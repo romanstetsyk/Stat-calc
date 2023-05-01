@@ -1,11 +1,16 @@
 import { Button } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { isFiniteNumber, isPositiveNumber } from "../../utils/validators";
+import {
+  isFiniteNumber,
+  isIntegerGreaterThanOne,
+  isPositiveNumber,
+} from "../../utils/validators";
 import FormInput from "../../components/Input";
 
 type Inputs = {
   sampleMean: string;
   standardDeviation: string;
+  sampleSize: string;
 };
 
 function ZForm() {
@@ -36,6 +41,17 @@ function ZForm() {
         rules={{
           required: "This value is required",
           validate: isPositiveNumber,
+        }}
+        errors={errors}
+      />
+
+      <FormInput
+        label="Sample size"
+        name="sampleSize"
+        register={register}
+        rules={{
+          required: "This value is required",
+          validate: isIntegerGreaterThanOne,
         }}
         errors={errors}
       />
