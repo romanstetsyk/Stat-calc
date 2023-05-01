@@ -7,6 +7,7 @@ import DataEditor, {
   Item,
 } from "@glideapps/glide-data-grid";
 import * as React from "react";
+import ZModal from "./features/ZStatistics/ZModal";
 
 type GridColumnName = `col${number}`;
 
@@ -77,6 +78,7 @@ function App() {
 
   return (
     <>
+      <ZModal />
       <DataEditor
         getCellContent={getContent}
         columns={columns}
