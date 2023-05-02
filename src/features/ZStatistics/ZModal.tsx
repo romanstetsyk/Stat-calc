@@ -7,7 +7,7 @@ function ZModal() {
     <>
       <Button onClick={onOpen}>z statistics</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ZModalContent onClose={onClose} />
       </Modal>

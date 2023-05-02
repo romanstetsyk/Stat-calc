@@ -24,7 +24,7 @@ export type IProps<TFormValues extends FieldValues> = {
   errors?: Partial<DeepMap<TFormValues, FieldError>>;
 } & Omit<InputProps, "name">;
 
-const FormInput = <TFormValues extends Record<string, unknown>>({
+const InputField = <TFormValues extends Record<string, unknown>>({
   label,
   name,
   errors,
@@ -54,4 +54,4 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
   );
 };
 
-export default FormInput;
+export default InputField;
