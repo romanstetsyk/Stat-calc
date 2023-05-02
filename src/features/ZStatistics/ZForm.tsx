@@ -1,10 +1,11 @@
 import {
   Box,
-  Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -13,38 +14,68 @@ import {
   isFiniteNumber,
   isIntegerGreaterThanOne,
   isPositiveNumber,
+  isValidLevel,
 } from "../../utils/validators";
 import InputField from "../../components/InputField";
 import * as React from "react";
+import { TFormSummary, PerformType } from "./types";
 
-enum PerformType {
-  hypothesisTest = "hypothesisTest",
-  confidenceInterval = "confidenceInterval",
-}
-
-type Inputs = {
-  xbar: string;
-  stdev: string;
-  n: string;
-  perform: PerformType;
+type IProps = {
+  formId: string;
+  onSubmit: SubmitHandler<TFormSummary>;
+  defaultValues: TFormSummary;
 };
 
-function ZForm() {
+function ZForm({ formId, onSubmit, defaultValues }: IProps) {
   const {
     register,
     handleSubmit,
     control,
-    watch,
+    setValue,
+    trigger,
     formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  } = useForm<TFormSummary>({ defaultValues });
 
   const [perform, setPerform] = React.useState<PerformType>(
-    PerformType.hypothesisTest
+    defaultValues.perform
   );
 
+  const onSelectChange = (event: React.ChangeEvent) => {
+    const value = (event.target as HTMLInputElement).value;
+    switch (value) {
+      case "eq":
+        setValue("mu1dir", "ne");
+        break;
+      case "ge":
+        setValue("mu1dir", "lt");
+        break;
+      case "le":
+        setValue("mu1dir", "gt");
+        break;
+      case "ne":
+        setValue("mu0dir", "eq");
+        break;
+      case "gt":
+        setValue("mu0dir", "le");
+        break;
+      case "lt":
+        setValue("mu0dir", "ge");
+        break;
+      default:
+        throw new Error("Unknown hypothesis test sign combination");
+    }
+  };
+
+  const onMuValueChange = (event: React.ChangeEvent) => {
+    const { value } = event.target as HTMLInputElement;
+    setValue("mu0val", value);
+    trigger("mu0val");
+    setValue("mu1val", value);
+    trigger("mu1val");
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} id={formId}>
       <InputField
         label="Sample mean"
         name="xbar"
@@ -101,28 +132,108 @@ function ZForm() {
                   <Radio value={PerformType.hypothesisTest}>
                     Hypothesis Test
                   </Radio>
-                  <Text
-                    ml="4"
+                  <Stack
+                    ml={5}
                     opacity={
                       perform === PerformType.hypothesisTest ? "1" : "0.5"
                     }
                   >
-                    Some text here
-                  </Text>
+                    <Flex gap={2} alignItems="baseline">
+                      <Text as="label" htmlFor="mu0val">H0: &mu;</Text>
+                      <FormControl width="50px">
+                        <Select
+                          {...register("mu0dir", {
+                            disabled: perform !== PerformType.hypothesisTest,
+                          })}
+                          size="xs"
+                          defaultValue="eq"
+                          width="50px"
+                          onChange={onSelectChange}
+                        >
+                          <option value="eq">=</option>
+                          <option value="ge">&ge;</option>
+                          <option value="le">&le;</option>
+                        </Select>
+                      </FormControl>
+                      <InputField
+                        name="mu0val"
+                        register={register}
+                        rules={{
+                          required: "This value is required",
+                          validate: isFiniteNumber,
+                          onChange: onMuValueChange,
+                          disabled: perform !== PerformType.hypothesisTest,
+                        }}
+                        errors={errors}
+                      />
+                    </Flex>
+
+                    <Flex gap={2}>
+                      <Text>H1: &mu;</Text>
+                      <FormControl width="50px">
+                        <Select
+                          {...register("mu1dir", {
+                            disabled: perform !== PerformType.hypothesisTest,
+                          })}
+                          size="xs"
+                          defaultValue="ne"
+                          width="50px"
+                          onChange={onSelectChange}
+                        >
+                          <option value="ne">&ne;</option>
+                          <option value="gt">&gt;</option>
+                          <option value="lt">&lt;</option>
+                        </Select>
+                      </FormControl>
+                      <InputField
+                        onChange={onMuValueChange}
+                        name="mu1val"
+                        register={register}
+                        rules={{
+                          required: "This value is required",
+                          validate: isFiniteNumber,
+                          onChange: onMuValueChange,
+                          disabled: perform !== PerformType.hypothesisTest,
+                        }}
+                        errors={errors}
+                      />
+                    </Flex>
+                    <InputField
+                      label="&alpha;"
+                      name="alpha"
+                      register={register}
+                      rules={{
+                        required: "This value is required",
+                        validate: isValidLevel,
+                        disabled: perform !== PerformType.hypothesisTest,
+                      }}
+                      errors={errors}
+                    />
+                  </Stack>
                 </Box>
                 <Box flex="1">
                   <>
                     <Radio value={PerformType.confidenceInterval}>
                       Confidence Interval
                     </Radio>
-                    <Text
-                      ml="4"
+                    <Stack
+                      ml={5}
                       opacity={
                         perform === PerformType.confidenceInterval ? "1" : "0.5"
                       }
                     >
-                      Some text here
-                    </Text>
+                      <InputField
+                        label="Level"
+                        name="level"
+                        register={register}
+                        rules={{
+                          required: "This value is required",
+                          validate: isValidLevel,
+                          disabled: perform !== PerformType.confidenceInterval,
+                        }}
+                        errors={errors}
+                      />
+                    </Stack>
                   </>
                 </Box>
               </Box>
@@ -131,10 +242,6 @@ function ZForm() {
         />
         <FormErrorMessage as="span">{errors.perform?.message}</FormErrorMessage>
       </FormControl>
-
-      <Button type="submit" colorScheme="teal">
-        Calculate
-      </Button>
     </form>
   );
 }

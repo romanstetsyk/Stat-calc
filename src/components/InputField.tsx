@@ -17,7 +17,7 @@ import {
 } from "react-hook-form";
 
 export type IProps<TFormValues extends FieldValues> = {
-  label: string;
+  label?: string;
   name: Path<TFormValues>;
   rules?: RegisterOptions;
   register?: UseFormRegister<TFormValues>;
@@ -36,18 +36,19 @@ const InputField = <TFormValues extends Record<string, unknown>>({
       isInvalid={Boolean(errors?.[name])}
       display="flex"
       alignItems="baseline"
+      width="auto"
     >
-      <FormLabel>{label}</FormLabel>
+      {label && <FormLabel>{label}</FormLabel>}
       <VStack alignItems="start">
         <Input
           size="sm"
-          width="auto"
+          width="80px"
           {...(register && register(name, rules))}
         />
         <FormErrorMessage as="span">
           {errors?.[name]?.type === "required" && errors[name]?.message}
           {errors?.[name]?.type === "validate" &&
-            `${label} ${errors[name]?.message}`}
+            `${label || "This value"} ${errors[name]?.message}`}
         </FormErrorMessage>
       </VStack>
     </FormControl>
