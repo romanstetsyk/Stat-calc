@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { TFormSummary } from "./types";
 import { Checkbox, FormControl, FormLabel, Stack } from "@chakra-ui/react";
-import { ColumnValues } from "../../App";
+import { ColumnValues } from "../../Types";
 
 type IProps = {
   onSubmit: SubmitHandler<TFormSummary>;

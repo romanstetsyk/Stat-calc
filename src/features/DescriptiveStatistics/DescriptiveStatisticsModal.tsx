@@ -1,6 +1,7 @@
 import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
 import DescriptiveModalContent from "./ModalCont";
-import { ColumnValues } from "../../App";
+import { ColumnValues } from "../../Types";
+
 // import ZModalContent from "./ZModalContent";
 
 type IProps = {

@@ -10,7 +10,7 @@ import { DisplayOptions, TFormSummary } from "./types";
 import { useId, useState } from "react";
 import DescriptiveForm from "./DescriptiveForm";
 import { SubmitHandler } from "react-hook-form";
-import { ColumnValues } from "../../App";
+import { ColumnValues } from "../../Types";
 import Display from "./Display";
 
 interface IProps {
