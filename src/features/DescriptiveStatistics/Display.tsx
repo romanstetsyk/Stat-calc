@@ -8,6 +8,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import mean from "@stdlib/stats-base-mean";
+import mediansorted from "@stdlib/stats-base-mediansorted";
+import variance from "@stdlib/stats-base-variance";
+
 import { DisplayOptions, TFormSummary } from "./types";
 import { ColumnValues } from "../../Types";
 
@@ -22,25 +26,34 @@ function Display({ setDisplay, formSummary, cols }: IProps) {
   return (
     <>
       <Button onClick={() => setDisplay("form")}>Edit</Button>
-      {Array.isArray(columns) && columns.map((col) => <p key={col}>{col}</p>)}
       <TableContainer>
-        <Table variant="simple">
+        <Table variant="simple" size="sm">
           <Thead>
             <Tr>
               <Th></Th>
+              <Th isNumeric>n</Th>
               <Th isNumeric>Mean</Th>
               <Th isNumeric>Median</Th>
+              <Th isNumeric>S. Variance</Th>
+              <Th isNumeric>P. Variance</Th>
             </Tr>
           </Thead>
           <Tbody>
             {Array.isArray(columns) &&
-              columns.map((col) => (
-                <Tr key={col}>
-                  <Td>{col}</Td>
-                  <Td isNumeric>25.4</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-              ))}
+              columns.map((col) => {
+                const arrOfNums = cols[col].filter(Number).map(Number);
+                const n = arrOfNums.length;
+                return (
+                  <Tr key={col}>
+                    <Td>{col}</Td>
+                    <Td isNumeric>{n}</Td>
+                    <Td isNumeric>{mean(n, arrOfNums, 1)}</Td>
+                    <Td isNumeric>{mediansorted(n, arrOfNums, 1)}</Td>
+                    <Td isNumeric>{variance(n, 1, arrOfNums, 1)}</Td>
+                    <Td isNumeric>{variance(n, 0, arrOfNums, 1)}</Td>
+                  </Tr>
+                );
+              })}
           </Tbody>
         </Table>
       </TableContainer>
