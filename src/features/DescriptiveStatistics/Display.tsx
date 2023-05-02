@@ -1,4 +1,13 @@
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { DisplayOptions, TFormSummary } from "./types";
 import { ColumnValues } from "../../Types";
 
@@ -14,6 +23,27 @@ function Display({ setDisplay, formSummary, cols }: IProps) {
     <>
       <Button onClick={() => setDisplay("form")}>Edit</Button>
       {Array.isArray(columns) && columns.map((col) => <p key={col}>{col}</p>)}
+      <TableContainer>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th></Th>
+              <Th isNumeric>Mean</Th>
+              <Th isNumeric>Median</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {Array.isArray(columns) &&
+              columns.map((col) => (
+                <Tr key={col}>
+                  <Td>{col}</Td>
+                  <Td isNumeric>25.4</Td>
+                  <Td isNumeric>25.4</Td>
+                </Tr>
+              ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </>
   );
 }
