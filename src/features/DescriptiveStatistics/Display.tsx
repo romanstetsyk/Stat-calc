@@ -47,10 +47,10 @@ function Display({ setDisplay, formSummary, cols }: IProps) {
                   <Tr key={col}>
                     <Td>{col}</Td>
                     <Td isNumeric>{n}</Td>
-                    <Td isNumeric>{mean(n, arrOfNums, 1)}</Td>
-                    <Td isNumeric>{mediansorted(n, arrOfNums, 1)}</Td>
-                    <Td isNumeric>{variance(n, 1, arrOfNums, 1)}</Td>
-                    <Td isNumeric>{variance(n, 0, arrOfNums, 1)}</Td>
+                    <Td isNumeric>{String(mean(n, arrOfNums, 1))}</Td>
+                    <Td isNumeric>{String(mediansorted(n, arrOfNums, 1))}</Td>
+                    <Td isNumeric>{String(variance(n, 1, arrOfNums, 1))}</Td>
+                    <Td isNumeric>{String(variance(n, 0, arrOfNums, 1))}</Td>
                   </Tr>
                 );
               })}
