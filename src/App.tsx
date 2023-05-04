@@ -9,11 +9,7 @@ import DataEditor, {
 import * as React from "react";
 import ZModal from "./features/ZStatistics/ZModal";
 import DescriptiveStatisticsModal from "./features/DescriptiveStatistics/DescriptiveStatisticsModal";
-import { ColumnValues, GridColumnName } from "./Types";
-
-interface GridRow {
-  [colName: GridColumnName]: string;
-}
+import { ColumnValues, GridColumnName, GridRow } from "./Types";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
   const col: { title: GridColumnName; width: number } = {

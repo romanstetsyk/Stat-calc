@@ -1,19 +1,19 @@
-import {
-  Button,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+
+import DataEditor, {
+  Item,
+  GridCell,
+  GridCellKind,
+  GridColumn,
+} from "@glideapps/glide-data-grid";
+
 import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
 import variance from "@stdlib/stats-base-variance";
 
 import { DisplayOptions, TFormSummary } from "./types";
-import { ColumnValues } from "../../Types";
+import { ColumnValues, GridColumnName } from "../../Types";
+import React, { useMemo } from "react";
 
 type IProps = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
@@ -21,42 +21,81 @@ type IProps = {
   cols: ColumnValues;
 };
 
+type DescTableRow = {
+  col: string;
+  n: string;
+  mean: string;
+  median: string;
+  "s.variance": string;
+  "p.variance": string;
+};
+
 function Display({ setDisplay, formSummary, cols }: IProps) {
   const { columns } = formSummary;
+
+  const columnHeaders: GridColumn[] = useMemo(
+    () => [
+      { title: "col", width: 100 },
+      { title: "n", width: 100 },
+      { title: "mean", width: 100 },
+      { title: "median", width: 100 },
+      { title: "s.variance", width: 100 },
+      { title: "p.variance", width: 100 },
+    ],
+    []
+  );
+
+  const data: DescTableRow[] = (columns as Array<GridColumnName>).map(
+    (colName) => {
+      const arrOfNums = cols[colName].filter(Number).map(Number);
+      const n = arrOfNums.length;
+      const row: DescTableRow = {
+        col: colName,
+        n: String(n),
+        mean: String(mean(n, arrOfNums, 1)),
+        median: String(
+          mediansorted(
+            n,
+            arrOfNums.sort((a, b) => a - b),
+            1
+          )
+        ),
+        "s.variance": String(variance(n, 1, arrOfNums, 1)),
+        "p.variance": String(variance(n, 0, arrOfNums, 1)),
+      };
+      return row;
+    }
+  );
+
+  const getContent = React.useCallback((cell: Item): GridCell => {
+    const [col, row] = cell;
+    const dataRow = data[row] || {};
+    // dumb but simple way to do this
+    const indexes: (keyof DescTableRow)[] = columnHeaders.map(
+      (col) => col.title as keyof DescTableRow
+    );
+    const d = dataRow[indexes[col]] || "";
+    return {
+      kind: GridCellKind.Text,
+      allowOverlay: true,
+      readonly: false,
+      displayData: d,
+      data: d,
+    };
+  }, []);
+
   return (
     <>
       <Button onClick={() => setDisplay("form")}>Edit</Button>
-      <TableContainer>
-        <Table variant="simple" size="sm">
-          <Thead>
-            <Tr>
-              <Th></Th>
-              <Th isNumeric>n</Th>
-              <Th isNumeric>Mean</Th>
-              <Th isNumeric>Median</Th>
-              <Th isNumeric>S. Variance</Th>
-              <Th isNumeric>P. Variance</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Array.isArray(columns) &&
-              columns.map((col) => {
-                const arrOfNums = cols[col].filter(Number).map(Number);
-                const n = arrOfNums.length;
-                return (
-                  <Tr key={col}>
-                    <Td>{col}</Td>
-                    <Td isNumeric>{n}</Td>
-                    <Td isNumeric>{String(mean(n, arrOfNums, 1))}</Td>
-                    <Td isNumeric>{String(mediansorted(n, arrOfNums, 1))}</Td>
-                    <Td isNumeric>{String(variance(n, 1, arrOfNums, 1))}</Td>
-                    <Td isNumeric>{String(variance(n, 0, arrOfNums, 1))}</Td>
-                  </Tr>
-                );
-              })}
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <DataEditor
+        getCellContent={getContent}
+        columns={columnHeaders}
+        rows={data.length}
+        getCellsForSelection={true}
+        rowMarkers="none"
+        copyHeaders={true}
+        smoothScrollX={true}
+      />
     </>
   );
 }
