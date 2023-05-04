@@ -6,7 +6,7 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { DisplayOptions, TFormSummary } from "./types";
+import { DisplayOptions, Options, TFormSummary } from "./types";
 import { useId, useState } from "react";
 import DescriptiveForm from "./DescriptiveForm";
 import { SubmitHandler } from "react-hook-form";
@@ -21,15 +21,19 @@ interface IProps {
 function DescriptiveModalContent({ cols, onClose }: IProps) {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
-  const [formSummary, setFormSummary] = useState<TFormSummary>({ columns: [] });
+  const [formSummary, setFormSummary] = useState<TFormSummary>({
+    columns: [],
+    options: Object.values(Options),
+  });
 
   const onSubmit: SubmitHandler<TFormSummary> = (data) => {
-    const { columns } = data;
+    const { columns, options } = data;
+    console.log(options);
     if (columns === false || columns.length === 0) return;
     if (typeof columns === "string") {
-      setFormSummary({ columns: [columns] });
+      setFormSummary({ columns: [columns], options: options });
     } else {
-      setFormSummary({ columns });
+      setFormSummary({ columns, options });
     }
     setDisplay("result");
     console.log(data);

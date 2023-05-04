@@ -11,7 +11,7 @@ import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
 import variance from "@stdlib/stats-base-variance";
 
-import { DisplayOptions, TFormSummary } from "./types";
+import { DisplayOptions, Options, TFormSummary } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import React, { useMemo } from "react";
 
@@ -22,25 +22,21 @@ type IProps = {
 };
 
 type DescTableRow = {
-  col: string;
-  n: string;
-  mean: string;
-  median: string;
-  "s.variance": string;
-  "p.variance": string;
-};
+  [key in Options]?: string;
+} & { col: string };
 
 function Display({ setDisplay, formSummary, cols }: IProps) {
-  const { columns } = formSummary;
+  const { columns, options } = formSummary;
 
   const columnHeaders: GridColumn[] = useMemo(
     () => [
       { title: "col", width: 100 },
-      { title: "n", width: 100 },
-      { title: "mean", width: 100 },
-      { title: "median", width: 100 },
-      { title: "s.variance", width: 100 },
-      { title: "p.variance", width: 100 },
+      ...options.map((opt) => {
+        return {
+          title: opt,
+          width: 100,
+        };
+      }),
     ],
     []
   );
@@ -51,18 +47,39 @@ function Display({ setDisplay, formSummary, cols }: IProps) {
       const n = arrOfNums.length;
       const row: DescTableRow = {
         col: colName,
-        n: String(n),
-        mean: String(mean(n, arrOfNums, 1)),
-        median: String(
+      };
+
+      // Data length
+      if (options.includes(Options.N)) {
+        row[Options.N] = String(n);
+      }
+
+      // Mean
+      if (options.includes(Options.Mean)) {
+        row[Options.Mean] = String(mean(n, arrOfNums, 1));
+      }
+
+      // Median
+      if (options.includes(Options.Median)) {
+        row[Options.Median] = String(
           mediansorted(
             n,
             arrOfNums.sort((a, b) => a - b),
             1
           )
-        ),
-        "s.variance": String(variance(n, 1, arrOfNums, 1)),
-        "p.variance": String(variance(n, 0, arrOfNums, 1)),
-      };
+        );
+      }
+
+      // Sample variance
+      if (options.includes(Options.SVariance)) {
+        row[Options.SVariance] = String(variance(n, 1, arrOfNums, 1));
+      }
+
+      // Population variance
+      if (options.includes(Options.PVariance)) {
+        row[Options.PVariance] = String(variance(n, 0, arrOfNums, 1));
+      }
+
       return row;
     }
   );

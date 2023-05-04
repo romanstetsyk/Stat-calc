@@ -1,6 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TFormSummary } from "./types";
-import { Checkbox, FormControl, FormLabel, Stack } from "@chakra-ui/react";
+import { Options, TFormSummary } from "./types";
+import {
+  Checkbox,
+  CheckboxGroup,
+  FormControl,
+  FormLabel,
+  Stack,
+} from "@chakra-ui/react";
 import { ColumnValues } from "../../Types";
 
 type IProps = {
@@ -11,11 +17,7 @@ type IProps = {
 };
 
 function DescriptiveForm({ onSubmit, cols, formId, defaultValues }: IProps) {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<TFormSummary>({ defaultValues });
+  const { handleSubmit, register } = useForm<TFormSummary>({ defaultValues });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
@@ -28,6 +30,18 @@ function DescriptiveForm({ onSubmit, cols, formId, defaultValues }: IProps) {
             </Checkbox>
           ))}
         </Stack>
+      </FormControl>
+      <FormControl>
+        <FormLabel>Statistics</FormLabel>
+        <CheckboxGroup defaultValue={defaultValues.options}>
+          <Stack direction="column">
+            {Object.values(Options).map((opt) => (
+              <Checkbox key={opt} value={opt} {...register("options")}>
+                {opt}
+              </Checkbox>
+            ))}
+          </Stack>
+        </CheckboxGroup>
       </FormControl>
     </form>
   );
