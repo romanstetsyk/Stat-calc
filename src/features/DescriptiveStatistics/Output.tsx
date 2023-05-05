@@ -11,13 +11,13 @@ import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
 import variance from "@stdlib/stats-base-variance";
 
-import { DisplayOptions, Options, TFormSummary } from "./types";
+import { DisplayOptions, Options, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import React, { useMemo } from "react";
 
 type IProps = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
-  formSummary: TFormSummary;
+  formSummary: TForm;
   cols: ColumnValues;
 };
 
@@ -25,7 +25,7 @@ type DescTableRow = {
   [key in Options]?: string;
 } & { col: string };
 
-function Display({ setDisplay, formSummary, cols }: IProps) {
+function Output({ setDisplay, formSummary, cols }: IProps) {
   const { columns, options } = formSummary;
 
   const columnHeaders: GridColumn[] = useMemo(
@@ -117,4 +117,4 @@ function Display({ setDisplay, formSummary, cols }: IProps) {
   );
 }
 
-export default Display;
+export { Output };

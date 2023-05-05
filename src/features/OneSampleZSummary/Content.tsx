@@ -1,3 +1,5 @@
+import { useId, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 import {
   ModalContent,
   ModalHeader,
@@ -6,21 +8,19 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import ZForm from "./ZForm";
-import { useId, useState } from "react";
-import ZDisplay from "./ZDisplay";
-import { SubmitHandler } from "react-hook-form";
-import { DisplayOptions, PerformType, TFormSummary } from "./types";
+import { StatForm } from "./StatForm";
+import { Output } from "./Output";
+import { DisplayOptions, PerformType, TForm } from "./types";
 
 interface IProps {
   onClose: () => void;
 }
 
-function ZModalContent({ onClose }: IProps) {
+function Content({ onClose }: IProps) {
   const formId = useId();
 
   const [display, setDisplay] = useState<DisplayOptions>("form");
-  const [formSummary, setFormSummary] = useState<TFormSummary>({
+  const [formSummary, setFormSummary] = useState<TForm>({
     xbar: "",
     stdev: "",
     n: "",
@@ -33,7 +33,7 @@ function ZModalContent({ onClose }: IProps) {
     level: "0.95",
   });
 
-  const onSubmit: SubmitHandler<TFormSummary> = (data) => {
+  const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
     setFormSummary(data);
     setDisplay("result");
@@ -41,18 +41,18 @@ function ZModalContent({ onClose }: IProps) {
 
   return (
     <ModalContent>
-      <ModalHeader>One Sample Z Test with Summary</ModalHeader>
+      <ModalHeader>One Sample Z Test</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         {display === "form" && (
-          <ZForm
+          <StatForm
             formId={formId}
             onSubmit={onSubmit}
             defaultValues={formSummary}
           />
         )}
         {display === "result" && formSummary && (
-          <ZDisplay setDisplay={setDisplay} formSummary={formSummary} />
+          <Output setDisplay={setDisplay} formSummary={formSummary} />
         )}
       </ModalBody>
 
@@ -70,4 +70,4 @@ function ZModalContent({ onClose }: IProps) {
   );
 }
 
-export default ZModalContent;
+export { Content };

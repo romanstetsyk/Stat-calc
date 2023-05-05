@@ -1,3 +1,5 @@
+import * as React from "react";
+import { useState } from "react";
 import {
   Box,
   Flex,
@@ -16,17 +18,16 @@ import {
   isPositiveNumber,
   isValidLevel,
 } from "../../utils/validators";
-import InputField from "../../components/InputField";
-import * as React from "react";
-import { TFormSummary, PerformType } from "./types";
+import { InputField } from "../../components/InputField";
+import { TForm, PerformType } from "./types";
 
 type IProps = {
   formId: string;
-  onSubmit: SubmitHandler<TFormSummary>;
-  defaultValues: TFormSummary;
+  onSubmit: SubmitHandler<TForm>;
+  defaultValues: TForm;
 };
 
-function ZForm({ formId, onSubmit, defaultValues }: IProps) {
+function StatForm({ formId, onSubmit, defaultValues }: IProps) {
   const {
     register,
     handleSubmit,
@@ -34,11 +35,9 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
     setValue,
     trigger,
     formState: { errors },
-  } = useForm<TFormSummary>({ defaultValues });
+  } = useForm<TForm>({ defaultValues });
 
-  const [perform, setPerform] = React.useState<PerformType>(
-    defaultValues.perform
-  );
+  const [perform, setPerform] = useState<PerformType>(defaultValues.perform);
 
   const onSelectChange = (event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -133,18 +132,20 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                     Hypothesis Test
                   </Radio>
                   <Stack
+                    disabled={perform !== PerformType.hypothesisTest}
+                    as="fieldset"
                     ml={5}
                     opacity={
                       perform === PerformType.hypothesisTest ? "1" : "0.5"
                     }
                   >
                     <Flex gap={2} alignItems="baseline">
-                      <Text as="label" htmlFor="mu0val">H0: &mu;</Text>
+                      <Text as="label" htmlFor="mu0val">
+                        H0: &mu;
+                      </Text>
                       <FormControl width="50px">
                         <Select
-                          {...register("mu0dir", {
-                            disabled: perform !== PerformType.hypothesisTest,
-                          })}
+                          {...register("mu0dir")}
                           size="xs"
                           defaultValue="eq"
                           width="50px"
@@ -160,9 +161,10 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                         register={register}
                         rules={{
                           required: "This value is required",
-                          validate: isFiniteNumber,
+                          validate: (value) =>
+                            perform !== PerformType.hypothesisTest ||
+                            isFiniteNumber(value),
                           onChange: onMuValueChange,
-                          disabled: perform !== PerformType.hypothesisTest,
                         }}
                         errors={errors}
                       />
@@ -172,9 +174,7 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                       <Text>H1: &mu;</Text>
                       <FormControl width="50px">
                         <Select
-                          {...register("mu1dir", {
-                            disabled: perform !== PerformType.hypothesisTest,
-                          })}
+                          {...register("mu1dir")}
                           size="xs"
                           defaultValue="ne"
                           width="50px"
@@ -191,9 +191,10 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                         register={register}
                         rules={{
                           required: "This value is required",
-                          validate: isFiniteNumber,
+                          validate: (value) =>
+                            perform !== PerformType.hypothesisTest ||
+                            isFiniteNumber(value),
                           onChange: onMuValueChange,
-                          disabled: perform !== PerformType.hypothesisTest,
                         }}
                         errors={errors}
                       />
@@ -204,8 +205,9 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                       register={register}
                       rules={{
                         required: "This value is required",
-                        validate: isValidLevel,
-                        disabled: perform !== PerformType.hypothesisTest,
+                        validate: (value) =>
+                          perform !== PerformType.hypothesisTest ||
+                          isValidLevel(value),
                       }}
                       errors={errors}
                     />
@@ -217,6 +219,8 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                       Confidence Interval
                     </Radio>
                     <Stack
+                      disabled={perform !== PerformType.confidenceInterval}
+                      as="fieldset"
                       ml={5}
                       opacity={
                         perform === PerformType.confidenceInterval ? "1" : "0.5"
@@ -228,8 +232,9 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
                         register={register}
                         rules={{
                           required: "This value is required",
-                          validate: isValidLevel,
-                          disabled: perform !== PerformType.confidenceInterval,
+                          validate: (value) =>
+                            perform !== PerformType.confidenceInterval ||
+                            isValidLevel(value),
                         }}
                         errors={errors}
                       />
@@ -246,4 +251,4 @@ function ZForm({ formId, onSubmit, defaultValues }: IProps) {
   );
 }
 
-export default ZForm;
+export { StatForm };

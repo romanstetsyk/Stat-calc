@@ -1,4 +1,4 @@
-import "@glideapps/glide-data-grid/dist/index.css";
+import { useCallback, useState } from "react";
 import DataEditor, {
   EditableGridCell,
   GridCell,
@@ -6,9 +6,9 @@ import DataEditor, {
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
-import * as React from "react";
-import ZModal from "./features/ZStatistics/ZModal";
-import DescriptiveStatisticsModal from "./features/DescriptiveStatistics/DescriptiveStatisticsModal";
+import "@glideapps/glide-data-grid/dist/index.css";
+import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummary/StatModal";
+import { StatModal as DescriptiveStatisticsModal } from "./features/DescriptiveStatistics/StatModal";
 import { ColumnValues, GridColumnName, GridRow } from "./Types";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
@@ -31,11 +31,11 @@ function getColumns(rows: GridRow[]): ColumnValues {
 }
 
 function App() {
-  const [data, setData] = React.useState<GridRow[]>([]);
+  const [data, setData] = useState<GridRow[]>([]);
 
   const columns = getColumns(data);
 
-  const getContent = React.useCallback((cell: Item): GridCell => {
+  const getContent = useCallback((cell: Item): GridCell => {
     const [col, row] = cell;
     const dataRow = data[row] || {};
     // dumb but simple way to do this
@@ -52,28 +52,25 @@ function App() {
     };
   }, []);
 
-  const onCellEdited = React.useCallback(
-    (cell: Item, newValue: EditableGridCell) => {
-      if (newValue.kind !== GridCellKind.Text) {
-        return;
-      }
-      const indexes: (keyof GridRow)[] = columnHeaders.map(
-        (col) => col.title as GridColumnName
-      );
-      const [colIdx, rowIdx] = cell;
-      const col = indexes[colIdx];
-      if (!data[rowIdx]) {
-        data[rowIdx] = {};
-      }
-      data[rowIdx][col] = newValue.data;
-      setData([...data]);
-    },
-    []
-  );
+  const onCellEdited = useCallback((cell: Item, newValue: EditableGridCell) => {
+    if (newValue.kind !== GridCellKind.Text) {
+      return;
+    }
+    const indexes: (keyof GridRow)[] = columnHeaders.map(
+      (col) => col.title as GridColumnName
+    );
+    const [colIdx, rowIdx] = cell;
+    const col = indexes[colIdx];
+    if (!data[rowIdx]) {
+      data[rowIdx] = {};
+    }
+    data[rowIdx][col] = newValue.data;
+    setData([...data]);
+  }, []);
 
   return (
     <>
-      <ZModal />
+      <OneSampleZSummaryModal />
       <DescriptiveStatisticsModal cols={columns} />
       <DataEditor
         getCellContent={getContent}
@@ -97,4 +94,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

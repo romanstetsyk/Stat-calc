@@ -6,7 +6,6 @@ import {
   Input,
   InputProps,
 } from "@chakra-ui/react";
-
 import {
   DeepMap,
   FieldError,
@@ -55,4 +54,4 @@ const InputField = <TFormValues extends Record<string, unknown>>({
   );
 };
 
-export default InputField;
+export { InputField };

@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Options, TFormSummary } from "./types";
+import { Options, TForm } from "./types";
 import {
   Checkbox,
   CheckboxGroup,
@@ -10,14 +10,14 @@ import {
 import { ColumnValues } from "../../Types";
 
 type IProps = {
-  onSubmit: SubmitHandler<TFormSummary>;
+  onSubmit: SubmitHandler<TForm>;
   cols: ColumnValues;
   formId: string;
-  defaultValues: TFormSummary;
+  defaultValues: TForm;
 };
 
-function DescriptiveForm({ onSubmit, cols, formId, defaultValues }: IProps) {
-  const { handleSubmit, register } = useForm<TFormSummary>({ defaultValues });
+function StatForm({ onSubmit, cols, formId, defaultValues }: IProps) {
+  const { handleSubmit, register } = useForm<TForm>({ defaultValues });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
@@ -47,4 +47,4 @@ function DescriptiveForm({ onSubmit, cols, formId, defaultValues }: IProps) {
   );
 }
 
-export default DescriptiveForm;
+export { StatForm };

@@ -1,14 +1,12 @@
 import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
-import DescriptiveModalContent from "./ModalCont";
+import { Content } from "./Content";
 import { ColumnValues } from "../../Types";
-
-// import ZModalContent from "./ZModalContent";
 
 type IProps = {
   cols: ColumnValues;
 };
 
-function DescriptiveStatisticsModal({ cols }: IProps) {
+function StatModal({ cols }: IProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -16,10 +14,10 @@ function DescriptiveStatisticsModal({ cols }: IProps) {
 
       <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
         <ModalOverlay />
-        <DescriptiveModalContent onClose={onClose} cols={cols} />
+        <Content onClose={onClose} cols={cols} />
       </Modal>
     </>
   );
 }
 
-export default DescriptiveStatisticsModal;
+export { StatModal };

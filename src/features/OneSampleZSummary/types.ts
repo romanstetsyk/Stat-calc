@@ -3,7 +3,7 @@ export enum PerformType {
   confidenceInterval = "confidenceInterval",
 }
 
-export type TFormSummary = {
+export type TForm = {
   xbar: string;
   stdev: string;
   n: string;

@@ -10,7 +10,7 @@ export enum Options {
   PVariance = "Population Variance",
 }
 
-export type TFormSummary = {
+export type TForm = {
   columns: false | GridColumnName | GridColumnName[];
   options: Options[];
 };

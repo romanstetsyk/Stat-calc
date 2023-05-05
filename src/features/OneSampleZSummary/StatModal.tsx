@@ -1,18 +1,18 @@
 import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
-import ZModalContent from "./ZModalContent";
+import { Content } from "./Content";
 
-function ZModal() {
+function StatModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button onClick={onOpen}>z statistics</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
+      <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
         <ModalOverlay />
-        <ZModalContent onClose={onClose} />
+        <Content onClose={onClose} />
       </Modal>
     </>
   );
 }
 
-export default ZModal;
+export { StatModal };
