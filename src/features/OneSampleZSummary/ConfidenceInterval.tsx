@@ -16,6 +16,7 @@ enum CI {
   Xbar = "Sample Mean",
   Stdev = "Std. Dev.",
   Stderr = "Std. Err.",
+  Level = "Level",
   Zcrit = "Z-crit",
 }
 
@@ -24,7 +25,7 @@ type ResultRow = {
 };
 
 function ConfidenceInterval({ formSummary }: IProps) {
-  const { xbar, stdev, n } = formSummary;
+  const { xbar, stdev, n, level } = formSummary;
 
   const stderr = String(+stdev / Math.sqrt(+n));
 
@@ -38,6 +39,7 @@ function ConfidenceInterval({ formSummary }: IProps) {
       [CI.Xbar]: xbar,
       [CI.Stdev]: stdev,
       [CI.Stderr]: stderr,
+      [CI.Level]: level,
       [CI.Zcrit]: "42",
     },
   ];
@@ -60,15 +62,18 @@ function ConfidenceInterval({ formSummary }: IProps) {
   }, []);
 
   return (
-    <DataEditor
-      getCellContent={getContent}
-      columns={columnHeaders}
-      rows={1}
-      getCellsForSelection={true}
-      rowMarkers="none"
-      copyHeaders={true}
-      smoothScrollX={true}
-    />
+    <>
+      <p>Confidence Interval</p>
+      <DataEditor
+        getCellContent={getContent}
+        columns={columnHeaders}
+        rows={1}
+        getCellsForSelection={true}
+        rowMarkers="none"
+        copyHeaders={true}
+        smoothScrollX={true}
+      />
+    </>
   );
 }
 
