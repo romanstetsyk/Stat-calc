@@ -9,6 +9,7 @@ import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
 
 import { TForm } from "./types";
+import { SampleStatisticsTable } from "./SampleStatisticsTable";
 
 // ASCII codes of comparison signs
 const codes = {
@@ -22,18 +23,6 @@ const codes = {
 
 type IProps = {
   formSummary: TForm;
-};
-
-// Columns of sample statistics table
-enum SSTable {
-  N = "n",
-  Xbar = "Sample Mean",
-  Stdev = "Std. Dev.",
-  Stderr = "Std. Err.",
-}
-
-type SSTableRow = {
-  [key in SSTable]: number;
 };
 
 // Columns of hypothesis test table
@@ -90,11 +79,6 @@ function HypothesisTest({ formSummary }: IProps) {
   const ll = Number(xbar) - zcrit * stderr;
   const ul = Number(xbar) + zcrit * stderr;
 
-  const sampleStatisticsColumnHeaders: (GridColumn & { title: SSTable })[] =
-    useMemo(() => {
-      return Object.values(SSTable).map((e) => ({ title: e, id: e }));
-    }, []);
-
   const hypothesisTestColumnHeaders: (GridColumn & { title: HTTable })[] =
     useMemo(() => {
       return Object.values(HTTable).map((e) => ({ title: e, id: e }));
@@ -104,31 +88,6 @@ function HypothesisTest({ formSummary }: IProps) {
     useMemo(() => {
       return Object.values(CITable).map((e) => ({ title: e, id: e }));
     }, []);
-
-  const sampleStatisticsData: SSTableRow[] = [
-    {
-      [SSTable.N]: Number(n),
-      [SSTable.Xbar]: Number(xbar),
-      [SSTable.Stdev]: Number(stdev),
-      [SSTable.Stderr]: Number(stderr),
-    },
-  ];
-  const getSampleStatisticsContent = useCallback((cell: Item): GridCell => {
-    const [col, row] = cell;
-    const dataRow = sampleStatisticsData[row];
-    // dumb but simple way to do this
-    const indexes: (keyof SSTableRow)[] = sampleStatisticsColumnHeaders.map(
-      (col) => col.title as keyof SSTableRow
-    );
-    const d = dataRow[indexes[col]];
-    return {
-      kind: GridCellKind.Number,
-      allowOverlay: true,
-      readonly: false,
-      displayData: String(d),
-      data: d,
-    };
-  }, []);
 
   const hypothesisTestData: HTTableRow[] = [
     {
@@ -185,16 +144,7 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>
         H1: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
-      <p>Sample data</p>
-      <DataEditor
-        getCellContent={getSampleStatisticsContent}
-        columns={sampleStatisticsColumnHeaders}
-        rows={1}
-        getCellsForSelection={true}
-        rowMarkers="none"
-        copyHeaders={true}
-        smoothScrollX={true}
-      />
+      <SampleStatisticsTable xbar={xbar} stdev={stdev} stderr={stderr} n={n} />
       <p>Results of Hypothesis Test</p>
       <DataEditor
         getCellContent={getHypothesisTestContent}

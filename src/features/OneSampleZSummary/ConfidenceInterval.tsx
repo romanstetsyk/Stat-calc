@@ -8,6 +8,7 @@ import DataEditor, {
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 
 import { TForm } from "./types";
+import { SampleStatisticsTable } from "./SampleStatisticsTable";
 
 type IProps = {
   formSummary: TForm;
@@ -16,10 +17,6 @@ type IProps = {
 // Set column order here
 enum CI {
   Level = "Level",
-  N = "n",
-  Xbar = "Sample Mean",
-  Stdev = "Std. Dev.",
-  Stderr = "Std. Err.",
   Zcrit = "Z-crit",
   Me = "M.E.",
   LL = "L. Limit",
@@ -46,10 +43,6 @@ function ConfidenceInterval({ formSummary }: IProps) {
   let data: ResultRow[] = [
     {
       [CI.Level]: level,
-      [CI.N]: n,
-      [CI.Xbar]: xbar,
-      [CI.Stdev]: stdev,
-      [CI.Stderr]: String(stderr),
       [CI.Zcrit]: String(zcrit),
       [CI.Me]: String(me),
       [CI.LL]: String(ll),
@@ -76,6 +69,7 @@ function ConfidenceInterval({ formSummary }: IProps) {
 
   return (
     <>
+      <SampleStatisticsTable xbar={xbar} stdev={stdev} stderr={stderr} n={n} />
       <p>Confidence Interval</p>
       <DataEditor
         getCellContent={getContent}
