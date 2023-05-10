@@ -24,12 +24,20 @@ type IProps = {
   formSummary: TForm;
 };
 
-// Columns of hypothesis test table
-enum HTTable {
+// Columns of sample statistics table
+enum SSTable {
   N = "n",
   Xbar = "Sample Mean",
   Stdev = "Std. Dev.",
   Stderr = "Std. Err.",
+}
+
+type SSTableRow = {
+  [key in SSTable]: number;
+};
+
+// Columns of hypothesis test table
+enum HTTable {
   Alpha = "Alpha",
   Zcrit = "Z-crit",
   ZStat = "Z-stat",
@@ -37,7 +45,7 @@ enum HTTable {
 }
 
 type HTTableRow = {
-  [key in HTTable]: string;
+  [key in HTTable]: number;
 };
 
 // Columns of confidence interval table
@@ -82,53 +90,81 @@ function HypothesisTest({ formSummary }: IProps) {
   const ll = Number(xbar) - zcrit * stderr;
   const ul = Number(xbar) + zcrit * stderr;
 
-  const columnHeaders: (GridColumn & { title: HTTable })[] = useMemo(() => {
-    return Object.values(HTTable).map((e) => ({
-      title: e,
-      width: 100,
-    }));
-  }, []);
+  const sampleStatisticsColumnHeaders: (GridColumn & { title: SSTable })[] =
+    useMemo(() => {
+      return Object.values(SSTable).map((e) => ({ title: e, width: 100 }));
+    }, []);
 
-  let data: HTTableRow[] = [
+  const hypothesisTestColumnHeaders: (GridColumn & { title: HTTable })[] =
+    useMemo(() => {
+      return Object.values(HTTable).map((e) => ({ title: e, width: 100 }));
+    }, []);
+
+  const confidenceIntervalColumnHeaders: (GridColumn & { title: CITable })[] =
+    useMemo(() => {
+      return Object.values(CITable).map((e) => ({ title: e, width: 100 }));
+    }, []);
+
+  const sampleStatisticsData: SSTableRow[] = [
     {
-      [HTTable.N]: n,
-      [HTTable.Xbar]: xbar,
-      [HTTable.Stdev]: stdev,
-      [HTTable.Stderr]: String(stderr),
-      [HTTable.Zcrit]: String(zcrit),
-      [HTTable.ZStat]: String(zstat),
-      [HTTable.PValue]: String(pvalue),
-      [HTTable.Alpha]: alpha,
+      [SSTable.N]: Number(n),
+      [SSTable.Xbar]: Number(xbar),
+      [SSTable.Stdev]: Number(stdev),
+      [SSTable.Stderr]: Number(stderr),
     },
   ];
-
-  const getContent = useCallback((cell: Item): GridCell => {
+  const getSampleStatisticsContent = useCallback((cell: Item): GridCell => {
     const [col, row] = cell;
-    const dataRow = data[row];
+    const dataRow = sampleStatisticsData[row];
     // dumb but simple way to do this
-    const indexes: (keyof HTTableRow)[] = columnHeaders.map(
-      (col) => col.title as keyof HTTableRow
+    const indexes: (keyof SSTableRow)[] = sampleStatisticsColumnHeaders.map(
+      (col) => col.title as keyof SSTableRow
     );
     const d = dataRow[indexes[col]];
     return {
-      kind: GridCellKind.Text,
+      kind: GridCellKind.Number,
       allowOverlay: true,
       readonly: false,
-      displayData: d,
+      displayData: String(d),
       data: d,
     };
   }, []);
 
-  const CIHeaders: (GridColumn & { title: CITable })[] = useMemo(() => {
-    return Object.values(CITable).map((e) => ({ title: e, width: 100 }));
+  const hypothesisTestData: HTTableRow[] = [
+    {
+      [HTTable.Zcrit]: zcrit,
+      [HTTable.ZStat]: zstat,
+      [HTTable.PValue]: pvalue,
+      [HTTable.Alpha]: Number(alpha),
+    },
+  ];
+  const getHypothesisTestContent = useCallback((cell: Item): GridCell => {
+    const [col, row] = cell;
+    const dataRow = hypothesisTestData[row];
+    // dumb but simple way to do this
+    const indexes: (keyof HTTableRow)[] = hypothesisTestColumnHeaders.map(
+      (col) => col.title as keyof HTTableRow
+    );
+    const d = dataRow[indexes[col]];
+    return {
+      kind: GridCellKind.Number,
+      allowOverlay: true,
+      readonly: false,
+      displayData: String(d),
+      data: d,
+    };
   }, []);
 
-  const CIData: CITableRow[] = [{ [CITable.LL]: ll, [CITable.UL]: ul }];
-
+  const confidenceIntervalData: CITableRow[] = [
+    {
+      [CITable.LL]: ll,
+      [CITable.UL]: ul,
+    },
+  ];
   const getCIContent = useCallback((cell: Item): GridCell => {
     const [col, row] = cell;
-    const dataRow = CIData[row];
-    const indexes: (keyof CITableRow)[] = CIHeaders.map(
+    const dataRow = confidenceIntervalData[row];
+    const indexes: (keyof CITableRow)[] = confidenceIntervalColumnHeaders.map(
       (col) => col.title as keyof CITableRow
     );
     const d = dataRow[indexes[col]];
@@ -149,10 +185,20 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>
         H1: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
+      <p>Sample data</p>
+      <DataEditor
+        getCellContent={getSampleStatisticsContent}
+        columns={sampleStatisticsColumnHeaders}
+        rows={1}
+        getCellsForSelection={true}
+        rowMarkers="none"
+        copyHeaders={true}
+        smoothScrollX={true}
+      />
       <p>Results of Hypothesis Test</p>
       <DataEditor
-        getCellContent={getContent}
-        columns={columnHeaders}
+        getCellContent={getHypothesisTestContent}
+        columns={hypothesisTestColumnHeaders}
         rows={1}
         getCellsForSelection={true}
         rowMarkers="none"
@@ -162,7 +208,7 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>{ciLevel} Confidence Interval</p>
       <DataEditor
         getCellContent={getCIContent}
-        columns={CIHeaders}
+        columns={confidenceIntervalColumnHeaders}
         rows={1}
         getCellsForSelection={true}
         rowMarkers="none"
