@@ -10,6 +10,7 @@ import cdf from "@stdlib/stats-base-dists-normal-cdf";
 
 import { TForm } from "./types";
 
+// ASCII codes of comparison signs
 const codes = {
   eq: 61,
   ge: 8805,
@@ -23,7 +24,8 @@ type IProps = {
   formSummary: TForm;
 };
 
-enum HT {
+// Columns of hypothesis test table
+enum HTTable {
   N = "n",
   Xbar = "Sample Mean",
   Stdev = "Std. Dev.",
@@ -34,10 +36,11 @@ enum HT {
   PValue = "P-value",
 }
 
-type ResultRow = {
-  [key in HT]: string;
+type HTTableRow = {
+  [key in HTTable]: string;
 };
 
+// Columns of confidence interval table
 enum CITable {
   LL = "L.Limit",
   UL = "U.Limit",
@@ -79,20 +82,23 @@ function HypothesisTest({ formSummary }: IProps) {
   const ll = Number(xbar) - zcrit * stderr;
   const ul = Number(xbar) + zcrit * stderr;
 
-  const columnHeaders: (GridColumn & { title: HT })[] = useMemo(() => {
-    return Object.values(HT).map((e) => ({ title: e, width: 100 }));
+  const columnHeaders: (GridColumn & { title: HTTable })[] = useMemo(() => {
+    return Object.values(HTTable).map((e) => ({
+      title: e,
+      width: 100,
+    }));
   }, []);
 
-  let data: ResultRow[] = [
+  let data: HTTableRow[] = [
     {
-      [HT.N]: n,
-      [HT.Xbar]: xbar,
-      [HT.Stdev]: stdev,
-      [HT.Stderr]: String(stderr),
-      [HT.Zcrit]: String(zcrit),
-      [HT.ZStat]: String(zstat),
-      [HT.PValue]: String(pvalue),
-      [HT.Alpha]: alpha,
+      [HTTable.N]: n,
+      [HTTable.Xbar]: xbar,
+      [HTTable.Stdev]: stdev,
+      [HTTable.Stderr]: String(stderr),
+      [HTTable.Zcrit]: String(zcrit),
+      [HTTable.ZStat]: String(zstat),
+      [HTTable.PValue]: String(pvalue),
+      [HTTable.Alpha]: alpha,
     },
   ];
 
@@ -100,8 +106,8 @@ function HypothesisTest({ formSummary }: IProps) {
     const [col, row] = cell;
     const dataRow = data[row];
     // dumb but simple way to do this
-    const indexes: (keyof ResultRow)[] = columnHeaders.map(
-      (col) => col.title as keyof ResultRow
+    const indexes: (keyof HTTableRow)[] = columnHeaders.map(
+      (col) => col.title as keyof HTTableRow
     );
     const d = dataRow[indexes[col]];
     return {
@@ -143,6 +149,7 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>
         H1: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
+      <p>Results of Hypothesis Test</p>
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
