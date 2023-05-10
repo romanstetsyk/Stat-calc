@@ -139,10 +139,10 @@ function HypothesisTest({ formSummary }: IProps) {
   return (
     <>
       <p>
-        H0: &mu; {String.fromCharCode(codes[mu0dir])} {mu0val}
+        H<sub>0</sub>: &mu; {String.fromCharCode(codes[mu0dir])} {mu0val}
       </p>
       <p>
-        H1: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
+        H<sub>a</sub>: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
       <SampleStatisticsTable xbar={xbar} stdev={stdev} stderr={stderr} n={n} />
       <p>Results of Hypothesis Test</p>

@@ -141,7 +141,7 @@ function StatForm({ formId, onSubmit, defaultValues }: IProps) {
                   >
                     <Flex gap={2} alignItems="baseline">
                       <Text as="label" htmlFor="mu0val">
-                        H0: &mu;
+                        H<sub>0</sub>: &mu;
                       </Text>
                       <FormControl width="50px">
                         <Select
@@ -171,7 +171,9 @@ function StatForm({ formId, onSubmit, defaultValues }: IProps) {
                     </Flex>
 
                     <Flex gap={2}>
-                      <Text>H1: &mu;</Text>
+                      <Text>
+                        H<sub>a</sub>: &mu;
+                      </Text>
                       <FormControl width="50px">
                         <Select
                           {...register("mu1dir")}
