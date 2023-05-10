@@ -28,6 +28,7 @@ enum HT {
   Xbar = "Sample Mean",
   Stdev = "Std. Dev.",
   Stderr = "Std. Err.",
+  Alpha = "Alpha",
   Zcrit = "Z-crit",
   ZStat = "Z-stat",
   PValue = "P-value",
@@ -37,27 +38,46 @@ type ResultRow = {
   [key in HT]: string;
 };
 
+enum CITable {
+  LL = "L.Limit",
+  UL = "U.Limit",
+}
+
+type CITableRow = {
+  [key in CITable]: number;
+};
+
 function HypothesisTest({ formSummary }: IProps) {
   const { xbar, stdev, n, mu0dir, mu0val, mu1dir, mu1val, alpha } = formSummary;
 
   const stderr = Number(stdev) / Math.sqrt(Number(n));
-  const zcrit = -1 * quantile(Number(alpha) / 2, 0, 1);
   const zstat = (Number(xbar) - Number(mu0val)) / stderr;
 
+  let ciLevel: string;
+  let zcrit: number;
   let pvalue: number;
   switch (mu1dir) {
     case "ne":
+      ciLevel = `${100 * (1 - Number(alpha))}%`;
+      zcrit = -quantile(Number(alpha) / 2, 0, 1);
       pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
       break;
     case "gt":
+      ciLevel = `${100 * (1 - 2 * Number(alpha))}%`;
+      zcrit = -quantile(Number(alpha), 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
     case "lt":
+      ciLevel = `${100 * (1 - 2 * Number(alpha))}%`;
+      zcrit = quantile(Number(alpha), 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     default:
       throw new Error("Invalid hypothesis direction");
   }
+
+  const ll = Number(xbar) - zcrit * stderr;
+  const ul = Number(xbar) + zcrit * stderr;
 
   const columnHeaders: (GridColumn & { title: HT })[] = useMemo(() => {
     return Object.values(HT).map((e) => ({ title: e, width: 100 }));
@@ -72,6 +92,7 @@ function HypothesisTest({ formSummary }: IProps) {
       [HT.Zcrit]: String(zcrit),
       [HT.ZStat]: String(zstat),
       [HT.PValue]: String(pvalue),
+      [HT.Alpha]: alpha,
     },
   ];
 
@@ -92,6 +113,28 @@ function HypothesisTest({ formSummary }: IProps) {
     };
   }, []);
 
+  const CIHeaders: (GridColumn & { title: CITable })[] = useMemo(() => {
+    return Object.values(CITable).map((e) => ({ title: e, width: 100 }));
+  }, []);
+
+  const CIData: CITableRow[] = [{ [CITable.LL]: ll, [CITable.UL]: ul }];
+
+  const getCIContent = useCallback((cell: Item): GridCell => {
+    const [col, row] = cell;
+    const dataRow = CIData[row];
+    const indexes: (keyof CITableRow)[] = CIHeaders.map(
+      (col) => col.title as keyof CITableRow
+    );
+    const d = dataRow[indexes[col]];
+    return {
+      kind: GridCellKind.Number,
+      allowOverlay: true,
+      readonly: false,
+      displayData: String(d),
+      data: d,
+    };
+  }, []);
+
   return (
     <>
       <p>
@@ -103,6 +146,16 @@ function HypothesisTest({ formSummary }: IProps) {
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
+        rows={1}
+        getCellsForSelection={true}
+        rowMarkers="none"
+        copyHeaders={true}
+        smoothScrollX={true}
+      />
+      <p>{ciLevel} Confidence Interval</p>
+      <DataEditor
+        getCellContent={getCIContent}
+        columns={CIHeaders}
         rows={1}
         getCellsForSelection={true}
         rowMarkers="none"
