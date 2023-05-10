@@ -92,17 +92,17 @@ function HypothesisTest({ formSummary }: IProps) {
 
   const sampleStatisticsColumnHeaders: (GridColumn & { title: SSTable })[] =
     useMemo(() => {
-      return Object.values(SSTable).map((e) => ({ title: e, width: 100 }));
+      return Object.values(SSTable).map((e) => ({ title: e, id: e }));
     }, []);
 
   const hypothesisTestColumnHeaders: (GridColumn & { title: HTTable })[] =
     useMemo(() => {
-      return Object.values(HTTable).map((e) => ({ title: e, width: 100 }));
+      return Object.values(HTTable).map((e) => ({ title: e, id: e }));
     }, []);
 
   const confidenceIntervalColumnHeaders: (GridColumn & { title: CITable })[] =
     useMemo(() => {
-      return Object.values(CITable).map((e) => ({ title: e, width: 100 }));
+      return Object.values(CITable).map((e) => ({ title: e, id: e }));
     }, []);
 
   const sampleStatisticsData: SSTableRow[] = [

@@ -40,7 +40,7 @@ function ConfidenceInterval({ formSummary }: IProps) {
   const ul = Number(xbar) + me;
 
   const columnHeaders: (GridColumn & { title: CI })[] = useMemo(() => {
-    return Object.values(CI).map((e) => ({ title: e, width: 100 }));
+    return Object.values(CI).map((e) => ({ title: e, id: e }));
   }, []);
 
   let data: ResultRow[] = [
