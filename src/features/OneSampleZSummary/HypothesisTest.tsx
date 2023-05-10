@@ -5,6 +5,9 @@ import DataEditor, {
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
+import quantile from "@stdlib/stats-base-dists-normal-quantile";
+import cdf from "@stdlib/stats-base-dists-normal-cdf";
+
 import { TForm } from "./types";
 
 const codes = {
@@ -25,6 +28,9 @@ enum HT {
   Xbar = "Sample Mean",
   Stdev = "Std. Dev.",
   Stderr = "Std. Err.",
+  Zcrit = "Z-crit",
+  ZStat = "Z-stat",
+  PValue = "P-value",
 }
 
 type ResultRow = {
@@ -32,7 +38,26 @@ type ResultRow = {
 };
 
 function HypothesisTest({ formSummary }: IProps) {
-  const { xbar, stdev, n, mu0dir, mu0val, mu1dir, mu1val } = formSummary;
+  const { xbar, stdev, n, mu0dir, mu0val, mu1dir, mu1val, alpha } = formSummary;
+
+  const stderr = Number(stdev) / Math.sqrt(Number(n));
+  const zcrit = -1 * quantile(Number(alpha) / 2, 0, 1);
+  const zstat = (Number(xbar) - Number(mu0val)) / stderr;
+
+  let pvalue: number;
+  switch (mu1dir) {
+    case "ne":
+      pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
+      break;
+    case "gt":
+      pvalue = 1 - cdf(zstat, 0, 1);
+      break;
+    case "lt":
+      pvalue = cdf(zstat, 0, 1);
+      break;
+    default:
+      throw new Error("Invalid hypothesis direction");
+  }
 
   const columnHeaders: (GridColumn & { title: HT })[] = useMemo(() => {
     return Object.values(HT).map((e) => ({ title: e, width: 100 }));
@@ -43,7 +68,10 @@ function HypothesisTest({ formSummary }: IProps) {
       [HT.N]: n,
       [HT.Xbar]: xbar,
       [HT.Stdev]: stdev,
-      [HT.Stderr]: "12",
+      [HT.Stderr]: String(stderr),
+      [HT.Zcrit]: String(zcrit),
+      [HT.ZStat]: String(zstat),
+      [HT.PValue]: String(pvalue),
     },
   ];
 
