@@ -1,30 +1,10 @@
-import { useCallback, useMemo } from "react";
-import DataEditor, {
-  GridCell,
-  GridCellKind,
-  GridColumn,
-  Item,
-} from "@glideapps/glide-data-grid";
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
-
 import { TForm } from "./types";
-import { SampleStatisticsTable } from "./SampleStatisticsTable";
+import { SampleStatisticsTable } from "./Tables/SampleStatisticsTable";
+import { ConfidenceIntervalTable } from "./Tables/ConfidenceIntervalTable";
 
 type IProps = {
   formSummary: TForm;
-};
-
-// Set column order here
-enum CI {
-  Level = "Level",
-  Zcrit = "Z-crit",
-  Me = "M.E.",
-  LL = "L. Limit",
-  UL = "U. Limit",
-}
-
-type ResultRow = {
-  [key in CI]: string;
 };
 
 function ConfidenceInterval({ formSummary }: IProps) {
@@ -36,49 +16,15 @@ function ConfidenceInterval({ formSummary }: IProps) {
   const ll = Number(xbar) - me;
   const ul = Number(xbar) + me;
 
-  const columnHeaders: (GridColumn & { title: CI })[] = useMemo(() => {
-    return Object.values(CI).map((e) => ({ title: e, id: e }));
-  }, []);
-
-  let data: ResultRow[] = [
-    {
-      [CI.Level]: level,
-      [CI.Zcrit]: String(zcrit),
-      [CI.Me]: String(me),
-      [CI.LL]: String(ll),
-      [CI.UL]: String(ul),
-    },
-  ];
-
-  const getContent = useCallback((cell: Item): GridCell => {
-    const [col, row] = cell;
-    const dataRow = data[row];
-    // dumb but simple way to do this
-    const indexes: (keyof ResultRow)[] = columnHeaders.map(
-      (col) => col.title as keyof ResultRow
-    );
-    const d = dataRow[indexes[col]];
-    return {
-      kind: GridCellKind.Text,
-      allowOverlay: true,
-      readonly: false,
-      displayData: d,
-      data: d,
-    };
-  }, []);
-
   return (
     <>
       <SampleStatisticsTable xbar={xbar} stdev={stdev} stderr={stderr} n={n} />
-      <p>Confidence Interval</p>
-      <DataEditor
-        getCellContent={getContent}
-        columns={columnHeaders}
-        rows={1}
-        getCellsForSelection={true}
-        rowMarkers="none"
-        copyHeaders={true}
-        smoothScrollX={true}
+      <ConfidenceIntervalTable
+        level={Number(level)}
+        zcrit={zcrit}
+        me={me}
+        ll={ll}
+        ul={ul}
       />
     </>
   );
