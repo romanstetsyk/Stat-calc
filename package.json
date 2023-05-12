@@ -18,6 +18,7 @@
     "@stdlib/stats-base-dists-normal-quantile": "^0.0.7",
     "@stdlib/stats-base-mean": "^0.0.9",
     "@stdlib/stats-base-mediansorted": "^0.0.9",
+    "@stdlib/stats-base-stdev": "^0.0.9",
     "@stdlib/stats-base-variance": "^0.0.10",
     "framer-motion": "^10.12.5",
     "lodash": "^4.17.21",

@@ -8,6 +8,8 @@ export enum Options {
   Median = "Median",
   SVariance = "Sample Variance",
   PVariance = "Population Variance",
+  SStdev = "Sample Stdev",
+  PStdev = "Population Stdev",
 }
 
 export type TForm = {

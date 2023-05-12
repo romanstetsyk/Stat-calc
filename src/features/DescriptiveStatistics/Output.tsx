@@ -10,6 +10,7 @@ import DataEditor, {
 import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
 import variance from "@stdlib/stats-base-variance";
+import stdev from "@stdlib/stats-base-stdev";
 
 import { DisplayOptions, Options, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
@@ -78,6 +79,16 @@ function Output({ setDisplay, formSummary, cols }: IProps) {
       // Population variance
       if (options.includes(Options.PVariance)) {
         row[Options.PVariance] = String(variance(n, 0, arrOfNums, 1));
+      }
+
+      // Sample standard deviation
+      if (options.includes(Options.SStdev)) {
+        row[Options.SStdev] = String(stdev(n, 1, arrOfNums, 1));
+      }
+
+      // Sample standard deviation
+      if (options.includes(Options.PStdev)) {
+        row[Options.PStdev] = String(stdev(n, 0, arrOfNums, 1));
       }
 
       return row;
