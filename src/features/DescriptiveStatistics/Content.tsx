@@ -1,3 +1,5 @@
+import { useId, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 import {
   ModalContent,
   ModalHeader,
@@ -6,37 +8,34 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { DisplayOptions, Options, TForm } from "./types";
-import { useId, useState } from "react";
+import { DisplayOptions, TForm } from "./types";
+import { SampleStatisticsEnum } from "../../components/SampleStatisticsTable";
 import { StatForm } from "./StatForm";
-import { SubmitHandler } from "react-hook-form";
 import { ColumnValues } from "../../Types";
 import { Output } from "./Output";
 
-interface IProps {
+type Props = {
   onClose: () => void;
   cols: ColumnValues;
-}
+};
 
-function Content({ cols, onClose }: IProps) {
+export const Content = ({ cols, onClose }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
-    options: Object.values(Options),
+    options: Object.values(SampleStatisticsEnum),
   });
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
     const { columns, options } = data;
-    console.log(options);
     if (columns === false || columns.length === 0) return;
     if (typeof columns === "string") {
-      setFormSummary({ columns: [columns], options: options });
+      setFormSummary({ columns: [columns], options });
     } else {
       setFormSummary({ columns, options });
     }
     setDisplay("result");
-    console.log(data);
   };
 
   return (
@@ -73,6 +72,4 @@ function Content({ cols, onClose }: IProps) {
       </ModalFooter>
     </ModalContent>
   );
-}
-
-export { Content };
+};

@@ -2,11 +2,11 @@ import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
 import { Content } from "./Content";
 import { ColumnValues } from "../../Types";
 
-type IProps = {
+type Props = {
   cols: ColumnValues;
 };
 
-function StatModal({ cols }: IProps) {
+export const StatModal = ({ cols }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -18,6 +18,4 @@ function StatModal({ cols }: IProps) {
       </Modal>
     </>
   );
-}
-
-export { StatModal };
+};

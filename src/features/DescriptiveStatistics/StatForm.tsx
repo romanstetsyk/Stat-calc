@@ -1,5 +1,4 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Options, TForm } from "./types";
 import {
   Checkbox,
   CheckboxGroup,
@@ -7,16 +6,19 @@ import {
   FormLabel,
   Stack,
 } from "@chakra-ui/react";
-import { ColumnValues } from "../../Types";
 
-type IProps = {
+import { ColumnValues } from "../../Types";
+import { TForm } from "./types";
+import { SampleStatisticsEnum } from "../../components/SampleStatisticsTable";
+
+type Props = {
   onSubmit: SubmitHandler<TForm>;
   cols: ColumnValues;
   formId: string;
   defaultValues: TForm;
 };
 
-function StatForm({ onSubmit, cols, formId, defaultValues }: IProps) {
+export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
   const { handleSubmit, register } = useForm<TForm>({ defaultValues });
 
   return (
@@ -24,18 +26,20 @@ function StatForm({ onSubmit, cols, formId, defaultValues }: IProps) {
       <FormControl>
         <FormLabel>Choose columns</FormLabel>
         <Stack direction="column">
-          {Object.keys(cols).map((col) => (
-            <Checkbox key={col} value={col} {...register("columns")}>
-              {col}
-            </Checkbox>
-          ))}
+          {Object.keys(cols)
+            .sort()
+            .map((col) => (
+              <Checkbox key={col} value={col} {...register("columns")}>
+                {col}
+              </Checkbox>
+            ))}
         </Stack>
       </FormControl>
       <FormControl>
         <FormLabel>Statistics</FormLabel>
         <CheckboxGroup defaultValue={defaultValues.options}>
           <Stack direction="column">
-            {Object.values(Options).map((opt) => (
+            {Object.values(SampleStatisticsEnum).map((opt) => (
               <Checkbox key={opt} value={opt} {...register("options")}>
                 {opt}
               </Checkbox>
@@ -45,6 +49,4 @@ function StatForm({ onSubmit, cols, formId, defaultValues }: IProps) {
       </FormControl>
     </form>
   );
-}
-
-export { StatForm };
+};
