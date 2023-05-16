@@ -1,9 +1,12 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
 import { TForm } from "./types";
-import { SampleStatisticsTable } from "./Tables/SampleStatisticsTable";
 import { HypothesisTestTable } from "./Tables/HypothesisTestTable";
 import { ConfidenceIntervalTable } from "./Tables/ConfidenceIntervalTable";
+import {
+  SampleStatisticsEnum as SSEnum,
+  SampleStatisticsTable,
+} from "../../components/SampleStatisticsTable";
 
 // ASCII codes of comparison signs
 const codes = {
@@ -48,6 +51,16 @@ function HypothesisTest({ formSummary }: IProps) {
       throw new Error("Invalid hypothesis direction");
   }
 
+  const sampleStatisticsData = [
+    {
+      "": "Sample 1",
+      [SSEnum.N]: Number(n),
+      [SSEnum.Xbar]: Number(xbar),
+      [SSEnum.SStdev]: Number(stdev),
+      [SSEnum.Stderr]: stderr,
+    },
+  ];
+
   const me = zcrit * stderr;
   const ll = Number(xbar) - me;
   const ul = Number(xbar) + me;
@@ -60,7 +73,10 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>
         H<sub>a</sub>: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
-      <SampleStatisticsTable xbar={xbar} stdev={stdev} stderr={stderr} n={n} />
+      <SampleStatisticsTable
+        data={sampleStatisticsData}
+        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
+      />
       <HypothesisTestTable
         zcrit={zcrit}
         zstat={zstat}
