@@ -1,12 +1,12 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
 import { TForm } from "./types";
-import { HypothesisTestTable } from "./Tables/HypothesisTestTable";
-import { ConfidenceIntervalTable } from "./Tables/ConfidenceIntervalTable";
 import {
   SampleStatisticsEnum as SSEnum,
-  SampleStatisticsTable,
-} from "../../components/SampleStatisticsTable";
+  ConfidenceIntervalEnum as CIEnum,
+  HypothesisTestEnum as HTEnum,
+  DataTable,
+} from "../../components/DataTable";
 
 // ASCII codes of comparison signs
 const codes = {
@@ -18,11 +18,11 @@ const codes = {
   lt: 60,
 };
 
-type IProps = {
+type Props = {
   formSummary: TForm;
 };
 
-function HypothesisTest({ formSummary }: IProps) {
+export const HypothesisTest = ({ formSummary }: Props) => {
   const { xbar, stdev, n, mu0dir, mu0val, mu1dir, mu1val, alpha } = formSummary;
 
   const stderr = Number(stdev) / Math.sqrt(Number(n));
@@ -61,9 +61,30 @@ function HypothesisTest({ formSummary }: IProps) {
     },
   ];
 
+  const hypothesisTestData = [
+    {
+      "": "Sample 1",
+      [HTEnum.Alpha]: Number(alpha),
+      [HTEnum.Zcrit]: zcrit,
+      [HTEnum.Zstat]: zstat,
+      [HTEnum.Pvalue]: pvalue,
+    },
+  ];
+
   const me = zcrit * stderr;
   const ll = Number(xbar) - me;
   const ul = Number(xbar) + me;
+
+  const confidenceIntervalData = [
+    {
+      "": "Sample 1",
+      [CIEnum.Level]: ciLevel,
+      [CIEnum.Zcrit]: zcrit,
+      [CIEnum.Me]: me,
+      [CIEnum.LL]: ll,
+      [CIEnum.UL]: ul,
+    },
+  ];
 
   return (
     <>
@@ -73,26 +94,21 @@ function HypothesisTest({ formSummary }: IProps) {
       <p>
         H<sub>a</sub>: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
       </p>
-      <SampleStatisticsTable
+      <p>Sample Data</p>
+      <DataTable
         data={sampleStatisticsData}
         stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
       />
-      <HypothesisTestTable
-        zcrit={zcrit}
-        zstat={zstat}
-        pvalue={pvalue}
-        alpha={Number(alpha)}
+      <p>Hypothesis Test Result</p>
+      <DataTable
+        data={hypothesisTestData}
+        stats={[HTEnum.Alpha, HTEnum.Zcrit, HTEnum.Zstat, HTEnum.Pvalue]}
       />
-
-      <ConfidenceIntervalTable
-        level={ciLevel}
-        zcrit={zcrit}
-        me={me}
-        ll={ll}
-        ul={ul}
+      <p>Confidence Interval</p>
+      <DataTable
+        data={confidenceIntervalData}
+        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
       />
     </>
   );
-}
-
-export { HypothesisTest };
+};

@@ -12,11 +12,11 @@ import { StatForm } from "./StatForm";
 import { Output } from "./Output";
 import { DisplayOptions, PerformType, TForm } from "./types";
 
-interface IProps {
+type Props = {
   onClose: () => void;
-}
+};
 
-function Content({ onClose }: IProps) {
+export const Content = ({ onClose }: Props) => {
   const formId = useId();
 
   const [display, setDisplay] = useState<DisplayOptions>("form");
@@ -68,6 +68,4 @@ function Content({ onClose }: IProps) {
       </ModalFooter>
     </ModalContent>
   );
-}
-
-export { Content };
+};

@@ -1,5 +1,5 @@
 import { GridColumnName } from "../../Types";
-import { SampleStatisticsEnum } from "../../components/SampleStatisticsTable";
+import { SampleStatisticsEnum } from "../../components/DataTable";
 
 export type DisplayOptions = "form" | "result";
 

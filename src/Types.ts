@@ -4,6 +4,6 @@ export type ColumnValues = {
   [key: GridColumnName]: string[];
 };
 
-export interface GridRow {
+export type GridRow = {
   [colName: GridColumnName]: string;
-}
+};

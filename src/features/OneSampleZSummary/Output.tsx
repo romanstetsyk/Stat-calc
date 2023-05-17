@@ -4,12 +4,12 @@ import { DisplayOptions, PerformType, TForm } from "./types";
 import { ConfidenceInterval } from "./ConfidenceInterval";
 import { HypothesisTest } from "./HypothesisTest";
 
-type IProps = {
+type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
 };
 
-function Output({ setDisplay, formSummary }: IProps) {
+export const Output = ({ setDisplay, formSummary }: Props) => {
   const { perform } = formSummary;
   return (
     <>
@@ -22,6 +22,4 @@ function Output({ setDisplay, formSummary }: IProps) {
       )}
     </>
   );
-}
-
-export { Output };
+};

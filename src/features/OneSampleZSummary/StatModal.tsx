@@ -1,7 +1,7 @@
 import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
 import { Content } from "./Content";
 
-function StatModal() {
+export const StatModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -13,6 +13,4 @@ function StatModal() {
       </Modal>
     </>
   );
-}
-
-export { StatModal };
+};

@@ -9,7 +9,7 @@ import {
 
 import { ColumnValues } from "../../Types";
 import { TForm } from "./types";
-import { SampleStatisticsEnum } from "../../components/SampleStatisticsTable";
+import { SampleStatisticsEnum } from "../../components/DataTable";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;

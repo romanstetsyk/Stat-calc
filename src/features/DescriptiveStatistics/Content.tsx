@@ -9,7 +9,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { DisplayOptions, TForm } from "./types";
-import { SampleStatisticsEnum } from "../../components/SampleStatisticsTable";
+import { SampleStatisticsEnum } from "../../components/DataTable";
 import { StatForm } from "./StatForm";
 import { ColumnValues } from "../../Types";
 import { Output } from "./Output";

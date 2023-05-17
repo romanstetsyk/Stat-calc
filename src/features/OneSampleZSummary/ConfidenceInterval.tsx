@@ -1,16 +1,16 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import { TForm } from "./types";
-import { ConfidenceIntervalTable } from "./Tables/ConfidenceIntervalTable";
 import {
   SampleStatisticsEnum as SSEnum,
-  SampleStatisticsTable,
-} from "../../components/SampleStatisticsTable";
+  ConfidenceIntervalEnum as CIEnum,
+  DataTable,
+} from "../../components/DataTable";
 
 type Props = {
   formSummary: TForm;
 };
 
-function ConfidenceInterval({ formSummary }: Props) {
+export const ConfidenceInterval = ({ formSummary }: Props) => {
   const { xbar, stdev, n, level } = formSummary;
 
   const stderr = Number(stdev) / Math.sqrt(Number(n));
@@ -29,21 +29,29 @@ function ConfidenceInterval({ formSummary }: Props) {
     },
   ];
 
+  const confidenceIntervalData = [
+    {
+      "": "Sample 1",
+      [CIEnum.Level]: Number(level),
+      [CIEnum.Zcrit]: zcrit,
+      [CIEnum.Me]: me,
+      [CIEnum.LL]: ll,
+      [CIEnum.UL]: ul,
+    },
+  ];
+
   return (
     <>
-      <SampleStatisticsTable
+      <p>Sample Statistics</p>
+      <DataTable
         data={sampleStatisticsData}
         stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
       />
-      <ConfidenceIntervalTable
-        level={Number(level)}
-        zcrit={zcrit}
-        me={me}
-        ll={ll}
-        ul={ul}
+      <p>Confidence Interval</p>
+      <DataTable
+        data={confidenceIntervalData}
+        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
       />
     </>
   );
-}
-
-export { ConfidenceInterval };
+};
