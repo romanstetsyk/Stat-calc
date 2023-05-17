@@ -7,3 +7,6 @@ export type ColumnValues = {
 export type GridRow = {
   [colName: GridColumnName]: string;
 };
+
+export type H0Sign = "eq" | "ge" | "le";
+export type H1Sign = "ne" | "lt" | "gt";

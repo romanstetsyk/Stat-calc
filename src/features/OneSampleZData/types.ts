@@ -1,4 +1,4 @@
-import { GridColumnName } from "../../Types";
+import { GridColumnName, H0Sign, H1Sign } from "../../Types";
 
 export enum PerformType {
   hypothesisTest = "hypothesisTest",
@@ -8,8 +8,8 @@ export enum PerformType {
 export type TForm = {
   columns: false | GridColumnName | GridColumnName[];
   perform: PerformType;
-  mu0dir: "eq" | "ge" | "le";
-  mu1dir: "ne" | "lt" | "gt";
+  mu0dir: H0Sign;
+  mu1dir: H1Sign;
   mu0val: string;
   mu1val: string;
   alpha: string;

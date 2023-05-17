@@ -7,16 +7,7 @@ import {
   HypothesisTestEnum as HTEnum,
   DataTable,
 } from "../../components/DataTable";
-
-// ASCII codes of comparison signs
-const codes = {
-  eq: 61,
-  ge: 8805,
-  le: 8804,
-  ne: 8800,
-  gt: 62,
-  lt: 60,
-};
+import { HypothesisTestNotation } from "../../components/HypothesisTestNotation";
 
 type Props = {
   formSummary: TForm;
@@ -88,12 +79,13 @@ export const HypothesisTest = ({ formSummary }: Props) => {
 
   return (
     <>
-      <p>
-        H<sub>0</sub>: &mu; {String.fromCharCode(codes[mu0dir])} {mu0val}
-      </p>
-      <p>
-        H<sub>a</sub>: &mu; {String.fromCharCode(codes[mu1dir])} {mu1val}
-      </p>
+      <HypothesisTestNotation
+        mu0dir={mu0dir}
+        mu1dir={mu1dir}
+        mu0val={mu0val}
+        mu1val={mu1val}
+      />
+
       <p>Sample Data</p>
       <DataTable
         data={sampleStatisticsData}

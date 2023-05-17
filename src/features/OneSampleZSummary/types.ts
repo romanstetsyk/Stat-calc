@@ -1,3 +1,5 @@
+import { H0Sign, H1Sign } from "../../Types";
+
 export enum PerformType {
   hypothesisTest = "hypothesisTest",
   confidenceInterval = "confidenceInterval",
@@ -8,8 +10,8 @@ export type TForm = {
   stdev: string;
   n: string;
   perform: PerformType;
-  mu0dir: "eq" | "ge" | "le";
-  mu1dir: "ne" | "lt" | "gt";
+  mu0dir: H0Sign;
+  mu1dir: H1Sign;
   mu0val: string;
   mu1val: string;
   alpha: string;
