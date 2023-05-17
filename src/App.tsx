@@ -10,6 +10,7 @@ import "@glideapps/glide-data-grid/dist/index.css";
 import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummary/StatModal";
 import { StatModal as OneSampleZDataModal } from "./features/OneSampleZData/StatModal";
 import { StatModal as DescriptiveStatisticsModal } from "./features/DescriptiveStatistics/StatModal";
+import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummary/StatModal";
 import { ColumnValues, GridColumnName, GridRow } from "./Types";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
@@ -74,6 +75,7 @@ function App() {
       <OneSampleZSummaryModal />
       <OneSampleZDataModal cols={columns} />
       <DescriptiveStatisticsModal cols={columns} />
+      <TwoSampleZSummaryModal />
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
