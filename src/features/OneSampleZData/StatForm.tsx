@@ -14,7 +14,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { isFiniteNumber, isValidLevel } from "../../utils/validators";
+import {
+  isFiniteNumber,
+  isPositiveNumber,
+  isValidLevel,
+} from "../../utils/validators";
 import { InputField } from "../../components/InputField";
 import { TForm, PerformType } from "./types";
 import { ColumnValues } from "../../Types";
@@ -86,6 +90,14 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
             ))}
         </Stack>
       </FormControl>
+
+      <InputField
+        label="Std. dev. (optional)"
+        name="pstdev"
+        register={register}
+        rules={{ validate: (value) => value === "" || isPositiveNumber(value) }}
+        errors={errors}
+      />
 
       <FormControl isInvalid={Boolean(errors.perform)}>
         <Controller

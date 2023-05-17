@@ -18,14 +18,15 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary, cols }: Props) => {
-  const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha } = formSummary;
+  const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha, pstdev } =
+    formSummary;
 
   const rows = (columns as Array<GridColumnName>).map((colName) => {
     const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
-    const sampleStdev = stdev(n, 1, arrOfNums, 1);
-    const stderr = sampleStdev / Math.sqrt(n);
+    const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
+    const stderr = stdevApprox / Math.sqrt(n);
     const zstat = (xbar - Number(mu0val)) / stderr;
 
     let ciLevel: number;
@@ -59,7 +60,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
       "": colName,
       [SSEnum.N]: n,
       [SSEnum.Xbar]: xbar,
-      [SSEnum.SStdev]: sampleStdev,
+      [SSEnum.PStdev]: stdevApprox,
       [SSEnum.Stderr]: stderr,
       [CIEnum.Level]: Number(ciLevel),
       [CIEnum.Zcrit]: zcrit,
@@ -85,7 +86,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
       <p>Sample Data</p>
       <DataTable
         data={rows}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
+        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.PStdev, SSEnum.Stderr]}
       />
       <p>Hypothesis Test Result</p>
       <DataTable

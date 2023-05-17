@@ -16,15 +16,15 @@ type Props = {
 };
 
 export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
-  const { columns, level } = formSummary;
+  const { columns, level, pstdev } = formSummary;
 
   const rows: DataTableRow[] = (columns as Array<GridColumnName>).map(
     (colName) => {
       const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
       const n = arrOfNums.length;
       const xbar = mean(n, arrOfNums, 1);
-      const sampleStdev = stdev(n, 1, arrOfNums, 1);
-      const stderr = sampleStdev / Math.sqrt(n);
+      const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
+      const stderr = stdevApprox / Math.sqrt(n);
       const zcrit = -1 * quantile((1 - Number(level)) / 2, 0, 1);
       const me = zcrit * stderr;
       const ll = Number(xbar) - me;
@@ -34,7 +34,7 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
         "": colName,
         [SSEnum.N]: n,
         [SSEnum.Xbar]: xbar,
-        [SSEnum.SStdev]: sampleStdev,
+        [SSEnum.PStdev]: stdevApprox,
         [SSEnum.Stderr]: stderr,
         [CIEnum.Level]: Number(level),
         [CIEnum.Zcrit]: zcrit,
@@ -51,7 +51,7 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
       <p>Sample Statistics</p>
       <DataTable
         data={rows}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
+        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.PStdev, SSEnum.Stderr]}
       />
       <p>Confidence Interval</p>
       <DataTable

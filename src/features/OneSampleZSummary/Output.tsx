@@ -13,7 +13,7 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
   const { perform } = formSummary;
   return (
     <>
-      <Button onClick={() => setDisplay("form")}>Edit</Button>
+      <Button onClick={() => setDisplay("form")}>← Back</Button>
       {perform === PerformType.hypothesisTest && (
         <HypothesisTest formSummary={formSummary} />
       )}

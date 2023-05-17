@@ -7,6 +7,7 @@ export enum PerformType {
 
 export type TForm = {
   columns: false | GridColumnName | GridColumnName[];
+  pstdev?: string;
   perform: PerformType;
   mu0dir: H0Sign;
   mu1dir: H1Sign;

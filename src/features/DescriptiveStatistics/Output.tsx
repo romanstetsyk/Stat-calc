@@ -77,7 +77,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
 
   return (
     <>
-      <Button onClick={() => setDisplay("form")}>Edit</Button>
+      <Button onClick={() => setDisplay("form")}>← Back</Button>
       <DataTable data={data} stats={options} />
     </>
   );
