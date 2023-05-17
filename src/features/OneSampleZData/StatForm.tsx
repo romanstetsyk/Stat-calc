@@ -2,9 +2,11 @@ import * as React from "react";
 import { useState } from "react";
 import {
   Box,
+  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Radio,
   RadioGroup,
   Select,
@@ -12,22 +14,19 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import {
-  isFiniteNumber,
-  isIntegerGreaterThanOne,
-  isPositiveNumber,
-  isValidLevel,
-} from "../../utils/validators";
+import { isFiniteNumber, isValidLevel } from "../../utils/validators";
 import { InputField } from "../../components/InputField";
 import { TForm, PerformType } from "./types";
+import { ColumnValues } from "../../Types";
 
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
   defaultValues: TForm;
+  cols: ColumnValues;
 };
 
-export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
+export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
   const {
     register,
     handleSubmit,
@@ -75,38 +74,18 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      <InputField
-        label="Sample mean"
-        name="xbar"
-        register={register}
-        rules={{
-          required: "This value is required",
-          validate: isFiniteNumber,
-        }}
-        errors={errors}
-      />
-
-      <InputField
-        label="Std. dev."
-        name="stdev"
-        register={register}
-        rules={{
-          required: "This value is required",
-          validate: isPositiveNumber,
-        }}
-        errors={errors}
-      />
-
-      <InputField
-        label="Sample size"
-        name="n"
-        register={register}
-        rules={{
-          required: "This value is required",
-          validate: isIntegerGreaterThanOne,
-        }}
-        errors={errors}
-      />
+      <FormControl>
+        <FormLabel>Choose columns</FormLabel>
+        <Stack direction="column">
+          {Object.keys(cols)
+            .sort()
+            .map((col) => (
+              <Checkbox key={col} value={col} {...register("columns")}>
+                {col}
+              </Checkbox>
+            ))}
+        </Stack>
+      </FormControl>
 
       <FormControl isInvalid={Boolean(errors.perform)}>
         <Controller

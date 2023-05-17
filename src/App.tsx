@@ -8,6 +8,7 @@ import DataEditor, {
 } from "@glideapps/glide-data-grid";
 import "@glideapps/glide-data-grid/dist/index.css";
 import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummary/StatModal";
+import { StatModal as OneSampleZDataModal } from "./features/OneSampleZData/StatModal";
 import { StatModal as DescriptiveStatisticsModal } from "./features/DescriptiveStatistics/StatModal";
 import { ColumnValues, GridColumnName, GridRow } from "./Types";
 
@@ -71,11 +72,12 @@ function App() {
   return (
     <>
       <OneSampleZSummaryModal />
+      <OneSampleZDataModal cols={columns} />
       <DescriptiveStatisticsModal cols={columns} />
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
-        rows={5}
+        rows={12}
         onCellEdited={onCellEdited}
         rowMarkers={"clickable-number"}
         getCellsForSelection={true}
