@@ -35,6 +35,8 @@ export const Content = ({ onClose, cols }: Props) => {
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
+    const { columns } = data;
+    if (columns === false || columns.length === 0) return;
     setFormSummary(data);
     setDisplay("result");
   };
