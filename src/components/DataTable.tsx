@@ -32,31 +32,31 @@ export enum HypothesisTestEnum {
   Alpha = "alpha",
 }
 
-// Header of the first column
-type RowTitle = "";
+// T can be const enum or union of literals
+export type DataTableRow<
+  T extends string,
+  Title extends string = "column"
+> = Title extends "column"
+  ? Partial<{
+      [key in T]: string;
+    }>
+  : Partial<{
+      [key in T]: string;
+    }> &
+      Record<Title, string>;
 
-export type DataTableRow = {
-  [key in
-    | SampleStatisticsEnum
-    | ConfidenceIntervalEnum
-    | HypothesisTestEnum]?: number;
-} & Record<RowTitle, string>;
-
-type Props = {
-  data: DataTableRow[];
-  stats: (SampleStatisticsEnum | ConfidenceIntervalEnum | HypothesisTestEnum)[];
+//
+type Props<T extends string, Title extends string = "column"> = {
+  data: DataTableRow<T, Title>[];
+  stats: Title extends "column" ? T[] : [Title, ...T[]];
 };
 
-export const DataTable = ({ data, stats }: Props) => {
-  const columnHeaders: (GridColumn & {
-    title:
-      | SampleStatisticsEnum
-      | ConfidenceIntervalEnum
-      | HypothesisTestEnum
-      | RowTitle;
-  })[] = useMemo(() => {
-    const rowTitle: RowTitle = "";
-    return [rowTitle, ...Object.values(stats)].map((e) => ({
+export const DataTable = <T extends string, Title extends string = "column">({
+  data,
+  stats,
+}: Props<T, Title>) => {
+  const columnHeaders: GridColumn[] = useMemo(() => {
+    return stats.map((e) => ({
       title: e,
       id: e,
     }));
@@ -66,27 +66,18 @@ export const DataTable = ({ data, stats }: Props) => {
     const [col, row] = cell;
     const dataRow = data[row];
     // dumb but simple way to do this
-    const indexes: (keyof DataTableRow)[] = columnHeaders.map(
-      (col) => col.title as keyof DataTableRow
+    const indexes: (keyof DataTableRow<T, Title>)[] = columnHeaders.map(
+      (col) => col.title as keyof DataTableRow<T, Title>
     );
 
     const d = dataRow[indexes[col]];
 
-    if (col === 0) {
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        readonly: false,
-        displayData: String(d),
-        data: String(d),
-      };
-    }
     return {
-      kind: GridCellKind.Number,
+      kind: GridCellKind.Text,
       allowOverlay: true,
       readonly: false,
       displayData: String(d),
-      data: Number(d),
+      data: String(d),
     };
   }, []);
 

@@ -9,7 +9,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { DisplayOptions, TForm } from "./types";
-import { SampleStatisticsEnum } from "../../components/DataTable";
+import { SampleStatistics } from "./types";
 import { StatForm } from "./StatForm";
 import { ColumnValues } from "../../Types";
 import { Output } from "./Output";
@@ -24,7 +24,7 @@ export const Content = ({ cols, onClose }: Props) => {
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
-    options: Object.values(SampleStatisticsEnum),
+    options: [...SampleStatistics],
   });
 
   const onSubmit: SubmitHandler<TForm> = (data) => {

@@ -9,7 +9,7 @@ import {
 
 import { ColumnValues } from "../../Types";
 import { TForm } from "./types";
-import { SampleStatisticsEnum } from "../../components/DataTable";
+import { SampleStatistics } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -39,7 +39,7 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
         <FormLabel>Statistics</FormLabel>
         <CheckboxGroup defaultValue={defaultValues.options}>
           <Stack direction="column">
-            {Object.values(SampleStatisticsEnum).map((opt) => (
+            {SampleStatistics.map((opt) => (
               <Checkbox key={opt} value={opt} {...register("options")}>
                 {opt}
               </Checkbox>
