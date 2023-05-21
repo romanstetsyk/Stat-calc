@@ -60,26 +60,29 @@ export const DataTable = <T extends string, Title extends string = "column">({
       title: e,
       id: e,
     }));
-  }, []);
+  }, [stats]);
 
-  const getCellContent = useCallback((cell: Item): GridCell => {
-    const [col, row] = cell;
-    const dataRow = data[row];
-    // dumb but simple way to do this
-    const indexes: (keyof DataTableRow<T, Title>)[] = columnHeaders.map(
-      (col) => col.title as keyof DataTableRow<T, Title>
-    );
+  const getCellContent = useCallback(
+    (cell: Item): GridCell => {
+      const [col, row] = cell;
+      const dataRow = data[row];
+      // dumb but simple way to do this
+      const indexes: (keyof DataTableRow<T, Title>)[] = columnHeaders.map(
+        (col) => col.title as keyof DataTableRow<T, Title>
+      );
 
-    const d = dataRow[indexes[col]];
+      const d = dataRow[indexes[col]];
 
-    return {
-      kind: GridCellKind.Text,
-      allowOverlay: true,
-      readonly: false,
-      displayData: String(d),
-      data: String(d),
-    };
-  }, []);
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        readonly: false,
+        displayData: String(d),
+        data: String(d),
+      };
+    },
+    [columnHeaders, data]
+  );
 
   return (
     <DataEditor
