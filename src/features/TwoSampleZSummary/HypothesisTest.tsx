@@ -1,13 +1,10 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { TForm } from "./types";
-import {
-  SampleStatisticsEnum as SSEnum,
-  ConfidenceIntervalEnum as CIEnum,
-  HypothesisTestEnum as HTEnum,
-  DataTable,
-} from "../../components/DataTable";
+import { HTColumns, SampleStatistics, CIColumns, TForm } from "./types";
+import { DataTable, DataTableRow } from "../../components/DataTable";
 import { HypothesisTestNotation } from "../../components/HypothesisTestNotation";
+
+const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
@@ -29,8 +26,10 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   } = formSummary;
 
   const xdiff = Number(xbar1) - Number(xbar2);
-  const stderr = Math.sqrt((+stdev1) ** 2 / +n1 + (+stdev2) ** 2 / +n2);
-  const zstat = (xdiff - Number(mu0val)) / stderr;
+  const stderr1 = Number(stdev1) / Math.sqrt(Number(n1));
+  const stderr2 = Number(stdev2) / Math.sqrt(Number(n2));
+  const stderrPooled = Math.sqrt((+stdev1) ** 2 / +n1 + (+stdev2) ** 2 / +n2);
+  const zstat = (xdiff - Number(mu0val)) / stderrPooled;
 
   let ciLevel: number;
   let zcrit: number;
@@ -55,44 +54,45 @@ export const HypothesisTest = ({ formSummary }: Props) => {
       throw new Error("Invalid hypothesis direction");
   }
 
-  const sampleStatisticsData = [
+  const sampleStatisticsData: DataTableRow<SampleStatistics, "">[] = [
     {
       "": "Sample 1",
-      [SSEnum.N]: Number(n1),
-      [SSEnum.Xbar]: Number(xbar1),
-      [SSEnum.SStdev]: Number(stdev1),
+      N: n1,
+      Mean: xbar1,
+      "Known Stdev": stdev1,
+      "Std.Err": stderr1.toFixed(DECIMAL),
     },
     {
       "": "Sample 2",
-      [SSEnum.N]: Number(n2),
-      [SSEnum.Xbar]: Number(xbar2),
-      [SSEnum.SStdev]: Number(stdev2),
+      N: n2,
+      Mean: xbar2,
+      "Known Stdev": stdev2,
+      "Std.Err": stderr2.toFixed(DECIMAL),
     },
   ];
 
-  const hypothesisTestData = [
+  const hypothesisTestData: DataTableRow<HTColumns, "">[] = [
     {
       "": "mu1 - mu2",
-      [HTEnum.Alpha]: Number(alpha),
-      [HTEnum.Zcrit]: zcrit,
-      [SSEnum.Stderr]: stderr,
-      [HTEnum.Zstat]: zstat,
-      [HTEnum.Pvalue]: pvalue,
+      Alpha: alpha,
+      "Z-crit": zcrit.toFixed(DECIMAL),
+      "Std.Err.": stderrPooled.toFixed(DECIMAL),
+      "Z-stat": zstat.toFixed(DECIMAL),
+      "P-value": pvalue.toFixed(DECIMAL),
     },
   ];
 
-  const me = zcrit * stderr;
+  const me = zcrit * stderrPooled;
   const ll = xdiff - me;
   const ul = xdiff + me;
 
-  const confidenceIntervalData = [
+  const confidenceIntervalData: DataTableRow<CIColumns, "">[] = [
     {
       "": "mu1 - mu2",
-      [CIEnum.Level]: ciLevel,
-      [CIEnum.Zcrit]: zcrit,
-      [CIEnum.Me]: me,
-      [CIEnum.LL]: ll,
-      [CIEnum.UL]: ul,
+      Level: ciLevel.toString(),
+      "M.E.": me.toFixed(DECIMAL),
+      "L.Limit": ll.toFixed(DECIMAL),
+      "U.Limit": ul.toFixed(DECIMAL),
     },
   ];
 
@@ -108,23 +108,17 @@ export const HypothesisTest = ({ formSummary }: Props) => {
       <p>Sample Data</p>
       <DataTable
         data={sampleStatisticsData}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev]}
+        stats={["", "N", "Mean", "Known Stdev", "Std.Err"]}
       />
       <p>Hypothesis Test Result</p>
       <DataTable
         data={hypothesisTestData}
-        stats={[
-          HTEnum.Alpha,
-          HTEnum.Zcrit,
-          SSEnum.Stderr,
-          HTEnum.Zstat,
-          HTEnum.Pvalue,
-        ]}
+        stats={["", "Alpha", "Z-crit", "Std.Err.", "Z-stat", "P-value"]}
       />
       <p>Confidence Interval</p>
       <DataTable
         data={confidenceIntervalData}
-        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
+        stats={["", "Level", "M.E.", "L.Limit", "U.Limit"]}
       />
     </>
   );

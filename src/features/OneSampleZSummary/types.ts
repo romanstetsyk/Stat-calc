@@ -1,6 +1,11 @@
 import { H0Sign, H1Sign } from "../../Types";
 
-export const SampleStatistics = ["N", "Mean", "S.Stdev", "Std.Err"] as const;
+export const SampleStatistics = [
+  "N",
+  "Mean",
+  "Known Stdev",
+  "Std.Err",
+] as const;
 export type SampleStatistics = (typeof SampleStatistics)[number];
 
 export const CIColumns = [

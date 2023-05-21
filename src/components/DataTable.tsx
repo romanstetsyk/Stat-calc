@@ -6,32 +6,6 @@ import DataEditor, {
   Item,
 } from "@glideapps/glide-data-grid";
 
-export enum SampleStatisticsEnum {
-  N = "n",
-  Xbar = "Mean",
-  Median = "Median",
-  SVariance = "Sample Variance",
-  PVariance = "Population Variance",
-  SStdev = "Sample Stdev",
-  PStdev = "Population Stdev",
-  Stderr = "Std. err.",
-}
-
-export enum ConfidenceIntervalEnum {
-  Level = "Level",
-  Zcrit = "Z-crit",
-  Me = "M.E.",
-  LL = "L. Limit",
-  UL = "U. Limit",
-}
-
-export enum HypothesisTestEnum {
-  Zcrit = "Z-crit",
-  Zstat = "Z-stat",
-  Pvalue = "P-Value",
-  Alpha = "alpha",
-}
-
 // T can be const enum or union of literals
 export type DataTableRow<
   T extends string,

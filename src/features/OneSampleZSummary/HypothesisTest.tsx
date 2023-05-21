@@ -43,7 +43,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
     {
       N: n,
       Mean: xbar,
-      "S.Stdev": stdev,
+      "Known Stdev": stdev,
       "Std.Err": stderr.toFixed(DECIMAL),
     },
   ];
@@ -83,7 +83,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
       <p>Sample Data</p>
       <DataTable<SampleStatistics>
         data={sampleStatisticsData}
-        stats={["N", "Mean", "S.Stdev", "Std.Err"]}
+        stats={["N", "Mean", "Known Stdev", "Std.Err"]}
       />
       <p>Hypothesis Test Result</p>
       <DataTable<HTColumns>

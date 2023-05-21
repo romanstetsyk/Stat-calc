@@ -21,7 +21,7 @@ export const ConfidenceInterval = ({ formSummary }: Props) => {
     {
       N: n,
       Mean: xbar,
-      "S.Stdev": stdev,
+      "Known Stdev": stdev,
       "Std.Err": stderr.toFixed(DECIMAL),
     },
   ];
@@ -41,7 +41,7 @@ export const ConfidenceInterval = ({ formSummary }: Props) => {
       <p>Sample Statistics</p>
       <DataTable<SampleStatistics>
         data={sampleStatisticsData}
-        stats={["N", "Mean", "S.Stdev", "Std.Err"]}
+        stats={["N", "Mean", "Known Stdev", "Std.Err"]}
       />
       <p>Confidence Interval</p>
       <DataTable<CIColumns>
