@@ -1,14 +1,11 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
-import { TForm } from "./types";
+import { CIColumns, SampleStatistics, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
-import {
-  SampleStatisticsEnum as SSEnum,
-  ConfidenceIntervalEnum as CIEnum,
-  DataTable,
-  DataTableRow,
-} from "../../components/DataTable";
+import { DataTable, DataTableRow } from "../../components/DataTable";
+
+const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
@@ -18,45 +15,45 @@ type Props = {
 export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
   const { columns, level, pstdev } = formSummary;
 
-  const rows: DataTableRow[] = (columns as Array<GridColumnName>).map(
-    (colName) => {
-      const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
-      const n = arrOfNums.length;
-      const xbar = mean(n, arrOfNums, 1);
-      const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
-      const stderr = stdevApprox / Math.sqrt(n);
-      const zcrit = -1 * quantile((1 - Number(level)) / 2, 0, 1);
-      const me = zcrit * stderr;
-      const ll = Number(xbar) - me;
-      const ul = Number(xbar) + me;
+  const rows: DataTableRow<SampleStatistics | CIColumns, "">[] = (
+    columns as Array<GridColumnName>
+  ).map((colName) => {
+    const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
+    const n = arrOfNums.length;
+    const xbar = mean(n, arrOfNums, 1);
+    const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
+    const stderr = stdevApprox / Math.sqrt(n);
+    const zcrit = -1 * quantile((1 - Number(level)) / 2, 0, 1);
+    const me = zcrit * stderr;
+    const ll = Number(xbar) - me;
+    const ul = Number(xbar) + me;
 
-      const rowData: DataTableRow = {
-        "": colName,
-        [SSEnum.N]: n,
-        [SSEnum.Xbar]: xbar,
-        [SSEnum.PStdev]: stdevApprox,
-        [SSEnum.Stderr]: stderr,
-        [CIEnum.Level]: Number(level),
-        [CIEnum.Zcrit]: zcrit,
-        [CIEnum.Me]: me,
-        [CIEnum.LL]: ll,
-        [CIEnum.UL]: ul,
-      };
-      return rowData;
-    }
-  );
+    const rowData: DataTableRow<SampleStatistics | CIColumns, ""> = {
+      "": colName,
+      N: n.toString(),
+      Mean: xbar.toFixed(DECIMAL),
+      "Known Stdev": stdevApprox.toFixed(DECIMAL),
+      "Std.Err": stderr.toFixed(DECIMAL),
+      Level: level,
+      "Z-crit": zcrit.toFixed(DECIMAL),
+      "M.E.": me.toFixed(DECIMAL),
+      "L.Limit": ll.toFixed(DECIMAL),
+      "U.Limit": ul.toFixed(DECIMAL),
+    };
+    return rowData;
+  });
 
   return (
     <>
       <p>Sample Statistics</p>
-      <DataTable
+      <DataTable<SampleStatistics, "">
         data={rows}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.PStdev, SSEnum.Stderr]}
+        stats={["", "N", "Mean", "Known Stdev", "Std.Err"]}
       />
       <p>Confidence Interval</p>
-      <DataTable
+      <DataTable<CIColumns, "">
         data={rows}
-        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
+        stats={["", "Level", "Z-crit", "M.E.", "L.Limit", "U.Limit"]}
       />
     </>
   );

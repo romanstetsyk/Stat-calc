@@ -2,15 +2,12 @@ import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { TForm } from "./types";
+import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
-import {
-  SampleStatisticsEnum as SSEnum,
-  ConfidenceIntervalEnum as CIEnum,
-  HypothesisTestEnum as HTEnum,
-  DataTable,
-} from "../../components/DataTable";
+import { DataTable, DataTableRow } from "../../components/DataTable";
 import { HypothesisTestNotation } from "../../components/HypothesisTestNotation";
+
+const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
@@ -21,7 +18,9 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
   const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha, pstdev } =
     formSummary;
 
-  const rows = (columns as Array<GridColumnName>).map((colName) => {
+  const rows: DataTableRow<SampleStatistics | CIColumns | HTColumns, "">[] = (
+    columns as Array<GridColumnName>
+  ).map((colName) => {
     const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
@@ -56,22 +55,24 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     const ll = Number(2) - me;
     const ul = Number(2) + me;
 
-    return {
-      "": colName,
-      [SSEnum.N]: n,
-      [SSEnum.Xbar]: xbar,
-      [SSEnum.PStdev]: stdevApprox,
-      [SSEnum.Stderr]: stderr,
-      [CIEnum.Level]: Number(ciLevel),
-      [CIEnum.Zcrit]: zcrit,
-      [CIEnum.Me]: me,
-      [CIEnum.LL]: ll,
-      [CIEnum.UL]: ul,
-      [HTEnum.Alpha]: Number(alpha),
-      [HTEnum.Zcrit]: zcrit,
-      [HTEnum.Zstat]: zstat,
-      [HTEnum.Pvalue]: pvalue,
-    };
+    const rowData: DataTableRow<SampleStatistics | CIColumns | HTColumns, ""> =
+      {
+        "": colName,
+        N: n.toString(),
+        Mean: xbar.toFixed(DECIMAL),
+        "Known Stdev": stdevApprox.toFixed(DECIMAL),
+        "Std.Err": stderr.toFixed(DECIMAL),
+        Level: ciLevel.toString(),
+        "Z-crit": zcrit.toFixed(DECIMAL),
+        "M.E.": me.toFixed(DECIMAL),
+        "L.Limit": ll.toFixed(DECIMAL),
+        "U.Limit": ul.toFixed(DECIMAL),
+        Alpha: alpha,
+        "Z-stat": zstat.toFixed(DECIMAL),
+        "P-value": pvalue.toFixed(DECIMAL),
+      };
+
+    return rowData;
   });
 
   return (
@@ -84,19 +85,19 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
       />
 
       <p>Sample Data</p>
-      <DataTable
+      <DataTable<SampleStatistics, "">
         data={rows}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.PStdev, SSEnum.Stderr]}
+        stats={["", "N", "Mean", "Known Stdev", "Std.Err"]}
       />
       <p>Hypothesis Test Result</p>
-      <DataTable
+      <DataTable<HTColumns, "">
         data={rows}
-        stats={[HTEnum.Alpha, HTEnum.Zcrit, HTEnum.Zstat, HTEnum.Pvalue]}
+        stats={["", "Alpha", "Z-crit", "Z-stat", "P-value"]}
       />
       <p>Confidence Interval</p>
-      <DataTable
+      <DataTable<CIColumns, "">
         data={rows}
-        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
+        stats={["", "Level", "Z-crit", "M.E.", "L.Limit", "U.Limit"]}
       />
     </>
   );
