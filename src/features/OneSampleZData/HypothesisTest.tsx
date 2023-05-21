@@ -9,6 +9,7 @@ import {
   HypothesisNotation,
   PopulationMean,
 } from "../../components/HypothesisNotation";
+import { parseNumber } from "../../utils/parseNumber";
 
 const DECIMAL = 6;
 
@@ -65,12 +66,12 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
         Mean: xbar.toFixed(DECIMAL),
         "Known Stdev": stdevApprox.toFixed(DECIMAL),
         "Std.Err": stderr.toFixed(DECIMAL),
-        Level: ciLevel.toString(),
+        Level: parseNumber(ciLevel),
         "Z-crit": zcrit.toFixed(DECIMAL),
         "M.E.": me.toFixed(DECIMAL),
         "L.Limit": ll.toFixed(DECIMAL),
         "U.Limit": ul.toFixed(DECIMAL),
-        Alpha: alpha,
+        Alpha: parseNumber(alpha),
         "Z-stat": zstat.toFixed(DECIMAL),
         "P-value": pvalue.toFixed(DECIMAL),
       };
@@ -98,11 +99,15 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
         data={rows}
         stats={["", "Alpha", "Z-crit", "Z-stat", "P-value"]}
       />
-      <p>Confidence Interval</p>
-      <DataTable<CIColumns, "">
-        data={rows}
-        stats={["", "Level", "Z-crit", "M.E.", "L.Limit", "U.Limit"]}
-      />
+      {!(mu1dir !== "ne" && Number(alpha) >= 0.5) && (
+        <>
+          <p>Confidence Interval</p>
+          <DataTable<CIColumns, "">
+            data={rows}
+            stats={["", "Level", "Z-crit", "M.E.", "L.Limit", "U.Limit"]}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -6,6 +6,7 @@ import {
   HypothesisNotation,
   PopulationMeanDiff,
 } from "../../components/HypothesisNotation";
+import { parseNumber } from "../../utils/parseNumber";
 
 const DECIMAL = 6;
 
@@ -77,7 +78,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   const hypothesisTestData: DataTableRow<HTColumns, "">[] = [
     {
       "": "mu1 - mu2",
-      Alpha: alpha,
+      Alpha: parseNumber(alpha),
       "Z-crit": zcrit.toFixed(DECIMAL),
       "Std.Err.": stderrPooled.toFixed(DECIMAL),
       "Z-stat": zstat.toFixed(DECIMAL),
@@ -92,7 +93,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   const confidenceIntervalData: DataTableRow<CIColumns, "">[] = [
     {
       "": "mu1 - mu2",
-      Level: ciLevel.toString(),
+      Level: parseNumber(ciLevel),
       "M.E.": me.toFixed(DECIMAL),
       "L.Limit": ll.toFixed(DECIMAL),
       "U.Limit": ul.toFixed(DECIMAL),
@@ -119,11 +120,15 @@ export const HypothesisTest = ({ formSummary }: Props) => {
         data={hypothesisTestData}
         stats={["", "Alpha", "Z-crit", "Std.Err.", "Z-stat", "P-value"]}
       />
-      <p>Confidence Interval</p>
-      <DataTable
-        data={confidenceIntervalData}
-        stats={["", "Level", "M.E.", "L.Limit", "U.Limit"]}
-      />
+      {!(mu1dir !== "ne" && Number(alpha) >= 0.5) && (
+        <>
+          <p>Confidence Interval</p>
+          <DataTable
+            data={confidenceIntervalData}
+            stats={["", "Level", "M.E.", "L.Limit", "U.Limit"]}
+          />
+        </>
+      )}
     </>
   );
 };
