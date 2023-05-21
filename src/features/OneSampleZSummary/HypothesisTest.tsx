@@ -1,13 +1,10 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { TForm } from "./types";
-import {
-  SampleStatisticsEnum as SSEnum,
-  ConfidenceIntervalEnum as CIEnum,
-  HypothesisTestEnum as HTEnum,
-  DataTable,
-} from "../../components/DataTable";
+import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
+import { DataTable, DataTableRow } from "../../components/DataTable";
 import { HypothesisTestNotation } from "../../components/HypothesisTestNotation";
+
+const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
@@ -42,23 +39,21 @@ export const HypothesisTest = ({ formSummary }: Props) => {
       throw new Error("Invalid hypothesis direction");
   }
 
-  const sampleStatisticsData = [
+  const sampleStatisticsData: DataTableRow<SampleStatistics>[] = [
     {
-      "": "Sample 1",
-      [SSEnum.N]: Number(n),
-      [SSEnum.Xbar]: Number(xbar),
-      [SSEnum.SStdev]: Number(stdev),
-      [SSEnum.Stderr]: stderr,
+      N: n,
+      Mean: xbar,
+      "S.Stdev": stdev,
+      "Std.Err": stderr.toFixed(DECIMAL),
     },
   ];
 
-  const hypothesisTestData = [
+  const hypothesisTestData: DataTableRow<HTColumns>[] = [
     {
-      "": "Sample 1",
-      [HTEnum.Alpha]: Number(alpha),
-      [HTEnum.Zcrit]: zcrit,
-      [HTEnum.Zstat]: zstat,
-      [HTEnum.Pvalue]: pvalue,
+      Alpha: alpha,
+      "Z-crit": zcrit.toFixed(DECIMAL),
+      "Z-stat": zstat.toFixed(DECIMAL),
+      "P-value": pvalue.toFixed(DECIMAL),
     },
   ];
 
@@ -66,14 +61,13 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   const ll = Number(xbar) - me;
   const ul = Number(xbar) + me;
 
-  const confidenceIntervalData = [
+  const confidenceIntervalData: DataTableRow<CIColumns>[] = [
     {
-      "": "Sample 1",
-      [CIEnum.Level]: ciLevel,
-      [CIEnum.Zcrit]: zcrit,
-      [CIEnum.Me]: me,
-      [CIEnum.LL]: ll,
-      [CIEnum.UL]: ul,
+      Level: ciLevel.toString(),
+      "Z-crit": zcrit.toFixed(DECIMAL),
+      "M.E.": me.toFixed(DECIMAL),
+      "L.Limit": ll.toFixed(DECIMAL),
+      "U.Limit": ul.toFixed(DECIMAL),
     },
   ];
 
@@ -87,19 +81,19 @@ export const HypothesisTest = ({ formSummary }: Props) => {
       />
 
       <p>Sample Data</p>
-      <DataTable
+      <DataTable<SampleStatistics>
         data={sampleStatisticsData}
-        stats={[SSEnum.N, SSEnum.Xbar, SSEnum.SStdev, SSEnum.Stderr]}
+        stats={["N", "Mean", "S.Stdev", "Std.Err"]}
       />
       <p>Hypothesis Test Result</p>
-      <DataTable
+      <DataTable<HTColumns>
         data={hypothesisTestData}
-        stats={[HTEnum.Alpha, HTEnum.Zcrit, HTEnum.Zstat, HTEnum.Pvalue]}
+        stats={["Alpha", "Z-crit", "Z-stat", "P-value"]}
       />
       <p>Confidence Interval</p>
-      <DataTable
+      <DataTable<CIColumns>
         data={confidenceIntervalData}
-        stats={[CIEnum.Level, CIEnum.Zcrit, CIEnum.Me, CIEnum.LL, CIEnum.UL]}
+        stats={["Level", "Z-crit", "M.E.", "L.Limit", "U.Limit"]}
       />
     </>
   );

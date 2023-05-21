@@ -1,5 +1,20 @@
 import { H0Sign, H1Sign } from "../../Types";
 
+export const SampleStatistics = ["N", "Mean", "S.Stdev", "Std.Err"] as const;
+export type SampleStatistics = (typeof SampleStatistics)[number];
+
+export const CIColumns = [
+  "Level",
+  "Z-crit",
+  "M.E.",
+  "L.Limit",
+  "U.Limit",
+] as const;
+export type CIColumns = (typeof CIColumns)[number];
+
+export const HTColumns = ["Alpha", "Z-crit", "Z-stat", "P-value"] as const;
+export type HTColumns = (typeof HTColumns)[number];
+
 export enum PerformType {
   hypothesisTest = "hypothesisTest",
   confidenceInterval = "confidenceInterval",
