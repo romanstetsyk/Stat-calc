@@ -5,7 +5,10 @@ import cdf from "@stdlib/stats-base-dists-normal-cdf";
 import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
-import { HypothesisTestNotation } from "../../components/HypothesisTestNotation";
+import {
+  HypothesisNotation,
+  PopulationMean,
+} from "../../components/HypothesisNotation";
 
 const DECIMAL = 6;
 
@@ -77,11 +80,12 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
 
   return (
     <>
-      <HypothesisTestNotation
-        mu0dir={mu0dir}
-        mu1dir={mu1dir}
-        mu0val={mu0val}
-        mu1val={mu1val}
+      <HypothesisNotation
+        param={<PopulationMean />}
+        h0dir={mu0dir}
+        h1dir={mu1dir}
+        h0val={mu0val}
+        h1val={mu1val}
       />
 
       <p>Sample Data</p>
