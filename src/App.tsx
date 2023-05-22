@@ -11,6 +11,7 @@ import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummar
 import { StatModal as OneSampleZDataModal } from "./features/OneSampleZData/StatModal";
 import { StatModal as DescriptiveStatisticsModal } from "./features/DescriptiveStatistics/StatModal";
 import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummary/StatModal";
+import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/StatModal";
 import { ColumnValues, GridColumnName, GridRow } from "./Types";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
@@ -52,7 +53,7 @@ function App() {
       displayData: d,
       data: d,
     };
-  }, []);
+  }, [data]);
 
   const onCellEdited = useCallback((cell: Item, newValue: EditableGridCell) => {
     if (newValue.kind !== GridCellKind.Text) {
@@ -68,7 +69,7 @@ function App() {
     }
     data[rowIdx][col] = newValue.data;
     setData([...data]);
-  }, []);
+  }, [data]);
 
   return (
     <>
@@ -76,6 +77,7 @@ function App() {
       <OneSampleZDataModal cols={columns} />
       <DescriptiveStatisticsModal cols={columns} />
       <TwoSampleZSummaryModal />
+      <TwoSampleZDataModal cols={columns} />
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
