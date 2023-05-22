@@ -9,7 +9,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { StatForm } from "./StatForm";
-// import { Output } from "./Output";
+import { Output } from "./Output";
 import { DisplayOptions, PerformType, TForm } from "./types";
 import { ColumnValues } from "../../Types";
 
@@ -53,13 +53,13 @@ export const Content = ({ onClose, cols }: Props) => {
             cols={cols}
           />
         )}
-        {/* {display === "result" && formSummary && (
+        {display === "result" && formSummary && (
           <Output
             setDisplay={setDisplay}
             formSummary={formSummary}
             cols={cols}
           />
-        )} */}
+        )}
       </ModalBody>
 
       <ModalFooter>
