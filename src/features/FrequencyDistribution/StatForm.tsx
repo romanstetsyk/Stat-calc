@@ -1,10 +1,10 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+  Box,
   Checkbox,
   CheckboxGroup,
   FormControl,
   FormLabel,
-  Stack,
 } from "@chakra-ui/react";
 
 import { ColumnValues, GridColumnName } from "../../Types";
@@ -26,13 +26,17 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      <FormControl>
-        <FormLabel>Choose columns</FormLabel>
-        <Stack direction="column">
+      <FormControl as="fieldset">
+        <FormLabel as="legend" m={0}>
+          Choose columns
+        </FormLabel>
+
+        <Box p={2}>
           {Object.keys(cols)
             .sort()
             .map((colHeader) => (
               <Checkbox
+                display={"flex"}
                 key={colHeader}
                 value={colHeader}
                 {...register("columns")}
@@ -42,39 +46,47 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
                   : colHeader}
               </Checkbox>
             ))}
-        </Stack>
+
+          <Controller
+            name="label"
+            control={control}
+            defaultValue={label}
+            render={({ field: { onChange, value } }) => (
+              <Checkbox
+                mt={4}
+                display={"flex"}
+                isChecked={value}
+                onChange={(e) => {
+                  onChange(e);
+                  setLabel(e.target.checked);
+                }}
+              >
+                Labels in first row
+              </Checkbox>
+            )}
+          />
+        </Box>
       </FormControl>
 
-      <FormControl>
-        <Controller
-          name="label"
-          control={control}
-          defaultValue={label}
-          render={({ field: { onChange, value } }) => (
-            <Checkbox
-              isChecked={value}
-              onChange={(e) => {
-                onChange(e);
-                setLabel(e.target.checked);
-              }}
-            >
-              Labels in first row
-            </Checkbox>
-          )}
-        />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Statistics</FormLabel>
-        <CheckboxGroup defaultValue={defaultValues.options}>
-          <Stack direction="column">
+      <FormControl as="fieldset">
+        <FormLabel as="legend" m={0}>
+          Statistics
+        </FormLabel>
+        <Box p={2}>
+          <CheckboxGroup defaultValue={defaultValues.options}>
             {FreqDist.map((opt) => (
-              <Checkbox key={opt} value={opt} {...register("options")}>
+              <Checkbox
+                display="flex"
+                key={opt}
+                value={opt}
+                {...register("options")}
+                size={"md"}
+              >
                 {opt}
               </Checkbox>
             ))}
-          </Stack>
-        </CheckboxGroup>
+          </CheckboxGroup>
+        </Box>
       </FormControl>
     </form>
   );
