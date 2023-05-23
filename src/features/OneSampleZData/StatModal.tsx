@@ -1,4 +1,4 @@
-import { useDisclosure, Button, Modal, ModalOverlay } from "@chakra-ui/react";
+import { useDisclosure, Modal, ModalOverlay, MenuItem } from "@chakra-ui/react";
 import { Content } from "./Content";
 import { ColumnValues } from "../../Types";
 
@@ -10,7 +10,9 @@ export const StatModal = ({ cols }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button onClick={onOpen}>z statistics data</Button>
+      <MenuItem pl={8} onClick={onOpen}>
+        With Data
+      </MenuItem>
 
       <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
         <ModalOverlay />
