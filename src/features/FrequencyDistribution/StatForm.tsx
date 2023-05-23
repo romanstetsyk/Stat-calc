@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Checkbox,
   CheckboxGroup,
@@ -7,9 +7,10 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import { ColumnValues } from "../../Types";
+import { ColumnValues, GridColumnName } from "../../Types";
 import { TForm } from "./types";
 import { FreqDist } from "./types";
+import { useState } from "react";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -19,7 +20,9 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
-  const { handleSubmit, register } = useForm<TForm>({ defaultValues });
+  const { handleSubmit, register, control } = useForm<TForm>({ defaultValues });
+
+  const [label, setLabel] = useState<boolean>(defaultValues.label);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
@@ -28,16 +31,37 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
         <Stack direction="column">
           {Object.keys(cols)
             .sort()
-            .map((col) => (
-              <Checkbox key={col} value={col} {...register("columns")}>
-                {col}
+            .map((colHeader) => (
+              <Checkbox
+                key={colHeader}
+                value={colHeader}
+                {...register("columns")}
+              >
+                {label
+                  ? `${cols[colHeader as GridColumnName][0]} (${colHeader})`
+                  : colHeader}
               </Checkbox>
             ))}
         </Stack>
       </FormControl>
 
       <FormControl>
-        <Checkbox {...register("label")}>Labels in first row</Checkbox>
+        <Controller
+          name="label"
+          control={control}
+          defaultValue={label}
+          render={({ field: { onChange, value } }) => (
+            <Checkbox
+              isChecked={value}
+              onChange={(e) => {
+                onChange(e);
+                setLabel(e.target.checked);
+              }}
+            >
+              Labels in first row
+            </Checkbox>
+          )}
+        />
       </FormControl>
 
       <FormControl>
