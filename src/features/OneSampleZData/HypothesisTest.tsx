@@ -56,8 +56,8 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     }
 
     const me = zcrit * stderr;
-    const ll = Number(2) - me;
-    const ul = Number(2) + me;
+    const ll = Number(xbar) - me;
+    const ul = Number(xbar) + me;
 
     const rowData: DataTableRow<SampleStatistics | CIColumns | HTColumns, ""> =
       {
