@@ -53,6 +53,7 @@ export const DataTable = <T extends string, Title extends string = "column">({
         readonly: false,
         displayData: String(d),
         data: String(d),
+        contentAlign: "right",
       };
     },
     [columnHeaders, data]
