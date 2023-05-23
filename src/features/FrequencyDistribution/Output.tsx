@@ -23,10 +23,11 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, formSummary, cols }: Props) => {
-  const { columns, options } = formSummary;
+  const { label, columns, options } = formSummary;
 
-  const arrOfTables = (columns as GridColumnName[]).map((colName) => {
-    const values = cols[colName];
+  const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
+    const colName = label ? cols[colHeader][0] : colHeader;
+    const values = label ? cols[colHeader].slice(1) : cols[colHeader];
     const n = values.length;
     const out = tabulate(values);
     const table: DataTableRow<FreqDist, "Value">[] = out.map(
@@ -67,7 +68,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
       {arrOfTables.map(({ colName, n, table }) => (
         <div key={colName}>
           <p>
-            Column: {colName}. Total: {n}
+            Variable: {colName}. Count: {n}
           </p>
           <DataTable<FreqDist, "Value">
             data={table}

@@ -23,17 +23,19 @@ export const Content = ({ cols, onClose }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
+    label: false,
     columns: [],
     options: [...FreqDist],
   });
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
-    const { columns, options } = data;
+    console.log(data);
+    const { label, columns, options } = data;
     if (columns === false || columns.length === 0) return;
     if (typeof columns === "string") {
-      setFormSummary({ columns: [columns], options });
+      setFormSummary({ label, columns: [columns], options });
     } else {
-      setFormSummary({ columns, options });
+      setFormSummary({ label, columns, options });
     }
     setDisplay("result");
   };

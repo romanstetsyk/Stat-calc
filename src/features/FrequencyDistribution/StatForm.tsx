@@ -35,6 +35,11 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
             ))}
         </Stack>
       </FormControl>
+
+      <FormControl>
+        <Checkbox {...register("label")}>Labels in first row</Checkbox>
+      </FormControl>
+
       <FormControl>
         <FormLabel>Statistics</FormLabel>
         <CheckboxGroup defaultValue={defaultValues.options}>

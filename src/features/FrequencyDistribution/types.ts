@@ -12,6 +12,7 @@ export type FreqDist = (typeof FreqDist)[number];
 export type DisplayOptions = "form" | "result";
 
 export type TForm = {
+  label: boolean;
   columns: false | GridColumnName | GridColumnName[];
   options: FreqDist[];
 };
