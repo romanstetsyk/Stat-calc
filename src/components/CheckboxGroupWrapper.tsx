@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormErrorMessage,
   Box,
+  Text,
 } from "@chakra-ui/react";
 import {
   Control,
@@ -20,7 +21,7 @@ import {
 type Props<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-  data: { title: string; value: string }[];
+  data: { title: string; value: string }[] | string[];
   defaultValue: PathValue<T, Path<T>>;
   label?: string;
   rules?: RegisterOptions;
@@ -37,40 +38,50 @@ export const CheckboxGroupWrapper = <T extends FieldValues>({
   error,
 }: Props<T>) => {
   return (
-    <FormControl isInvalid={Boolean(error)} as="fieldset">
+    <FormControl isInvalid={Boolean(error)} as="fieldset" my={2}>
       {label && (
         <FormLabel as="legend" m={0}>
           {label}
         </FormLabel>
       )}
       <Box p={2}>
-        <Controller
-          defaultValue={defaultValue}
-          name={name}
-          control={control}
-          rules={rules}
-          render={({
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            field: { ref: _ref, ...field },
-          }) => (
-            <CheckboxGroup {...field}>
-              {data.map(({ title, value }) => (
-                <Checkbox
-                  key={value}
-                  name="checkboxes"
-                  value={value}
-                  display="flex"
-                >
-                  {title}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
-          )}
-        />
+        {data.length > 0 ? (
+          <>
+            <Controller
+              defaultValue={defaultValue}
+              name={name}
+              control={control}
+              rules={rules}
+              render={({
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                field: { ref: _ref, ...field },
+              }) => (
+                <CheckboxGroup {...field}>
+                  {data
+                    .map((e) =>
+                      typeof e === "string" ? { title: e, value: e } : e
+                    )
+                    .map(({ title, value }) => (
+                      <Checkbox
+                        key={value}
+                        name={name}
+                        value={value}
+                        display="flex"
+                      >
+                        {title}
+                      </Checkbox>
+                    ))}
+                </CheckboxGroup>
+              )}
+            />
 
-        <FormErrorMessage>
-          {error?.type === "required" && error?.message}
-        </FormErrorMessage>
+            <FormErrorMessage>
+              {error?.type === "required" && error?.message}
+            </FormErrorMessage>
+          </>
+        ) : (
+          <Text>No data in the table</Text>
+        )}
       </Box>
     </FormControl>
   );
