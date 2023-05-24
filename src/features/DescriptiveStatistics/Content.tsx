@@ -25,16 +25,14 @@ export const Content = ({ cols, onClose }: Props) => {
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
     options: [...SampleStatistics],
+    withLabel: false,
   });
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
-    const { columns, options } = data;
-    if (columns === false || columns.length === 0) return;
-    if (typeof columns === "string") {
-      setFormSummary({ columns: [columns], options });
-    } else {
-      setFormSummary({ columns, options });
-    }
+    console.log(data);
+    const { columns } = data;
+    if (columns.length === 0) return;
+    setFormSummary(data);
     setDisplay("result");
   };
 

@@ -20,12 +20,15 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, formSummary, cols }: Props) => {
-  const { columns, options } = formSummary;
+  const { columns, options, withLabel } = formSummary;
 
+  let colName;
   const data: DataTableRow<SampleStatistics>[] = (
     columns as GridColumnName[]
-  ).map((colName) => {
-    const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
+  ).map((colHeader) => {
+    colName = withLabel ? `${cols[colHeader][0]} (${colHeader})` : colHeader;
+    const values = withLabel ? cols[colHeader].slice(1) : cols[colHeader];
+    const arrOfNums = values.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const row: DataTableRow<SampleStatistics> = {};
 
@@ -79,6 +82,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
+      <p>Variable: {colName}</p>
       <DataTable<SampleStatistics> data={data} stats={options} />
     </>
   );

@@ -59,6 +59,10 @@ export const DataTable = <T extends string, Title extends string = "column">({
     [columnHeaders, data]
   );
 
+  if (stats.length === 0) {
+    return null;
+  }
+
   return (
     <DataEditor
       getCellContent={getCellContent}

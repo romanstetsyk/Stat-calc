@@ -16,6 +16,7 @@ export type SampleStatistics = (typeof SampleStatistics)[number];
 export type DisplayOptions = "form" | "result";
 
 export type TForm = {
-  columns: false | GridColumnName | GridColumnName[];
+  columns: GridColumnName[];
   options: SampleStatistics[];
+  withLabel: boolean;
 };

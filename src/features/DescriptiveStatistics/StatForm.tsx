@@ -1,15 +1,10 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  Checkbox,
-  CheckboxGroup,
-  FormControl,
-  FormLabel,
-  Stack,
-} from "@chakra-ui/react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Checkbox } from "@chakra-ui/react";
 
-import { ColumnValues } from "../../Types";
+import { ColumnValues, GridColumnName } from "../../Types";
 import { TForm } from "./types";
 import { SampleStatistics } from "./types";
+import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -19,34 +14,66 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
-  const { handleSubmit, register } = useForm<TForm>({ defaultValues });
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<TForm>({ defaultValues });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      <FormControl>
-        <FormLabel>Choose columns</FormLabel>
-        <Stack direction="column">
-          {Object.keys(cols)
-            .sort()
-            .map((col) => (
-              <Checkbox key={col} value={col} {...register("columns")}>
-                {col}
-              </Checkbox>
-            ))}
-        </Stack>
-      </FormControl>
-      <FormControl>
-        <FormLabel>Statistics</FormLabel>
-        <CheckboxGroup defaultValue={defaultValues.options}>
-          <Stack direction="column">
-            {SampleStatistics.map((opt) => (
-              <Checkbox key={opt} value={opt} {...register("options")}>
-                {opt}
-              </Checkbox>
-            ))}
-          </Stack>
-        </CheckboxGroup>
-      </FormControl>
+      <CheckboxGroupWrapper
+        label="Choose columns"
+        name="columns"
+        data={
+          watch("withLabel")
+            ? Object.keys(cols)
+                .sort()
+                .map((colHeader) => ({
+                  title: `${
+                    cols[colHeader as GridColumnName][0]
+                  } (${colHeader})`,
+                  value: colHeader,
+                }))
+            : Object.keys(cols)
+        }
+        control={control}
+        defaultValue={defaultValues.columns}
+        rules={{ required: "Select at least one column" }}
+        error={errors["columns"]}
+      />
+
+      {Object.keys(cols).length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field: { onChange, value } }) => (
+            <Checkbox
+              pl={2}
+              display={"flex"}
+              isChecked={value}
+              onChange={(e) => {
+                onChange(e);
+                // setLabel(e.target.checked);
+              }}
+            >
+              Labels in first row
+            </Checkbox>
+          )}
+        />
+      )}
+
+      <CheckboxGroupWrapper
+        label="Statistics"
+        name="options"
+        data={[...SampleStatistics]}
+        control={control}
+        defaultValue={defaultValues.options}
+        rules={{ required: "Select at least one statistic" }}
+        error={errors["options"]}
+      />
     </form>
   );
 };
