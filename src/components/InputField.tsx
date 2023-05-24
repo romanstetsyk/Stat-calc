@@ -7,7 +7,6 @@ import {
   InputProps,
 } from "@chakra-ui/react";
 import {
-  DeepMap,
   FieldError,
   FieldValues,
   Path,
@@ -20,19 +19,19 @@ type Props<TFormValues extends FieldValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
   register?: UseFormRegister<TFormValues>;
-  errors?: Partial<DeepMap<TFormValues, FieldError>>;
+  error?: FieldError;
 } & Omit<InputProps, "name">;
 
 const InputField = <TFormValues extends Record<string, unknown>>({
   label,
   name,
-  errors,
+  error,
   register,
   rules,
 }: Props<TFormValues>) => {
   return (
     <FormControl
-      isInvalid={Boolean(errors?.[name])}
+      isInvalid={Boolean(error)}
       display="flex"
       alignItems="baseline"
       width="auto"
@@ -45,9 +44,9 @@ const InputField = <TFormValues extends Record<string, unknown>>({
           {...(register && register(name, rules))}
         />
         <FormErrorMessage as="span">
-          {errors?.[name]?.type === "required" && errors[name]?.message}
-          {errors?.[name]?.type === "validate" &&
-            `${label || "This value"} ${errors[name]?.message}`}
+          {error?.type === "required" && error?.message}
+          {error?.type === "validate" &&
+            `${label || "This value"} ${error?.message}`}
         </FormErrorMessage>
       </VStack>
     </FormControl>
