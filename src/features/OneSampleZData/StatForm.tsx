@@ -96,7 +96,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
         name="pstdev"
         register={register}
         rules={{ validate: (value) => value === "" || isPositiveNumber(value) }}
-        errors={errors}
+        error={errors.pstdev}
       />
 
       <FormControl isInvalid={Boolean(errors.perform)}>
@@ -157,7 +157,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
                             isFiniteNumber(value),
                           onChange: onMuValueChange,
                         }}
-                        errors={errors}
+                        error={errors.mu0val}
                       />
                     </Flex>
 
@@ -189,7 +189,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
                             isFiniteNumber(value),
                           onChange: onMuValueChange,
                         }}
-                        errors={errors}
+                        error={errors.mu1val}
                       />
                     </Flex>
                     <InputField
@@ -202,7 +202,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
                           perform !== PerformType.hypothesisTest ||
                           isValidLevel(value),
                       }}
-                      errors={errors}
+                      error={errors.alpha}
                     />
                   </Stack>
                 </Box>
@@ -229,7 +229,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
                             perform !== PerformType.confidenceInterval ||
                             isValidLevel(value),
                         }}
-                        errors={errors}
+                        error={errors.level}
                       />
                     </Stack>
                   </>

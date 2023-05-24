@@ -10,7 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { StatForm } from "./StatForm";
 import { Output } from "./Output";
-import { DisplayOptions, PerformType, TForm } from "./types";
+import { TForm } from "./types";
+import { DisplayOptions, Perform } from "../../Types";
 
 type Props = {
   onClose: () => void;
@@ -24,7 +25,7 @@ export const Content = ({ onClose }: Props) => {
     xbar: "",
     stdev: "",
     n: "",
-    perform: PerformType.hypothesisTest,
+    perform: Perform.HypothesisTest,
     mu0dir: "eq",
     mu1dir: "ne",
     mu0val: "0",

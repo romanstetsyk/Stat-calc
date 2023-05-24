@@ -19,7 +19,8 @@ import {
   isValidLevel,
 } from "../../utils/validators";
 import { InputField } from "../../components/InputField";
-import { TForm, PerformType } from "./types";
+import { TForm } from "./types";
+import { Perform } from "../../Types";
 
 type Props = {
   formId: string;
@@ -37,7 +38,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
     formState: { errors },
   } = useForm<TForm>({ defaultValues });
 
-  const [perform, setPerform] = useState<PerformType>(defaultValues.perform);
+  const [perform, setPerform] = useState<Perform>(defaultValues.perform);
 
   const onSelectChange = (event: React.ChangeEvent) => {
     const value = (event.target as HTMLInputElement).value;
@@ -83,7 +84,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
           required: "This value is required",
           validate: isFiniteNumber,
         }}
-        errors={errors}
+        error={errors.xbar}
       />
 
       <InputField
@@ -94,7 +95,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
           required: "This value is required",
           validate: isPositiveNumber,
         }}
-        errors={errors}
+        error={errors.stdev}
       />
 
       <InputField
@@ -105,7 +106,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
           required: "This value is required",
           validate: isIntegerGreaterThanOne,
         }}
-        errors={errors}
+        error={errors.n}
       />
 
       <FormControl isInvalid={Boolean(errors.perform)}>
@@ -114,13 +115,14 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
           control={control}
           rules={{ required: "This field is required" }}
           defaultValue={perform}
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange, value, ...rest } }) => (
             <RadioGroup
-              onChange={(value) => {
+              {...rest}
+              onChange={(value: Perform) => {
                 setPerform(
-                  value === PerformType.hypothesisTest
-                    ? PerformType.hypothesisTest
-                    : PerformType.confidenceInterval
+                  value === Perform.HypothesisTest
+                    ? Perform.HypothesisTest
+                    : Perform.ConfidenceInerval
                 );
                 onChange(value);
               }}
@@ -128,16 +130,12 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             >
               <Box display="flex" flexDirection="row">
                 <Box flex="1">
-                  <Radio value={PerformType.hypothesisTest}>
-                    Hypothesis Test
-                  </Radio>
+                  <Radio value={Perform.HypothesisTest}>Hypothesis Test</Radio>
                   <Stack
-                    disabled={perform !== PerformType.hypothesisTest}
+                    disabled={perform !== Perform.HypothesisTest}
                     as="fieldset"
                     ml={5}
-                    opacity={
-                      perform === PerformType.hypothesisTest ? "1" : "0.5"
-                    }
+                    opacity={perform === Perform.HypothesisTest ? "1" : "0.5"}
                   >
                     <Flex gap={2} alignItems="baseline">
                       <Text as="label" htmlFor="mu0val">
@@ -162,11 +160,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                         rules={{
                           required: "This value is required",
                           validate: (value) =>
-                            perform !== PerformType.hypothesisTest ||
+                            perform !== Perform.HypothesisTest ||
                             isFiniteNumber(value),
                           onChange: onMuValueChange,
                         }}
-                        errors={errors}
+                        error={errors.mu0val}
                       />
                     </Flex>
 
@@ -194,11 +192,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                         rules={{
                           required: "This value is required",
                           validate: (value) =>
-                            perform !== PerformType.hypothesisTest ||
+                            perform !== Perform.HypothesisTest ||
                             isFiniteNumber(value),
                           onChange: onMuValueChange,
                         }}
-                        errors={errors}
+                        error={errors.mu1val}
                       />
                     </Flex>
                     <InputField
@@ -208,24 +206,24 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                       rules={{
                         required: "This value is required",
                         validate: (value) =>
-                          perform !== PerformType.hypothesisTest ||
+                          perform !== Perform.HypothesisTest ||
                           isValidLevel(value),
                       }}
-                      errors={errors}
+                      error={errors.alpha}
                     />
                   </Stack>
                 </Box>
                 <Box flex="1">
                   <>
-                    <Radio value={PerformType.confidenceInterval}>
+                    <Radio value={Perform.ConfidenceInerval}>
                       Confidence Interval
                     </Radio>
                     <Stack
-                      disabled={perform !== PerformType.confidenceInterval}
+                      disabled={perform !== Perform.ConfidenceInerval}
                       as="fieldset"
                       ml={5}
                       opacity={
-                        perform === PerformType.confidenceInterval ? "1" : "0.5"
+                        perform === Perform.ConfidenceInerval ? "1" : "0.5"
                       }
                     >
                       <InputField
@@ -235,10 +233,10 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                         rules={{
                           required: "This value is required",
                           validate: (value) =>
-                            perform !== PerformType.confidenceInterval ||
+                            perform !== Perform.ConfidenceInerval ||
                             isValidLevel(value),
                         }}
-                        errors={errors}
+                        error={errors.level}
                       />
                     </Stack>
                   </>
