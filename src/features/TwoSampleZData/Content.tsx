@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { StatForm } from "./StatForm";
 import { Output } from "./Output";
-import { DisplayOptions, PerformType, TForm } from "./types";
-import { ColumnValues } from "../../Types";
+import { TForm } from "./types";
+import { ColumnValues, DisplayOptions, Perform } from "../../Types";
 
 type Props = {
   onClose: () => void;
@@ -23,7 +23,7 @@ export const Content = ({ onClose, cols }: Props) => {
 
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
-    perform: PerformType.hypothesisTest,
+    perform: Perform.HypothesisTest,
     mu0dir: "eq",
     mu1dir: "ne",
     mu0val: "0",
@@ -42,7 +42,7 @@ export const Content = ({ onClose, cols }: Props) => {
 
   return (
     <ModalContent>
-      <ModalHeader>One Sample Z Test</ModalHeader>
+      <ModalHeader>Two Sample Z Test</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         {display === "form" && (

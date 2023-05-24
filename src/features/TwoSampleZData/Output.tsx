@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Button } from "@chakra-ui/react";
-import { DisplayOptions, PerformType, TForm } from "./types";
+import { TForm } from "./types";
 import { ConfidenceInterval } from "./ConfidenceInterval";
 import { HypothesisTest } from "./HypothesisTest";
-import { ColumnValues } from "../../Types";
+import { ColumnValues, DisplayOptions, Perform } from "../../Types";
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
@@ -16,10 +16,10 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      {perform === PerformType.hypothesisTest && (
+      {perform === Perform.HypothesisTest && (
         <HypothesisTest formSummary={formSummary} cols={cols} />
       )}
-      {perform === PerformType.confidenceInterval && (
+      {perform === Perform.ConfidenceInerval && (
         <ConfidenceInterval formSummary={formSummary} cols={cols} />
       )}
     </>

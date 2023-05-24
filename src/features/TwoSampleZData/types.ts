@@ -1,4 +1,4 @@
-import { GridColumnName, H0Sign, H1Sign } from "../../Types";
+import { GridColumnName, H0Sign, H1Sign, Perform } from "../../Types";
 
 export const SampleStatistics = [
   "N",
@@ -27,17 +27,12 @@ export const HTColumns = [
 ] as const;
 export type HTColumns = (typeof HTColumns)[number];
 
-export enum PerformType {
-  hypothesisTest = "hypothesisTest",
-  confidenceInterval = "confidenceInterval",
-}
-
 export type TForm = {
   sample1?: GridColumnName;
   sample2?: GridColumnName;
   stdev1?: string;
   stdev2?: string;
-  perform: PerformType;
+  perform: Perform;
   mu0dir: H0Sign;
   mu1dir: H1Sign;
   mu0val: string;
@@ -45,5 +40,3 @@ export type TForm = {
   alpha: string;
   level: string;
 };
-
-export type DisplayOptions = "form" | "result";
