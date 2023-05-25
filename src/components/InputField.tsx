@@ -14,21 +14,21 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 
-type Props<TFormValues extends FieldValues> = {
+type Props<T extends FieldValues> = {
   label?: string;
-  name: Path<TFormValues>;
+  name: Path<T>;
   rules?: RegisterOptions;
-  register?: UseFormRegister<TFormValues>;
+  register?: UseFormRegister<T>;
   error?: FieldError;
 } & Omit<InputProps, "name">;
 
-const InputField = <TFormValues extends Record<string, unknown>>({
+const InputField = <T extends Record<string, unknown>>({
   label,
   name,
   error,
   register,
   rules,
-}: Props<TFormValues>) => {
+}: Props<T>) => {
   return (
     <FormControl
       isInvalid={Boolean(error)}

@@ -109,7 +109,7 @@ function App() {
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
-        rows={12}
+        rows={50}
         onCellEdited={onCellEdited}
         rowMarkers={"clickable-number"}
         getCellsForSelection={true}

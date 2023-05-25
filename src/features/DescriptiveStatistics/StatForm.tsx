@@ -36,7 +36,7 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
                   } (${colHeader})`,
                   value: colHeader,
                 }))
-            : Object.keys(cols)
+            : Object.keys(cols).sort()
         }
         control={control}
         defaultValue={defaultValues.columns}

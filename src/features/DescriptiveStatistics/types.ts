@@ -5,10 +5,11 @@ export const SampleStatistics = [
   "Mean",
   "Median",
   "S.Var",
-  "P.Var",
   "S.Stdev",
-  "P.Stdev",
+  "Range",
   "Std.Err",
+  "P.Var",
+  "P.Stdev",
 ] as const;
 
 export type SampleStatistics = (typeof SampleStatistics)[number];

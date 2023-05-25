@@ -5,6 +5,7 @@ import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
 import variance from "@stdlib/stats-base-variance";
 import stdev from "@stdlib/stats-base-stdev";
+import range from "@stdlib/stats-base-range";
 
 import { DisplayOptions, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
@@ -74,6 +75,11 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
     // Standard error (uses sample stdev)
     if (options.includes("Std.Err")) {
       row["Std.Err"] = (stdev(n, 1, arrOfNums, 1) / n ** 0.5).toFixed(DECIMAL);
+    }
+
+    // Range
+    if (options.includes("Range")) {
+      row["Range"] = range(n, arrOfNums, 1).toString();
     }
 
     return row;
