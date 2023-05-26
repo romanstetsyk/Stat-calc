@@ -4,6 +4,7 @@ import stdev from "@stdlib/stats-base-stdev";
 import { CIColumns, SampleStatistics, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
+import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 
 const DECIMAL = 6;
 
@@ -13,12 +14,14 @@ type Props = {
 };
 
 export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
-  const { columns, level, pstdev } = formSummary;
+  const { columns, level, pstdev, withLabel } = formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns, "">[] = (
     columns as Array<GridColumnName>
-  ).map((colName) => {
-    const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
+  ).map((colHeader) => {
+    const varName = getVarName(cols, colHeader, withLabel);
+    const varValues = getVarValues(cols, colHeader, withLabel);
+    const arrOfNums = varValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
     const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
@@ -29,7 +32,7 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
     const ul = Number(xbar) + me;
 
     const rowData: DataTableRow<SampleStatistics | CIColumns, ""> = {
-      "": colName,
+      "": varName,
       N: n.toString(),
       Mean: xbar.toFixed(DECIMAL),
       "Known Stdev": stdevApprox.toFixed(DECIMAL),

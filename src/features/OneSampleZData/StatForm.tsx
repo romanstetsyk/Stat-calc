@@ -6,7 +6,6 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Radio,
   RadioGroup,
   Select,
@@ -21,7 +20,9 @@ import {
 } from "../../utils/validators";
 import { InputField } from "../../components/InputField";
 import { TForm } from "./types";
-import { ColumnValues, Perform } from "../../Types";
+import { ColumnValues, GridColumnName, Perform } from "../../Types";
+import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
+import { getVarName } from "../../utils/getColumnNameAndValues";
 
 type Props = {
   formId: string;
@@ -37,6 +38,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
     control,
     setValue,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<TForm>({ defaultValues });
 
@@ -78,18 +80,38 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      <FormControl>
-        <FormLabel>Choose columns</FormLabel>
-        <Stack direction="column">
-          {Object.keys(cols)
-            .sort()
-            .map((col) => (
-              <Checkbox key={col} value={col} {...register("columns")}>
-                {col}
-              </Checkbox>
-            ))}
-        </Stack>
-      </FormControl>
+      <CheckboxGroupWrapper
+        label="Choose columns"
+        name="columns"
+        data={(Object.keys(cols) as GridColumnName[])
+          .sort()
+          .map((colHeader) => ({
+            title: getVarName(cols, colHeader, watch("withLabel")),
+            value: colHeader,
+          }))}
+        control={control}
+        defaultValue={defaultValues.columns}
+        rules={{ required: "Select at least one column" }}
+        error={errors["columns"]}
+      />
+
+      {Object.keys(cols).length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field: { onChange, value } }) => (
+            <Checkbox
+              pl={2}
+              display={"flex"}
+              isChecked={value}
+              onChange={onChange}
+            >
+              Labels in first row
+            </Checkbox>
+          )}
+        />
+      )}
 
       <InputField
         label="Std. dev. (optional)"

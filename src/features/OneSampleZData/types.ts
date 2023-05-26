@@ -21,7 +21,8 @@ export const HTColumns = ["Alpha", "Z-crit", "Z-stat", "P-value"] as const;
 export type HTColumns = (typeof HTColumns)[number];
 
 export type TForm = {
-  columns: false | GridColumnName | GridColumnName[];
+  columns: GridColumnName[];
+  withLabel: boolean;
   pstdev?: string;
   perform: Perform;
   mu0dir: H0Sign;

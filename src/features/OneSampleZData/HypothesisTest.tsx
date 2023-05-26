@@ -10,6 +10,7 @@ import {
   PopulationMean,
 } from "../../components/HypothesisNotation";
 import { parseNumber } from "../../utils/parseNumber";
+import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 
 const DECIMAL = 6;
 
@@ -19,13 +20,15 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary, cols }: Props) => {
-  const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha, pstdev } =
+  const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha, pstdev, withLabel } =
     formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns | HTColumns, "">[] = (
     columns as Array<GridColumnName>
-  ).map((colName) => {
-    const arrOfNums = cols[colName].map(Number).filter(Number.isFinite);
+  ).map((colHeader) => {
+    const varName = getVarName(cols, colHeader, withLabel);
+    const varValues = getVarValues(cols, colHeader, withLabel);
+    const arrOfNums = varValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
     const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
@@ -61,7 +64,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
 
     const rowData: DataTableRow<SampleStatistics | CIColumns | HTColumns, ""> =
       {
-        "": colName,
+        "": varName,
         N: n.toString(),
         Mean: xbar.toFixed(DECIMAL),
         "Known Stdev": stdevApprox.toFixed(DECIMAL),

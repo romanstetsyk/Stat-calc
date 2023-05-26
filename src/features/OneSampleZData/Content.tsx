@@ -24,6 +24,7 @@ export const Content = ({ onClose, cols }: Props) => {
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
+    withLabel: false,
     perform: Perform.HypothesisTest,
     mu0dir: "eq",
     mu1dir: "ne",
@@ -36,7 +37,7 @@ export const Content = ({ onClose, cols }: Props) => {
   const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
     const { columns } = data;
-    if (columns === false || columns.length === 0) return;
+    if (columns.length === 0) return;
     setFormSummary(data);
     setDisplay("result");
   };
