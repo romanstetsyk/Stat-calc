@@ -54,10 +54,7 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
               pl={2}
               display={"flex"}
               isChecked={value}
-              onChange={(e) => {
-                onChange(e);
-                // setLabel(e.target.checked);
-              }}
+              onChange={onChange}
             >
               Labels in first row
             </Checkbox>

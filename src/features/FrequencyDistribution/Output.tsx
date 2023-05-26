@@ -8,11 +8,12 @@ import { Button } from "@chakra-ui/react";
 import tabulate from "@stdlib/utils-tabulate";
 import gcusum from "@stdlib/blas-ext-base-gcusum";
 
-import { DisplayOptions, TForm } from "./types";
-import { ColumnValues, GridColumnName } from "../../Types";
+import { TForm } from "./types";
+import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { FreqDist } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
+import { getColumnNameAndValues } from "../../utils/getColumnNameAndValues";
 
 // const DECIMAL = 6;
 
@@ -23,13 +24,16 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, formSummary, cols }: Props) => {
-  const { label, columns, options } = formSummary;
+  const { withLabel, columns, options } = formSummary;
 
   const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
-    const colName = label ? cols[colHeader][0] : colHeader;
-    const values = label ? cols[colHeader].slice(1) : cols[colHeader];
-    const n = values.length;
-    const out = tabulate(values);
+    const [colName, colValues] = getColumnNameAndValues(
+      cols,
+      colHeader,
+      withLabel
+    );
+    const n = colValues.length;
+    const out = tabulate(colValues);
     const table: DataTableRow<FreqDist, "Value">[] = out.map(
       ([x, fr, relFr]) => {
         const row: DataTableRow<FreqDist, "Value"> = {

@@ -7,11 +7,12 @@ import variance from "@stdlib/stats-base-variance";
 import stdev from "@stdlib/stats-base-stdev";
 import range from "@stdlib/stats-base-range";
 
-import { DisplayOptions, TForm } from "./types";
-import { ColumnValues, GridColumnName } from "../../Types";
+import { TForm } from "./types";
+import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { SampleStatistics } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
+import { getColumnNameAndValues } from "../../utils/getColumnNameAndValues";
 
 const DECIMAL = 6;
 
@@ -24,13 +25,15 @@ type Props = {
 export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   const { columns, options, withLabel } = formSummary;
 
-  let colName;
   const data: DataTableRow<SampleStatistics, "">[] = (
     columns as GridColumnName[]
   ).map((colHeader) => {
-    colName = withLabel ? `${cols[colHeader][0]} (${colHeader})` : colHeader;
-    const values = withLabel ? cols[colHeader].slice(1) : cols[colHeader];
-    const arrOfNums = values.map(Number).filter(Number.isFinite);
+    const [colName, colValues] = getColumnNameAndValues(
+      cols,
+      colHeader,
+      withLabel
+    );
+    const arrOfNums = colValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const row: DataTableRow<SampleStatistics, ""> = { "": colName };
 

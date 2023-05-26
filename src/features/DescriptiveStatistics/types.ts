@@ -14,8 +14,6 @@ export const SampleStatistics = [
 
 export type SampleStatistics = (typeof SampleStatistics)[number];
 
-export type DisplayOptions = "form" | "result";
-
 export type TForm = {
   columns: GridColumnName[];
   options: SampleStatistics[];

@@ -1,16 +1,10 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  Box,
-  Checkbox,
-  CheckboxGroup,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+import { Checkbox } from "@chakra-ui/react";
 
 import { ColumnValues, GridColumnName } from "../../Types";
 import { TForm } from "./types";
 import { FreqDist } from "./types";
-import { useState } from "react";
+import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -20,74 +14,65 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
-  const { handleSubmit, register, control } = useForm<TForm>({ defaultValues });
-
-  const [label, setLabel] = useState<boolean>(defaultValues.label);
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<TForm>({
+    defaultValues,
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      <FormControl as="fieldset">
-        <FormLabel as="legend" m={0}>
-          Choose columns
-        </FormLabel>
+      <CheckboxGroupWrapper
+        label="Choose columns"
+        name="columns"
+        data={
+          watch("withLabel")
+            ? Object.keys(cols)
+                .sort()
+                .map((colHeader) => ({
+                  title: `${
+                    cols[colHeader as GridColumnName][0]
+                  } (${colHeader})`,
+                  value: colHeader,
+                }))
+            : Object.keys(cols).sort()
+        }
+        control={control}
+        defaultValue={defaultValues.columns}
+        rules={{ required: "Select at least one column" }}
+        error={errors["columns"]}
+      />
 
-        <Box p={2}>
-          {Object.keys(cols)
-            .sort()
-            .map((colHeader) => (
-              <Checkbox
-                display={"flex"}
-                key={colHeader}
-                value={colHeader}
-                {...register("columns")}
-              >
-                {label
-                  ? `${cols[colHeader as GridColumnName][0]} (${colHeader})`
-                  : colHeader}
-              </Checkbox>
-            ))}
+      {Object.keys(cols).length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field: { onChange, value } }) => (
+            <Checkbox
+              pl={2}
+              display={"flex"}
+              isChecked={value}
+              onChange={onChange}
+            >
+              Labels in first row
+            </Checkbox>
+          )}
+        />
+      )}
 
-          <Controller
-            name="label"
-            control={control}
-            defaultValue={label}
-            render={({ field: { onChange, value } }) => (
-              <Checkbox
-                mt={4}
-                display={"flex"}
-                isChecked={value}
-                onChange={(e) => {
-                  onChange(e);
-                  setLabel(e.target.checked);
-                }}
-              >
-                Labels in first row
-              </Checkbox>
-            )}
-          />
-        </Box>
-      </FormControl>
-
-      <FormControl as="fieldset">
-        <FormLabel as="legend" m={0}>
-          Statistics
-        </FormLabel>
-        <Box p={2}>
-          <CheckboxGroup defaultValue={defaultValues.options}>
-            {FreqDist.map((opt) => (
-              <Checkbox
-                display="flex"
-                key={opt}
-                value={opt}
-                {...register("options")}
-                size={"md"}
-              >
-                {opt}
-              </Checkbox>
-            ))}
-          </CheckboxGroup>
-        </Box>
-      </FormControl>
+      <CheckboxGroupWrapper
+        label="Statistics"
+        name="options"
+        data={[...FreqDist]}
+        control={control}
+        defaultValue={defaultValues.options}
+        rules={{ required: "Select at least one statistic" }}
+        error={errors["options"]}
+      />
     </form>
   );
 };

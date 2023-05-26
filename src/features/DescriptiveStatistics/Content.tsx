@@ -8,10 +8,10 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { DisplayOptions, TForm } from "./types";
+import { TForm } from "./types";
 import { SampleStatistics } from "./types";
 import { StatForm } from "./StatForm";
-import { ColumnValues } from "../../Types";
+import { ColumnValues, DisplayOptions } from "../../Types";
 import { Output } from "./Output";
 
 type Props = {

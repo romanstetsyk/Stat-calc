@@ -8,10 +8,10 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { DisplayOptions, TForm } from "./types";
+import { TForm } from "./types";
 import { FreqDist } from "./types";
 import { StatForm } from "./StatForm";
-import { ColumnValues } from "../../Types";
+import { ColumnValues, DisplayOptions } from "../../Types";
 import { Output } from "./Output";
 
 type Props = {
@@ -23,20 +23,16 @@ export const Content = ({ cols, onClose }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
-    label: false,
     columns: [],
     options: [...FreqDist],
+    withLabel: false,
   });
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
-    const { label, columns, options } = data;
-    if (columns === false || columns.length === 0) return;
-    if (typeof columns === "string") {
-      setFormSummary({ label, columns: [columns], options });
-    } else {
-      setFormSummary({ label, columns, options });
-    }
+    const { columns } = data;
+    if (columns.length === 0) return;
+    setFormSummary(data);
     setDisplay("result");
   };
 
