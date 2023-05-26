@@ -28,6 +28,7 @@ export const HTColumns = [
 export type HTColumns = (typeof HTColumns)[number];
 
 export type TForm = {
+  withLabel: boolean;
   sample1?: GridColumnName;
   sample2?: GridColumnName;
   stdev1?: string;

@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import {
   Box,
+  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -19,8 +20,9 @@ import {
 } from "../../utils/validators";
 import { InputField } from "../../components/InputField";
 import { TForm } from "./types";
-import { ColumnValues, Perform } from "../../Types";
+import { ColumnValues, GridColumnName, Perform } from "../../Types";
 import { SelectField } from "../../components/SelectField";
+import { getVarName } from "../../utils/getColumnNameAndValues";
 
 type Props = {
   formId: string;
@@ -36,6 +38,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
     control,
     setValue,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<TForm>({ defaultValues });
 
@@ -77,6 +80,24 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
+      {Object.keys(cols).length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field: { onChange, value } }) => (
+            <Checkbox
+              pl={2}
+              display={"flex"}
+              isChecked={value}
+              onChange={onChange}
+            >
+              Labels in first row
+            </Checkbox>
+          )}
+        />
+      )}
+
       <Box display="flex" flexDirection="row">
         <Box flex="1">
           <SelectField
@@ -87,13 +108,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {Object.keys(cols)
-              .sort()
-              .map((col) => (
-                <option key={col} value={col}>
-                  {col}
-                </option>
-              ))}
+            {(Object.keys(cols) as GridColumnName[]).sort().map((colHeader) => (
+              <option key={colHeader} value={colHeader}>
+                {getVarName(cols, colHeader, watch("withLabel"))}
+              </option>
+            ))}
           </SelectField>
 
           <InputField
@@ -115,13 +134,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {Object.keys(cols)
-              .sort()
-              .map((col) => (
-                <option key={col} value={col}>
-                  {col}
-                </option>
-              ))}
+            {(Object.keys(cols) as GridColumnName[]).sort().map((colHeader) => (
+              <option key={colHeader} value={colHeader}>
+                {getVarName(cols, colHeader, watch("withLabel"))}
+              </option>
+            ))}
           </SelectField>
           <InputField
             label="Std. dev."

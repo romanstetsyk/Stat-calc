@@ -23,6 +23,7 @@ export const Content = ({ onClose, cols }: Props) => {
 
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
+    withLabel: false,
     perform: Perform.HypothesisTest,
     mu0dir: "eq",
     mu1dir: "ne",
