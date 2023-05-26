@@ -11,6 +11,7 @@ import { DisplayOptions, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { SampleStatistics } from "./types";
+import { parseNumber } from "../../utils/parseNumber";
 
 const DECIMAL = 6;
 
@@ -24,14 +25,14 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   const { columns, options, withLabel } = formSummary;
 
   let colName;
-  const data: DataTableRow<SampleStatistics>[] = (
+  const data: DataTableRow<SampleStatistics, "">[] = (
     columns as GridColumnName[]
   ).map((colHeader) => {
     colName = withLabel ? `${cols[colHeader][0]} (${colHeader})` : colHeader;
     const values = withLabel ? cols[colHeader].slice(1) : cols[colHeader];
     const arrOfNums = values.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
-    const row: DataTableRow<SampleStatistics> = {};
+    const row: DataTableRow<SampleStatistics, ""> = { "": colName };
 
     // Data length
     if (options.includes("N")) {
@@ -79,7 +80,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
 
     // Range
     if (options.includes("Range")) {
-      row["Range"] = range(n, arrOfNums, 1).toString();
+      row["Range"] = parseNumber(range(n, arrOfNums, 1));
     }
 
     return row;
@@ -88,8 +89,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      <p>Variable: {colName}</p>
-      <DataTable<SampleStatistics> data={data} stats={options} />
+      <DataTable<SampleStatistics, ""> data={data} stats={["", ...options]} />
     </>
   );
 };

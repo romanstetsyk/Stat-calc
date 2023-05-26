@@ -36,7 +36,9 @@ function getColumns(rows: GridRow[]): ColumnValues {
   for (const obj of rows) {
     if (!obj) continue;
     (Object.keys(obj) as Array<keyof GridRow>).forEach((key) => {
-      columns[key] = (columns[key] || []).concat([obj[key]]);
+      if (obj[key] !== "") {
+        columns[key] = (columns[key] || []).concat([obj[key]]);
+      }
     });
   }
   return columns;
