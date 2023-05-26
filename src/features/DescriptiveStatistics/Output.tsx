@@ -12,7 +12,7 @@ import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { SampleStatistics } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
-import { getColumnNameAndValues } from "../../utils/getColumnNameAndValues";
+import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 
 const DECIMAL = 6;
 
@@ -28,14 +28,11 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   const data: DataTableRow<SampleStatistics, "">[] = (
     columns as GridColumnName[]
   ).map((colHeader) => {
-    const [colName, colValues] = getColumnNameAndValues(
-      cols,
-      colHeader,
-      withLabel
-    );
-    const arrOfNums = colValues.map(Number).filter(Number.isFinite);
+    const varName = getVarName(cols, colHeader, withLabel);
+    const varValues = getVarValues(cols, colHeader, withLabel);
+    const arrOfNums = varValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
-    const row: DataTableRow<SampleStatistics, ""> = { "": colName };
+    const row: DataTableRow<SampleStatistics, ""> = { "": varName };
 
     // Data length
     if (options.includes("N")) {

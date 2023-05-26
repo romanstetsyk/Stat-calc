@@ -13,7 +13,7 @@ import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { FreqDist } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
-import { getColumnNameAndValues } from "../../utils/getColumnNameAndValues";
+import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 
 // const DECIMAL = 6;
 
@@ -27,13 +27,10 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   const { withLabel, columns, options } = formSummary;
 
   const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
-    const [colName, colValues] = getColumnNameAndValues(
-      cols,
-      colHeader,
-      withLabel
-    );
-    const n = colValues.length;
-    const out = tabulate(colValues);
+    const varName = getVarName(cols, colHeader, withLabel);
+    const varValues = getVarValues(cols, colHeader, withLabel);
+    const n = varValues.length;
+    const out = tabulate(varValues);
     const table: DataTableRow<FreqDist, "Value">[] = out.map(
       ([x, fr, relFr]) => {
         const row: DataTableRow<FreqDist, "Value"> = {
@@ -63,16 +60,16 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
       });
     }
 
-    return { colName, n, table };
+    return { varName, n, table };
   });
 
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      {arrOfTables.map(({ colName, n, table }) => (
-        <div key={colName}>
+      {arrOfTables.map(({ varName, n, table }) => (
+        <div key={varName}>
           <p>
-            Variable: {colName}. Count: {n}
+            Variable: {varName}. Count: {n}
           </p>
           <DataTable<FreqDist, "Value">
             data={table}

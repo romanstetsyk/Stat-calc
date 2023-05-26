@@ -5,6 +5,7 @@ import { ColumnValues, GridColumnName } from "../../Types";
 import { TForm } from "./types";
 import { FreqDist } from "./types";
 import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
+import { getVarName } from "../../utils/getColumnNameAndValues";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -28,18 +29,12 @@ export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
-        data={
-          watch("withLabel")
-            ? Object.keys(cols)
-                .sort()
-                .map((colHeader) => ({
-                  title: `${
-                    cols[colHeader as GridColumnName][0]
-                  } (${colHeader})`,
-                  value: colHeader,
-                }))
-            : Object.keys(cols).sort()
-        }
+        data={(Object.keys(cols) as GridColumnName[])
+          .sort()
+          .map((colHeader) => ({
+            title: getVarName(cols, colHeader, watch("withLabel")),
+            value: colHeader,
+          }))}
         control={control}
         defaultValue={defaultValues.columns}
         rules={{ required: "Select at least one column" }}
