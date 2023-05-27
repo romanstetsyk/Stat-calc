@@ -1,11 +1,7 @@
-export const isFiniteNumber = (value: string): boolean | string => {
-  const err = "must be a number";
-  if (value.trim() === "") {
-    return err;
-  }
-  const n = Number(value);
-  return Number.isFinite(n) || err;
-};
+import { isFiniteNumberString } from "./assertions";
+
+export const isFiniteNumber = (value: string): boolean | string =>
+  isFiniteNumberString(value) || "must be a number";
 
 export const isPositiveNumber = (value: string): boolean | string => {
   const n = Number(value);

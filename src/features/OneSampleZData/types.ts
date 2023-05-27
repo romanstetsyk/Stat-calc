@@ -1,4 +1,4 @@
-import { GridColumnName, H0Sign, H1Sign, Perform } from "../../Types";
+import { GridColumnName, H1Sign, Perform } from "../../Types";
 
 export const SampleStatistics = [
   "N",
@@ -25,10 +25,8 @@ export type TForm = {
   withLabel: boolean;
   pstdev?: string;
   perform: Perform;
-  mu0dir: H0Sign;
-  mu1dir: H1Sign;
-  mu0val: string;
-  mu1val: string;
+  alternative: H1Sign;
+  nullValue: string;
   alpha: string;
   level: string;
 };

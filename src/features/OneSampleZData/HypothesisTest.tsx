@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary, cols }: Props) => {
-  const { columns, mu0dir, mu0val, mu1dir, mu1val, alpha, pstdev, withLabel } =
+  const { columns, alternative, nullValue, alpha, pstdev, withLabel } =
     formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns | HTColumns, "">[] = (
@@ -33,12 +33,12 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     const xbar = mean(n, arrOfNums, 1);
     const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
     const stderr = stdevApprox / Math.sqrt(n);
-    const zstat = (xbar - Number(mu0val)) / stderr;
+    const zstat = (xbar - Number(nullValue)) / stderr;
 
     let ciLevel: number;
     let zcrit: number;
     let pvalue: number;
-    switch (mu1dir) {
+    switch (alternative) {
       case "ne":
         ciLevel = 1 - Number(alpha);
         zcrit = -quantile(Number(alpha) / 2, 0, 1);
@@ -86,10 +86,8 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     <>
       <HypothesisNotation
         param={<PopulationMean />}
-        h0dir={mu0dir}
-        h1dir={mu1dir}
-        h0val={mu0val}
-        h1val={mu1val}
+        h1dir={alternative}
+        h1val={parseNumber(nullValue)}
       />
 
       <p>Sample Data</p>
@@ -102,7 +100,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
         data={rows}
         stats={["", "Alpha", "Z-crit", "Z-stat", "P-value"]}
       />
-      {!(mu1dir !== "ne" && Number(alpha) >= 0.5) && (
+      {!(alternative !== "ne" && Number(alpha) >= 0.5) && (
         <>
           <p>Confidence Interval</p>
           <DataTable<CIColumns, "">
