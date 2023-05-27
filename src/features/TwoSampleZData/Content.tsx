@@ -25,10 +25,8 @@ export const Content = ({ onClose, cols }: Props) => {
   const [formSummary, setFormSummary] = useState<TForm>({
     withLabel: false,
     perform: Perform.HypothesisTest,
-    mu0dir: "eq",
-    mu1dir: "ne",
-    mu0val: "0",
-    mu1val: "0",
+    alternative: "notEqual",
+    nullValue: "0",
     alpha: "0.05",
     level: "0.95",
   });

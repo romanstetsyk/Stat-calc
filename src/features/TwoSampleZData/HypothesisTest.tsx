@@ -19,17 +19,8 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary, cols }: Props) => {
-  const {
-    sample1,
-    stdev1,
-    sample2,
-    stdev2,
-    mu0dir,
-    mu0val,
-    mu1dir,
-    mu1val,
-    alpha,
-  } = formSummary;
+  const { sample1, stdev1, sample2, stdev2, alternative, nullValue, alpha } =
+    formSummary;
 
   if (!sample1 || !sample2) return null;
 
@@ -49,23 +40,23 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
   const stderrPooled = Math.sqrt(
     stdevApprox1 ** 2 / n1 + stdevApprox2 ** 2 / n2
   );
-  const zstat = (xdiff - Number(mu0val)) / stderrPooled;
+  const zstat = (xdiff - Number(nullValue)) / stderrPooled;
 
   let ciLevel: number;
   let zcrit: number;
   let pvalue: number;
-  switch (mu1dir) {
-    case "ne":
+  switch (alternative) {
+    case "notEqual":
       ciLevel = 1 - Number(alpha);
       zcrit = -quantile(Number(alpha) / 2, 0, 1);
       pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
       break;
-    case "gt":
+    case "greaterThan":
       ciLevel = 1 - 2 * Number(alpha);
       zcrit = -quantile(Number(alpha), 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
-    case "lt":
+    case "lessThan":
       ciLevel = 1 - 2 * Number(alpha);
       zcrit = quantile(Number(alpha), 0, 1);
       pvalue = cdf(zstat, 0, 1);
@@ -120,10 +111,8 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     <>
       <HypothesisNotation
         param={<PopulationMeanDiff />}
-        h0dir={mu0dir}
-        h1dir={mu1dir}
-        h0val={mu0val}
-        h1val={mu1val}
+        h1dir={alternative}
+        h1val={parseNumber(nullValue)}
       />
 
       <p>Sample Data</p>
@@ -136,7 +125,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
         data={hypothesisTestData}
         stats={["", "Alpha", "Z-crit", "Std.Err.", "Z-stat", "P-value"]}
       />
-      {!(mu1dir !== "ne" && Number(alpha) >= 0.5) && (
+      {!(alternative !== "notEqual" && Number(alpha) >= 0.5) && (
         <>
           <p>Confidence Interval</p>
           <DataTable
