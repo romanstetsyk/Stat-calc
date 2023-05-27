@@ -22,10 +22,8 @@ export const HypothesisTest = ({ formSummary }: Props) => {
     xbar2,
     stdev2,
     n2,
-    mu0dir,
-    mu0val,
-    mu1dir,
-    mu1val,
+    alternative,
+    nullValue,
     alpha,
   } = formSummary;
 
@@ -33,23 +31,23 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   const stderr1 = Number(stdev1) / Math.sqrt(Number(n1));
   const stderr2 = Number(stdev2) / Math.sqrt(Number(n2));
   const stderrPooled = Math.sqrt((+stdev1) ** 2 / +n1 + (+stdev2) ** 2 / +n2);
-  const zstat = (xdiff - Number(mu0val)) / stderrPooled;
+  const zstat = (xdiff - Number(nullValue)) / stderrPooled;
 
   let ciLevel: number;
   let zcrit: number;
   let pvalue: number;
-  switch (mu1dir) {
-    case "ne":
+  switch (alternative) {
+    case "notEqual":
       ciLevel = 1 - Number(alpha);
       zcrit = -quantile(Number(alpha) / 2, 0, 1);
       pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
       break;
-    case "gt":
+    case "greaterThan":
       ciLevel = 1 - 2 * Number(alpha);
       zcrit = -quantile(Number(alpha), 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
-    case "lt":
+    case "lessThan":
       ciLevel = 1 - 2 * Number(alpha);
       zcrit = quantile(Number(alpha), 0, 1);
       pvalue = cdf(zstat, 0, 1);
@@ -104,10 +102,8 @@ export const HypothesisTest = ({ formSummary }: Props) => {
     <>
       <HypothesisNotation
         param={<PopulationMeanDiff />}
-        h0dir={mu0dir}
-        h1dir={mu1dir}
-        h0val={mu0val}
-        h1val={mu1val}
+        h1dir={alternative}
+        h1val={parseNumber(nullValue)}
       />
 
       <p>Sample Data</p>
@@ -120,7 +116,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
         data={hypothesisTestData}
         stats={["", "Alpha", "Z-crit", "Std.Err.", "Z-stat", "P-value"]}
       />
-      {!(mu1dir !== "ne" && Number(alpha) >= 0.5) && (
+      {!(alternative !== "notEqual" && Number(alpha) >= 0.5) && (
         <>
           <p>Confidence Interval</p>
           <DataTable

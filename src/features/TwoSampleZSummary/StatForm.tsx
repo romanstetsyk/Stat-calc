@@ -1,15 +1,11 @@
-import * as React from "react";
 import { useState } from "react";
 import {
   Box,
-  Flex,
   FormControl,
   FormErrorMessage,
   Radio,
   RadioGroup,
-  Select,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
@@ -21,6 +17,8 @@ import {
 import { InputField } from "../../components/InputField";
 import { TForm } from "./types";
 import { Perform } from "../../Types";
+import { HTFormPart } from "../../components/HTFormPart";
+import { PopulationMean } from "../../components/HypothesisNotation";
 
 type Props = {
   formId: string;
@@ -34,45 +32,10 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
     handleSubmit,
     control,
     setValue,
-    trigger,
     formState: { errors },
   } = useForm<TForm>({ defaultValues });
 
   const [perform, setPerform] = useState<Perform>(defaultValues.perform);
-
-  const onSelectChange = (event: React.ChangeEvent) => {
-    const value = (event.target as HTMLInputElement).value;
-    switch (value) {
-      case "eq":
-        setValue("mu1dir", "ne");
-        break;
-      case "ge":
-        setValue("mu1dir", "lt");
-        break;
-      case "le":
-        setValue("mu1dir", "gt");
-        break;
-      case "ne":
-        setValue("mu0dir", "eq");
-        break;
-      case "gt":
-        setValue("mu0dir", "le");
-        break;
-      case "lt":
-        setValue("mu0dir", "ge");
-        break;
-      default:
-        throw new Error("Unknown hypothesis test sign combination");
-    }
-  };
-
-  const onMuValueChange = (event: React.ChangeEvent) => {
-    const { value } = event.target as HTMLInputElement;
-    setValue("mu0val", value);
-    trigger("mu0val");
-    setValue("mu1val", value);
-    trigger("mu1val");
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
@@ -168,74 +131,18 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
               <Box display="flex" flexDirection="row">
                 <Box flex="1">
                   <Radio value={Perform.HypothesisTest}>Hypothesis Test</Radio>
-                  <Stack
-                    disabled={perform !== Perform.HypothesisTest}
-                    as="fieldset"
-                    ml={5}
-                    opacity={perform === Perform.HypothesisTest ? "1" : "0.5"}
-                  >
-                    <Flex gap={2} alignItems="baseline">
-                      <Text as="label" htmlFor="mu0val">
-                        H<sub>0</sub>: &mu;
-                      </Text>
-                      <FormControl width="50px">
-                        <Select
-                          {...register("mu0dir")}
-                          size="xs"
-                          defaultValue="eq"
-                          width="50px"
-                          onChange={onSelectChange}
-                        >
-                          <option value="eq">=</option>
-                          <option value="ge">&ge;</option>
-                          <option value="le">&le;</option>
-                        </Select>
-                      </FormControl>
-                      <InputField
-                        name="mu0val"
-                        register={register}
-                        rules={{
-                          required: "This value is required",
-                          validate: (value) =>
-                            perform !== Perform.HypothesisTest ||
-                            isFiniteNumber(value),
-                          onChange: onMuValueChange,
-                        }}
-                        error={errors.mu0val}
-                      />
-                    </Flex>
 
-                    <Flex gap={2}>
-                      <Text>
-                        H<sub>a</sub>: &mu;
-                      </Text>
-                      <FormControl width="50px">
-                        <Select
-                          {...register("mu1dir")}
-                          size="xs"
-                          defaultValue="ne"
-                          width="50px"
-                          onChange={onSelectChange}
-                        >
-                          <option value="ne">&ne;</option>
-                          <option value="gt">&gt;</option>
-                          <option value="lt">&lt;</option>
-                        </Select>
-                      </FormControl>
-                      <InputField
-                        onChange={onMuValueChange}
-                        name="mu1val"
-                        register={register}
-                        rules={{
-                          required: "This value is required",
-                          validate: (value) =>
-                            perform !== Perform.HypothesisTest ||
-                            isFiniteNumber(value),
-                          onChange: onMuValueChange,
-                        }}
-                        error={errors.mu1val}
-                      />
-                    </Flex>
+                  <HTFormPart
+                    param={<PopulationMean />}
+                    alternative="alternative"
+                    alternativeDefault={defaultValues.alternative}
+                    nullValue="nullValue"
+                    nullValueDefault={defaultValues.nullValue}
+                    disabled={perform !== Perform.HypothesisTest}
+                    control={control}
+                    setValue={setValue}
+                    nullError={errors.nullValue}
+                  >
                     <InputField
                       label="&alpha;"
                       name="alpha"
@@ -248,7 +155,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                       }}
                       error={errors.alpha}
                     />
-                  </Stack>
+                  </HTFormPart>
                 </Box>
                 <Box flex="1">
                   <>
