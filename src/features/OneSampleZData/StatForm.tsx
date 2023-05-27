@@ -74,10 +74,10 @@ export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
 
       <InputField
         label="Std. dev. (optional)"
-        name="pstdev"
+        name="knownStdev"
         register={register}
         rules={{ validate: (value) => value === "" || isPositiveNumber(value) }}
-        error={errors.pstdev}
+        error={errors.knownStdev}
       />
 
       <FormControl isInvalid={Boolean(errors.perform)}>

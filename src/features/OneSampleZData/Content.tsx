@@ -26,7 +26,7 @@ export const Content = ({ onClose, cols }: Props) => {
     columns: [],
     withLabel: false,
     perform: Perform.HypothesisTest,
-    alternative: "ne",
+    alternative: "notEqual",
     nullValue: "0",
     alpha: "0.05",
     level: "0.95",

@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
-  const { columns, level, pstdev, withLabel } = formSummary;
+  const { columns, level, knownStdev, withLabel } = formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns, "">[] = (
     columns as Array<GridColumnName>
@@ -24,7 +24,9 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
     const arrOfNums = varValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
-    const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
+    const stdevApprox = knownStdev
+      ? Number(knownStdev)
+      : stdev(n, 1, arrOfNums, 1);
     const stderr = stdevApprox / Math.sqrt(n);
     const zcrit = -1 * quantile((1 - Number(level)) / 2, 0, 1);
     const me = zcrit * stderr;

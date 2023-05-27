@@ -23,7 +23,7 @@ export type HTColumns = (typeof HTColumns)[number];
 export type TForm = {
   columns: GridColumnName[];
   withLabel: boolean;
-  pstdev?: string;
+  knownStdev?: string;
   perform: Perform;
   alternative: H1Sign;
   nullValue: string;

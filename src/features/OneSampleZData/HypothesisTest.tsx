@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary, cols }: Props) => {
-  const { columns, alternative, nullValue, alpha, pstdev, withLabel } =
+  const { columns, alternative, nullValue, alpha, knownStdev, withLabel } =
     formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns | HTColumns, "">[] = (
@@ -31,7 +31,9 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     const arrOfNums = varValues.map(Number).filter(Number.isFinite);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
-    const stdevApprox = pstdev ? Number(pstdev) : stdev(n, 1, arrOfNums, 1);
+    const stdevApprox = knownStdev
+      ? Number(knownStdev)
+      : stdev(n, 1, arrOfNums, 1);
     const stderr = stdevApprox / Math.sqrt(n);
     const zstat = (xbar - Number(nullValue)) / stderr;
 
@@ -39,17 +41,17 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
     let zcrit: number;
     let pvalue: number;
     switch (alternative) {
-      case "ne":
+      case "notEqual":
         ciLevel = 1 - Number(alpha);
         zcrit = -quantile(Number(alpha) / 2, 0, 1);
         pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
         break;
-      case "gt":
+      case "greaterThan":
         ciLevel = 1 - 2 * Number(alpha);
         zcrit = -quantile(Number(alpha), 0, 1);
         pvalue = 1 - cdf(zstat, 0, 1);
         break;
-      case "lt":
+      case "lessThan":
         ciLevel = 1 - 2 * Number(alpha);
         zcrit = quantile(Number(alpha), 0, 1);
         pvalue = cdf(zstat, 0, 1);
@@ -100,7 +102,7 @@ export const HypothesisTest = ({ formSummary, cols }: Props) => {
         data={rows}
         stats={["", "Alpha", "Z-crit", "Z-stat", "P-value"]}
       />
-      {!(alternative !== "ne" && Number(alpha) >= 0.5) && (
+      {!(alternative !== "notEqual" && Number(alpha) >= 0.5) && (
         <>
           <p>Confidence Interval</p>
           <DataTable<CIColumns, "">

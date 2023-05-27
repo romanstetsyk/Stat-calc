@@ -57,27 +57,27 @@ export const HTFormPart = <T extends FieldValues>({
 
   const onSelectChange = (event: React.ChangeEvent) => {
     const { value } = event.target as HTMLInputElement;
-    switch (value) {
-      case "eq":
-        setNullSign("eq");
-        setValue(alternative, "ne" as PathValue<T, Path<T>>);
+    switch (value as H0Sign | H1Sign) {
+      case "equal":
+        setNullSign("equal");
+        setValue(alternative, "notEqual" as PathValue<T, Path<T>>);
         break;
-      case "ge":
-        setNullSign("ge");
-        setValue(alternative, "lt" as PathValue<T, Path<T>>);
+      case "greaterThanEqual":
+        setNullSign("greaterThanEqual");
+        setValue(alternative, "lessThan" as PathValue<T, Path<T>>);
         break;
-      case "le":
-        setNullSign("le");
-        setValue(alternative, "gt" as PathValue<T, Path<T>>);
+      case "lessThanEqual":
+        setNullSign("lessThanEqual");
+        setValue(alternative, "greaterThan" as PathValue<T, Path<T>>);
         break;
-      case "ne":
-        setNullSign("eq");
+      case "notEqual":
+        setNullSign(HypothesisSignMap["notEqual"]);
         break;
-      case "gt":
-        setNullSign("le");
+      case "greaterThan":
+        setNullSign(HypothesisSignMap["greaterThan"]);
         break;
-      case "lt":
-        setNullSign("ge");
+      case "lessThan":
+        setNullSign(HypothesisSignMap["lessThan"]);
         break;
       default:
         throw new Error("Unknown hypothesis test sign");
