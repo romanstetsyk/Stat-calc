@@ -4,6 +4,7 @@ import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import { CIColumns, SampleStatistics, TForm } from "./types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { ColumnValues } from "../../Types";
+import { isFiniteNumberString } from "../../utils/assertions";
 
 const DECIMAL = 6;
 
@@ -17,12 +18,12 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
 
   if (!sample1 || !sample2) return null;
 
-  const arrOfNums1 = cols[sample1].map(Number).filter(Number.isFinite);
+  const arrOfNums1 = cols[sample1].filter(isFiniteNumberString).map(Number);
   const n1 = arrOfNums1.length;
   const xbar1 = mean(n1, arrOfNums1, 1);
   const stdevApprox1 = stdev1 ? Number(stdev1) : stdev(n1, 1, arrOfNums1, 1);
 
-  const arrOfNums2 = cols[sample2].map(Number).filter(Number.isFinite);
+  const arrOfNums2 = cols[sample2].filter(isFiniteNumberString).map(Number);
   const n2 = arrOfNums2.length;
   const xbar2 = mean(n2, arrOfNums2, 1);
   const stdevApprox2 = stdev2 ? Number(stdev2) : stdev(n2, 1, arrOfNums2, 1);

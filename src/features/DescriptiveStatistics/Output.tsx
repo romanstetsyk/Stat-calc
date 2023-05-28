@@ -13,6 +13,7 @@ import { DataTable, DataTableRow } from "../../components/DataTable";
 import { SampleStatistics } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
+import { isFiniteNumberString } from "../../utils/assertions";
 
 const DECIMAL = 6;
 
@@ -30,7 +31,7 @@ export const Output = ({ setDisplay, formSummary, cols }: Props) => {
   ).map((colHeader) => {
     const varName = getVarName(cols, colHeader, withLabel);
     const varValues = getVarValues(cols, colHeader, withLabel);
-    const arrOfNums = varValues.map(Number).filter(Number.isFinite);
+    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
     const n = arrOfNums.length;
     const row: DataTableRow<SampleStatistics, ""> = { "": varName };
 

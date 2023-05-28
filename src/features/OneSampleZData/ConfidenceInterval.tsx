@@ -5,6 +5,7 @@ import { CIColumns, SampleStatistics, TForm } from "./types";
 import { ColumnValues, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
+import { isFiniteNumberString } from "../../utils/assertions";
 
 const DECIMAL = 6;
 
@@ -21,7 +22,7 @@ export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
   ).map((colHeader) => {
     const varName = getVarName(cols, colHeader, withLabel);
     const varValues = getVarValues(cols, colHeader, withLabel);
-    const arrOfNums = varValues.map(Number).filter(Number.isFinite);
+    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);
     const stdevApprox = knownStdev
