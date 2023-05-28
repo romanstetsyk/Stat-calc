@@ -37,7 +37,11 @@ export const Content = ({ cols, onClose }: Props) => {
   };
 
   return (
-    <ModalContent>
+    <ModalContent
+      onKeyDown={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <ModalHeader>Frequency Distribution</ModalHeader>
       <ModalCloseButton />
       <ModalBody>

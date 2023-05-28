@@ -42,7 +42,11 @@ export const Content = ({ onClose }: Props) => {
   };
 
   return (
-    <ModalContent>
+    <ModalContent
+      onKeyDown={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <ModalHeader>Two Sample Z Test</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
