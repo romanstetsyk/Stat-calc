@@ -11,6 +11,7 @@ import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummar
 import { StatModal as OneSampleZDataModal } from "./features/OneSampleZData/StatModal";
 import { StatModal as DescriptiveStatisticsModal } from "./features/DescriptiveStatistics/StatModal";
 import { StatModal as FrequencyDistributionModal } from "./features/FrequencyDistribution/StatModal";
+import { StatModal as GroupNumericDataModal } from "./features/GroupNumericData/StatModal";
 import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummary/StatModal";
 import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/StatModal";
 import { ColumnValues, GridColumnName, GridRow } from "./Types";
@@ -107,6 +108,7 @@ function App() {
 
       <DescriptiveStatisticsModal cols={columns} />
       <FrequencyDistributionModal cols={columns} />
+      <GroupNumericDataModal cols={columns} />
 
       <DataEditor
         getCellContent={getContent}

@@ -23,6 +23,7 @@
     "@stdlib/stats-base-stdev": "^0.0.9",
     "@stdlib/stats-base-variance": "^0.0.10",
     "@stdlib/utils-tabulate": "^0.0.8",
+    "@stdlib/utils-tabulate-by": "^0.0.8",
     "framer-motion": "^10.12.5",
     "lodash": "^4.17.21",
     "marked": "^4.3.0",
