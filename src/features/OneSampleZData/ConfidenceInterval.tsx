@@ -2,19 +2,22 @@ import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
 import { CIColumns, SampleStatistics, TForm } from "./types";
-import { ColumnValues, GridColumnName } from "../../Types";
+import { GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { isFiniteNumberString } from "../../utils/assertions";
+import { useContext } from "react";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
+export const ConfidenceInterval = ({ formSummary }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const { columns, level, knownStdev, withLabel } = formSummary;
 
   const rows: DataTableRow<SampleStatistics | CIColumns, "">[] = (
