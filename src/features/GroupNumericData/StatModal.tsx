@@ -1,12 +1,7 @@
 import { useDisclosure, Modal, ModalOverlay, MenuItem } from "@chakra-ui/react";
 import { Content } from "./Content";
-import { ColumnValues } from "../../Types";
 
-type Props = {
-  cols: ColumnValues;
-};
-
-export const StatModal = ({ cols }: Props) => {
+export const StatModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -14,7 +9,7 @@ export const StatModal = ({ cols }: Props) => {
 
       <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
         <ModalOverlay />
-        <Content onClose={onClose} cols={cols} />
+        <Content onClose={onClose} />
       </Modal>
     </>
   );

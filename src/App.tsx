@@ -134,7 +134,7 @@ function App() {
           <MenuList>
             <DescriptiveStatisticsModal />
             <FrequencyDistributionModal />
-            <GroupNumericDataModal cols={columns} />
+            <GroupNumericDataModal />
           </MenuList>
         </Menu>
       </DataColumnsContext.Provider>
