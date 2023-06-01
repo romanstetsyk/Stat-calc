@@ -23,6 +23,7 @@ import {
   MenuGroup,
   MenuDivider,
 } from "@chakra-ui/react";
+import { DataColumnsContext } from "./contexts/DataColumnsContext";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
   const col: { title: GridColumnName; width: number } = {
@@ -91,20 +92,22 @@ function App() {
 
   return (
     <>
-      <Menu>
-        <MenuButton as={Button}>Z Stats</MenuButton>
-        <MenuList>
-          <MenuGroup title="One Sample">
-            <OneSampleZSummaryModal />
-            <OneSampleZDataModal cols={columns} />
-          </MenuGroup>
-          <MenuDivider />
-          <MenuGroup title="Two Sample">
-            <TwoSampleZSummaryModal />
-            <TwoSampleZDataModal cols={columns} />
-          </MenuGroup>
-        </MenuList>
-      </Menu>
+      <DataColumnsContext.Provider value={columns}>
+        <Menu>
+          <MenuButton as={Button}>Z Stats</MenuButton>
+          <MenuList>
+            <MenuGroup title="One Sample">
+              <OneSampleZSummaryModal />
+              <OneSampleZDataModal />
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title="Two Sample">
+              <TwoSampleZSummaryModal />
+              <TwoSampleZDataModal cols={columns} />
+            </MenuGroup>
+          </MenuList>
+        </Menu>
+      </DataColumnsContext.Provider>
 
       <DescriptiveStatisticsModal cols={columns} />
       <FrequencyDistributionModal cols={columns} />
