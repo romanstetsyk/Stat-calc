@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@chakra-ui/react";
 
 // import mean from "@stdlib/stats-base-mean";
@@ -9,21 +9,23 @@ import tabulate from "@stdlib/utils-tabulate";
 import gcusum from "@stdlib/blas-ext-base-gcusum";
 
 import { TForm } from "./types";
-import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
+import { DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { FreqDist } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 // const DECIMAL = 6;
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const Output = ({ setDisplay, formSummary, cols }: Props) => {
+export const Output = ({ setDisplay, formSummary }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const { withLabel, columns, options } = formSummary;
 
   const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {

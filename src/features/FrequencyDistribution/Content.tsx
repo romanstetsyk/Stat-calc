@@ -11,15 +11,14 @@ import {
 import { TForm } from "./types";
 import { FreqDist } from "./types";
 import { StatForm } from "./StatForm";
-import { ColumnValues, DisplayOptions } from "../../Types";
+import { DisplayOptions } from "../../Types";
 import { Output } from "./Output";
 
 type Props = {
   onClose: () => void;
-  cols: ColumnValues;
 };
 
-export const Content = ({ cols, onClose }: Props) => {
+export const Content = ({ onClose }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
@@ -48,17 +47,12 @@ export const Content = ({ cols, onClose }: Props) => {
         {display === "form" && (
           <StatForm
             onSubmit={onSubmit}
-            cols={cols}
             formId={formId}
             defaultValues={formSummary}
           />
         )}
         {display === "result" && (
-          <Output
-            setDisplay={setDisplay}
-            formSummary={formSummary}
-            cols={cols}
-          />
+          <Output setDisplay={setDisplay} formSummary={formSummary} />
         )}
       </ModalBody>
 

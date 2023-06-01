@@ -133,7 +133,7 @@ function App() {
           </MenuButton>
           <MenuList>
             <DescriptiveStatisticsModal />
-            <FrequencyDistributionModal cols={columns} />
+            <FrequencyDistributionModal />
             <GroupNumericDataModal cols={columns} />
           </MenuList>
         </Menu>
