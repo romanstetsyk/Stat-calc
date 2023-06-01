@@ -18,12 +18,12 @@ import { ColumnValues, GridColumnName, GridRow } from "./Types";
 import {
   Menu,
   MenuButton,
-  Button,
   MenuList,
   MenuGroup,
   MenuDivider,
 } from "@chakra-ui/react";
 import { DataColumnsContext } from "./contexts/DataColumnsContext";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
   const col: { title: GridColumnName; width: number } = {
@@ -94,7 +94,18 @@ function App() {
     <>
       <DataColumnsContext.Provider value={columns}>
         <Menu>
-          <MenuButton as={Button}>Z Stats</MenuButton>
+          <MenuButton
+            px={4}
+            py={2}
+            transition="all 0.2s"
+            borderRadius="md"
+            borderWidth="1px"
+            _hover={{ bg: "gray.400" }}
+            _expanded={{ bg: "gray.500" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            Z Stats <ChevronDownIcon />
+          </MenuButton>
           <MenuList>
             <MenuGroup title="One Sample">
               <OneSampleZSummaryModal />
@@ -107,11 +118,26 @@ function App() {
             </MenuGroup>
           </MenuList>
         </Menu>
+        <Menu>
+          <MenuButton
+            px={4}
+            py={2}
+            transition="all 0.2s"
+            borderRadius="md"
+            borderWidth="1px"
+            _hover={{ bg: "gray.400" }}
+            _expanded={{ bg: "gray.500" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            Summarize <ChevronDownIcon />
+          </MenuButton>
+          <MenuList>
+            <DescriptiveStatisticsModal cols={columns} />
+            <FrequencyDistributionModal cols={columns} />
+            <GroupNumericDataModal cols={columns} />
+          </MenuList>
+        </Menu>
       </DataColumnsContext.Provider>
-
-      <DescriptiveStatisticsModal cols={columns} />
-      <FrequencyDistributionModal cols={columns} />
-      <GroupNumericDataModal cols={columns} />
 
       <DataEditor
         getCellContent={getContent}
