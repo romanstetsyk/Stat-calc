@@ -3,24 +3,23 @@ import { Button } from "@chakra-ui/react";
 import { TForm } from "./types";
 import { ConfidenceInterval } from "./ConfidenceInterval";
 import { HypothesisTest } from "./HypothesisTest";
-import { ColumnValues, DisplayOptions, Perform } from "../../Types";
+import { DisplayOptions, Perform } from "../../Types";
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const Output = ({ setDisplay, formSummary, cols }: Props) => {
+export const Output = ({ setDisplay, formSummary }: Props) => {
   const { perform } = formSummary;
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
       {perform === Perform.HypothesisTest && (
-        <HypothesisTest formSummary={formSummary} cols={cols} />
+        <HypothesisTest formSummary={formSummary} />
       )}
       {perform === Perform.ConfidenceInerval && (
-        <ConfidenceInterval formSummary={formSummary} cols={cols} />
+        <ConfidenceInterval formSummary={formSummary} />
       )}
     </>
   );

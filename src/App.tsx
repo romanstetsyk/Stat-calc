@@ -103,7 +103,7 @@ function App() {
             <MenuDivider />
             <MenuGroup title="Two Sample">
               <TwoSampleZSummaryModal />
-              <TwoSampleZDataModal cols={columns} />
+              <TwoSampleZDataModal />
             </MenuGroup>
           </MenuList>
         </Menu>

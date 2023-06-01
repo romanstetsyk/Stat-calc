@@ -3,17 +3,19 @@ import stdev from "@stdlib/stats-base-stdev";
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import { CIColumns, SampleStatistics, TForm } from "./types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
-import { ColumnValues } from "../../Types";
 import { isFiniteNumberString } from "../../utils/assertions";
+import { useContext } from "react";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const ConfidenceInterval = ({ formSummary, cols }: Props) => {
+export const ConfidenceInterval = ({ formSummary }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const { sample1, stdev1, sample2, stdev2, level } = formSummary;
 
   if (!sample1 || !sample2) return null;

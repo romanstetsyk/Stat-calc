@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Checkbox,
@@ -12,20 +12,22 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { isPositiveNumber, isValidLevel } from "../../utils/validators";
 import { InputField } from "../../components/InputField";
 import { TForm } from "./types";
-import { ColumnValues, GridColumnName, Perform } from "../../Types";
+import { GridColumnName, Perform } from "../../Types";
 import { SelectField } from "../../components/SelectField";
 import { getVarName } from "../../utils/getColumnNameAndValues";
 import { HTFormPart } from "../../components/HTFormPart";
 import { PopulationMean } from "../../components/HypothesisNotation";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
   defaultValues: TForm;
-  cols: ColumnValues;
 };
 
-export const StatForm = ({ formId, onSubmit, defaultValues, cols }: Props) => {
+export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const {
     register,
     handleSubmit,

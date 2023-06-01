@@ -9,17 +9,19 @@ import {
   PopulationMeanDiff,
 } from "../../components/HypothesisNotation";
 import { parseNumber } from "../../utils/parseNumber";
-import { ColumnValues } from "../../Types";
 import { isFiniteNumberString } from "../../utils/assertions";
+import { useContext } from "react";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 const DECIMAL = 6;
 
 type Props = {
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const HypothesisTest = ({ formSummary, cols }: Props) => {
+export const HypothesisTest = ({ formSummary }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const { sample1, stdev1, sample2, stdev2, alternative, nullValue, alpha } =
     formSummary;
 
