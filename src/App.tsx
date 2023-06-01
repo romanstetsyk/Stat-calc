@@ -132,7 +132,7 @@ function App() {
             Summarize <ChevronDownIcon />
           </MenuButton>
           <MenuList>
-            <DescriptiveStatisticsModal cols={columns} />
+            <DescriptiveStatisticsModal />
             <FrequencyDistributionModal cols={columns} />
             <GroupNumericDataModal cols={columns} />
           </MenuList>

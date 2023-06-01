@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@chakra-ui/react";
 
 import mean from "@stdlib/stats-base-mean";
@@ -8,22 +8,24 @@ import stdev from "@stdlib/stats-base-stdev";
 import range from "@stdlib/stats-base-range";
 
 import { TForm } from "./types";
-import { ColumnValues, DisplayOptions, GridColumnName } from "../../Types";
+import { DisplayOptions, GridColumnName } from "../../Types";
 import { DataTable, DataTableRow } from "../../components/DataTable";
 import { SampleStatistics } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { isFiniteNumberString } from "../../utils/assertions";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 const DECIMAL = 6;
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
-  cols: ColumnValues;
 };
 
-export const Output = ({ setDisplay, formSummary, cols }: Props) => {
+export const Output = ({ setDisplay, formSummary }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const { columns, options, withLabel } = formSummary;
 
   const data: DataTableRow<SampleStatistics, "">[] = (

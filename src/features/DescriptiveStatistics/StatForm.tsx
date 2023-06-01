@@ -1,20 +1,23 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Checkbox } from "@chakra-ui/react";
 
-import { ColumnValues, GridColumnName } from "../../Types";
+import { GridColumnName } from "../../Types";
 import { TForm } from "./types";
 import { SampleStatistics } from "./types";
 import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
 import { getVarName } from "../../utils/getColumnNameAndValues";
+import { useContext } from "react";
+import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
-  cols: ColumnValues;
   formId: string;
   defaultValues: TForm;
 };
 
-export const StatForm = ({ onSubmit, cols, formId, defaultValues }: Props) => {
+export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
+  const cols = useContext(DataColumnsContext);
+
   const {
     handleSubmit,
     control,
