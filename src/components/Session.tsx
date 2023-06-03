@@ -2,6 +2,7 @@ import { useContext, memo } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "./DataTable";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 export const Session = memo(() => {
   const { session } = useContext(SessionContext);
@@ -11,19 +12,24 @@ export const Session = memo(() => {
   }
 
   return (
-    <div>
+    <Box>
       {session.map(({ type, timestamp, title, data, stats }) => {
         if (type === "descriptive") {
           return (
-            <div key={timestamp}>
-              <p>
-                {title}. Timestamp: {new Date(timestamp).toLocaleString()}
-              </p>
+            <Box key={timestamp} mb={8}>
+              <Flex gap={4} alignItems={"baseline"} mb={4}>
+                <Heading as="h4" size="md">
+                  {title}
+                </Heading>
+                <Text fontSize="md">
+                  {new Date(timestamp).toLocaleString()}
+                </Text>
+              </Flex>
               <DataTable<SampleStatistics, ""> data={data} stats={stats} />
-            </div>
+            </Box>
           );
         }
       })}
-    </div>
+    </Box>
   );
 });
