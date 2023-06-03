@@ -27,7 +27,7 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
-  const cols = useContext(DataColumnsContext);
+  const { columnData } = useContext(DataColumnsContext);
 
   console.log("output component");
 
@@ -36,8 +36,8 @@ export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
   const data: DataTableRow<SampleStatistics, "">[] = useMemo(
     () =>
       (columns as GridColumnName[]).map((colHeader) => {
-        const varName = getVarName(cols, colHeader, withLabel);
-        const varValues = getVarValues(cols, colHeader, withLabel);
+        const varName = getVarName(columnData, colHeader, withLabel);
+        const varValues = getVarValues(columnData, colHeader, withLabel);
         const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
         const n = arrOfNums.length;
         const row: DataTableRow<SampleStatistics, ""> = { "": varName };
@@ -95,7 +95,7 @@ export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
 
         return row;
       }),
-    [cols, columns, options, withLabel]
+    [columnData, columns, options, withLabel]
   );
 
   useEffect(() => {

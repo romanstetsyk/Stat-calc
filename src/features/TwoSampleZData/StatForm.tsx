@@ -26,7 +26,7 @@ type Props = {
 };
 
 export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
-  const cols = useContext(DataColumnsContext);
+  const { columnData } = useContext(DataColumnsContext);
 
   const {
     register,
@@ -41,7 +41,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      {Object.keys(cols).length > 0 && (
+      {Object.keys(columnData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}
@@ -69,11 +69,13 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {(Object.keys(cols) as GridColumnName[]).sort().map((colHeader) => (
-              <option key={colHeader} value={colHeader}>
-                {getVarName(cols, colHeader, watch("withLabel"))}
-              </option>
-            ))}
+            {(Object.keys(columnData) as GridColumnName[])
+              .sort()
+              .map((colHeader) => (
+                <option key={colHeader} value={colHeader}>
+                  {getVarName(columnData, colHeader, watch("withLabel"))}
+                </option>
+              ))}
           </SelectField>
 
           <InputField
@@ -95,11 +97,13 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {(Object.keys(cols) as GridColumnName[]).sort().map((colHeader) => (
-              <option key={colHeader} value={colHeader}>
-                {getVarName(cols, colHeader, watch("withLabel"))}
-              </option>
-            ))}
+            {(Object.keys(columnData) as GridColumnName[])
+              .sort()
+              .map((colHeader) => (
+                <option key={colHeader} value={colHeader}>
+                  {getVarName(columnData, colHeader, watch("withLabel"))}
+                </option>
+              ))}
           </SelectField>
           <InputField
             label="Std. dev."

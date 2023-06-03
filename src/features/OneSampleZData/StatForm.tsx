@@ -26,7 +26,7 @@ type Props = {
 };
 
 export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
-  const cols = useContext(DataColumnsContext);
+  const { columnData } = useContext(DataColumnsContext);
 
   const {
     register,
@@ -44,10 +44,10 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
-        data={(Object.keys(cols) as GridColumnName[])
+        data={(Object.keys(columnData) as GridColumnName[])
           .sort()
           .map((colHeader) => ({
-            title: getVarName(cols, colHeader, watch("withLabel")),
+            title: getVarName(columnData, colHeader, watch("withLabel")),
             value: colHeader,
           }))}
         control={control}
@@ -56,7 +56,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
         error={errors["columns"]}
       />
 
-      {Object.keys(cols).length > 0 && (
+      {Object.keys(columnData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}

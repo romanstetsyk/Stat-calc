@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext } from "react";
 import DataEditor, {
   EditableGridCell,
   GridCell,
@@ -14,7 +14,7 @@ import { StatModal as FrequencyDistributionModal } from "./features/FrequencyDis
 import { StatModal as GroupNumericDataModal } from "./features/GroupNumericData/StatModal";
 import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummary/StatModal";
 import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/StatModal";
-import { ColumnValues, GridColumnName, GridRow } from "./Types";
+import { GridColumnName, GridRow } from "./Types";
 import {
   Menu,
   MenuButton,
@@ -34,28 +34,13 @@ const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
   return col;
 });
 
-function getColumns(rows: GridRow[]): ColumnValues {
-  const columns: ColumnValues = {};
-  for (const obj of rows) {
-    if (!obj) continue;
-    (Object.keys(obj) as Array<keyof GridRow>).forEach((key) => {
-      if (obj[key] !== "") {
-        columns[key] = (columns[key] || []).concat([obj[key]]);
-      }
-    });
-  }
-  return columns;
-}
-
 function App() {
-  const [data, setData] = useState<GridRow[]>([]);
-
-  const columns = getColumns(data);
+  const { rowData, setRowData } = useContext(DataColumnsContext);
 
   const getContent = useCallback(
     (cell: Item): GridCell => {
       const [col, row] = cell;
-      const dataRow = data[row] || {};
+      const dataRow = rowData[row] || {};
       // dumb but simple way to do this
       const indexes: (keyof GridRow)[] = columnHeaders.map(
         (col) => col.title as GridColumnName
@@ -69,7 +54,7 @@ function App() {
         data: d,
       };
     },
-    [data]
+    [rowData]
   );
 
   const onCellEdited = useCallback(
@@ -82,63 +67,61 @@ function App() {
       );
       const [colIdx, rowIdx] = cell;
       const col = indexes[colIdx];
-      if (!data[rowIdx]) {
-        data[rowIdx] = {};
+      if (!rowData[rowIdx]) {
+        rowData[rowIdx] = {};
       }
-      data[rowIdx][col] = newValue.data;
-      setData([...data]);
+      rowData[rowIdx][col] = newValue.data;
+      setRowData([...rowData]);
     },
-    [data]
+    [rowData, setRowData]
   );
 
   return (
     <>
-      <DataColumnsContext.Provider value={columns}>
-        <Menu>
-          <MenuButton
-            px={4}
-            py={2}
-            transition="all 0.2s"
-            borderRadius="md"
-            borderWidth="1px"
-            _hover={{ bg: "gray.400" }}
-            _expanded={{ bg: "gray.500" }}
-            _focus={{ boxShadow: "outline" }}
-          >
-            Z Stats <ChevronDownIcon />
-          </MenuButton>
-          <MenuList>
-            <MenuGroup title="One Sample">
-              <OneSampleZSummaryModal />
-              <OneSampleZDataModal />
-            </MenuGroup>
-            <MenuDivider />
-            <MenuGroup title="Two Sample">
-              <TwoSampleZSummaryModal />
-              <TwoSampleZDataModal />
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton
-            px={4}
-            py={2}
-            transition="all 0.2s"
-            borderRadius="md"
-            borderWidth="1px"
-            _hover={{ bg: "gray.400" }}
-            _expanded={{ bg: "gray.500" }}
-            _focus={{ boxShadow: "outline" }}
-          >
-            Summarize <ChevronDownIcon />
-          </MenuButton>
-          <MenuList>
-            <DescriptiveStatisticsModal />
-            <FrequencyDistributionModal />
-            <GroupNumericDataModal />
-          </MenuList>
-        </Menu>
-      </DataColumnsContext.Provider>
+      <Menu>
+        <MenuButton
+          px={4}
+          py={2}
+          transition="all 0.2s"
+          borderRadius="md"
+          borderWidth="1px"
+          _hover={{ bg: "gray.400" }}
+          _expanded={{ bg: "gray.500" }}
+          _focus={{ boxShadow: "outline" }}
+        >
+          Z Stats <ChevronDownIcon />
+        </MenuButton>
+        <MenuList>
+          <MenuGroup title="One Sample">
+            <OneSampleZSummaryModal />
+            <OneSampleZDataModal />
+          </MenuGroup>
+          <MenuDivider />
+          <MenuGroup title="Two Sample">
+            <TwoSampleZSummaryModal />
+            <TwoSampleZDataModal />
+          </MenuGroup>
+        </MenuList>
+      </Menu>
+      <Menu>
+        <MenuButton
+          px={4}
+          py={2}
+          transition="all 0.2s"
+          borderRadius="md"
+          borderWidth="1px"
+          _hover={{ bg: "gray.400" }}
+          _expanded={{ bg: "gray.500" }}
+          _focus={{ boxShadow: "outline" }}
+        >
+          Summarize <ChevronDownIcon />
+        </MenuButton>
+        <MenuList>
+          <DescriptiveStatisticsModal />
+          <FrequencyDistributionModal />
+          <GroupNumericDataModal />
+        </MenuList>
+      </Menu>
 
       <DataEditor
         getCellContent={getContent}

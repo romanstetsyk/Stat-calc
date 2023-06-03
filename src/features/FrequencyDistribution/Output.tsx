@@ -24,13 +24,13 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, formSummary }: Props) => {
-  const cols = useContext(DataColumnsContext);
+  const { columnData } = useContext(DataColumnsContext);
 
   const { withLabel, columns, options } = formSummary;
 
   const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
-    const varName = getVarName(cols, colHeader, withLabel);
-    const varValues = getVarValues(cols, colHeader, withLabel);
+    const varName = getVarName(columnData, colHeader, withLabel);
+    const varValues = getVarValues(columnData, colHeader, withLabel);
     const n = varValues.length;
     const out = tabulate(varValues);
     const table: DataTableRow<FreqDist, "Value">[] = out.map(

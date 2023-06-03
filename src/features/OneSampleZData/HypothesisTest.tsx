@@ -22,7 +22,7 @@ type Props = {
 };
 
 export const HypothesisTest = ({ formSummary }: Props) => {
-  const cols = useContext(DataColumnsContext);
+  const { columnData } = useContext(DataColumnsContext);
 
   const { columns, alternative, nullValue, alpha, knownStdev, withLabel } =
     formSummary;
@@ -30,8 +30,8 @@ export const HypothesisTest = ({ formSummary }: Props) => {
   const rows: DataTableRow<SampleStatistics | CIColumns | HTColumns, "">[] = (
     columns as Array<GridColumnName>
   ).map((colHeader) => {
-    const varName = getVarName(cols, colHeader, withLabel);
-    const varValues = getVarValues(cols, colHeader, withLabel);
+    const varName = getVarName(columnData, colHeader, withLabel);
+    const varValues = getVarValues(columnData, colHeader, withLabel);
     const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
     const n = arrOfNums.length;
     const xbar = mean(n, arrOfNums, 1);

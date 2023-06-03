@@ -4,13 +4,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { App } from "./App.tsx";
 import "./index.css";
 import { SessionProvider } from "./contexts/SessionContext.tsx";
+import { DataColumnsProvider } from "./contexts/DataColumnsContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider>
-      <SessionProvider>
-        <App />
-      </SessionProvider>
+      <DataColumnsProvider>
+        <SessionProvider>
+          <App />
+        </SessionProvider>
+      </DataColumnsProvider>
     </ChakraProvider>
   </React.StrictMode>
 );
