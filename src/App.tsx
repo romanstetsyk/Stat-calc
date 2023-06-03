@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { DataColumnsContext } from "./contexts/DataColumnsContext";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Session } from "./components/Session";
 
 const columnHeaders: GridColumn[] = Array.from({ length: 5 }, (_, i) => {
   const col: { title: GridColumnName; width: number } = {
@@ -142,21 +143,15 @@ function App() {
       <DataEditor
         getCellContent={getContent}
         columns={columnHeaders}
-        rows={50}
+        rows={10}
         onCellEdited={onCellEdited}
         rowMarkers={"clickable-number"}
         getCellsForSelection={true}
         onPaste={true}
       />
-      <ul>
-        {data.map((row, i) => {
-          return (
-            <li key={i}>
-              {Object.entries(row || {}).map(([k, v]) => `${k}: ${v}`)}
-            </li>
-          );
-        })}
-      </ul>
+
+      <h2>Session</h2>
+      <Session />
     </>
   );
 }

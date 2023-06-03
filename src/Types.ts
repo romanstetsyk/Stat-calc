@@ -34,3 +34,5 @@ export const enum Perform {
 }
 
 export type DisplayOptions = "form" | "result";
+
+export type SessionItem = "descriptive";

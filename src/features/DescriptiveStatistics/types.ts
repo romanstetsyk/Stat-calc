@@ -1,4 +1,5 @@
-import { GridColumnName } from "../../Types";
+import { GridColumnName, SessionItem } from "../../Types";
+import { DataTableRow } from "../../components/DataTable";
 
 export const SampleStatistics = [
   "N",
@@ -18,4 +19,12 @@ export type TForm = {
   columns: GridColumnName[];
   options: SampleStatistics[];
   withLabel: boolean;
+};
+
+export type DescriptiveStatisticsSession = {
+  timestamp: number;
+  title: string;
+  type: SessionItem;
+  data: DataTableRow<SampleStatistics, "">[];
+  stats: ["", ...SampleStatistics[]];
 };
