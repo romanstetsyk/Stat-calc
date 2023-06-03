@@ -16,10 +16,12 @@ import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummar
 import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/StatModal";
 import { Session } from "./layout/Session";
 import { DataGrid } from "./layout/DataGrid";
+import { MainHeader } from "./layout/MainHeader";
 
 export const App = () => {
   return (
     <>
+      <MainHeader />
       <Menu>
         <MenuButton
           px={4}
