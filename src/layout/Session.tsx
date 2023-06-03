@@ -1,7 +1,7 @@
 import { useContext, memo } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { SampleStatistics } from "../features/DescriptiveStatistics/types";
-import { DataTable } from "./DataTable";
+import { DataTable } from "../components/DataTable";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 export const Session = memo(() => {
