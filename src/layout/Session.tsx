@@ -8,7 +8,7 @@ export const Session = memo(() => {
   const { session } = useContext(SessionContext);
 
   if (session.length === 0) {
-    return null;
+    return <Text>No data</Text>;
   }
 
   return (
@@ -18,7 +18,7 @@ export const Session = memo(() => {
           return (
             <Box key={timestamp} mb={8}>
               <Flex gap={4} alignItems={"baseline"} mb={4}>
-                <Heading as="h4" size="md">
+                <Heading as="h4" size='sm'>
                   {title}
                 </Heading>
                 <Text fontSize="md">

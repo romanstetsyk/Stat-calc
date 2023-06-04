@@ -4,6 +4,11 @@ import {
   MenuList,
   MenuGroup,
   MenuDivider,
+  Heading,
+  Card,
+  CardHeader,
+  CardBody,
+  Flex,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
@@ -67,10 +72,25 @@ export const App = () => {
         </MenuList>
       </Menu>
 
-      <DataGrid />
+      <Flex gap={2}>
+        <Card maxW="full" flexBasis={"75%"} height='100%'>
+          <CardHeader pb={0}>
+            <Heading size={"md"}>Untitled</Heading>
+          </CardHeader>
+          <CardBody maxH="100%" overflow={"scroll"}>
+            <DataGrid />
+          </CardBody>
+        </Card>
 
-      <h2>Session</h2>
-      <Session />
+        <Card maxW="full" flexBasis={"25%"} height='100%'>
+          <CardHeader>
+            <Heading size={"md"}>Session</Heading>
+          </CardHeader>
+          <CardBody maxH="100%" overflow={"scroll"}>
+            <Session />
+          </CardBody>
+        </Card>
+      </Flex>
     </>
   );
 };

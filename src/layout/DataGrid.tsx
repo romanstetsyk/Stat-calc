@@ -15,7 +15,7 @@ export const DataGrid = () => {
 
   const columnHeaders: GridColumn[] = useMemo(
     () =>
-      Array.from({ length: 5 }, (_, i) => {
+      Array.from({ length: 50 }, (_, i) => {
         const col: { title: GridColumnName; width: number } = {
           title: `col${i + 1}`,
           width: 100,
@@ -68,7 +68,7 @@ export const DataGrid = () => {
     <DataEditor
       getCellContent={getContent}
       columns={columnHeaders}
-      rows={10}
+      rows={200}
       onCellEdited={onCellEdited}
       rowMarkers={"clickable-number"}
       getCellsForSelection={true}
