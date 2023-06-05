@@ -9,17 +9,14 @@ import {
   CardHeader,
   CardBody,
   Flex,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerBody,
-  DrawerHeader,
-  useDisclosure,
-  DrawerCloseButton,
   Show,
   IconButton,
 } from "@chakra-ui/react";
-import { ChevronDownIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
 import "allotment/dist/style.css";
 import { Allotment } from "allotment";
 
@@ -33,9 +30,10 @@ import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/Stat
 import { Session } from "./layout/Session";
 import { DataGrid } from "./layout/DataGrid";
 import { MainHeader } from "./layout/MainHeader";
+import { useState } from "react";
 
 export const App = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showGrid, setShowGrid] = useState<boolean>(true);
 
   return (
     <Flex direction={"column"} height={"100vh"} overflow={"scroll"}>
@@ -87,6 +85,55 @@ export const App = () => {
         </Menu>
       </Flex>
 
+      <Show below="md">
+        {showGrid && (
+          <IconButton
+            zIndex={1}
+            width={"max-content"}
+            position={"fixed"}
+            top="50%"
+            right="0"
+            onClick={() => setShowGrid(!showGrid)}
+            aria-label="Add to friends"
+            icon={<ChevronLeftIcon />}
+          />
+        )}
+        {!showGrid && (
+          <IconButton
+            zIndex={1}
+            width={"max-content"}
+            position={"fixed"}
+            top="50%"
+            left="0"
+            onClick={() => setShowGrid(!showGrid)}
+            aria-label="Add to friends"
+            icon={<ChevronRightIcon />}
+          />
+        )}
+        <Allotment defaultSizes={[7, 3]}>
+          <Allotment.Pane visible={showGrid}>
+            <Card maxW="full" height="100%" m={2}>
+              <CardHeader pb={0}>
+                <Heading size={"md"}>Untitled</Heading>
+              </CardHeader>
+              <CardBody overflow={"scroll"} px={0}>
+                <DataGrid />
+              </CardBody>
+            </Card>
+          </Allotment.Pane>
+          <Allotment.Pane visible={!showGrid}>
+            <Card maxW="full" height="100%" m={2}>
+              <CardHeader>
+                <Heading size={"md"}>Session</Heading>
+              </CardHeader>
+              <CardBody overflow={"scroll"}>
+                <Session />
+              </CardBody>
+            </Card>
+          </Allotment.Pane>
+        </Allotment>
+      </Show>
+
       <Show above="md">
         <Allotment defaultSizes={[7, 3]}>
           <Allotment.Pane>
@@ -110,42 +157,6 @@ export const App = () => {
             </Card>
           </Allotment.Pane>
         </Allotment>
-      </Show>
-
-      <Show below="md">
-        <IconButton
-          zIndex={1}
-          width={"max-content"}
-          position={"fixed"}
-          top="50%"
-          right="0"
-          onClick={onOpen}
-          aria-label="Add to friends"
-          icon={<ChevronLeftIcon />}
-        />
-        <Card maxW="full" height="100%" m={2}>
-          <CardHeader pb={0}>
-            <Heading size={"md"}>Untitled</Heading>
-          </CardHeader>
-          <CardBody overflow={"scroll"} px={0}>
-            <DataGrid />
-          </CardBody>
-        </Card>
-        <Drawer
-          placement={"right"}
-          onClose={onClose}
-          isOpen={isOpen}
-          size="full"
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">Session</DrawerHeader>
-            <DrawerBody>
-              <Session />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
       </Show>
     </Flex>
   );
