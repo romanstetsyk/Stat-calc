@@ -9,8 +9,19 @@ import {
   CardHeader,
   CardBody,
   Flex,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerBody,
+  DrawerHeader,
+  useDisclosure,
+  DrawerCloseButton,
+  Show,
+  IconButton,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import "allotment/dist/style.css";
+import { Allotment } from "allotment";
 
 import { StatModal as OneSampleZSummaryModal } from "./features/OneSampleZSummary/StatModal";
 import { StatModal as OneSampleZDataModal } from "./features/OneSampleZData/StatModal";
@@ -24,73 +35,118 @@ import { DataGrid } from "./layout/DataGrid";
 import { MainHeader } from "./layout/MainHeader";
 
 export const App = () => {
-  return (
-    <>
-      <MainHeader />
-      <Menu>
-        <MenuButton
-          px={4}
-          py={2}
-          transition="all 0.2s"
-          borderRadius="md"
-          borderWidth="1px"
-          _hover={{ bg: "gray.400" }}
-          _expanded={{ bg: "gray.500" }}
-          _focus={{ boxShadow: "outline" }}
-        >
-          Z Stats <ChevronDownIcon />
-        </MenuButton>
-        <MenuList>
-          <MenuGroup title="One Sample">
-            <OneSampleZSummaryModal />
-            <OneSampleZDataModal />
-          </MenuGroup>
-          <MenuDivider />
-          <MenuGroup title="Two Sample">
-            <TwoSampleZSummaryModal />
-            <TwoSampleZDataModal />
-          </MenuGroup>
-        </MenuList>
-      </Menu>
-      <Menu>
-        <MenuButton
-          px={4}
-          py={2}
-          transition="all 0.2s"
-          borderRadius="md"
-          borderWidth="1px"
-          _hover={{ bg: "gray.400" }}
-          _expanded={{ bg: "gray.500" }}
-          _focus={{ boxShadow: "outline" }}
-        >
-          Summarize <ChevronDownIcon />
-        </MenuButton>
-        <MenuList>
-          <DescriptiveStatisticsModal />
-          <FrequencyDistributionModal />
-          <GroupNumericDataModal />
-        </MenuList>
-      </Menu>
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-      <Flex gap={2}>
-        <Card maxW="full" flexBasis={"75%"} height='100%'>
+  return (
+    <Flex direction={"column"} height={"100vh"} overflow={"scroll"}>
+      <MainHeader />
+      <Flex>
+        <Menu>
+          <MenuButton
+            px={4}
+            py={2}
+            transition="all 0.2s"
+            borderRadius="md"
+            borderWidth="1px"
+            _hover={{ bg: "gray.400" }}
+            _expanded={{ bg: "gray.500" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            Z Stats <ChevronDownIcon />
+          </MenuButton>
+          <MenuList>
+            <MenuGroup title="One Sample">
+              <OneSampleZSummaryModal />
+              <OneSampleZDataModal />
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title="Two Sample">
+              <TwoSampleZSummaryModal />
+              <TwoSampleZDataModal />
+            </MenuGroup>
+          </MenuList>
+        </Menu>
+        <Menu>
+          <MenuButton
+            px={4}
+            py={2}
+            transition="all 0.2s"
+            borderRadius="md"
+            borderWidth="1px"
+            _hover={{ bg: "gray.400" }}
+            _expanded={{ bg: "gray.500" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            Summarize <ChevronDownIcon />
+          </MenuButton>
+          <MenuList>
+            <DescriptiveStatisticsModal />
+            <FrequencyDistributionModal />
+            <GroupNumericDataModal />
+          </MenuList>
+        </Menu>
+      </Flex>
+
+      <Show above="md">
+        <Allotment defaultSizes={[7, 3]}>
+          <Allotment.Pane>
+            <Card maxW="full" height="100%" m={2}>
+              <CardHeader pb={0}>
+                <Heading size={"md"}>Untitled</Heading>
+              </CardHeader>
+              <CardBody overflow={"scroll"} px={0}>
+                <DataGrid />
+              </CardBody>
+            </Card>
+          </Allotment.Pane>
+          <Allotment.Pane>
+            <Card maxW="full" height="100%" m={2}>
+              <CardHeader>
+                <Heading size={"md"}>Session</Heading>
+              </CardHeader>
+              <CardBody overflow={"scroll"}>
+                <Session />
+              </CardBody>
+            </Card>
+          </Allotment.Pane>
+        </Allotment>
+      </Show>
+
+      <Show below="md">
+        <IconButton
+          zIndex={1}
+          width={"max-content"}
+          position={"fixed"}
+          top="50%"
+          right="0"
+          onClick={onOpen}
+          aria-label="Add to friends"
+          icon={<ChevronLeftIcon />}
+        />
+        <Card maxW="full" height="100%" m={2}>
           <CardHeader pb={0}>
             <Heading size={"md"}>Untitled</Heading>
           </CardHeader>
-          <CardBody maxH="100%" overflow={"scroll"}>
+          <CardBody overflow={"scroll"} px={0}>
             <DataGrid />
           </CardBody>
         </Card>
-
-        <Card maxW="full" flexBasis={"25%"} height='100%'>
-          <CardHeader>
-            <Heading size={"md"}>Session</Heading>
-          </CardHeader>
-          <CardBody maxH="100%" overflow={"scroll"}>
-            <Session />
-          </CardBody>
-        </Card>
-      </Flex>
-    </>
+        <Drawer
+          placement={"right"}
+          onClose={onClose}
+          isOpen={isOpen}
+          size="full"
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader borderBottomWidth="1px">Session</DrawerHeader>
+            <DrawerBody>
+              <Session />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      </Show>
+    </Flex>
   );
 };

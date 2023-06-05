@@ -16,8 +16,13 @@ export const DataGrid = () => {
   const columnHeaders: GridColumn[] = useMemo(
     () =>
       Array.from({ length: 50 }, (_, i) => {
-        const col: { title: GridColumnName; width: number } = {
+        const col: {
+          title: GridColumnName;
+          id: GridColumnName;
+          width: number;
+        } = {
           title: `col${i + 1}`,
+          id: `col${i + 1}`,
           width: 100,
         };
         return col;
