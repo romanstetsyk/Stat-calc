@@ -1,10 +1,10 @@
 import { createContext, useState } from "react";
-import { DescriptiveStatisticsSession } from "../features/DescriptiveStatistics/types";
+import { TSession } from "../Types";
 
 const useProvideSession = () => {
-  const [session, setSession] = useState<DescriptiveStatisticsSession[]>([]);
+  const [session, setSession] = useState<TSession[]>([]);
 
-  const addSessionItem = (item: DescriptiveStatisticsSession) => {
+  const addSessionItem = (item: TSession) => {
     setSession((prev) => prev.concat(item));
   };
   return { session, setSession, addSessionItem };

@@ -1,3 +1,6 @@
+import { DescriptiveStatisticsSession } from "./features/DescriptiveStatistics/types";
+import { FreqDistSession } from "./features/FrequencyDistribution/types";
+
 export type GridColumnName = `col${number}`;
 
 export type ColumnValues = {
@@ -35,4 +38,4 @@ export const enum Perform {
 
 export type DisplayOptions = "form" | "result";
 
-export type SessionItem = "descriptive";
+export type TSession = DescriptiveStatisticsSession | FreqDistSession;

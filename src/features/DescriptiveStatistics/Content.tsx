@@ -32,7 +32,7 @@ export const Content = ({ onClose }: Props) => {
 
   const [output, setOutput] = useState<DescriptiveStatisticsSession>();
 
-  const onSaveClick = () => {
+  const onSaveToSession = () => {
     if (output) {
       addSessionItem(output);
     }
@@ -83,7 +83,7 @@ export const Content = ({ onClose }: Props) => {
           </Button>
         )}
         {display === "result" && (
-          <Button colorScheme="blue" onClick={onSaveClick}>
+          <Button colorScheme="blue" onClick={onSaveToSession}>
             Save and Close
           </Button>
         )}
