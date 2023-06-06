@@ -2,7 +2,14 @@ import { useContext, memo } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "../components/DataTable";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Stack,
+  StackDivider,
+  Text,
+} from "@chakra-ui/react";
 
 export const Session = memo(() => {
   const { session } = useContext(SessionContext);
@@ -12,12 +19,12 @@ export const Session = memo(() => {
   }
 
   return (
-    <Box>
+    <Stack divider={<StackDivider />} spacing={8}>
       {session.map((item) => {
         if (item.type === "descriptive") {
           const { timestamp, title, data, stats } = item;
           return (
-            <Box key={timestamp} mb={8}>
+            <Box key={timestamp}>
               <Flex gap={4} alignItems={"baseline"} mb={4}>
                 <Heading as="h4" size="sm">
                   {title}
@@ -33,7 +40,7 @@ export const Session = memo(() => {
         if (item.type === "frequencyDistribution") {
           const { timestamp, title, data } = item;
           return (
-            <Box key={timestamp} mb={8}>
+            <Box key={timestamp}>
               <Flex gap={4} alignItems={"baseline"} mb={4}>
                 <Heading as="h4" size="sm">
                   {title}
@@ -43,17 +50,17 @@ export const Session = memo(() => {
                 </Text>
               </Flex>
               {data.map(({ varName, n, table, stats }) => (
-                <div key={varName}>
-                  <p>
+                <Box key={varName} my={4}>
+                  <Heading size="xs" as="h5" mb={4}>
                     Variable: {varName}. Count: {n}
-                  </p>
+                  </Heading>
                   <DataTable data={table} stats={stats} />
-                </div>
+                </Box>
               ))}
             </Box>
           );
         }
       })}
-    </Box>
+    </Stack>
   );
 });
