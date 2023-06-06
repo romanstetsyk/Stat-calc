@@ -39,7 +39,7 @@ export const SplitPanes = () => {
 
   return (
     <>
-      {smallScreen && (
+      {!showSessionMobile && smallScreen && (
         <IconButton
           zIndex={1}
           width={"max-content"}
@@ -53,7 +53,7 @@ export const SplitPanes = () => {
           icon={<ChevronLeftIcon />}
         />
       )}
-      {smallScreen && (
+      {showSessionMobile && smallScreen && (
         <IconButton
           zIndex={1}
           width={"max-content"}
