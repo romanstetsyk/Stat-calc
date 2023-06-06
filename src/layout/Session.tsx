@@ -4,11 +4,13 @@ import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "../components/DataTable";
 import {
   Box,
+  CloseButton,
   Flex,
   Heading,
   Stack,
   StackDivider,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 
 export const Session = memo(() => {
@@ -24,7 +26,7 @@ export const Session = memo(() => {
         if (item.type === "descriptive") {
           const { timestamp, title, data, stats } = item;
           return (
-            <Box key={timestamp}>
+            <Box key={timestamp} data-group>
               <Flex gap={4} alignItems={"baseline"} mb={4}>
                 <Heading as="h4" size="sm">
                   {title}
@@ -32,6 +34,19 @@ export const Session = memo(() => {
                 <Text fontSize="md">
                   {new Date(timestamp).toLocaleString()}
                 </Text>
+                <Tooltip
+                  hasArrow
+                  label="Remove from session"
+                  placement="top"
+                  fontSize={"xs"}
+                >
+                  <CloseButton
+                    size="sm"
+                    ml="auto"
+                    visibility={"hidden"}
+                    _groupHover={{ visibility: "visible" }}
+                  />
+                </Tooltip>
               </Flex>
               <DataTable<SampleStatistics, ""> data={data} stats={stats} />
             </Box>
@@ -40,7 +55,7 @@ export const Session = memo(() => {
         if (item.type === "frequencyDistribution") {
           const { timestamp, title, data } = item;
           return (
-            <Box key={timestamp}>
+            <Box key={timestamp} data-group>
               <Flex gap={4} alignItems={"baseline"} mb={4}>
                 <Heading as="h4" size="sm">
                   {title}
@@ -48,6 +63,19 @@ export const Session = memo(() => {
                 <Text fontSize="md">
                   {new Date(timestamp).toLocaleString()}
                 </Text>
+                <Tooltip
+                  hasArrow
+                  label="Remove from session"
+                  placement="top"
+                  fontSize={"xs"}
+                >
+                  <CloseButton
+                    size="sm"
+                    ml="auto"
+                    visibility={"hidden"}
+                    _groupHover={{ visibility: "visible" }}
+                  />
+                </Tooltip>
               </Flex>
               {data.map(({ varName, n, table, stats }) => (
                 <Box key={varName} my={4}>
