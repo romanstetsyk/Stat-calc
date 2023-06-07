@@ -1,3 +1,14 @@
 body {
   overscroll-behavior-x: contain;
 }
+
+.ruuri-draggable-item {
+  min-width: 100%;
+}
+
+.draggableHeader {
+  cursor: grab;
+}
+.muuri-item-dragging .draggableHeader {
+  cursor: grabbing;
+}

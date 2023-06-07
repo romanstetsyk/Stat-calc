@@ -29,10 +29,12 @@
     "framer-motion": "^10.12.5",
     "lodash": "^4.17.21",
     "marked": "^4.3.0",
+    "muuri": "^0.9.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
-    "react-responsive-carousel": "^3.2.23"
+    "react-responsive-carousel": "^3.2.23",
+    "ruuri": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

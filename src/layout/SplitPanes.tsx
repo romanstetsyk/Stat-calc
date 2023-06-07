@@ -110,7 +110,7 @@ export const SplitPanes = () => {
             <CardHeader>
               <Heading size={"md"}>Session</Heading>
             </CardHeader>
-            <CardBody overflow={"scroll"}>
+            <CardBody overflow={"scroll"} px={0}>
               <Session />
             </CardBody>
           </Card>

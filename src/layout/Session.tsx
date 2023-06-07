@@ -4,14 +4,16 @@ import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "../components/DataTable";
 import {
   Box,
+  Card,
+  CardBody,
+  CardHeader,
   CloseButton,
   Flex,
   Heading,
-  Stack,
-  StackDivider,
   Text,
   Tooltip,
 } from "@chakra-ui/react";
+import DraggableGrid, { DraggableItem } from "ruuri";
 
 export const Session = memo(() => {
   const { session } = useContext(SessionContext);
@@ -21,35 +23,66 @@ export const Session = memo(() => {
   }
 
   return (
-    <Stack divider={<StackDivider />} spacing={8}>
+    <DraggableGrid
+      dragEnabled
+      dragSort
+      layout={{
+        fillGaps: true,
+      }}
+      dragHandle={".draggableHeader"}
+      dragStartPredicate={{ delay: 200 }}
+    >
       {session.map((item) => {
         if (item.type === "descriptive") {
           const { timestamp, title, data, stats } = item;
           return (
-            <Box key={timestamp} data-group>
-              <Flex gap={4} alignItems={"baseline"} mb={4}>
-                <Heading as="h4" size="sm">
-                  {title}
-                </Heading>
-                <Text fontSize="md">
-                  {new Date(timestamp).toLocaleString()}
-                </Text>
-                <Tooltip
-                  hasArrow
-                  label="Remove from session"
-                  placement="top"
-                  fontSize={"xs"}
+            <DraggableItem key={timestamp}>
+              <Card
+                mx={2}
+                my={1}
+                data-group
+                cursor={"auto"}
+                boxShadow="xs"
+                transitionDuration="200ms"
+                transitionProperty="boxShadow"
+                _hover={{
+                  boxShadow:
+                    "var(--chakra-shadows-base), var(--chakra-shadows-xs)",
+                }}
+              >
+                <Flex
+                  gap={4}
+                  alignItems={"flex-start"}
+                  className="draggableHeader"
                 >
-                  <CloseButton
-                    size="sm"
-                    ml="auto"
-                    visibility={"hidden"}
-                    _groupHover={{ visibility: "visible" }}
-                  />
-                </Tooltip>
-              </Flex>
-              <DataTable<SampleStatistics, ""> data={data} stats={stats} />
-            </Box>
+                  <CardHeader>
+                    <Heading as="h4" size="sm">
+                      {title}
+                    </Heading>
+                    {/* <Text fontSize="md">
+                      {new Date(timestamp).toLocaleString()}
+                    </Text> */}
+                  </CardHeader>
+                  <Tooltip
+                    hasArrow
+                    label="Remove from session"
+                    placement="top"
+                    fontSize={"xs"}
+                  >
+                    <CloseButton
+                      size="sm"
+                      ml="auto"
+                      p={"var(--card-padding)"}
+                      visibility={"hidden"}
+                      _groupHover={{ visibility: "visible" }}
+                    />
+                  </Tooltip>
+                </Flex>
+                <CardBody pt={0}>
+                  <DataTable<SampleStatistics, ""> data={data} stats={stats} />
+                </CardBody>
+              </Card>
+            </DraggableItem>
           );
         }
         if (item.type === "frequencyDistribution") {
@@ -89,6 +122,6 @@ export const Session = memo(() => {
           );
         }
       })}
-    </Stack>
+    </DraggableGrid>
   );
 });
