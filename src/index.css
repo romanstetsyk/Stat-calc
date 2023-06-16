@@ -12,3 +12,8 @@ body {
 .muuri-item-dragging .draggableHeader {
   cursor: grabbing;
 }
+
+/* to retain scroll position on rerender */
+.ruuri-draggable-grid {
+  height: calc(1px / 0);
+}
