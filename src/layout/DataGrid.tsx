@@ -6,7 +6,7 @@ import DataEditor, {
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { GridColumnName, GridRow } from "../Types";
 import { DataColumnsContext } from "../contexts/DataColumnsContext";
 
