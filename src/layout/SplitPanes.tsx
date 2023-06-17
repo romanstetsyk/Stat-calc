@@ -7,24 +7,27 @@ import {
   IconButton,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { Allotment } from "allotment";
+import { Allotment, AllotmentHandle } from "allotment";
 import { useEffect, useRef, useState } from "react";
 import { DataGrid } from "./DataGrid";
 import { Session } from "./Session";
 
-type AllotmentRef = {
-  resize: (args: number[]) => void;
-  reset: () => void;
-};
-
 export const SplitPanes = () => {
-  const ref = useRef<AllotmentRef>(null);
+  const ref = useRef<AllotmentHandle | null>(null);
 
   const [showSessionMobile, setShowSessionMobile] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
   const [showSession, setShowSession] = useState(true);
 
-  const [sizes, setSizes] = useState<number[]>([700, 300]);
+  const [sizes, setSizes] = useState<number[]>(() => {
+    const savedSizes = window.localStorage.getItem("allotmentSizes");
+    return typeof savedSizes === "string" ? JSON.parse(savedSizes) : [2, 1];
+  });
+
+  const adjustSizes = (s: number[]) => {
+    setSizes(s);
+    window.localStorage.setItem("allotmentSizes", JSON.stringify(s));
+  };
 
   const smallScreen = useBreakpointValue(
     { base: true, md: false },
@@ -32,9 +35,14 @@ export const SplitPanes = () => {
   );
 
   useEffect(() => {
-    if (!smallScreen && ref.current) {
-      ref.current.resize(sizes);
+    let id: number;
+    if (!smallScreen) {
+      // settimeout necessary to run after allotment finishes the layout process
+      id = setTimeout(() => {
+        ref.current?.reset(); // reset to preferred size
+      }, 0);
     }
+    return () => clearTimeout(id);
   }, [sizes, smallScreen]);
 
   return (
@@ -70,13 +78,12 @@ export const SplitPanes = () => {
       <Allotment
         ref={ref}
         snap
-        defaultSizes={sizes}
-        onDragEnd={setSizes}
+        // defaultSizes={sizes}
+        onDragEnd={adjustSizes}
         onVisibleChange={(_index, value) => {
           console.log("onVisibleChange ran");
           switch (_index) {
             case 0:
-              console.log(value);
               setShowGrid(value);
               break;
             case 1:
@@ -89,8 +96,10 @@ export const SplitPanes = () => {
       >
         <Allotment.Pane
           minSize={100}
-          preferredSize={sizes[0]}
           visible={smallScreen ? !showSessionMobile : showGrid}
+          preferredSize={`${((100 * sizes[0]) / (sizes[0] + sizes[1])).toFixed(
+            2
+          )}%`}
         >
           <Card maxW="full" height="100%" m={2}>
             <CardHeader pb={0}>
@@ -103,8 +112,10 @@ export const SplitPanes = () => {
         </Allotment.Pane>
         <Allotment.Pane
           minSize={100}
-          preferredSize={sizes[1]}
           visible={smallScreen ? showSessionMobile : showSession}
+          preferredSize={`${((100 * sizes[1]) / (sizes[0] + sizes[1])).toFixed(
+            2
+          )}%`}
         >
           <Card maxW="full" height="100%" m={2}>
             <CardHeader>
