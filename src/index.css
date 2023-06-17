@@ -1,5 +1,6 @@
 body {
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: contain;
 }
 
 .ruuri-draggable-item {
@@ -11,4 +12,8 @@ body {
 }
 .muuri-item-dragging .draggableHeader {
   cursor: grabbing;
+}
+
+:root {
+  --focus-border: rgba(0, 0, 0, 1);
 }

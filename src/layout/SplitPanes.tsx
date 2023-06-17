@@ -109,6 +109,37 @@ export const SplitPanes = () => {
           icon={<ChevronRightIcon />}
         />
       )}
+
+      {!smallScreen && !showGrid && (
+        <IconButton
+          zIndex={1}
+          width={"max-content"}
+          position={"fixed"}
+          top="50%"
+          left="0"
+          onClick={() => {
+            setShowGrid(true);
+          }}
+          aria-label="Add to friends"
+          icon={<ChevronRightIcon />}
+        />
+      )}
+
+      {!smallScreen && !showSession && (
+        <IconButton
+          zIndex={1}
+          width={"max-content"}
+          position={"fixed"}
+          top="50%"
+          right="0"
+          onClick={() => {
+            setShowSession(true);
+          }}
+          aria-label="Add to friends"
+          icon={<ChevronLeftIcon />}
+        />
+      )}
+
       <Allotment
         ref={ref}
         snap
@@ -128,13 +159,13 @@ export const SplitPanes = () => {
         }}
       >
         <Allotment.Pane
-          minSize={100}
+          minSize={200}
           visible={smallScreen ? !showSessionMobile : showGrid}
           preferredSize={`${((100 * sizes[0]) / (sizes[0] + sizes[1])).toFixed(
             2
           )}%`}
         >
-          <Card maxW="full" height="100%" m={2}>
+          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
             <CardHeader pb={0}>
               <Heading size={"md"}>Untitled</Heading>
             </CardHeader>
@@ -144,13 +175,13 @@ export const SplitPanes = () => {
           </Card>
         </Allotment.Pane>
         <Allotment.Pane
-          minSize={100}
+          minSize={200}
           visible={smallScreen ? showSessionMobile : showSession}
           preferredSize={`${((100 * sizes[1]) / (sizes[0] + sizes[1])).toFixed(
             2
           )}%`}
         >
-          <Card maxW="full" height="100%" m={2}>
+          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
             <CardHeader>
               <Heading size={"md"}>Session</Heading>
             </CardHeader>
