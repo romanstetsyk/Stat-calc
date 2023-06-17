@@ -1,5 +1,6 @@
 body {
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: contain;
 }
 
 .ruuri-draggable-item {
@@ -16,4 +17,8 @@ body {
 /* to retain scroll position on rerender */
 .ruuri-draggable-grid {
   height: calc(1px / 0);
+}
+
+:root {
+  --focus-border: rgba(0, 0, 0, 1);
 }

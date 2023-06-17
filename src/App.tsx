@@ -38,7 +38,7 @@ export const App = () => {
           >
             Z Stats <ChevronDownIcon />
           </MenuButton>
-          <MenuList>
+          <MenuList zIndex={6}>
             <MenuGroup title="One Sample">
               <OneSampleZSummaryModal />
               <OneSampleZDataModal />
@@ -63,7 +63,7 @@ export const App = () => {
           >
             Summarize <ChevronDownIcon />
           </MenuButton>
-          <MenuList>
+          <MenuList zIndex={6}>
             <DescriptiveStatisticsModal />
             <FrequencyDistributionModal />
             <GroupNumericDataModal />

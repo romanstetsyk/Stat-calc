@@ -6,27 +6,36 @@ import DataEditor, {
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext, useState } from "react";
 import { GridColumnName, GridRow } from "../Types";
 import { DataColumnsContext } from "../contexts/DataColumnsContext";
 
 export const DataGrid = () => {
   const { rowData, setRowData } = useContext(DataColumnsContext);
 
-  const columnHeaders: GridColumn[] = useMemo(
-    () =>
-      Array.from({ length: 50 }, (_, i) => {
-        const col: {
-          title: GridColumnName;
-          id: GridColumnName;
-          width: number;
-        } = {
-          title: `col${i + 1}`,
-          id: `col${i + 1}`,
-          width: 100,
-        };
-        return col;
-      }),
+  const [columnHeaders, setColumnHeaders] = useState(() =>
+    Array.from({ length: 50 }, (_, i) => {
+      const col: {
+        title: GridColumnName;
+        id: GridColumnName;
+        width: number;
+      } = {
+        title: `col${i + 1}`,
+        id: `col${i + 1}`,
+        width: 100,
+      };
+      return col;
+    })
+  );
+
+  const onColumnResize = useCallback(
+    (_col: GridColumn, newSize: number, colIndex: number) => {
+      setColumnHeaders((prev) =>
+        prev.map((header, idx) =>
+          idx === colIndex ? { ...header, width: newSize } : header
+        )
+      );
+    },
     []
   );
 
@@ -74,10 +83,14 @@ export const DataGrid = () => {
       getCellContent={getContent}
       columns={columnHeaders}
       rows={200}
+      rowHeight={24}
+      headerHeight={28}
       onCellEdited={onCellEdited}
       rowMarkers={"clickable-number"}
       getCellsForSelection={true}
       onPaste={true}
+      onColumnResize={onColumnResize}
+      scaleToRem={true}
     />
   );
 };
