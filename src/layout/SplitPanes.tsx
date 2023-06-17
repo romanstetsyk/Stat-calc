@@ -12,27 +12,61 @@ import { useEffect, useRef, useState } from "react";
 import { DataGrid } from "./DataGrid";
 import { Session } from "./Session";
 
+const DEFAULT = {
+  showSessionMobile: false,
+  showGrid: true,
+  showSession: true,
+  sizes: [2, 1],
+};
+
 export const SplitPanes = () => {
   const ref = useRef<AllotmentHandle | null>(null);
 
-  const [showSessionMobile, setShowSessionMobile] = useState(false);
-  const [showGrid, setShowGrid] = useState(true);
-  const [showSession, setShowSession] = useState(true);
-
-  const [sizes, setSizes] = useState<number[]>(() => {
-    const savedSizes = window.localStorage.getItem("allotmentSizes");
-    return typeof savedSizes === "string" ? JSON.parse(savedSizes) : [2, 1];
+  const [showSessionMobile, setShowSessionMobile] = useState<boolean>(() => {
+    const saved = window.localStorage.getItem("showSessionMobile");
+    return typeof saved === "string"
+      ? JSON.parse(saved)
+      : DEFAULT.showSessionMobile;
   });
 
-  const adjustSizes = (s: number[]) => {
-    setSizes(s);
-    window.localStorage.setItem("allotmentSizes", JSON.stringify(s));
-  };
+  const [showGrid, setShowGrid] = useState<boolean>(() => {
+    const saved = window.localStorage.getItem("showGrid");
+    return typeof saved === "string" ? JSON.parse(saved) : DEFAULT.showGrid;
+  });
+
+  const [showSession, setShowSession] = useState<boolean>(() => {
+    const saved = window.localStorage.getItem("showSession");
+    return typeof saved === "string" ? JSON.parse(saved) : DEFAULT.showSession;
+  });
+
+  const [sizes, setSizes] = useState<number[]>(() => {
+    const saved = window.localStorage.getItem("sizes");
+    return typeof saved === "string" ? JSON.parse(saved) : DEFAULT.sizes;
+  });
 
   const smallScreen = useBreakpointValue(
     { base: true, md: false },
     { ssr: false }
   );
+
+  useEffect(() => {
+    window.localStorage.setItem("showGrid", JSON.stringify(showGrid));
+  }, [showGrid]);
+
+  useEffect(() => {
+    window.localStorage.setItem("showSession", JSON.stringify(showSession));
+  }, [showSession]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "showSessionMobile",
+      JSON.stringify(showSessionMobile)
+    );
+  }, [showSessionMobile]);
+
+  useEffect(() => {
+    window.localStorage.setItem("sizes", JSON.stringify(sizes));
+  }, [sizes]);
 
   useEffect(() => {
     let id: number;
@@ -78,8 +112,7 @@ export const SplitPanes = () => {
       <Allotment
         ref={ref}
         snap
-        // defaultSizes={sizes}
-        onDragEnd={adjustSizes}
+        onDragEnd={setSizes}
         onVisibleChange={(_index, value) => {
           console.log("onVisibleChange ran");
           switch (_index) {
