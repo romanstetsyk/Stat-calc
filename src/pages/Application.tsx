@@ -22,7 +22,7 @@ import { SplitPanes } from "src/layout/SplitPanes";
 // Should be default export to use with dynamic import
 export default function Application() {
   return (
-    <Flex direction={"column"} height={"100%"}>
+    <Flex direction={"column"} height={"100vh"}>
       <Flex>
         <Menu>
           <MenuButton

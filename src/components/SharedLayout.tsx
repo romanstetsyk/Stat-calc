@@ -5,7 +5,7 @@ import { NavBar } from "src/components/NavBar";
 
 export const SharedLayout = () => {
   return (
-    <Flex direction={"column"} height={"100vh"} overflow={"scroll"}>
+    <Flex direction={"column"}>
       <NavBar />
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
