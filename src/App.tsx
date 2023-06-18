@@ -17,13 +17,14 @@ import { StatModal as GroupNumericDataModal } from "./features/GroupNumericData/
 import { StatModal as TwoSampleZSummaryModal } from "./features/TwoSampleZSummary/StatModal";
 import { StatModal as TwoSampleZDataModal } from "./features/TwoSampleZData/StatModal";
 
-import { MainHeader } from "./layout/MainHeader";
 import { SplitPanes } from "./layout/SplitPanes";
+import { NavBar } from "./components/NavBar";
 
 export const App = () => {
   return (
     <Flex direction={"column"} height={"100vh"} overflow={"scroll"}>
-      <MainHeader />
+      <NavBar />
+
       <Flex>
         <Menu>
           <MenuButton
