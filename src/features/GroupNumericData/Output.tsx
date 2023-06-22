@@ -54,7 +54,7 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
         : `< ${bins.values[0][0]}`;
     };
 
-    const out = tabulateBy(varValues, indicator);
+    const out = tabulateBy(arrOfNums, indicator);
     out.sort((a, b) => {
       const first = Number(a[0].split(",")[0].slice(1));
       const second = Number(b[0].split(",")[0].slice(1));
