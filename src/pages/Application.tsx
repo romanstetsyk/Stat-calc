@@ -16,6 +16,7 @@ import { StatModal as FrequencyDistributionModal } from "src/features/FrequencyD
 import { StatModal as GroupNumericDataModal } from "src/features/GroupNumericData/StatModal";
 import { StatModal as TwoSampleZSummaryModal } from "src/features/TwoSampleZSummary/StatModal";
 import { StatModal as TwoSampleZDataModal } from "src/features/TwoSampleZData/StatModal";
+import { StatModal as HistogramModal } from "src/features/Histogram/StatModal";
 
 import { SplitPanes } from "src/layout/SplitPanes";
 
@@ -66,6 +67,24 @@ export default function Application() {
             <DescriptiveStatisticsModal />
             <FrequencyDistributionModal />
             <GroupNumericDataModal />
+          </MenuList>
+        </Menu>
+
+        <Menu>
+          <MenuButton
+            px={4}
+            py={2}
+            transition="all 0.2s"
+            borderRadius="md"
+            borderWidth="1px"
+            _hover={{ bg: "gray.400" }}
+            _expanded={{ bg: "gray.500" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            Graphics <ChevronDownIcon />
+          </MenuButton>
+          <MenuList zIndex={6}>
+            <HistogramModal />
           </MenuList>
         </Menu>
       </Flex>
