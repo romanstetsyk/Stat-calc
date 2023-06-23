@@ -85,7 +85,9 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           render={({ field }) => (
             <RadioGroup {...field} display={"flex"} flexDirection={"column"}>
               {FreqDist.map((opt) => (
-                <Radio value={opt}>{opt}</Radio>
+                <Radio key={opt} value={opt}>
+                  {opt}
+                </Radio>
               ))}
             </RadioGroup>
           )}

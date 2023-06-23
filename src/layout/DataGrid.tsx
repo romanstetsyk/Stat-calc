@@ -82,7 +82,7 @@ export const DataGrid = () => {
     <DataEditor
       getCellContent={getContent}
       columns={columnHeaders}
-      rows={200}
+      rows={300}
       rowHeight={24}
       headerHeight={28}
       onCellEdited={onCellEdited}
