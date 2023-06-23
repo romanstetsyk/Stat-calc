@@ -6,20 +6,15 @@ import { Button } from "@chakra-ui/react";
 // import variance from "@stdlib/stats-base-variance";
 // import stdev from "@stdlib/stats-base-stdev";
 
-import tabulateBy from "@stdlib/utils-tabulate-by";
-import gcusum from "@stdlib/blas-ext-base-gcusum";
-
-import { TForm, FreqDist } from "src/features/GroupNumericData/types";
+import { FreqDist, BinMethod } from "src/features/GroupNumericData/types";
 import { DisplayOptions, GridColumnName } from "../../Types";
 import { DataTableRow } from "../../components/DataTable";
-import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { computeBins } from "../../utils/computeBins";
+import { Tabulate } from "../../utils/computeBins";
 import { isFiniteNumberString } from "../../utils/assertions";
 import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 import { Histogram } from "src/components/Histogram";
-
-// const DECIMAL = 6;
+import { TForm } from "./types";
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
@@ -39,64 +34,50 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
 
     const { start, width } = manual;
 
-    const lowerLimit =
-      start && isFiniteNumberString(start)
-        ? Number(start)
-        : Math.min(...arrOfNums);
-    const bins = computeBins(arrOfNums, lowerLimit, +width);
+    const out = new Tabulate(
+      {
+        method: BinMethod.MANUAL,
+        dataset: arrOfNums,
+        start: start === "" ? NaN : Number(start),
+        width: Number(width),
+      },
+      { allowHidden: false, showHidden: true, hideEmpty: false }
+    );
 
-    console.log("bins", bins);
-    const indicator = (v: number) => {
-      const idx = Math.floor(
-        (bins.values.length * (v - bins.l)) / (bins.u - bins.l)
-      );
-      return bins.values[idx]
-        ? `[${bins.values[idx].map(parseNumber).join(", ")})`
-        : `< ${bins.values[0][0]}`;
-    };
-
-    const out = tabulateBy(arrOfNums, indicator);
-    out.sort((a, b) => {
-      const first = Number(a[0].split(",")[0].slice(1));
-      const second = Number(b[0].split(",")[0].slice(1));
-      return first - second;
-    });
-
-    console.log("out", out);
-
-    const table: DataTableRow<FreqDist, "Value">[] = out.map(
-      ([x, fr, relFr]) => {
+    const table: DataTableRow<FreqDist, "Value">[] = out.bins.map(
+      ({ values, limits }) => {
         const row: DataTableRow<FreqDist, "Value"> = {
-          Value: x,
-          Frequency: (fr as number).toString(),
-          "Relative Frequency": parseNumber(relFr as number),
+          Value: "[" + limits.join(", ") + ")",
+          Frequency: String(values.freq),
         };
         return row;
       }
     );
 
-    if (options.includes("Cumulative Frequency")) {
-      const freqArr = out.map((e) => e[1]);
-      const cumulFreq = Array(freqArr.length);
-      gcusum(table.length, 0, freqArr, 1, cumulFreq, 1);
+    if (options.includes("Relative Frequency")) {
+      out.computeRelativeFrequency();
       table.forEach((row, i) => {
-        row["Cumulative Frequency"] = cumulFreq[i].toString();
+        row["Relative Frequency"] = out.bins[i].values.relFreq?.toString();
+      });
+    }
+
+    if (options.includes("Cumulative Frequency")) {
+      out.computeCumulativeFrequency();
+      table.forEach((row, i) => {
+        row["Cumulative Frequency"] = out.bins[i].values.cumulFreq?.toString();
       });
     }
 
     if (options.includes("Cumulative Relative Frequency")) {
-      const relFreqArr = out.map((e) => e[2]);
-      const cumulRelFreq = Array(relFreqArr.length);
-      gcusum(table.length, 0, relFreqArr, 1, cumulRelFreq, 1);
+      out.computeCumulativeRelativeFrequency();
       table.forEach((row, i) => {
-        row["Cumulative Relative Frequency"] = parseNumber(cumulRelFreq[i]);
+        row["Cumulative Relative Frequency"] =
+          out.bins[i].values.cumulRelFreq?.toString();
       });
     }
 
     return { varName, n, table };
   });
-
-  console.log(arrOfTables);
 
   return (
     <>
@@ -107,7 +88,7 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
           table={table}
           parsing={{
             xAxisKey: "Value",
-            yAxisKey: "Frequency",
+            yAxisKey: options,
           }}
           datalabel={varName}
         />

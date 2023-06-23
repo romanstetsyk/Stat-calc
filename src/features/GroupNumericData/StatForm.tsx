@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 import { GridColumnName } from "../../Types";
-import { BinSize, TForm } from "./types";
+import { BinMethod, TForm } from "./types";
 import { FreqDist } from "./types";
 import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
 import { getVarName } from "../../utils/getColumnNameAndValues";
@@ -90,13 +90,13 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           defaultValue={defaultValues.method}
           render={({ field }) => (
             <RadioGroup {...field}>
-              <Radio value={BinSize.MANUAL}>Manual</Radio>
+              <Radio value={BinMethod.MANUAL}>Manual</Radio>
 
               <HStack
                 ml={8}
                 as="fieldset"
-                disabled={watch("method") !== BinSize.MANUAL}
-                opacity={watch("method") !== BinSize.MANUAL ? 0.5 : 1}
+                disabled={watch("method") !== BinMethod.MANUAL}
+                opacity={watch("method") !== BinMethod.MANUAL ? 0.5 : 1}
               >
                 <InputField
                   name="manual.start"
@@ -114,7 +114,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                   error={errors?.manual?.width}
                   rules={{
                     required: {
-                      value: watch("method") === BinSize.MANUAL,
+                      value: watch("method") === BinMethod.MANUAL,
                       message: "This value is required",
                     },
                     validate: isFiniteNumber,
@@ -122,7 +122,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                 />
               </HStack>
 
-              {/* <Radio value={BinSize.OTHER}>Other</Radio> */}
+              {/* <Radio value={BinMethod.OTHER}>Other</Radio> */}
             </RadioGroup>
           )}
         />

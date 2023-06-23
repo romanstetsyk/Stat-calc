@@ -8,10 +8,11 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { BinSize, TForm, FreqDist } from "src/features/GroupNumericData/types";
+import { BinMethod, FreqDist } from "src/features/GroupNumericData/types";
 import { StatForm } from "./StatForm";
 import { DisplayOptions } from "../../Types";
 import { Output } from "./Output";
+import { TForm } from "./types";
 
 type Props = {
   onClose: () => void;
@@ -22,9 +23,9 @@ export const Content = ({ onClose }: Props) => {
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
-    options: [...FreqDist],
+    options: FreqDist[0],
     withLabel: false,
-    method: BinSize.MANUAL,
+    method: BinMethod.MANUAL,
     manual: {
       width: "",
     },

@@ -9,7 +9,7 @@ export const FreqDist = [
 
 export type FreqDist = (typeof FreqDist)[number];
 
-export const enum BinSize {
+export const enum BinMethod {
   MANUAL = "manual",
   OTHER = "other",
 }
@@ -18,7 +18,7 @@ export type TForm = {
   columns: GridColumnName[];
   options: FreqDist[];
   withLabel: boolean;
-  method: BinSize;
+  method: BinMethod;
   manual: {
     start?: string;
     width: string;

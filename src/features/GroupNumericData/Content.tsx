@@ -8,7 +8,7 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import { BinSize, TForm } from "./types";
+import { BinMethod, TForm } from "./types";
 import { FreqDist } from "./types";
 import { StatForm } from "./StatForm";
 import { DisplayOptions } from "../../Types";
@@ -25,7 +25,7 @@ export const Content = ({ onClose }: Props) => {
     columns: [],
     options: [...FreqDist],
     withLabel: false,
-    method: BinSize.MANUAL,
+    method: BinMethod.MANUAL,
     manual: {
       width: "",
     },

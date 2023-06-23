@@ -3,19 +3,21 @@ import {
   Checkbox,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   HStack,
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
 
 import { GridColumnName } from "../../Types";
-import { BinSize, TForm, FreqDist } from "src/features/GroupNumericData/types";
+import { BinMethod, FreqDist } from "src/features/GroupNumericData/types";
 import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
 import { getVarName } from "../../utils/getColumnNameAndValues";
 import { InputField } from "../../components/InputField";
 import { isFiniteNumber } from "../../utils/validators";
 import { useContext } from "react";
 import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import { TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -71,15 +73,25 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
         />
       )}
 
-      <CheckboxGroupWrapper
-        label="Statistics"
-        name="options"
-        data={[...FreqDist]}
-        control={control}
-        defaultValue={defaultValues.options}
-        rules={{ required: "Select at least one statistic" }}
-        error={errors["options"]}
-      />
+      <FormControl isInvalid={Boolean(errors.method)} as={"fieldset"} my={8}>
+        <FormLabel as="legend" m={0}>
+          Select type
+        </FormLabel>
+        <Controller
+          name="options"
+          control={control}
+          rules={{ required: "This field is required" }}
+          defaultValue={defaultValues.options}
+          render={({ field }) => (
+            <RadioGroup {...field} display={"flex"} flexDirection={"column"}>
+              {FreqDist.map((opt) => (
+                <Radio value={opt}>{opt}</Radio>
+              ))}
+            </RadioGroup>
+          )}
+        />
+        <FormErrorMessage as="span">{errors.method?.message}</FormErrorMessage>
+      </FormControl>
 
       <FormControl isInvalid={Boolean(errors.method)}>
         <Controller
@@ -89,13 +101,13 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           defaultValue={defaultValues.method}
           render={({ field }) => (
             <RadioGroup {...field}>
-              <Radio value={BinSize.MANUAL}>Manual</Radio>
+              <Radio value={BinMethod.MANUAL}>Manual</Radio>
 
               <HStack
                 ml={8}
                 as="fieldset"
-                disabled={watch("method") !== BinSize.MANUAL}
-                opacity={watch("method") !== BinSize.MANUAL ? 0.5 : 1}
+                disabled={watch("method") !== BinMethod.MANUAL}
+                opacity={watch("method") !== BinMethod.MANUAL ? 0.5 : 1}
               >
                 <InputField
                   name="manual.start"
@@ -113,7 +125,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                   error={errors?.manual?.width}
                   rules={{
                     required: {
-                      value: watch("method") === BinSize.MANUAL,
+                      value: watch("method") === BinMethod.MANUAL,
                       message: "This value is required",
                     },
                     validate: isFiniteNumber,
@@ -121,7 +133,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                 />
               </HStack>
 
-              {/* <Radio value={BinSize.OTHER}>Other</Radio> */}
+              {/* <Radio value={BinMethod.OTHER}>Other</Radio> */}
             </RadioGroup>
           )}
         />
