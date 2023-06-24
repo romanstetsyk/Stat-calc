@@ -32,20 +32,30 @@ type Props<T> = {
 export const Histogram = <T,>({ table, parsing, datalabel }: Props<T>) => {
   const options = {
     maintainAspectRatio: false,
+    scales: {
+      xAxis: {
+        title: {
+          display: true,
+          text: datalabel,
+        },
+      },
+    },
     plugins: {
       legend: {
+        display: false,
         position: "top" as const,
       },
       title: {
-        display: true,
-        text: "Chart.js Bar Chart",
+        display: false,
+        text: "Histogram",
       },
       // datalabels: {
       //   display: true,
       //   color: "black",
-      //   // formatter: (ths: unknown) => {
-      //   //   return JSON.stringify(ths);
-      //   // },
+      //   formatter: ({ Frequency }: { Frequency: number }) => {
+      //     // console.log(a, b, c);
+      //     return Frequency;
+      //   },
       //   anchor: "end" as const,
       //   offset: -20,
       //   align: "start" as const,
@@ -61,6 +71,7 @@ export const Histogram = <T,>({ table, parsing, datalabel }: Props<T>) => {
         barPercentage: 1,
         label: datalabel || "Dataset 1",
         data: table,
+        xAxisID: "xAxis",
       },
     ],
   };
