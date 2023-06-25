@@ -38,16 +38,16 @@ type Config = {
   allowHidden?: boolean;
   showHidden?: boolean;
   hideEmpty?: boolean;
+  precision?: number; // data precision subtracted from upper limits
 };
 
-type Bin = {
+export type Bin = {
   limits: [number, number];
-  values: {
-    freq: number;
-    relFreq?: number;
-    cumulFreq?: number;
-    cumulRelFreq?: number;
-  };
+  midpoint?: number;
+  Frequency: number;
+  "Relative Frequency"?: number;
+  "Cumulative Frequency"?: number;
+  "Cumulative Relative Frequency"?: number;
 };
 
 export class Tabulate {
@@ -64,6 +64,8 @@ export class Tabulate {
   hideEmpty: boolean; // show bins with 0 height
   showWarning = false; // flag if not all bins are visible
   bins: Bin[] = [];
+  ticks: number[] = [];
+  precision = 0;
   l = NaN; // lower limit of first class
   u = NaN; // upper limit of last class
 
@@ -71,6 +73,7 @@ export class Tabulate {
     this.allowHidden = config.allowHidden ?? false;
     this.showHidden = config.showHidden ?? true;
     this.hideEmpty = config.hideEmpty ?? false;
+    this.precision = config.precision ?? 0;
 
     const { dataset, method } = paramObj;
     this.method = method;
@@ -82,6 +85,8 @@ export class Tabulate {
     if (method === BinMethod.MANUAL) {
       this.createBinsManual(paramObj);
       this.allocate();
+      this.getTicks();
+      this.getMidpoints();
     }
   }
 
@@ -101,14 +106,19 @@ export class Tabulate {
     }
 
     if (this.datasetMin < this.start && this.showHidden) {
-      this.bins.push({ limits: [-Infinity, start], values: { freq: 0 } });
+      this.bins.push({ limits: [-Infinity, start], Frequency: 0 });
     }
 
     let i = 0;
     while (roundToPrecision(this.start + i * this.width) <= this.datasetMax) {
       const lowerLimit = roundToPrecision(this.start + i * this.width);
-      const upperLimit = roundToPrecision(this.start + (i + 1) * this.width);
-      this.bins.push({ limits: [lowerLimit, upperLimit], values: { freq: 0 } });
+      const upperLimit = roundToPrecision(
+        this.start + (i + 1) * this.width - this.precision
+      );
+      this.bins.push({
+        limits: [lowerLimit, upperLimit],
+        Frequency: 0,
+      });
       i += 1;
     }
 
@@ -127,40 +137,54 @@ export class Tabulate {
         )
       );
       if (this.showHidden) {
-        this.bins[idx >= 0 ? idx : 0].values.freq += 1;
+        this.bins[idx >= 0 ? idx : 0]["Frequency"] += 1;
         this.countVisible += 1;
       } else if (idx >= 0) {
-        this.bins[idx].values.freq += 1;
+        this.bins[idx]["Frequency"] += 1;
         this.countVisible += 1;
       }
     });
 
     if (this.hideEmpty) {
-      this.bins = this.bins.filter((bin) => bin.values.freq !== 0);
+      this.bins = this.bins.filter((bin) => bin["Frequency"] !== 0);
     }
   }
 
   computeRelativeFrequency() {
-    this.bins.forEach(({ values }) => {
-      values.relFreq = (values.freq ?? 0) / this.countVisible;
+    this.bins.forEach((bin) => {
+      bin["Relative Frequency"] = (bin["Frequency"] ?? 0) / this.countVisible;
     });
   }
 
   computeCumulativeFrequency() {
     let currentTotal = 0;
-    this.bins.forEach(({ values }) => {
-      values.cumulFreq = (values.freq ?? 0) + currentTotal;
-      currentTotal = values.cumulFreq;
+    this.bins.forEach((bin) => {
+      bin["Cumulative Frequency"] = (bin["Frequency"] ?? 0) + currentTotal;
+      currentTotal = bin["Cumulative Frequency"];
     });
   }
 
   computeCumulativeRelativeFrequency() {
     let currentTotal = 0;
-    this.bins.forEach(({ values }) => {
-      values.cumulRelFreq = roundToPrecision(
-        (values.freq ?? 0) / this.countVisible + currentTotal
+    this.bins.forEach((bin) => {
+      bin["Cumulative Relative Frequency"] = roundToPrecision(
+        (bin["Frequency"] ?? 0) / this.countVisible + currentTotal
       );
-      currentTotal = values.cumulRelFreq;
+      currentTotal = bin["Cumulative Relative Frequency"];
+    });
+  }
+
+  getTicks() {
+    this.ticks = [
+      ...this.bins.map(({ limits }) => limits[0]),
+      this.bins[this.bins.length - 1].limits[1],
+    ];
+  }
+
+  getMidpoints() {
+    this.bins.forEach((bin) => {
+      const [a, b] = bin.limits;
+      bin.midpoint = (a + b - this.precision) / 2;
     });
   }
 }

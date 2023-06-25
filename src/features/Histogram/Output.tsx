@@ -6,9 +6,8 @@ import { Button } from "@chakra-ui/react";
 // import variance from "@stdlib/stats-base-variance";
 // import stdev from "@stdlib/stats-base-stdev";
 
-import { FreqDist, BinMethod } from "src/features/GroupNumericData/types";
+import { BinMethod } from "src/features/GroupNumericData/types";
 import { DisplayOptions, GridColumnName } from "../../Types";
-import { DataTableRow } from "../../components/DataTable";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { Tabulate } from "../../utils/computeBins";
 import { isFiniteNumberString } from "../../utils/assertions";
@@ -41,53 +40,43 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
         start: start === "" ? NaN : Number(start),
         width: Number(width),
       },
-      { allowHidden: false, showHidden: true, hideEmpty: false }
-    );
-
-    const table: DataTableRow<FreqDist, "Value">[] = out.bins.map(
-      ({ values, limits }) => {
-        const row: DataTableRow<FreqDist, "Value"> = {
-          Value: "[" + limits.join(", ") + ")",
-          Frequency: String(values.freq),
-        };
-        return row;
-      }
+      { allowHidden: false, showHidden: true, hideEmpty: false, precision: 0 }
     );
 
     if (options.includes("Relative Frequency")) {
       out.computeRelativeFrequency();
-      table.forEach((row, i) => {
-        row["Relative Frequency"] = out.bins[i].values.relFreq?.toString();
-      });
     }
 
     if (options.includes("Cumulative Frequency")) {
       out.computeCumulativeFrequency();
-      table.forEach((row, i) => {
-        row["Cumulative Frequency"] = out.bins[i].values.cumulFreq?.toString();
-      });
     }
 
     if (options.includes("Cumulative Relative Frequency")) {
       out.computeCumulativeRelativeFrequency();
-      table.forEach((row, i) => {
-        row["Cumulative Relative Frequency"] =
-          out.bins[i].values.cumulRelFreq?.toString();
-      });
     }
-
-    return { varName, n, table };
+    console.log(out);
+    return {
+      varName,
+      n,
+      l: out.l,
+      u: out.u,
+      classWidth: out.width,
+      out,
+    };
   });
 
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      {arrOfTables.map(({ varName, table }) => (
+      {arrOfTables.map(({ varName, out, l, u, classWidth }) => (
         <Histogram
+          l={l}
+          u={u}
+          classWidth={classWidth}
           key={varName}
-          table={table}
+          table={out.bins}
           parsing={{
-            xAxisKey: "Value",
+            xAxisKey: "midpoint",
             yAxisKey: options,
           }}
           datalabel={varName}

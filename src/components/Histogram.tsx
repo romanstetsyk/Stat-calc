@@ -6,8 +6,10 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Bin } from "src/utils/computeBins";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(
@@ -27,16 +29,67 @@ type Props<T> = {
     yAxisKey: Extract<keyof T, string>;
   };
   datalabel?: string;
+  l: number;
+  u: number;
+  classWidth: number;
 };
 
-export const Histogram = <T,>({ table, parsing, datalabel }: Props<T>) => {
+export const Histogram = <T,>({
+  table,
+  parsing,
+  datalabel,
+  l,
+  u,
+  classWidth,
+}: Props<T>) => {
   const options = {
     maintainAspectRatio: false,
     scales: {
-      xAxis: {
+      x: {
+        bounds: "data" as const,
+        display: true,
+        type: "linear" as const,
+        offset: false,
+        grid: {
+          drawOnChartArea: false,
+          offset: false,
+        },
+        ticks: {
+          stepSize: classWidth, // class width
+          callback: (tickValue: string | number) =>
+            typeof tickValue === "number"
+              ? Number(tickValue.toFixed(6))
+              : tickValue,
+        },
+        suggestedMin: l,
+        suggestedMax: u,
+        // grace: '20%',
+
+        // ticks: {
+        //   display: true,
+        //   callback: (a, b, c) => {
+        //     console.log(a, b, JSON.stringify(c));
+        //     return a;
+        //   },
+        //   // stepSize: 1.2,
+        //   // includeBounds: true,
+        //   // maxTicksLimit: xLabels.length,
+        // },
+      },
+
+      y: {
+        // grace: '20%',
+        // suggestedMin: -2,
+        // suggestedMax: 1.3999,
+        beginAtZero: true,
         title: {
           display: true,
-          text: datalabel,
+          text: parsing.yAxisKey,
+        },
+        ticks: {
+          // stepSize: 0.15,
+          display: true,
+          autoSkipPadding: 15,
         },
       },
     },
@@ -48,6 +101,17 @@ export const Histogram = <T,>({ table, parsing, datalabel }: Props<T>) => {
       title: {
         display: false,
         text: "Histogram",
+      },
+      tooltip: {
+        // TODO: extract this callback
+        callbacks: {
+          title: (items: TooltipItem<"bar">[]) => {
+            if (!items.length) return "";
+            const [item] = items;
+            if (!item.raw) return "";
+            return "[" + (item.raw as Bin).limits.join(", ") + ")";
+          },
+        },
       },
       // datalabels: {
       //   display: true,
@@ -67,14 +131,17 @@ export const Histogram = <T,>({ table, parsing, datalabel }: Props<T>) => {
   const chartData = {
     datasets: [
       {
+        barThickness: "flex" as const,
         categoryPercentage: 1,
         barPercentage: 1,
         label: datalabel || "Dataset 1",
         data: table,
-        xAxisID: "xAxis",
+        xAxisID: "x",
+        yAxisID: "y",
       },
     ],
   };
+  console.log(table);
 
   return (
     <div
