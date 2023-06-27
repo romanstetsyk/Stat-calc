@@ -15,6 +15,7 @@ import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { isFiniteNumberString } from "../../utils/assertions";
 import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import { nanoid } from "nanoid";
 
 const DECIMAL = 6;
 
@@ -30,6 +31,7 @@ export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
   const { columnData } = useContext(DataColumnsContext);
 
   console.log("output component");
+  const outputId = useMemo(() => nanoid(), []);
 
   const { columns, options, withLabel } = formSummary;
 
@@ -100,13 +102,14 @@ export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
 
   useEffect(() => {
     setOutput({
+      outputId,
       timestamp: Date.now(),
       title: "Descriptive Statistics",
       type: "descriptive",
       data,
       stats: ["", ...options],
     });
-  }, [data, options, setOutput]);
+  }, [data, options, outputId, setOutput]);
 
   return (
     <>

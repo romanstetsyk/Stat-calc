@@ -1,6 +1,26 @@
 body {
   overscroll-behavior-x: contain;
-  overscroll-behavior-y: contain;
+}
+
+/* allotment */
+:root {
+  --focus-border: rgba(0, 0, 0, 1);
+}
+
+/* https://github.com/glideapps/glide-data-grid/blob/c9e1f3df5d545171ccca2226c0c55e253fb6cc83/packages/core/API.md#htmlcss-prerequisites */
+#portal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+/* https://github.com/haltu/muuri#grid-option-dragautoscroll */
+#dragContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
 }
 
 .ruuri-draggable-item {
@@ -15,10 +35,11 @@ body {
 }
 
 /* to retain scroll position on rerender */
-.ruuri-draggable-grid {
+/* .ruuri-draggable-grid {
   height: calc(1px / 0);
-}
+} */
 
-:root {
-  --focus-border: rgba(0, 0, 0, 1);
-}
+/* .ruuri-draggable-item.muuri-item-dragging,
+.ruuri-draggable-item.muuri-item-releasing {
+  z-index: 99999 !important;
+} */

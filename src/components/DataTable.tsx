@@ -17,7 +17,7 @@ export type DataTableRow<
   : Partial<{
       [key in T]: string;
     }> &
-      Record<Title, string | number>;
+      Record<Title, string>;
 
 //
 type Props<T extends string, Title extends string = "column"> = {
