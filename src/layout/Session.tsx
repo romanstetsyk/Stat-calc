@@ -2,17 +2,7 @@ import { useContext, useRef } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "../components/DataTable";
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  CloseButton,
-  Flex,
-  Heading,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, CardBody, Heading, Text } from "@chakra-ui/react";
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
 import { TSession } from "src/Types";
 import { layoutFunction } from "src/utils/layoutFunction";
@@ -59,15 +49,23 @@ export const Session = () => {
                 outputId={outputId}
                 title={title}
               >
-                <DataTable<SampleStatistics, ""> data={data} stats={stats} />
+                <CardBody px={3} py={2}>
+                  <DataTable<SampleStatistics, ""> data={data} stats={stats} />
+                </CardBody>
               </SessionItemWrapper>
             );
           }
           if (item.type === "frequencyDistribution") {
-            const { outputId, timestamp, title, data } = item;
+            const { outputId, title, data } = item;
             return (
-              <SessionItemWrapper outputId="a" title={title}>
-                <Flex gap={4} direction={"column"}>
+              <SessionItemWrapper outputId={outputId} title={title}>
+                <CardBody
+                  px={3}
+                  py={2}
+                  display={"flex"}
+                  gap={4}
+                  flexDirection={"column"}
+                >
                   {data.map(({ varName, n, table, stats }) => (
                     <Box key={varName}>
                       <Heading size="xs" as="h5" mb={4}>
@@ -76,7 +74,7 @@ export const Session = () => {
                       <DataTable data={table} stats={stats} />
                     </Box>
                   ))}
-                </Flex>
+                </CardBody>
               </SessionItemWrapper>
             );
           }

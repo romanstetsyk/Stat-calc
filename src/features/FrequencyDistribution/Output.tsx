@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Button } from "@chakra-ui/react";
 
 // import mean from "@stdlib/stats-base-mean";
@@ -15,6 +15,7 @@ import { FreqDist } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import { nanoid } from "nanoid";
 
 // const DECIMAL = 6;
 
@@ -25,6 +26,8 @@ type Props = {
 };
 
 export const Output = ({ setDisplay, formSummary, setOutput }: Props) => {
+  const outputId = useMemo(() => nanoid(), []);
+
   const { columnData } = useContext(DataColumnsContext);
 
   const { withLabel, columns, options } = formSummary;
@@ -74,12 +77,13 @@ export const Output = ({ setDisplay, formSummary, setOutput }: Props) => {
 
   useEffect(() => {
     setOutput({
+      outputId,
       timestamp: Date.now(),
       title: "Frequency Distribution",
       type: "frequencyDistribution",
       data: arrOfTables,
     });
-  }, [arrOfTables, options, setOutput]);
+  }, [arrOfTables, options, outputId, setOutput]);
 
   return (
     <>
