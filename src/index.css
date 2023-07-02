@@ -23,9 +23,9 @@ body {
   z-index: 1000;
 }
 
-.ruuri-draggable-item {
+/* .ruuri-draggable-item {
   min-width: 100%;
-}
+} */
 
 .draggableHeader {
   cursor: grab;

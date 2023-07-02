@@ -81,6 +81,56 @@ export const SplitPanes = () => {
 
   return (
     <>
+      <Allotment
+        ref={ref}
+        snap
+        onDragEnd={setSizes}
+        onVisibleChange={(_index, value) => {
+          console.log("onVisibleChange ran");
+          switch (_index) {
+            case 0:
+              setShowGrid(value);
+              break;
+            case 1:
+              setShowSession(value);
+              break;
+            default:
+              throw new Error("unknown allotment pane");
+          }
+        }}
+      >
+        <Allotment.Pane
+          minSize={200}
+          visible={smallScreen ? !showSessionMobile : showGrid}
+          preferredSize={`${((100 * sizes[0]) / (sizes[0] + sizes[1])).toFixed(
+            2
+          )}%`}
+        >
+          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
+            <CardHeader pb={0}>
+              <Heading size={"md"}>Untitled</Heading>
+            </CardHeader>
+            <CardBody overflow={"scroll"} px={0}>
+              <DataGrid />
+            </CardBody>
+          </Card>
+        </Allotment.Pane>
+        <Allotment.Pane
+          minSize={200}
+          visible={smallScreen ? showSessionMobile : showSession}
+          preferredSize={`${((100 * sizes[1]) / (sizes[0] + sizes[1])).toFixed(
+            2
+          )}%`}
+        >
+          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
+            <CardHeader>
+              <Heading size={"md"}>Session</Heading>
+            </CardHeader>
+            <Session />
+          </Card>
+        </Allotment.Pane>
+      </Allotment>
+
       {!showSessionMobile && smallScreen && (
         <IconButton
           zIndex={1}
@@ -139,56 +189,6 @@ export const SplitPanes = () => {
           icon={<ChevronLeftIcon />}
         />
       )}
-
-      <Allotment
-        ref={ref}
-        snap
-        onDragEnd={setSizes}
-        onVisibleChange={(_index, value) => {
-          console.log("onVisibleChange ran");
-          switch (_index) {
-            case 0:
-              setShowGrid(value);
-              break;
-            case 1:
-              setShowSession(value);
-              break;
-            default:
-              throw new Error("unknown allotment pane");
-          }
-        }}
-      >
-        <Allotment.Pane
-          minSize={200}
-          visible={smallScreen ? !showSessionMobile : showGrid}
-          preferredSize={`${((100 * sizes[0]) / (sizes[0] + sizes[1])).toFixed(
-            2
-          )}%`}
-        >
-          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
-            <CardHeader pb={0}>
-              <Heading size={"md"}>Untitled</Heading>
-            </CardHeader>
-            <CardBody overflow={"scroll"} px={0}>
-              <DataGrid />
-            </CardBody>
-          </Card>
-        </Allotment.Pane>
-        <Allotment.Pane
-          minSize={200}
-          visible={smallScreen ? showSessionMobile : showSession}
-          preferredSize={`${((100 * sizes[1]) / (sizes[0] + sizes[1])).toFixed(
-            2
-          )}%`}
-        >
-          <Card minW={"10rem"} maxW="full" height="100%" m={2}>
-            <CardHeader>
-              <Heading size={"md"}>Session</Heading>
-            </CardHeader>
-            <Session />
-          </Card>
-        </Allotment.Pane>
-      </Allotment>
     </>
   );
 };
