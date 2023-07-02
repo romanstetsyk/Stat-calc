@@ -16,6 +16,7 @@ import {
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
 import { TSession } from "src/Types";
 import { layoutFunction } from "src/utils/layoutFunction";
+import { SessionItemWrapper } from "src/components/SessionItemWrapper";
 
 export const Session = () => {
   const { session } = useContext(SessionContext);
@@ -53,88 +54,30 @@ export const Session = () => {
           if (item.type === "descriptive") {
             const { outputId, title, data, stats } = item;
             return (
-              <Card
+              <SessionItemWrapper
                 key={outputId}
-                mx={2}
-                my={1}
-                data-group
-                cursor={"auto"}
-                boxShadow="xs"
-                transitionDuration="200ms"
-                transitionProperty="boxShadow"
-                _hover={{
-                  boxShadow:
-                    "var(--chakra-shadows-base), var(--chakra-shadows-xs)",
-                }}
+                outputId={outputId}
+                title={title}
               >
-                <Flex
-                  gap={4}
-                  alignItems={"flex-start"}
-                  className="draggableHeader"
-                >
-                  <CardHeader>
-                    <Heading as="h4" size="sm">
-                      {title}
-                    </Heading>
-                    {/* <Text fontSize="md">
-                    {new Date(timestamp).toLocaleString()}
-                  </Text> */}
-                  </CardHeader>
-                  <Tooltip
-                    hasArrow
-                    label="Remove from session"
-                    placement="top"
-                    fontSize={"xs"}
-                  >
-                    <CloseButton
-                      size="sm"
-                      ml="auto"
-                      p={"var(--card-padding)"}
-                      visibility={"hidden"}
-                      _groupHover={{ visibility: "visible" }}
-                    />
-                  </Tooltip>
-                </Flex>
-                <CardBody pt={0}>
-                  <DataTable<SampleStatistics, ""> data={data} stats={stats} />
-                </CardBody>
-              </Card>
+                <DataTable<SampleStatistics, ""> data={data} stats={stats} />
+              </SessionItemWrapper>
             );
           }
           if (item.type === "frequencyDistribution") {
-            const { timestamp, title, data } = item;
+            const { outputId, timestamp, title, data } = item;
             return (
-              <Box key={timestamp} data-group>
-                <Flex gap={4} alignItems={"baseline"} mb={4}>
-                  <Heading as="h4" size="sm">
-                    {title}
-                  </Heading>
-                  <Text fontSize="md">
-                    {new Date(timestamp).toLocaleString()}
-                  </Text>
-                  <Tooltip
-                    hasArrow
-                    label="Remove from session"
-                    placement="top"
-                    fontSize={"xs"}
-                  >
-                    <CloseButton
-                      size="sm"
-                      ml="auto"
-                      visibility={"hidden"}
-                      _groupHover={{ visibility: "visible" }}
-                    />
-                  </Tooltip>
+              <SessionItemWrapper outputId="a" title={title}>
+                <Flex gap={4} direction={"column"}>
+                  {data.map(({ varName, n, table, stats }) => (
+                    <Box key={varName}>
+                      <Heading size="xs" as="h5" mb={4}>
+                        Variable: {varName}. Count: {n}
+                      </Heading>
+                      <DataTable data={table} stats={stats} />
+                    </Box>
+                  ))}
                 </Flex>
-                {data.map(({ varName, n, table, stats }) => (
-                  <Box key={varName} my={4}>
-                    <Heading size="xs" as="h5" mb={4}>
-                      Variable: {varName}. Count: {n}
-                    </Heading>
-                    <DataTable data={table} stats={stats} />
-                  </Box>
-                ))}
-              </Box>
+              </SessionItemWrapper>
             );
           }
         }}
