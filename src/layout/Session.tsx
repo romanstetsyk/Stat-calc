@@ -6,7 +6,7 @@ import { CardBody, Text } from "@chakra-ui/react";
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
 import { TSession } from "src/Types";
 import { layoutFunction } from "src/utils/layoutFunction";
-import { SessionItemWrapper } from "src/components/SessionItemWrapper";
+import { SessionItemWrapper } from "src/components/Session/SessionItemWrapper";
 import { OutputContent } from "src/features/FrequencyDistribution/OutputContent";
 
 export const Session = () => {
@@ -47,7 +47,7 @@ export const Session = () => {
             return (
               <SessionItemWrapper
                 key={outputId}
-                outputId={outputId}
+                id={outputId}
                 title={title}
                 gridRef={gridRef}
               >
@@ -62,7 +62,7 @@ export const Session = () => {
             return (
               <SessionItemWrapper
                 key={outputId}
-                outputId={outputId}
+                id={outputId}
                 title={title}
                 gridRef={gridRef}
               >

@@ -20,6 +20,7 @@ import { nanoid } from "nanoid";
 const DECIMAL = 6;
 
 type Props = {
+  id?: string;
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   setOutput: React.Dispatch<
     React.SetStateAction<DescriptiveStatisticsSession | undefined>
@@ -27,11 +28,11 @@ type Props = {
   formSummary: TForm;
 };
 
-export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
+export const Output = ({ id, setDisplay, setOutput, formSummary }: Props) => {
   const { columnData } = useContext(DataColumnsContext);
 
   console.log("output component");
-  const outputId = useMemo(() => nanoid(), []);
+  const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
   const { columns, options, withLabel } = formSummary;
 
@@ -108,8 +109,9 @@ export const Output = ({ setDisplay, setOutput, formSummary }: Props) => {
       type: "descriptive",
       data,
       stats: ["", ...options],
+      formSummary,
     });
-  }, [data, options, outputId, setOutput]);
+  }, [data, formSummary, options, outputId, setOutput]);
 
   return (
     <>

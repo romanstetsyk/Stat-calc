@@ -79,8 +79,9 @@ export const Output = ({ setDisplay, formSummary, setOutput }: Props) => {
       title: "Frequency Distribution",
       type: "frequencyDistribution",
       data: arrOfTables,
+      formSummary,
     });
-  }, [arrOfTables, options, outputId, setOutput]);
+  }, [arrOfTables, formSummary, outputId, setOutput]);
 
   return (
     <>

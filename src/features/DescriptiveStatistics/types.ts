@@ -28,4 +28,5 @@ export type DescriptiveStatisticsSession = {
   type: "descriptive";
   data: DataTableRow<SampleStatistics, "">[];
   stats: ["", ...SampleStatistics[]];
+  formSummary: TForm;
 };

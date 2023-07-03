@@ -1,32 +1,20 @@
-import {
-  Card,
-  CardHeader,
-  CloseButton,
-  Flex,
-  Heading,
-  Tooltip,
-} from "@chakra-ui/react";
-import { useContext, useRef } from "react";
-import { SessionContext } from "src/contexts/SessionContext";
+import { Card, CardHeader, Flex, Heading } from "@chakra-ui/react";
+import { useRef } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
 import { debounce } from "lodash-es";
 import { DraggableGridHandle } from "ruuri";
 
+import { UpdateBtn } from "src/components/Session/UpdateBtn";
+import { RemoveBtn } from "src/components/Session/RemoveBtn";
+
 type Props = {
   children: React.ReactNode;
-  outputId: string;
+  id: string;
   title: string;
   gridRef?: React.MutableRefObject<DraggableGridHandle | null>;
 };
 
-export const SessionItemWrapper = ({
-  outputId,
-  title,
-  children,
-  gridRef,
-}: Props) => {
-  const { removeSessionItem } = useContext(SessionContext);
-
+export const SessionItemWrapper = ({ id, title, children, gridRef }: Props) => {
   // Update chached dimensions of items
   const ref = useRef<HTMLDivElement | null>(null);
   useResizeObserver(
@@ -59,20 +47,9 @@ export const SessionItemWrapper = ({
             {new Date(timestamp).toLocaleString()}
           </Text> */}
         </CardHeader>
-        <Tooltip
-          hasArrow
-          label="Remove from session"
-          placement="top"
-          fontSize={"xs"}
-        >
-          <CloseButton
-            size="sm"
-            p={4}
-            // visibility={"hidden"}
-            _groupHover={{ visibility: "visible" }}
-            onClick={() => removeSessionItem(outputId)}
-          />
-        </Tooltip>
+
+        <UpdateBtn id={id} />
+        <RemoveBtn id={id} />
       </Flex>
       {children}
     </Card>

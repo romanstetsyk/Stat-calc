@@ -31,4 +31,5 @@ export type FreqDistSession = {
   title: string;
   type: "frequencyDistribution";
   data: OutputReturn[];
+  formSummary: TForm;
 };

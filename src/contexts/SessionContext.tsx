@@ -8,11 +8,23 @@ const useProvideSession = () => {
     setSession((prev) => prev.concat(item));
   };
 
+  const updateSessionItem = (newItem: TSession) => {
+    setSession((prev) =>
+      prev.map((item) => (item.outputId === newItem.outputId ? newItem : item))
+    );
+  };
+
   const removeSessionItem = (outputId: string) => {
     setSession((prev) => prev.filter((item) => item.outputId !== outputId));
   };
 
-  return { session, setSession, addSessionItem, removeSessionItem };
+  return {
+    session,
+    setSession,
+    addSessionItem,
+    removeSessionItem,
+    updateSessionItem,
+  };
 };
 
 export const SessionContext = createContext<
