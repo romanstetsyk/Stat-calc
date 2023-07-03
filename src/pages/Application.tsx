@@ -63,7 +63,8 @@ export default function Application() {
           >
             Summarize <ChevronDownIcon />
           </MenuButton>
-          <MenuList zIndex={6}>
+          {/* split view handle has z-index 35 by default */}
+          <MenuList zIndex={36}>
             <DescriptiveStatisticsModal />
             <FrequencyDistributionModal />
             <GroupNumericDataModal />
