@@ -15,7 +15,7 @@ export const Session = () => {
   const divRef = useRef<HTMLDivElement | null>(null);
 
   if (session.length === 0) {
-    return <Text>No data</Text>;
+    return <Text m={5}>No data</Text>;
   }
 
   return (
@@ -33,7 +33,7 @@ export const Session = () => {
           ],
           sortDuringScroll: false,
           threshold: 0,
-          safeZone: 0,
+          safeZone: 0.5,
         }}
         dragContainer={document.getElementById("dragContainer")}
         dragHandle={".draggableHeader"}

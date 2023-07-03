@@ -20,6 +20,7 @@ export const SessionItemWrapper = ({ outputId, title, children }: Props) => {
 
   return (
     <Card
+      width={"fit-content"}
       mx={2}
       my={1}
       data-group
@@ -30,6 +31,8 @@ export const SessionItemWrapper = ({ outputId, title, children }: Props) => {
       _hover={{
         boxShadow: "var(--chakra-shadows-base), var(--chakra-shadows-xs)",
       }}
+      resize={"both"}
+      overflow={"auto"}
     >
       <Flex alignItems={"flex-start"}>
         <CardHeader className="draggableHeader" flexGrow={1} p={3}>
