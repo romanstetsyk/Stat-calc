@@ -10,12 +10,12 @@ const useProvideSession = () => {
 
   const updateSessionItem = (newItem: TSession) => {
     setSession((prev) =>
-      prev.map((item) => (item.outputId === newItem.outputId ? newItem : item))
+      prev.map((item) => (item.id === newItem.id ? newItem : item))
     );
   };
 
-  const removeSessionItem = (outputId: string) => {
-    setSession((prev) => prev.filter((item) => item.outputId !== outputId));
+  const removeSessionItem = (id: string) => {
+    setSession((prev) => prev.filter((item) => item.id !== id));
   };
 
   return {

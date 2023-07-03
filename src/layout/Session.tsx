@@ -39,15 +39,15 @@ export const Session = () => {
         dragContainer={document.getElementById("dragContainer")}
         dragHandle={".draggableHeader"}
         // dragStartPredicate={{ delay: 200 }}
-        uniKey={"outputId"}
+        uniKey={"id"}
         data={session}
         renderItem={(item: TSession) => {
           if (item.type === "descriptive") {
-            const { outputId, title, data, stats } = item;
+            const { id, title, data, stats } = item;
             return (
               <SessionItemWrapper
-                key={outputId}
-                id={outputId}
+                key={id}
+                id={id}
                 title={title}
                 gridRef={gridRef}
               >
@@ -58,11 +58,11 @@ export const Session = () => {
             );
           }
           if (item.type === "frequencyDistribution") {
-            const { outputId, title, data } = item;
+            const { id, title, data } = item;
             return (
               <SessionItemWrapper
-                key={outputId}
-                id={outputId}
+                key={id}
+                id={id}
                 title={title}
                 gridRef={gridRef}
               >

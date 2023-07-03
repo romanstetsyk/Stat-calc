@@ -103,7 +103,7 @@ export const Output = ({ id, setDisplay, setOutput, formSummary }: Props) => {
 
   useEffect(() => {
     setOutput({
-      outputId,
+      id: outputId,
       timestamp: Date.now(),
       title: "Descriptive Statistics",
       type: "descriptive",

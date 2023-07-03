@@ -9,7 +9,7 @@ type Props = {
 
 export const UpdateBtn = ({ id }: Props) => {
   const { session } = useContext(SessionContext);
-  const item = session.find(({ outputId }) => outputId === id);
+  const item = session.find((item) => item.id === id);
 
   switch (item?.type) {
     case "descriptive":

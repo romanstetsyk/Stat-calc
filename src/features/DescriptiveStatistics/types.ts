@@ -22,7 +22,7 @@ export type TForm = {
 };
 
 export type DescriptiveStatisticsSession = {
-  outputId: string;
+  id: string;
   timestamp: number;
   title: string;
   type: "descriptive";

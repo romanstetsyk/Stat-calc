@@ -26,7 +26,7 @@ export type OutputReturn = {
 };
 
 export type FreqDistSession = {
-  outputId: string;
+  id: string;
   timestamp: number;
   title: string;
   type: "frequencyDistribution";

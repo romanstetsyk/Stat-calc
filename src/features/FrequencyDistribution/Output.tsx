@@ -75,7 +75,7 @@ export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
 
   useEffect(() => {
     setOutput({
-      outputId,
+      id: outputId,
       timestamp: Date.now(),
       title: "Frequency Distribution",
       type: "frequencyDistribution",

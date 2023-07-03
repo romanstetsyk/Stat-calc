@@ -33,7 +33,7 @@ export const Content = ({ onClose, id }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>(() => {
-    const sessionItem = session.find(({ outputId }) => outputId === id);
+    const sessionItem = session.find((item) => item.id === id);
     return sessionItem && sessionItem.type === "descriptive"
       ? sessionItem.formSummary
       : DEFAULT_SELECTED_FIELDS;
