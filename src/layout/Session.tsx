@@ -2,11 +2,12 @@ import { useContext, useRef } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { SampleStatistics } from "../features/DescriptiveStatistics/types";
 import { DataTable } from "../components/DataTable";
-import { Box, CardBody, Heading, Text } from "@chakra-ui/react";
+import { CardBody, Text } from "@chakra-ui/react";
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
 import { TSession } from "src/Types";
 import { layoutFunction } from "src/utils/layoutFunction";
 import { SessionItemWrapper } from "src/components/SessionItemWrapper";
+import { OutputContent } from "src/features/FrequencyDistribution/OutputContent";
 
 export const Session = () => {
   const { session } = useContext(SessionContext);
@@ -72,14 +73,7 @@ export const Session = () => {
                   gap={4}
                   flexDirection={"column"}
                 >
-                  {data.map(({ varName, n, table, stats }) => (
-                    <Box key={varName}>
-                      <Heading size="xs" as="h5" mb={4}>
-                        Variable: {varName}. Count: {n}
-                      </Heading>
-                      <DataTable data={table} stats={stats} />
-                    </Box>
-                  ))}
+                  <OutputContent outputData={data} />
                 </CardBody>
               </SessionItemWrapper>
             );

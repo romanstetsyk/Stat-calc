@@ -1,21 +1,18 @@
 import React, { useContext, useEffect, useMemo } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 
-// import mean from "@stdlib/stats-base-mean";
-// import mediansorted from "@stdlib/stats-base-mediansorted";
-// import variance from "@stdlib/stats-base-variance";
-// import stdev from "@stdlib/stats-base-stdev";
 import tabulate from "@stdlib/utils-tabulate";
 import gcusum from "@stdlib/blas-ext-base-gcusum";
 
 import { FreqDistSession, OutputReturn, TForm, topLeftCell } from "./types";
 import { DisplayOptions, GridColumnName } from "../../Types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
+import { DataTableRow } from "../../components/DataTable";
 import { FreqDist } from "./types";
 import { parseNumber } from "../../utils/parseNumber";
 import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
 import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 import { nanoid } from "nanoid";
+import { OutputContent } from "./OutputContent";
 
 // const DECIMAL = 6;
 
@@ -88,14 +85,10 @@ export const Output = ({ setDisplay, formSummary, setOutput }: Props) => {
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      {arrOfTables.map(({ varName, n, table, stats }) => (
-        <div key={varName}>
-          <p>
-            Variable: {varName}. Count: {n}
-          </p>
-          <DataTable<FreqDist, typeof topLeftCell> data={table} stats={stats} />
-        </div>
-      ))}
+
+      <Flex gap={4} flexDirection={"column"}>
+        <OutputContent outputData={arrOfTables} />
+      </Flex>
     </>
   );
 };
