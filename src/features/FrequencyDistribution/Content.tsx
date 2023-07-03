@@ -15,28 +15,36 @@ import { DisplayOptions } from "../../Types";
 import { Output } from "./Output";
 import { SessionContext } from "../../contexts/SessionContext";
 
+const DEFAULT_SELECTED_FIELDS = {
+  columns: [],
+  options: [...FreqDist],
+  withLabel: false,
+};
+
 type Props = {
+  id?: string;
   onClose: () => void;
 };
 
-export const Content = ({ onClose }: Props) => {
-  const { addSessionItem } = useContext(SessionContext);
+export const Content = ({ onClose, id }: Props) => {
+  const { session, addSessionItem, updateSessionItem } =
+    useContext(SessionContext);
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
-  const [formSummary, setFormSummary] = useState<TForm>({
-    columns: [],
-    options: [...FreqDist],
-    withLabel: false,
+  const [formSummary, setFormSummary] = useState<TForm>(() => {
+    const sessionItem = session.find(({ outputId }) => outputId === id);
+    return sessionItem && sessionItem.type === "frequencyDistribution"
+      ? sessionItem.formSummary
+      : DEFAULT_SELECTED_FIELDS;
   });
 
   const [output, setOutput] = useState<FreqDistSession>();
 
   const onSaveToSession = () => {
     if (output) {
-      addSessionItem(output);
+      id ? updateSessionItem(output) : addSessionItem(output);
     }
-    console.log(JSON.stringify(output, null, 2).length);
     onClose();
   };
 
@@ -66,6 +74,7 @@ export const Content = ({ onClose }: Props) => {
         )}
         {display === "result" && (
           <Output
+            id={id}
             setDisplay={setDisplay}
             formSummary={formSummary}
             setOutput={setOutput}

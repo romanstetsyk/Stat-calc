@@ -17,17 +17,18 @@ import { OutputContent } from "./OutputContent";
 // const DECIMAL = 6;
 
 type Props = {
+  id?: string;
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
   setOutput: React.Dispatch<React.SetStateAction<FreqDistSession | undefined>>;
 };
 
-export const Output = ({ setDisplay, formSummary, setOutput }: Props) => {
-  const outputId = useMemo(() => nanoid(), []);
-
+export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
   const { columnData } = useContext(DataColumnsContext);
 
-  const { withLabel, columns, options } = formSummary;
+  const outputId = useMemo(() => (id ? id : nanoid()), [id]);
+
+  const { columns, options, withLabel } = formSummary;
 
   const arrOfTables: OutputReturn[] = (columns as GridColumnName[]).map(
     (colHeader) => {

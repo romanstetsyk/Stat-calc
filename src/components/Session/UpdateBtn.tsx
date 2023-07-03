@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import { StatModal as DescriptiveStatisticsModal } from "src/features/DescriptiveStatistics/StatModal";
 import { SessionContext } from "src/contexts/SessionContext";
+import { StatModal as DescriptiveStatisticsModal } from "src/features/DescriptiveStatistics/StatModal";
+import { StatModal as FrequencyDistributionModal } from "src/features/FrequencyDistribution/StatModal";
 
 type Props = {
   id: string;
@@ -15,8 +16,7 @@ export const UpdateBtn = ({ id }: Props) => {
       return <DescriptiveStatisticsModal id={id} />;
 
     case "frequencyDistribution":
-      console.log("frequencyDistribution update");
-      break;
+      return <FrequencyDistributionModal id={id} />;
 
     default:
       throw new Error("unknown session type");
