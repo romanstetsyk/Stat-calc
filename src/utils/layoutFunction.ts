@@ -5,7 +5,6 @@ class CustomLayout {
   private registeredItems: Set<Item>;
 
   constructor() {
-    console.log('constructor')
     this.registeredItems = new Set();
   }
 
@@ -42,14 +41,11 @@ class CustomLayout {
 
       let maxWidth = 0;
       let maxHeight = 0;
+
       this.registeredItems.forEach((item) => {
-        const element = item.getElement();
-        if (element && element.getBoundingClientRect) {
-          maxHeight = Math.max(
-            (element.getBoundingClientRect().bottom ?? 0) - gridPos.top,
-            maxHeight
-          );
-        }
+        const m = item.getMargin();
+        const height = item.getHeight() + m.top + m.bottom;
+        maxHeight = Math.max(height, maxHeight);
       });
 
       for (const item of items) {

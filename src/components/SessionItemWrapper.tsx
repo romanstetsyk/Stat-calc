@@ -6,21 +6,37 @@ import {
   Heading,
   Tooltip,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { SessionContext } from "src/contexts/SessionContext";
+import useResizeObserver from "@react-hook/resize-observer";
+import { debounce } from "lodash-es";
+import { DraggableGridHandle } from "ruuri";
 
 type Props = {
   children: React.ReactNode;
   outputId: string;
   title: string;
+  gridRef?: React.MutableRefObject<DraggableGridHandle | null>;
 };
 
-export const SessionItemWrapper = ({ outputId, title, children }: Props) => {
+export const SessionItemWrapper = ({
+  outputId,
+  title,
+  children,
+  gridRef,
+}: Props) => {
   const { removeSessionItem } = useContext(SessionContext);
+
+  // Update chached dimensions of items
+  const ref = useRef<HTMLDivElement | null>(null);
+  useResizeObserver(
+    ref,
+    debounce(() => gridRef?.current?.grid?.refreshItems(), 300)
+  );
 
   return (
     <Card
-      width={"fit-content"}
+      ref={ref}
       mx={2}
       my={1}
       data-group

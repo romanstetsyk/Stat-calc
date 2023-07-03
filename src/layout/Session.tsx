@@ -23,9 +23,9 @@ export const Session = () => {
       <DraggableGrid
         ref={gridRef}
         layout={layoutFunction}
-        onDragEnd={() => gridRef.current?.grid?.layout()}
+        onDragEnd={() => gridRef.current?.grid?.refreshItems().layout()}
         dragEnabled
-        dragSort={false}
+        dragSort={true}
         dragAutoScroll={{
           targets: () => [
             { element: window, priority: 0 },
@@ -48,6 +48,7 @@ export const Session = () => {
                 key={outputId}
                 outputId={outputId}
                 title={title}
+                gridRef={gridRef}
               >
                 <CardBody px={3} py={2}>
                   <DataTable<SampleStatistics, ""> data={data} stats={stats} />
@@ -58,7 +59,12 @@ export const Session = () => {
           if (item.type === "frequencyDistribution") {
             const { outputId, title, data } = item;
             return (
-              <SessionItemWrapper outputId={outputId} title={title}>
+              <SessionItemWrapper
+                key={outputId}
+                outputId={outputId}
+                title={title}
+                gridRef={gridRef}
+              >
                 <CardBody
                   px={3}
                   py={2}
