@@ -1,17 +1,17 @@
 import { useId, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
 import {
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@chakra-ui/react";
-import { StatForm } from "./StatForm";
+import { SubmitHandler } from "react-hook-form";
+import { DisplayOptions, Perform } from "~/Types";
 import { Output } from "./Output";
+import { StatForm } from "./StatForm";
 import { TForm } from "./types";
-import { DisplayOptions, Perform } from "../../Types";
 
 type Props = {
   onClose: () => void;

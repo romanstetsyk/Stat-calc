@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { SessionContext } from "src/contexts/SessionContext";
-import { StatModal as DescriptiveStatisticsModal } from "src/features/DescriptiveStatistics/StatModal";
-import { StatModal as FrequencyDistributionModal } from "src/features/FrequencyDistribution/StatModal";
+import { SessionContext } from "~/contexts/SessionContext";
+import { StatModal as DescriptiveStatisticsModal } from "~/features/DescriptiveStatistics/StatModal";
+import { StatModal as FrequencyDistributionModal } from "~/features/FrequencyDistribution/StatModal";
 
 type Props = {
   id: string;

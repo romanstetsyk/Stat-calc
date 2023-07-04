@@ -1,4 +1,4 @@
-import { GridColumnName } from "../../Types";
+import { GridColumnName } from "~/Types";
 
 export const FreqDist = [
   "Frequency",

@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { TSession } from "../Types";
+import { TSession } from "~/Types";
 
 const useProvideSession = () => {
   const [session, setSession] = useState<TSession[]>([]);

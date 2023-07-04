@@ -1,24 +1,21 @@
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Flex,
   Menu,
   MenuButton,
-  MenuList,
-  MenuGroup,
   MenuDivider,
-  Flex,
+  MenuGroup,
+  MenuList,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import "allotment/dist/style.css";
-
-import { StatModal as OneSampleZSummaryModal } from "src/features/OneSampleZSummary/StatModal";
-import { StatModal as OneSampleZDataModal } from "src/features/OneSampleZData/StatModal";
-import { StatModal as DescriptiveStatisticsModal } from "src/features/DescriptiveStatistics/StatModal";
-import { StatModal as FrequencyDistributionModal } from "src/features/FrequencyDistribution/StatModal";
-import { StatModal as GroupNumericDataModal } from "src/features/GroupNumericData/StatModal";
-import { StatModal as TwoSampleZSummaryModal } from "src/features/TwoSampleZSummary/StatModal";
-import { StatModal as TwoSampleZDataModal } from "src/features/TwoSampleZData/StatModal";
-import { StatModal as HistogramModal } from "src/features/Histogram/StatModal";
-
-import { SplitPanes } from "src/layout/SplitPanes";
+import { StatModal as DescriptiveStatisticsModal } from "~/features/DescriptiveStatistics/StatModal";
+import { StatModal as FrequencyDistributionModal } from "~/features/FrequencyDistribution/StatModal";
+import { StatModal as GroupNumericDataModal } from "~/features/GroupNumericData/StatModal";
+import { StatModal as HistogramModal } from "~/features/Histogram/StatModal";
+import { StatModal as OneSampleZDataModal } from "~/features/OneSampleZData/StatModal";
+import { StatModal as OneSampleZSummaryModal } from "~/features/OneSampleZSummary/StatModal";
+import { StatModal as TwoSampleZDataModal } from "~/features/TwoSampleZData/StatModal";
+import { StatModal as TwoSampleZSummaryModal } from "~/features/TwoSampleZSummary/StatModal";
+import { SplitPanes } from "~/layout/SplitPanes";
 
 // Should be default export to use with dynamic import
 export default function Application() {

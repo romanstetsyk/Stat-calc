@@ -1,5 +1,5 @@
 import { Box, Heading } from "@chakra-ui/react";
-import { DataTable } from "src/components/DataTable";
+import { DataTable } from "~/components/DataTable";
 import { OutputReturn } from "./types";
 
 type Props = {

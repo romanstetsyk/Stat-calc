@@ -1,6 +1,6 @@
-import { CloseButton, Tooltip } from "@chakra-ui/react";
 import { useContext } from "react";
-import { SessionContext } from "src/contexts/SessionContext";
+import { CloseButton, Tooltip } from "@chakra-ui/react";
+import { SessionContext } from "~/contexts/SessionContext";
 
 type Props = {
   id: string;

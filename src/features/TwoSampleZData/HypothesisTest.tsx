@@ -1,17 +1,17 @@
+import { useContext } from "react";
+import cdf from "@stdlib/stats-base-dists-normal-cdf";
+import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
-import quantile from "@stdlib/stats-base-dists-normal-quantile";
-import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { HTColumns, SampleStatistics, CIColumns, TForm } from "./types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
+import { DataTable, DataTableRow } from "~/components/DataTable";
 import {
   HypothesisNotation,
   PopulationMeanDiff,
-} from "../../components/HypothesisNotation";
-import { parseNumber } from "../../utils/parseNumber";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { useContext } from "react";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+} from "~/components/HypothesisNotation";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { isFiniteNumberString } from "~/utils/assertions";
+import { parseNumber } from "~/utils/parseNumber";
+import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
 
 const DECIMAL = 6;
 

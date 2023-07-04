@@ -1,7 +1,7 @@
-import { Flex, Progress } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-import { NavBar } from "src/components/NavBar";
+import { Flex, Progress } from "@chakra-ui/react";
+import { NavBar } from "~/components/NavBar";
 
 export const SharedLayout = () => {
   return (

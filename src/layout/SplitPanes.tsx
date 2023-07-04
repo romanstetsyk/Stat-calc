@@ -1,3 +1,5 @@
+import "allotment/dist/style.css";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Card,
@@ -8,9 +10,8 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { Allotment, AllotmentHandle } from "allotment";
-import { useEffect, useRef, useState } from "react";
-import { DataGrid } from "./DataGrid";
-import { Session } from "./Session";
+import { DataGrid } from "~/layout/DataGrid";
+import { Session } from "~/layout/Session";
 
 const DEFAULT = {
   showSessionMobile: false,

@@ -1,5 +1,5 @@
-import { DescriptiveStatisticsSession } from "./features/DescriptiveStatistics/types";
-import { FreqDistSession } from "./features/FrequencyDistribution/types";
+import { DescriptiveStatisticsSession } from "~/features/DescriptiveStatistics/types";
+import { FreqDistSession } from "~/features/FrequencyDistribution/types";
 
 export type GridColumnName = `col${number}`;
 

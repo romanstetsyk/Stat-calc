@@ -1,15 +1,15 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
-  TooltipItem,
+  TooltipItem
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { Bin } from "src/utils/computeBins";
+import { Bin } from "~/utils/computeBins";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(

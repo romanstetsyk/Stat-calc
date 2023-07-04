@@ -1,4 +1,4 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useContext } from "react";
 import {
   Checkbox,
   FormControl,
@@ -8,15 +8,14 @@ import {
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
-
-import { GridColumnName } from "../../Types";
-import { BinMethod, FreqDist } from "src/features/GroupNumericData/types";
-import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
-import { getVarName } from "../../utils/getColumnNameAndValues";
-import { InputField } from "../../components/InputField";
-import { isFiniteNumber } from "../../utils/validators";
-import { useContext } from "react";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
+import { InputField } from "~/components/InputField";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { BinMethod, FreqDist } from "~/features/GroupNumericData/types";
+import { GridColumnName } from "~/Types";
+import { getVarName } from "~/utils/getColumnNameAndValues";
+import { isFiniteNumber } from "~/utils/validators";
 import { TForm } from "./types";
 
 type Props = {

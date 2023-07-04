@@ -1,12 +1,12 @@
-import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
+import quantile from "@stdlib/stats-base-dists-normal-quantile";
+import { DataTable, DataTableRow } from "~/components/DataTable";
 import {
   HypothesisNotation,
   PopulationMean,
-} from "../../components/HypothesisNotation";
-import { parseNumber } from "../../utils/parseNumber";
+} from "~/components/HypothesisNotation";
+import { parseNumber } from "~/utils/parseNumber";
+import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
 
 const DECIMAL = 6;
 

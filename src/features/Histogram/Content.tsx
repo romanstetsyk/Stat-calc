@@ -1,17 +1,17 @@
 import { useId, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
 import {
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@chakra-ui/react";
-import { BinMethod, FreqDist } from "src/features/GroupNumericData/types";
-import { StatForm } from "./StatForm";
-import { DisplayOptions } from "../../Types";
+import { SubmitHandler } from "react-hook-form";
+import { BinMethod, FreqDist } from "~/features/GroupNumericData/types";
+import { DisplayOptions } from "~/Types";
 import { Output } from "./Output";
+import { StatForm } from "./StatForm";
 import { TForm } from "./types";
 
 type Props = {

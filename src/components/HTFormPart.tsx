@@ -1,13 +1,12 @@
+import { useId, useState } from "react";
 import {
-  Stack,
   FormControl,
-  Select,
-  Input,
   FormErrorMessage,
   FormLabel,
+  Input,
+  Select,
+  Stack,
 } from "@chakra-ui/react";
-import { useId, useState } from "react";
-
 import {
   Control,
   Controller,
@@ -18,8 +17,8 @@ import {
   RegisterOptions,
   UseFormSetValue,
 } from "react-hook-form";
-import { H0Sign, H1Sign, HypothesisSignMap } from "../Types";
-import { isFiniteNumber } from "../utils/validators";
+import { H0Sign, H1Sign, HypothesisSignMap } from "~/Types";
+import { isFiniteNumber } from "~/utils/validators";
 
 type Props<T extends FieldValues> = {
   param: JSX.Element;

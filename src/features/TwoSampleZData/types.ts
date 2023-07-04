@@ -1,4 +1,4 @@
-import { GridColumnName, H1Sign, Perform } from "../../Types";
+import { GridColumnName, H1Sign, Perform } from "~/Types";
 
 export const SampleStatistics = [
   "N",

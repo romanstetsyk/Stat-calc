@@ -1,14 +1,15 @@
 import "@glideapps/glide-data-grid/dist/index.css";
-import DataEditor, {
+import { useCallback, useContext, useState } from "react";
+import {
+  DataEditor,
   EditableGridCell,
   GridCell,
   GridCellKind,
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
-import { useCallback, useContext, useState } from "react";
-import { GridColumnName, GridRow } from "../Types";
-import { DataColumnsContext } from "../contexts/DataColumnsContext";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { GridColumnName, GridRow } from "~/Types";
 
 export const DataGrid = () => {
   const { rowData, setRowData } = useContext(DataColumnsContext);

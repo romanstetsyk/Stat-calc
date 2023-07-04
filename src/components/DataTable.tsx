@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
-import DataEditor, {
+import {
+  DataEditor,
   GridCell,
   GridCellKind,
   GridColumn,

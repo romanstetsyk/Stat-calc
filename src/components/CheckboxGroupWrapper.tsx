@@ -1,10 +1,10 @@
 import {
-  FormControl,
-  FormLabel,
-  CheckboxGroup,
-  Checkbox,
-  FormErrorMessage,
   Box,
+  Checkbox,
+  CheckboxGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Text,
 } from "@chakra-ui/react";
 import {

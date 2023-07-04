@@ -1,25 +1,16 @@
-import React, { useContext } from "react";
+import * as React from "react";
+import { useContext } from "react";
 import { Button } from "@chakra-ui/react";
-
-// import mean from "@stdlib/stats-base-mean";
-// import mediansorted from "@stdlib/stats-base-mediansorted";
-// import variance from "@stdlib/stats-base-variance";
-// import stdev from "@stdlib/stats-base-stdev";
-
-import tabulateBy from "@stdlib/utils-tabulate-by";
 import gcusum from "@stdlib/blas-ext-base-gcusum";
-
-import { TForm } from "./types";
-import { DisplayOptions, GridColumnName } from "../../Types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
-import { FreqDist } from "./types";
-import { parseNumber } from "../../utils/parseNumber";
-import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { computeBins } from "../../utils/computeBins";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
-
-// const DECIMAL = 6;
+import tabulateBy from "@stdlib/utils-tabulate-by";
+import { DataTable, DataTableRow } from "~/components/DataTable";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { DisplayOptions, GridColumnName } from "~/Types";
+import { isFiniteNumberString } from "~/utils/assertions";
+import { computeBins } from "~/utils/computeBins";
+import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
+import { parseNumber } from "~/utils/parseNumber";
+import { FreqDist, TForm } from "./types";
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;

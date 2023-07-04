@@ -1,13 +1,13 @@
 import { useContext, useRef } from "react";
-import { SessionContext } from "../contexts/SessionContext";
-import { SampleStatistics } from "../features/DescriptiveStatistics/types";
-import { DataTable } from "../components/DataTable";
 import { CardBody, Text } from "@chakra-ui/react";
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
-import { TSession } from "src/Types";
-import { layoutFunction } from "src/utils/layoutFunction";
-import { SessionItemWrapper } from "src/components/Session/SessionItemWrapper";
-import { OutputContent } from "src/features/FrequencyDistribution/OutputContent";
+import { DataTable } from "~/components/DataTable";
+import { SessionItemWrapper } from "~/components/Session/SessionItemWrapper";
+import { SessionContext } from "~/contexts/SessionContext";
+import { SampleStatistics } from "~/features/DescriptiveStatistics/types";
+import { OutputContent } from "~/features/FrequencyDistribution/OutputContent";
+import { TSession } from "~/Types";
+import { layoutFunction } from "~/utils/layoutFunction";
 
 export const Session = () => {
   const { session } = useContext(SessionContext);

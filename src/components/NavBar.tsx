@@ -1,20 +1,20 @@
+import { Link as RRDLink, useLocation } from "react-router-dom";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Flex,
-  Text,
-  IconButton,
   Button,
-  Stack,
+  Flex,
+  IconButton,
   Link,
-  useColorModeValue,
-  useBreakpointValue,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
+  MenuList,
+  Stack,
+  Text,
+  useBreakpointValue,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { Link as RRDLink, useLocation } from "react-router-dom";
 
 export const NavBar = () => {
   const location = useLocation();

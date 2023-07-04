@@ -8,16 +8,16 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { isPositiveNumber, isValidLevel } from "../../utils/validators";
-import { InputField } from "../../components/InputField";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { HTFormPart } from "~/components/HTFormPart";
+import { PopulationMean } from "~/components/HypothesisNotation";
+import { InputField } from "~/components/InputField";
+import { SelectField } from "~/components/SelectField";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { GridColumnName, Perform } from "~/Types";
+import { getVarName } from "~/utils/getColumnNameAndValues";
+import { isPositiveNumber, isValidLevel } from "~/utils/validators";
 import { TForm } from "./types";
-import { GridColumnName, Perform } from "../../Types";
-import { SelectField } from "../../components/SelectField";
-import { getVarName } from "../../utils/getColumnNameAndValues";
-import { HTFormPart } from "../../components/HTFormPart";
-import { PopulationMean } from "../../components/HypothesisNotation";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 type Props = {
   formId: string;

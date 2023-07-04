@@ -7,18 +7,18 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { HTFormPart } from "~/components/HTFormPart";
+import { PopulationMean } from "~/components/HypothesisNotation";
+import { InputField } from "~/components/InputField";
+import { Perform } from "~/Types";
 import {
   isFiniteNumber,
   isIntegerGreaterThanOne,
   isPositiveNumber,
   isValidLevel,
-} from "../../utils/validators";
-import { InputField } from "../../components/InputField";
+} from "~/utils/validators";
 import { TForm } from "./types";
-import { Perform } from "../../Types";
-import { HTFormPart } from "../../components/HTFormPart";
-import { PopulationMean } from "../../components/HypothesisNotation";
 
 type Props = {
   formId: string;

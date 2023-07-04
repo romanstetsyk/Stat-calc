@@ -1,4 +1,4 @@
-import { useDisclosure, Modal, ModalOverlay, MenuItem } from "@chakra-ui/react";
+import { MenuItem, Modal, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { Content } from "./Content";
 
 export const StatModal = () => {

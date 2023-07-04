@@ -1,13 +1,11 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Checkbox } from "@chakra-ui/react";
-
-import { GridColumnName } from "../../Types";
-import { TForm } from "./types";
-import { SampleStatistics } from "./types";
-import { CheckboxGroupWrapper } from "../../components/CheckboxGroupWrapper";
-import { getVarName } from "../../utils/getColumnNameAndValues";
 import { useContext } from "react";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import { Checkbox } from "@chakra-ui/react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { GridColumnName } from "~/Types";
+import { getVarName } from "~/utils/getColumnNameAndValues";
+import { SampleStatistics, TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;

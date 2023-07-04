@@ -1,5 +1,5 @@
 import { createContext, useMemo, useState } from "react";
-import { ColumnValues, GridRow } from "../Types";
+import { ColumnValues, GridRow } from "~/Types";
 
 function getColumns(rows: GridRow[]): ColumnValues {
   const columns: ColumnValues = {};

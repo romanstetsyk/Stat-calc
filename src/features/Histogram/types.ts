@@ -1,6 +1,6 @@
 // import { GridColumnName } from "../../Types";
 
-import { GridColumnName } from "src/Types";
+import { GridColumnName } from "~/Types";
 import { BinMethod, FreqDist } from "../GroupNumericData/types";
 
 // export const FreqDist = [

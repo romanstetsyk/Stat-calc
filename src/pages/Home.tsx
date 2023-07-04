@@ -1,6 +1,6 @@
-import Hero from "src/components/Hero";
-import Features from "src/components/Features";
-import Footer from "src/components/Footer";
+import Features from "~/components/Features";
+import Footer from "~/components/Footer";
+import Hero from "~/components/Hero";
 
 export default function Home() {
   return (

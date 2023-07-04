@@ -1,19 +1,18 @@
 import { useContext, useId, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
 import {
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@chakra-ui/react";
-import { FreqDistSession, TForm } from "./types";
-import { FreqDist } from "./types";
-import { StatForm } from "./StatForm";
-import { DisplayOptions } from "../../Types";
+import { SubmitHandler } from "react-hook-form";
+import { SessionContext } from "~/contexts/SessionContext";
+import { DisplayOptions } from "~/Types";
 import { Output } from "./Output";
-import { SessionContext } from "../../contexts/SessionContext";
+import { StatForm } from "./StatForm";
+import { FreqDist, FreqDistSession, TForm } from "./types";
 
 const DEFAULT_SELECTED_FIELDS = {
   columns: [],

@@ -1,7 +1,7 @@
-import stdlibMin from "@stdlib/stats-base-min";
 import stdlibMax from "@stdlib/stats-base-max";
+import stdlibMin from "@stdlib/stats-base-min";
+import { BinMethod } from "~/features/GroupNumericData/types";
 import { roundToPrecision } from "./parseNumber";
-import { BinMethod } from "src/features/GroupNumericData/types";
 
 export const computeBins = (
   arr: number[],

@@ -1,15 +1,15 @@
+import { Link as RRDLink } from "react-router-dom";
 import {
   Box,
-  Heading,
-  Container,
-  Text,
   Button,
-  Stack,
+  Container,
+  Heading,
   Icon,
-  useColorModeValue,
+  Stack,
+  Text,
   createIcon,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { Link as RRDLink } from "react-router-dom";
 
 export default function CallToActionWithAnnotation() {
   return (
@@ -75,7 +75,7 @@ export default function CallToActionWithAnnotation() {
                 top={"-15px"}
                 transform={"rotate(10deg)"}
               >
-                It's free!
+                It&apos;s free!
               </Text>
             </Box>
           </Stack>

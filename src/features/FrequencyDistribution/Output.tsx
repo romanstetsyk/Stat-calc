@@ -1,20 +1,22 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import * as React from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Button, Flex } from "@chakra-ui/react";
-
-import tabulate from "@stdlib/utils-tabulate";
 import gcusum from "@stdlib/blas-ext-base-gcusum";
-
-import { FreqDistSession, OutputReturn, TForm, topLeftCell } from "./types";
-import { DisplayOptions, GridColumnName } from "../../Types";
-import { DataTableRow } from "../../components/DataTable";
-import { FreqDist } from "./types";
-import { parseNumber } from "../../utils/parseNumber";
-import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import tabulate from "@stdlib/utils-tabulate";
 import { nanoid } from "nanoid";
+import { DataTableRow } from "~/components/DataTable";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { DisplayOptions, GridColumnName } from "~/Types";
+import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
+import { parseNumber } from "~/utils/parseNumber";
 import { OutputContent } from "./OutputContent";
-
-// const DECIMAL = 6;
+import {
+  FreqDist,
+  FreqDistSession,
+  OutputReturn,
+  TForm,
+  topLeftCell,
+} from "./types";
 
 type Props = {
   id?: string;

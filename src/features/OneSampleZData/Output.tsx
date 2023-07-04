@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Button } from "@chakra-ui/react";
-import { TForm } from "./types";
+import { DisplayOptions, Perform } from "~/Types";
 import { ConfidenceInterval } from "./ConfidenceInterval";
 import { HypothesisTest } from "./HypothesisTest";
-import { DisplayOptions, Perform } from "../../Types";
+import { TForm } from "./types";
 
 type Props = {
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;

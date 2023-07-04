@@ -1,6 +1,6 @@
-import { useDisclosure, Modal, ModalOverlay, MenuItem } from "@chakra-ui/react";
+import { MenuItem, Modal, ModalOverlay, useDisclosure } from "@chakra-ui/react";
+import { OpenModalBtn } from "~/components/OpenModalBtn";
 import { Content } from "./Content";
-import { OpenModalBtn } from "src/components/OpenModalBtn";
 
 type Props = {
   id?: string;

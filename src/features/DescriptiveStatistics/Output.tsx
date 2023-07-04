@@ -1,21 +1,19 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import * as React from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Button } from "@chakra-ui/react";
-
 import mean from "@stdlib/stats-base-mean";
 import mediansorted from "@stdlib/stats-base-mediansorted";
-import variance from "@stdlib/stats-base-variance";
-import stdev from "@stdlib/stats-base-stdev";
 import range from "@stdlib/stats-base-range";
-
-import { DescriptiveStatisticsSession, TForm } from "./types";
-import { DisplayOptions, GridColumnName } from "../../Types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
-import { SampleStatistics } from "./types";
-import { parseNumber } from "../../utils/parseNumber";
-import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+import stdev from "@stdlib/stats-base-stdev";
+import variance from "@stdlib/stats-base-variance";
 import { nanoid } from "nanoid";
+import { DataTable, DataTableRow } from "~/components/DataTable";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { DisplayOptions, GridColumnName } from "~/Types";
+import { isFiniteNumberString } from "~/utils/assertions";
+import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
+import { parseNumber } from "~/utils/parseNumber";
+import { DescriptiveStatisticsSession, SampleStatistics, TForm } from "./types";
 
 const DECIMAL = 6;
 

@@ -1,19 +1,19 @@
+import { useContext } from "react";
+import cdf from "@stdlib/stats-base-dists-normal-cdf";
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
-import cdf from "@stdlib/stats-base-dists-normal-cdf";
-import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
-import { GridColumnName } from "../../Types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
+import { DataTable, DataTableRow } from "~/components/DataTable";
 import {
   HypothesisNotation,
   PopulationMean,
-} from "../../components/HypothesisNotation";
-import { parseNumber } from "../../utils/parseNumber";
-import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { useContext } from "react";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
+} from "~/components/HypothesisNotation";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { GridColumnName } from "~/Types";
+import { isFiniteNumberString } from "~/utils/assertions";
+import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
+import { parseNumber } from "~/utils/parseNumber";
+import { CIColumns, HTColumns, SampleStatistics, TForm } from "./types";
 
 const DECIMAL = 6;
 

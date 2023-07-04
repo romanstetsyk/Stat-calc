@@ -1,11 +1,10 @@
-import { Card, CardHeader, Flex, Heading } from "@chakra-ui/react";
 import { useRef } from "react";
+import { Card, CardHeader, Flex, Heading } from "@chakra-ui/react";
 import useResizeObserver from "@react-hook/resize-observer";
 import { debounce } from "lodash-es";
 import { DraggableGridHandle } from "ruuri";
-
-import { UpdateBtn } from "src/components/Session/UpdateBtn";
-import { RemoveBtn } from "src/components/Session/RemoveBtn";
+import { RemoveBtn } from "~/components/Session/RemoveBtn";
+import { UpdateBtn } from "~/components/Session/UpdateBtn";
 
 type Props = {
   children: React.ReactNode;

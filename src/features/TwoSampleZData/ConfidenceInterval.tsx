@@ -1,11 +1,11 @@
+import { useContext } from "react";
+import quantile from "@stdlib/stats-base-dists-normal-quantile";
 import mean from "@stdlib/stats-base-mean";
 import stdev from "@stdlib/stats-base-stdev";
-import quantile from "@stdlib/stats-base-dists-normal-quantile";
+import { DataTable, DataTableRow } from "~/components/DataTable";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { isFiniteNumberString } from "~/utils/assertions";
 import { CIColumns, SampleStatistics, TForm } from "./types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { useContext } from "react";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
 
 const DECIMAL = 6;
 

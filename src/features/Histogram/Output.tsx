@@ -1,18 +1,13 @@
-import React, { useContext } from "react";
+import * as React from "react";
+import { useContext } from "react";
 import { Button } from "@chakra-ui/react";
-
-// import mean from "@stdlib/stats-base-mean";
-// import mediansorted from "@stdlib/stats-base-mediansorted";
-// import variance from "@stdlib/stats-base-variance";
-// import stdev from "@stdlib/stats-base-stdev";
-
-import { BinMethod } from "src/features/GroupNumericData/types";
-import { DisplayOptions, GridColumnName } from "../../Types";
-import { getVarName, getVarValues } from "../../utils/getColumnNameAndValues";
-import { Tabulate } from "../../utils/computeBins";
-import { isFiniteNumberString } from "../../utils/assertions";
-import { DataColumnsContext } from "../../contexts/DataColumnsContext";
-import { Histogram } from "src/components/Histogram";
+import { Histogram } from "~/components/Histogram";
+import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { BinMethod } from "~/features/GroupNumericData/types";
+import { DisplayOptions, GridColumnName } from "~/Types";
+import { isFiniteNumberString } from "~/utils/assertions";
+import { Tabulate } from "~/utils/computeBins";
+import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { TForm } from "./types";
 
 type Props = {

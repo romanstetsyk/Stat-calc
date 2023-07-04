@@ -1,16 +1,16 @@
+import { ReactNode } from "react";
+import { Link as RRDLink } from "react-router-dom";
 import {
   Box,
-  chakra,
   Container,
   Flex,
   Stack,
   Text,
-  useColorModeValue,
   VisuallyHidden,
+  chakra,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FaGithub } from "react-icons/fa";
-import { ReactNode } from "react";
-import { Link as RRDLink } from "react-router-dom";
 
 const Logo = () => {
   return (

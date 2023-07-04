@@ -1,4 +1,4 @@
-import { ColumnValues, GridColumnName } from "../Types";
+import { ColumnValues, GridColumnName } from "~/Types";
 
 export const getVarName = (
   cols: ColumnValues,

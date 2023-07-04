@@ -1,4 +1,4 @@
-import { H1Sign, Perform } from "../../Types";
+import { H1Sign, Perform } from "~/Types";
 
 export const SampleStatistics = [
   "N",

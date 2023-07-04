@@ -1,6 +1,6 @@
 import quantile from "@stdlib/stats-base-dists-normal-quantile";
-import { CIColumns, TForm, SampleStatistics } from "./types";
-import { DataTable, DataTableRow } from "../../components/DataTable";
+import { DataTable, DataTableRow } from "~/components/DataTable";
+import { CIColumns, SampleStatistics, TForm } from "./types";
 
 const DECIMAL = 6;
 

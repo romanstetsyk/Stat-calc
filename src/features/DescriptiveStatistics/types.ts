@@ -1,5 +1,5 @@
-import { GridColumnName } from "../../Types";
-import { DataTableRow } from "../../components/DataTable";
+import { DataTableRow } from "~/components/DataTable";
+import { GridColumnName } from "~/Types";
 
 export const SampleStatistics = [
   "N",
