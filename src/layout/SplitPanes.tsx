@@ -20,7 +20,7 @@ const DEFAULT = {
   sizes: [2, 1],
 };
 
-export const SplitPanes = () => {
+const SplitPanes = () => {
   const ref = useRef<AllotmentHandle | null>(null);
 
   const [showSessionMobile, setShowSessionMobile] = useState<boolean>(() => {
@@ -193,3 +193,5 @@ export const SplitPanes = () => {
     </>
   );
 };
+
+export default SplitPanes;

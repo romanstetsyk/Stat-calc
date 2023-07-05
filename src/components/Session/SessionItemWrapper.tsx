@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Card, CardHeader, Flex, Heading } from "@chakra-ui/react";
 import useResizeObserver from "@react-hook/resize-observer";
-import { debounce } from "lodash-es";
+import debounce from "lodash-es/debounce";
 import { DraggableGridHandle } from "ruuri";
 import { RemoveBtn } from "~/components/Session/RemoveBtn";
 import { UpdateBtn } from "~/components/Session/UpdateBtn";
