@@ -17,6 +17,8 @@ module.exports = {
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -24,7 +26,7 @@ module.exports = {
     sourceType: "module",
     // project: "./tsconfig.json",
   },
-  plugins: ["react", "@typescript-eslint", "react-refresh"],
+  plugins: ["react", "@typescript-eslint", "react-refresh", "jsx-a11y"],
   rules: {
     "react-refresh/only-export-components": "warn",
     // fixes 'React' must be in scope when using JSX

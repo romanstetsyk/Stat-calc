@@ -86,8 +86,11 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           control={control}
           rules={{ required: "This field is required" }}
           defaultValue={defaultValues.method}
-          render={({ field }) => (
-            <RadioGroup {...field}>
+          render={({ field: { onChange, ...rest } }) => (
+            <RadioGroup
+              onChange={(value: BinMethod) => onChange(value)}
+              {...rest}
+            >
               <Radio value={BinMethod.MANUAL}>Manual</Radio>
 
               <HStack

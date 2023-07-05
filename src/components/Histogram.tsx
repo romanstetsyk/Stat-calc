@@ -6,7 +6,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
-  TooltipItem
+  TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Bin } from "~/utils/computeBins";

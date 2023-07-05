@@ -116,9 +116,9 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
           control={control}
           rules={{ required: "This field is required" }}
           defaultValue={perform}
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange, ...rest } }) => (
             <RadioGroup
-              onChange={(value) => {
+              onChange={(value: Perform) => {
                 setPerform(
                   value === Perform.HypothesisTest
                     ? Perform.HypothesisTest
@@ -126,7 +126,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                 );
                 onChange(value);
               }}
-              value={value}
+              {...rest}
             >
               <Box display="flex" flexDirection="row">
                 <Box flex="1">

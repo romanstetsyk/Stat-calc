@@ -54,9 +54,12 @@ export const CheckboxGroupWrapper = <T extends FieldValues>({
               rules={rules}
               render={({
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                field: { ref: _ref, ...field },
+                field: { ref: _ref, onChange, ...field },
               }) => (
-                <CheckboxGroup {...field}>
+                <CheckboxGroup
+                  onChange={(value: PathValue<T, Path<T>>) => onChange(value)}
+                  {...field}
+                >
                   {data
                     .map((e) =>
                       typeof e === "string" ? { title: e, value: e } : e
