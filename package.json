@@ -12,7 +12,8 @@
     "lint:fix": "tsc --noEmit && eslint \"**/*.{ts,tsx,cjs}\" --fix --config ./.eslintrc.cjs",
     "format": "prettier --check . --config ./.prettierrc.cjs",
     "format:fix": "prettier --write . --config ./.prettierrc.cjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sizecheck": "npx vite-bundle-visualizer"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
