@@ -2,9 +2,12 @@ import { BinMethod, ColumnValues } from "~/Types";
 import { isFiniteNumberString } from "~/utils/assertions";
 import { HistogramTableParameters, Tabulate } from "~/utils/computeBins";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
-import { TForm } from "./types";
+import { OutputReturn, TForm } from "./types";
 
-export const calcHistogram = (columnData: ColumnValues, formSummary: TForm) => {
+export const calcHistogram = (
+  columnData: ColumnValues,
+  formSummary: TForm
+): OutputReturn[] => {
   const { withLabel, columns, options, method } = formSummary;
 
   return columns.map((colHeader) => {
@@ -50,7 +53,6 @@ export const calcHistogram = (columnData: ColumnValues, formSummary: TForm) => {
     if (options.includes("Cumulative Relative Frequency")) {
       out.computeCumulativeRelativeFrequency();
     }
-    console.log(out);
-    return { varName, out };
+    return { varName, out, options };
   });
 };

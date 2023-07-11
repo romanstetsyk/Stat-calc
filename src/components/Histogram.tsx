@@ -146,7 +146,7 @@ export const Histogram = <T,>({
       style={{
         overflow: "scroll",
         resize: "both",
-        minHeight: "100%",
+        // minHeight: "100%",
         aspectRatio: 2,
       }}
     >

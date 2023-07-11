@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useContext, useId, useState } from "react";
 import {
   Button,
   ModalBody,
@@ -8,10 +8,11 @@ import {
   ModalHeader,
 } from "@chakra-ui/react";
 import { SubmitHandler } from "react-hook-form";
+import { SessionContext } from "~/contexts/SessionContext";
 import { BinMethod, DisplayOptions } from "~/Types";
 import { Output } from "./Output";
 import { StatForm } from "./StatForm";
-import { FrequencyDistribution, TForm } from "./types";
+import { FrequencyDistribution, HistogramSession, TForm } from "./types";
 
 const DEFAULT_SELECTED_FIELDS = {
   columns: [],
@@ -33,11 +34,26 @@ type Props = {
 };
 
 export const Content = ({ onClose, id }: Props) => {
+  const { session, addSessionItem, updateSessionItem } =
+    useContext(SessionContext);
+
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
-  const [formSummary, setFormSummary] = useState<TForm>(
-    DEFAULT_SELECTED_FIELDS
-  );
+  const [formSummary, setFormSummary] = useState<TForm>(() => {
+    const sessionItem = session.find((item) => item.id === id);
+    return sessionItem && sessionItem.type === "histogram"
+      ? sessionItem.formSummary
+      : DEFAULT_SELECTED_FIELDS;
+  });
+
+  const [output, setOutput] = useState<HistogramSession>();
+
+  const onSaveToSession = () => {
+    if (output) {
+      id ? updateSessionItem(output) : addSessionItem(output);
+    }
+    onClose();
+  };
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
@@ -64,7 +80,12 @@ export const Content = ({ onClose, id }: Props) => {
           />
         )}
         {display === "result" && (
-          <Output id={id} setDisplay={setDisplay} formSummary={formSummary} />
+          <Output
+            id={id}
+            setDisplay={setDisplay}
+            formSummary={formSummary}
+            setOutput={setOutput}
+          />
         )}
       </ModalBody>
 
@@ -75,6 +96,11 @@ export const Content = ({ onClose, id }: Props) => {
         {display === "form" && (
           <Button type="submit" colorScheme="blue" form={formId}>
             Calculate
+          </Button>
+        )}
+        {display === "result" && (
+          <Button colorScheme="blue" onClick={onSaveToSession}>
+            Save and Close
           </Button>
         )}
       </ModalFooter>

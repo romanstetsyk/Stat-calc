@@ -12,8 +12,8 @@ class CustomLayout {
     grid,
     layoutId,
     items,
-    _width,
-    _height,
+    width,
+    height,
     callback
   ) => {
     const layout: LayoutData = {
@@ -44,7 +44,8 @@ class CustomLayout {
 
       this.registeredItems.forEach((item) => {
         const m = item.getMargin();
-        const height = item.getHeight() + m.top + m.bottom;
+        const pos = item.getPosition();
+        const height = item.getHeight() + m.top + m.bottom + pos.top;
         maxHeight = Math.max(height, maxHeight);
       });
 
@@ -80,8 +81,9 @@ class CustomLayout {
       }
 
       if (layout.styles) {
-        layout.styles.width = Math.max(maxWidth, containerWidth) + "px";
-        layout.styles.height = Math.max(maxHeight, containerHeight) + "px";
+        layout.styles.width = Math.max(maxWidth, containerWidth, width) + "px";
+        layout.styles.height =
+          Math.max(maxHeight, containerHeight, height) + "px";
       }
 
       this.registeredItems = new Set(items);

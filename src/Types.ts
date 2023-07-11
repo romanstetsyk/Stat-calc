@@ -1,5 +1,6 @@
 import { DescriptiveStatisticsSession } from "~/features/DescriptiveStatistics/types";
 import { FreqDistSession } from "~/features/FrequencyDistribution/types";
+import { HistogramSession } from "./features/Histogram/types";
 
 export type GridColumnName = `col${number}`;
 
@@ -38,7 +39,10 @@ export const enum Perform {
 
 export type DisplayOptions = "form" | "result";
 
-export type TSession = DescriptiveStatisticsSession | FreqDistSession;
+export type TSession =
+  | DescriptiveStatisticsSession
+  | FreqDistSession
+  | HistogramSession;
 
 export const enum BinMethod {
   MANUAL = "MANUAL",

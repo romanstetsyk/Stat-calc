@@ -1,6 +1,7 @@
 // import { GridColumnName } from "../../Types";
 
 import { BinMethod, GridColumnName } from "~/Types";
+import { Tabulate } from "~/utils/computeBins";
 
 export const FrequencyDistribution = [
   "Frequency",
@@ -23,4 +24,19 @@ export type TForm = {
   squareRoot: {
     start?: string;
   };
+};
+
+export type OutputReturn = {
+  varName: string;
+  out: Tabulate;
+  options: FrequencyDistribution;
+};
+
+export type HistogramSession = {
+  id: string;
+  timestamp: number;
+  title: string;
+  type: "histogram";
+  data: OutputReturn[];
+  formSummary: TForm;
 };

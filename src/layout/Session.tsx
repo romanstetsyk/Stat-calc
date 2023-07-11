@@ -5,7 +5,8 @@ import { DataTable } from "~/components/DataTable";
 import { SessionItemWrapper } from "~/components/Session/SessionItemWrapper";
 import { SessionContext } from "~/contexts/SessionContext";
 import { SampleStatistics } from "~/features/DescriptiveStatistics/types";
-import { OutputContent } from "~/features/FrequencyDistribution/OutputContent";
+import { OutputContent as FrequencyDistOutputContent } from "~/features/FrequencyDistribution/OutputContent";
+import { OutputContent as HistogramOutputContent } from "~/features/Histogram/OutputContent";
 import { TSession } from "~/Types";
 import { layoutFunction } from "~/utils/layoutFunction";
 
@@ -51,13 +52,12 @@ export const Session = () => {
                 title={title}
                 gridRef={gridRef}
               >
-                <CardBody px={3} py={2}>
+                <CardBody px={3} py={2} overflow={"auto"}>
                   <DataTable<SampleStatistics, ""> data={data} stats={stats} />
                 </CardBody>
               </SessionItemWrapper>
             );
-          }
-          if (item.type === "frequencyDistribution") {
+          } else if (item.type === "frequencyDistribution") {
             const { id, title, data } = item;
             return (
               <SessionItemWrapper
@@ -72,8 +72,30 @@ export const Session = () => {
                   display={"flex"}
                   gap={4}
                   flexDirection={"column"}
+                  overflow={"auto"}
                 >
-                  <OutputContent outputData={data} />
+                  <FrequencyDistOutputContent outputData={data} />
+                </CardBody>
+              </SessionItemWrapper>
+            );
+          } else if (item.type === "histogram") {
+            const { id, title, data } = item;
+            return (
+              <SessionItemWrapper
+                key={id}
+                id={id}
+                title={title}
+                gridRef={gridRef}
+              >
+                <CardBody
+                  px={3}
+                  py={2}
+                  display={"flex"}
+                  gap={4}
+                  flexDirection={"column"}
+                  overflow={"auto"}
+                >
+                  <HistogramOutputContent outputData={data} />
                 </CardBody>
               </SessionItemWrapper>
             );
