@@ -1,29 +1,26 @@
 // import { GridColumnName } from "../../Types";
 
-import { GridColumnName } from "~/Types";
-import { BinMethod, FreqDist } from "../GroupNumericData/types";
+import { BinMethod, GridColumnName } from "~/Types";
 
-// export const FreqDist = [
-//   "Frequency",
-//   "Relative Frequency",
-//   "Cumulative Frequency",
-//   "Cumulative Relative Frequency",
-// ] as const;
+export const FrequencyDistribution = [
+  "Frequency",
+  "Relative Frequency",
+  "Cumulative Frequency",
+  "Cumulative Relative Frequency",
+] as const;
 
-// export type FreqDist = (typeof FreqDist)[number];
-
-// export const enum BinMethod {
-//   MANUAL = "manual",
-//   OTHER = "other",
-// }
+export type FrequencyDistribution = (typeof FrequencyDistribution)[number];
 
 export type TForm = {
   columns: GridColumnName[];
-  options: FreqDist;
+  options: FrequencyDistribution;
   withLabel: boolean;
   method: BinMethod;
   manual: {
     start?: string;
     width: string;
+  };
+  squareRoot: {
+    start?: string;
   };
 };

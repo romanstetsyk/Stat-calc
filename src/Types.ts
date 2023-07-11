@@ -39,3 +39,9 @@ export const enum Perform {
 export type DisplayOptions = "form" | "result";
 
 export type TSession = DescriptiveStatisticsSession | FreqDistSession;
+
+export const enum BinMethod {
+  MANUAL = "MANUAL",
+  SQUARE_ROOT = "SQUARE_ROOT",
+  // OTHER = "OTHER",
+}

@@ -12,11 +12,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
 import { InputField } from "~/components/InputField";
 import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { BinMethod, FreqDist } from "~/features/GroupNumericData/types";
-import { GridColumnName } from "~/Types";
+import { BinMethod, GridColumnName } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { isFiniteNumber } from "~/utils/validators";
-import { TForm } from "./types";
+import { FrequencyDistribution, TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -83,12 +82,12 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           defaultValue={defaultValues.options}
           render={({ field: { onChange, ...rest } }) => (
             <RadioGroup
-              onChange={(value: FreqDist) => onChange(value)}
+              onChange={(value: FrequencyDistribution) => onChange(value)}
               {...rest}
               display={"flex"}
               flexDirection={"column"}
             >
-              {FreqDist.map((opt) => (
+              {FrequencyDistribution.map((opt) => (
                 <Radio key={opt} value={opt}>
                   {opt}
                 </Radio>
@@ -124,7 +123,10 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                   register={register}
                   error={errors?.manual?.start}
                   rules={{
-                    validate: (value) => value === "" || isFiniteNumber(value),
+                    validate: (value) =>
+                      watch("method") !== BinMethod.MANUAL ||
+                      value === "" ||
+                      isFiniteNumber(value),
                   }}
                 />
                 <InputField
@@ -137,12 +139,34 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                       value: watch("method") === BinMethod.MANUAL,
                       message: "This value is required",
                     },
-                    validate: isFiniteNumber,
+                    validate: (value) =>
+                      watch("method") !== BinMethod.MANUAL ||
+                      isFiniteNumber(value),
                   }}
                 />
               </HStack>
 
-              {/* <Radio value={BinMethod.OTHER}>Other</Radio> */}
+              <Radio value={BinMethod.SQUARE_ROOT}>Square Root</Radio>
+
+              <HStack
+                ml={8}
+                as="fieldset"
+                disabled={watch("method") !== BinMethod.SQUARE_ROOT}
+                opacity={watch("method") !== BinMethod.SQUARE_ROOT ? 0.5 : 1}
+              >
+                <InputField
+                  name="squareRoot.start"
+                  label="Start"
+                  register={register}
+                  error={errors?.squareRoot?.start}
+                  rules={{
+                    validate: (value) =>
+                      watch("method") !== BinMethod.SQUARE_ROOT ||
+                      value === "" ||
+                      isFiniteNumber(value),
+                  }}
+                />
+              </HStack>
             </RadioGroup>
           )}
         />

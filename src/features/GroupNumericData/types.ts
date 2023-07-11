@@ -1,4 +1,4 @@
-import { GridColumnName } from "~/Types";
+import { BinMethod, GridColumnName } from "~/Types";
 
 export const FreqDist = [
   "Frequency",
@@ -8,11 +8,6 @@ export const FreqDist = [
 ] as const;
 
 export type FreqDist = (typeof FreqDist)[number];
-
-export const enum BinMethod {
-  MANUAL = "manual",
-  OTHER = "other",
-}
 
 export type TForm = {
   columns: GridColumnName[];

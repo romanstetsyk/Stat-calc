@@ -8,11 +8,10 @@ import {
   ModalHeader,
 } from "@chakra-ui/react";
 import { SubmitHandler } from "react-hook-form";
-import { BinMethod, FreqDist } from "~/features/GroupNumericData/types";
-import { DisplayOptions } from "~/Types";
+import { BinMethod, DisplayOptions } from "~/Types";
 import { Output } from "./Output";
 import { StatForm } from "./StatForm";
-import { TForm } from "./types";
+import { FrequencyDistribution, TForm } from "./types";
 
 type Props = {
   onClose: () => void;
@@ -23,11 +22,15 @@ export const Content = ({ onClose }: Props) => {
   const [display, setDisplay] = useState<DisplayOptions>("form");
   const [formSummary, setFormSummary] = useState<TForm>({
     columns: [],
-    options: FreqDist[0],
+    options: FrequencyDistribution[0],
     withLabel: false,
     method: BinMethod.MANUAL,
     manual: {
+      start: "",
       width: "",
+    },
+    squareRoot: {
+      start: "",
     },
   });
 

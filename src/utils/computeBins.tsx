@@ -1,6 +1,6 @@
 import stdlibMax from "@stdlib/stats-base-max";
 import stdlibMin from "@stdlib/stats-base-min";
-import { BinMethod } from "~/features/GroupNumericData/types";
+import { BinMethod } from "~/Types";
 import { roundToPrecision } from "./parseNumber";
 
 export const computeBins = (
@@ -26,13 +26,19 @@ type Manual = {
   width: number;
 };
 
-type Other = {
+type SquareRoot = {
   dataset: number[];
-  method: BinMethod.OTHER;
-  n: number;
+  method: BinMethod.SQUARE_ROOT;
+  start: number;
 };
 
-type HistogramTableParameters = Manual | Other;
+// type Other = {
+//   dataset: number[];
+//   method: BinMethod.OTHER;
+//   n: number;
+// };
+
+export type HistogramTableParameters = Manual | SquareRoot;
 
 type Config = {
   allowHidden?: boolean;
@@ -83,16 +89,23 @@ export class Tabulate {
     this.countTotal = this.dataset.length;
 
     if (method === BinMethod.MANUAL) {
-      this.createBinsManual(paramObj);
-      this.allocate();
-      this.getTicks();
-      this.getMidpoints();
+      const { start, width } = paramObj;
+      this.width = width;
+      this.createBinsManual(start);
+    } else if (method === BinMethod.SQUARE_ROOT) {
+      const { start } = paramObj;
+      const k = Math.ceil(Math.sqrt(this.dataset.length));
+      // w = (max + w - min) / k
+      this.width = (this.datasetMax - this.datasetMin) / (k - 1);
+      this.createBinsManual(start);
     }
+
+    this.allocate();
+    this.getTicks();
+    this.getMidpoints();
   }
 
-  createBinsManual({ start, width }: Manual) {
-    this.width = width;
-
+  createBinsManual(start: number) {
     if (Object.is(start, NaN)) {
       this.start = this.datasetMin;
     } else if (this.datasetMin < start) {

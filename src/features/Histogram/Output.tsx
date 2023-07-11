@@ -3,10 +3,9 @@ import { useContext } from "react";
 import { Button } from "@chakra-ui/react";
 import { Histogram } from "~/components/Histogram";
 import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { BinMethod } from "~/features/GroupNumericData/types";
-import { DisplayOptions, GridColumnName } from "~/Types";
+import { BinMethod, DisplayOptions, GridColumnName } from "~/Types";
 import { isFiniteNumberString } from "~/utils/assertions";
-import { Tabulate } from "~/utils/computeBins";
+import { HistogramTableParameters, Tabulate } from "~/utils/computeBins";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { TForm } from "./types";
 
@@ -18,7 +17,7 @@ type Props = {
 export const Output = ({ setDisplay, formSummary }: Props) => {
   const { columnData } = useContext(DataColumnsContext);
 
-  const { withLabel, columns, options, manual } = formSummary;
+  const { withLabel, columns, options, method } = formSummary;
 
   const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
     const varName = getVarName(columnData, colHeader, withLabel);
@@ -26,17 +25,32 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
     const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
     const n = arrOfNums.length;
 
-    const { start, width } = manual;
-
-    const out = new Tabulate(
-      {
-        method: BinMethod.MANUAL,
+    let tabulateParams: HistogramTableParameters;
+    if (method === BinMethod.MANUAL) {
+      const { start, width } = formSummary.manual;
+      tabulateParams = {
+        method,
         dataset: arrOfNums,
         start: start === "" ? NaN : Number(start),
         width: Number(width),
-      },
-      { allowHidden: false, showHidden: true, hideEmpty: false, precision: 0 }
-    );
+      };
+    } else if (method === BinMethod.SQUARE_ROOT) {
+      const { start } = formSummary.squareRoot;
+      tabulateParams = {
+        method,
+        dataset: arrOfNums,
+        start: start === "" ? NaN : Number(start),
+      };
+    } else {
+      throw new Error("Unknown bin method");
+    }
+
+    const out = new Tabulate(tabulateParams, {
+      allowHidden: false,
+      showHidden: true,
+      hideEmpty: false,
+      precision: 0,
+    });
 
     if (options.includes("Relative Frequency")) {
       out.computeRelativeFrequency();

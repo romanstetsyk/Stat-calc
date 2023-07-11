@@ -8,10 +8,10 @@ import {
   ModalHeader,
 } from "@chakra-ui/react";
 import { SubmitHandler } from "react-hook-form";
-import { DisplayOptions } from "~/Types";
+import { BinMethod, DisplayOptions } from "~/Types";
 import { Output } from "./Output";
 import { StatForm } from "./StatForm";
-import { BinMethod, FreqDist, TForm } from "./types";
+import { FreqDist, TForm } from "./types";
 
 type Props = {
   onClose: () => void;

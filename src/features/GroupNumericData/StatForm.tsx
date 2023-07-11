@@ -11,10 +11,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
 import { InputField } from "~/components/InputField";
 import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { GridColumnName } from "~/Types";
+import { BinMethod, GridColumnName } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { isFiniteNumber } from "~/utils/validators";
-import { BinMethod, FreqDist, TForm } from "./types";
+import { FreqDist, TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
