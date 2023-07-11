@@ -13,26 +13,31 @@ import { Output } from "./Output";
 import { StatForm } from "./StatForm";
 import { FrequencyDistribution, TForm } from "./types";
 
+const DEFAULT_SELECTED_FIELDS = {
+  columns: [],
+  options: FrequencyDistribution[0],
+  withLabel: false,
+  method: BinMethod.MANUAL,
+  manual: {
+    start: "",
+    width: "",
+  },
+  squareRoot: {
+    start: "",
+  },
+};
+
 type Props = {
+  id?: string;
   onClose: () => void;
 };
 
-export const Content = ({ onClose }: Props) => {
+export const Content = ({ onClose, id }: Props) => {
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>("form");
-  const [formSummary, setFormSummary] = useState<TForm>({
-    columns: [],
-    options: FrequencyDistribution[0],
-    withLabel: false,
-    method: BinMethod.MANUAL,
-    manual: {
-      start: "",
-      width: "",
-    },
-    squareRoot: {
-      start: "",
-    },
-  });
+  const [formSummary, setFormSummary] = useState<TForm>(
+    DEFAULT_SELECTED_FIELDS
+  );
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
     console.log(data);
@@ -59,16 +64,16 @@ export const Content = ({ onClose }: Props) => {
           />
         )}
         {display === "result" && (
-          <Output setDisplay={setDisplay} formSummary={formSummary} />
+          <Output id={id} setDisplay={setDisplay} formSummary={formSummary} />
         )}
       </ModalBody>
 
       <ModalFooter>
-        <Button colorScheme="blue" mr={3} onClick={onClose}>
+        <Button variant="ghost" mr={3} onClick={onClose}>
           Close
         </Button>
         {display === "form" && (
-          <Button type="submit" variant="ghost" form={formId}>
+          <Button type="submit" colorScheme="blue" form={formId}>
             Calculate
           </Button>
         )}

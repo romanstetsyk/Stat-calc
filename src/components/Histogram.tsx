@@ -29,8 +29,7 @@ type Props<T> = {
     yAxisKey: Extract<keyof T, string>;
   };
   datalabel?: string;
-  l: number;
-  u: number;
+  domain: [number, number];
   classWidth: number;
 };
 
@@ -38,8 +37,7 @@ export const Histogram = <T,>({
   table,
   parsing,
   datalabel,
-  l,
-  u,
+  domain,
   classWidth,
 }: Props<T>) => {
   const options = {
@@ -61,8 +59,8 @@ export const Histogram = <T,>({
               ? Number(tickValue.toFixed(6))
               : tickValue,
         },
-        suggestedMin: l,
-        suggestedMax: u,
+        suggestedMin: domain[0],
+        suggestedMax: domain[1],
         // grace: '20%',
 
         // ticks: {

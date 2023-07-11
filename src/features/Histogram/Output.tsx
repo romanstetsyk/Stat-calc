@@ -3,86 +3,32 @@ import { useContext } from "react";
 import { Button } from "@chakra-ui/react";
 import { Histogram } from "~/components/Histogram";
 import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { BinMethod, DisplayOptions, GridColumnName } from "~/Types";
-import { isFiniteNumberString } from "~/utils/assertions";
-import { HistogramTableParameters, Tabulate } from "~/utils/computeBins";
-import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
+import { DisplayOptions } from "~/Types";
+import { calcHistogram } from "./calcHistogram";
 import { TForm } from "./types";
 
 type Props = {
+  id?: string;
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
 };
 
 export const Output = ({ setDisplay, formSummary }: Props) => {
+  console.log("hist");
+  // const outputId = useMemo(() => (id ? id : nanoid()), [id]);
+
   const { columnData } = useContext(DataColumnsContext);
-
-  const { withLabel, columns, options, method } = formSummary;
-
-  const arrOfTables = (columns as GridColumnName[]).map((colHeader) => {
-    const varName = getVarName(columnData, colHeader, withLabel);
-    const varValues = getVarValues(columnData, colHeader, withLabel);
-    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
-    const n = arrOfNums.length;
-
-    let tabulateParams: HistogramTableParameters;
-    if (method === BinMethod.MANUAL) {
-      const { start, width } = formSummary.manual;
-      tabulateParams = {
-        method,
-        dataset: arrOfNums,
-        start: start === "" ? NaN : Number(start),
-        width: Number(width),
-      };
-    } else if (method === BinMethod.SQUARE_ROOT) {
-      const { start } = formSummary.squareRoot;
-      tabulateParams = {
-        method,
-        dataset: arrOfNums,
-        start: start === "" ? NaN : Number(start),
-      };
-    } else {
-      throw new Error("Unknown bin method");
-    }
-
-    const out = new Tabulate(tabulateParams, {
-      allowHidden: false,
-      showHidden: true,
-      hideEmpty: false,
-      precision: 0,
-    });
-
-    if (options.includes("Relative Frequency")) {
-      out.computeRelativeFrequency();
-    }
-
-    if (options.includes("Cumulative Frequency")) {
-      out.computeCumulativeFrequency();
-    }
-
-    if (options.includes("Cumulative Relative Frequency")) {
-      out.computeCumulativeRelativeFrequency();
-    }
-    console.log(out);
-    return {
-      varName,
-      n,
-      l: out.l,
-      u: out.u,
-      classWidth: out.width,
-      out,
-    };
-  });
+  const arrOfTables = calcHistogram(columnData, formSummary);
+  const { options } = formSummary;
 
   return (
     <>
       <Button onClick={() => setDisplay("form")}>← Back</Button>
-      {arrOfTables.map(({ varName, out, l, u, classWidth }) => (
+      {arrOfTables.map(({ varName, out }) => (
         <Histogram
-          l={l}
-          u={u}
-          classWidth={classWidth}
           key={varName}
+          domain={out.domain}
+          classWidth={out.width}
           table={out.bins}
           parsing={{
             xAxisKey: "midpoint",

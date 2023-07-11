@@ -57,6 +57,12 @@ export type Bin = {
 };
 
 export class Tabulate {
+  config: {
+    allowHidden: boolean; // allow starting value to be less than datasetMin
+    showHidden: boolean; // show additional bin before starting value it it's greater than datasetMin (allowHidden should be true to use this property)
+    hideEmpty: boolean; // show bins with 0 height
+    precision: number; // data precision. lower limit of next class can be greater than upper limit of the previous one
+  };
   dataset: number[];
   datasetMin: number;
   datasetMax: number;
@@ -65,21 +71,18 @@ export class Tabulate {
   method: BinMethod;
   start = NaN; // form
   width = NaN; // form
-  showHidden: boolean; // show additional bin before starting value
-  allowHidden: boolean; // allow starting value to be less than datasetMin
-  hideEmpty: boolean; // show bins with 0 height
   showWarning = false; // flag if not all bins are visible
   bins: Bin[] = [];
   ticks: number[] = [];
-  precision = 0;
-  l = NaN; // lower limit of first class
-  u = NaN; // upper limit of last class
+  domain: [number, number] = [NaN, NaN]; // lower limit of first class, upper limit of last class
 
   constructor(paramObj: HistogramTableParameters, config: Config) {
-    this.allowHidden = config.allowHidden ?? false;
-    this.showHidden = config.showHidden ?? true;
-    this.hideEmpty = config.hideEmpty ?? false;
-    this.precision = config.precision ?? 0;
+    this.config = {
+      allowHidden: config.allowHidden ?? false,
+      showHidden: config.showHidden ?? true,
+      hideEmpty: config.hideEmpty ?? false,
+      precision: config.precision ?? 0,
+    };
 
     const { dataset, method } = paramObj;
     this.method = method;
@@ -109,16 +112,20 @@ export class Tabulate {
     if (Object.is(start, NaN)) {
       this.start = this.datasetMin;
     } else if (this.datasetMin < start) {
-      this.start = this.allowHidden ? start : this.datasetMin;
+      this.start = this.config.allowHidden ? start : this.datasetMin;
     } else {
       this.start = start;
     }
 
-    if (this.allowHidden && !this.showHidden && this.datasetMin < this.start) {
+    if (
+      this.config.allowHidden &&
+      !this.config.showHidden &&
+      this.datasetMin < this.start
+    ) {
       this.showWarning = true;
     }
 
-    if (this.datasetMin < this.start && this.showHidden) {
+    if (this.datasetMin < this.start && this.config.showHidden) {
       this.bins.push({ limits: [-Infinity, start], Frequency: 0 });
     }
 
@@ -126,7 +133,7 @@ export class Tabulate {
     while (roundToPrecision(this.start + i * this.width) <= this.datasetMax) {
       const lowerLimit = roundToPrecision(this.start + i * this.width);
       const upperLimit = roundToPrecision(
-        this.start + (i + 1) * this.width - this.precision
+        this.start + (i + 1) * this.width - this.config.precision
       );
       this.bins.push({
         limits: [lowerLimit, upperLimit],
@@ -135,21 +142,23 @@ export class Tabulate {
       i += 1;
     }
 
-    this.l =
-      this.datasetMin < this.start && this.showHidden
+    const domainStart =
+      this.datasetMin < this.start && this.config.showHidden
         ? roundToPrecision(this.start - this.width)
         : this.start;
-    this.u = roundToPrecision(this.start + i * this.width);
+    const domainEnd = roundToPrecision(this.start + i * this.width);
+    this.domain = [domainStart, domainEnd];
   }
 
   allocate() {
     this.dataset.forEach((num) => {
       const idx = Math.floor(
         roundToPrecision(
-          (this.bins.length * (num - this.l)) / (this.u - this.l)
+          (this.bins.length * (num - this.domain[0])) /
+            (this.domain[1] - this.domain[0])
         )
       );
-      if (this.showHidden) {
+      if (this.config.showHidden) {
         this.bins[idx >= 0 ? idx : 0]["Frequency"] += 1;
         this.countVisible += 1;
       } else if (idx >= 0) {
@@ -158,7 +167,7 @@ export class Tabulate {
       }
     });
 
-    if (this.hideEmpty) {
+    if (this.config.hideEmpty) {
       this.bins = this.bins.filter((bin) => bin["Frequency"] !== 0);
     }
   }
@@ -197,7 +206,7 @@ export class Tabulate {
   getMidpoints() {
     this.bins.forEach((bin) => {
       const [a, b] = bin.limits;
-      bin.midpoint = (a + b - this.precision) / 2;
+      bin.midpoint = (a + b - this.config.precision) / 2;
     });
   }
 }
