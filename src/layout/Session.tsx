@@ -21,8 +21,13 @@ export const Session = () => {
   }
 
   return (
-    <CardBody overflow={"scroll"} px={0} ref={divRef}>
+    <CardBody overflow={"scroll"} p={0} ref={divRef}>
       <DraggableGrid
+        style={{
+          backgroundSize: "0.5in 0.5in",
+          backgroundImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px)",
+        }}
         ref={gridRef}
         layout={layoutFunction}
         onDragEnd={() => gridRef.current?.grid?.refreshItems().layout()}
