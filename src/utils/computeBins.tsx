@@ -99,7 +99,7 @@ export class Tabulate {
       const { start } = paramObj;
       const k = Math.ceil(Math.sqrt(this.dataset.length));
       // w = (max + w - min) / k
-      this.width = (this.datasetMax - this.datasetMin) / (k - 1);
+      this.width = (this.datasetMax - this.datasetMin) / (k - 1) || 1;
       this.createBinsManual(start);
     }
 
