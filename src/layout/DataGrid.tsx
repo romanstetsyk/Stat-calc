@@ -8,26 +8,34 @@ import {
   GridColumn,
   Item,
 } from "@glideapps/glide-data-grid";
+import { debounce } from "lodash-es";
 import { DataColumnsContext } from "~/contexts/DataColumnsContext";
 import { GridColumnName, GridRow } from "~/Types";
 
+const ROW_COUNT = 300;
+const ROW_HEIGHT = 24;
+const COL_COUNT = 50;
+const COL_WIDTH = 100;
+const HEADER_HEIGHT = 28;
+
+const generateHeaders = (colCount: number = COL_COUNT) =>
+  Array.from({ length: colCount }, (_, i) => {
+    const col: {
+      title: GridColumnName;
+      id: GridColumnName;
+      width: number;
+    } = {
+      title: `col${i + 1}`,
+      id: `col${i + 1}`,
+      width: COL_WIDTH,
+    };
+    return col;
+  });
+
 export const DataGrid = () => {
   const { rowData, setRowData } = useContext(DataColumnsContext);
-
-  const [columnHeaders, setColumnHeaders] = useState(() =>
-    Array.from({ length: 50 }, (_, i) => {
-      const col: {
-        title: GridColumnName;
-        id: GridColumnName;
-        width: number;
-      } = {
-        title: `col${i + 1}`,
-        id: `col${i + 1}`,
-        width: 100,
-      };
-      return col;
-    })
-  );
+  const [rowCount, setRowCount] = useState<number>(ROW_COUNT);
+  const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
 
   const onColumnResize = useCallback(
     (_col: GridColumn, newSize: number, colIndex: number) => {
@@ -74,24 +82,32 @@ export const DataGrid = () => {
         rowData[rowIdx] = {};
       }
       rowData[rowIdx][col] = newValue.data;
-      setRowData([...rowData]);
+      setRowData(rowData.slice());
     },
     [columnHeaders, rowData, setRowData]
   );
-
+  console.log(rowData);
   return (
     <DataEditor
       getCellContent={getContent}
       columns={columnHeaders}
-      rows={300}
-      rowHeight={24}
-      headerHeight={28}
+      rows={Math.max(rowCount, rowData.length)}
+      rowHeight={ROW_HEIGHT}
+      headerHeight={HEADER_HEIGHT}
       onCellEdited={onCellEdited}
       rowMarkers={"clickable-number"}
       getCellsForSelection={true}
       onPaste={true}
       onColumnResize={onColumnResize}
       scaleToRem={true}
+      onVisibleRegionChanged={debounce(({ x, y, width, height }) => {
+        if (x + width > columnHeaders.length - 5) {
+          setColumnHeaders(generateHeaders(columnHeaders.length + 10));
+        }
+        if (y + height > rowCount - 40) {
+          setRowCount((prev) => prev + 50);
+        }
+      }, 100)}
     />
   );
 };
