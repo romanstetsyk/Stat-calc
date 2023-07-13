@@ -59,7 +59,8 @@
     "react-icons": "^4.10.1",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.14.1",
-    "ruuri": "^2.0.0"
+    "ruuri": "^2.0.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",

@@ -7,6 +7,7 @@ import {
   MenuGroup,
   MenuList,
 } from "@chakra-ui/react";
+import { UploadFile } from "~/components/UploadFile";
 import { StatModal as DescriptiveStatisticsModal } from "~/features/DescriptiveStatistics/StatModal";
 import { StatModal as FrequencyDistributionModal } from "~/features/FrequencyDistribution/StatModal";
 import { StatModal as GroupNumericDataModal } from "~/features/GroupNumericData/StatModal";
@@ -19,6 +20,8 @@ import { StatModal as TwoSampleZSummaryModal } from "~/features/TwoSampleZSummar
 const StatMenu = () => {
   return (
     <Flex>
+      <UploadFile />
+
       <Menu>
         <MenuButton
           px={4}

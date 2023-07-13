@@ -53,8 +53,8 @@ export const DataGrid = () => {
         kind: GridCellKind.Text,
         allowOverlay: true,
         readonly: false,
-        displayData: d,
-        data: d,
+        displayData: String(d),
+        data: String(d),
       };
     },
     [columnHeaders, rowData]
