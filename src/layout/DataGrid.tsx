@@ -86,7 +86,7 @@ export const DataGrid = () => {
     },
     [columnHeaders, rowData, setRowData]
   );
-  console.log(rowData);
+
   return (
     <DataEditor
       getCellContent={getContent}

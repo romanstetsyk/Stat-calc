@@ -49,7 +49,7 @@ export const Session = () => {
         data={session}
         renderItem={(item: TSession) => {
           if (item.type === "descriptive") {
-            const { id, title, data, stats } = item;
+            const { id, title, data, stats, timestamp } = item;
             return (
               <SessionItemWrapper
                 key={id}
@@ -58,12 +58,16 @@ export const Session = () => {
                 gridRef={gridRef}
               >
                 <CardBody px={3} py={2} overflow={"auto"}>
-                  <DataTable<SampleStatistics, ""> data={data} stats={stats} />
+                  <DataTable<SampleStatistics, "">
+                    data={data}
+                    stats={stats}
+                    key={timestamp} // remount component to auto update col widths
+                  />
                 </CardBody>
               </SessionItemWrapper>
             );
           } else if (item.type === "frequencyDistribution") {
-            const { id, title, data } = item;
+            const { id, title, data, timestamp } = item;
             return (
               <SessionItemWrapper
                 key={id}
@@ -79,12 +83,15 @@ export const Session = () => {
                   flexDirection={"column"}
                   overflow={"auto"}
                 >
-                  <FrequencyDistOutputContent outputData={data} />
+                  <FrequencyDistOutputContent
+                    outputData={data}
+                    key={timestamp}
+                  />
                 </CardBody>
               </SessionItemWrapper>
             );
           } else if (item.type === "histogram") {
-            const { id, title, data } = item;
+            const { id, title, data, timestamp } = item;
             return (
               <SessionItemWrapper
                 key={id}
@@ -100,7 +107,7 @@ export const Session = () => {
                   flexDirection={"column"}
                   overflow={"auto"}
                 >
-                  <HistogramOutputContent outputData={data} />
+                  <HistogramOutputContent outputData={data} key={timestamp} />
                 </CardBody>
               </SessionItemWrapper>
             );
