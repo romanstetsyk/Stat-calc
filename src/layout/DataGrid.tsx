@@ -106,7 +106,7 @@ export const DataGrid = () => {
           setColumnHeaders(generateHeaders(columnHeaders.length + 10));
         }
         if (y + height > rowCount - 40) {
-          setRowCount((prev) => prev + 50);
+          setRowCount((prev) => Math.max(prev, rowData.length) + 50);
         }
       }, 100)}
       onDelete={(selection) => {
