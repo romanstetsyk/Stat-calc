@@ -33,7 +33,8 @@ const generateHeaders = (colCount: number = COL_COUNT) =>
   });
 
 export const DataGrid = () => {
-  const { rowData, setRowData } = useContext(DataColumnsContext);
+  const { rowData, setRowData, delRows, delColumns, delCells } =
+    useContext(DataColumnsContext);
   const [rowCount, setRowCount] = useState<number>(ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
 
@@ -108,6 +109,15 @@ export const DataGrid = () => {
           setRowCount((prev) => prev + 50);
         }
       }, 100)}
+      onDelete={(selection) => {
+        const rows = selection.rows.toArray();
+        const columns = selection.columns.toArray();
+        const range = selection.current?.range;
+        if (rows.length > 0) delRows(rows);
+        if (columns.length > 0) delColumns(columns);
+        if (range) delCells(range);
+        return false;
+      }}
     />
   );
 };
