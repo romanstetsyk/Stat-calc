@@ -1,14 +1,15 @@
-import { ChangeEvent, useContext, useRef } from "react";
-import { Button } from "@chakra-ui/react";
+import { ChangeEvent, useRef, useSyncExternalStore } from "react";
+import { Button, useToast } from "@chakra-ui/react";
+import { nanoid } from "nanoid";
 import { WorkBook, read, utils } from "xlsx";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { dataStore } from "~/dataStore";
 import { GridColumnName, GridRow } from "~/Types";
 
 type FileRow = { [colName: `col${number}`]: unknown } & { __rowNum__: number };
 
 const parse_wb = (wb: WorkBook) => {
   const sheet = wb.Sheets[wb.SheetNames[0]];
-  console.log(sheet);
+  console.log("sheet");
   const range = utils.decode_range(sheet["!ref"] ?? "A1");
   const headers = Array.from<unknown, GridColumnName>(
     { length: range.e.c - range.s.c + 1 },
@@ -28,24 +29,50 @@ const parse_wb = (wb: WorkBook) => {
     newRows[__rowNum__] = rest as GridRow;
   });
 
-  return newRows;
+  return { datasetId: nanoid(), newRows };
 };
 
 export const UploadFile = () => {
-  const { setRowData } = useContext(DataColumnsContext);
+  console.log("UploadFile");
+  const { overwriteRows } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
+
   const ref = useRef<HTMLInputElement>(null);
+  const toast = useToast();
 
   const handleClick = async (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
 
-    const fileRows = parse_wb(
-      read(await e.target.files?.[0].arrayBuffer(), { cellDates: true })
-    );
+    const fileBuffer = await file.arrayBuffer();
 
-    setRowData(fileRows);
-
-    if (ref.current) {
-      ref.current.value = "";
+    try {
+      const wb = read(fileBuffer, { cellDates: true, dense: true });
+      const fileRows = parse_wb(wb);
+      overwriteRows(fileRows);
+      toast({
+        title: "Success",
+        description: "File opened successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch {
+      toast({
+        title: "Error",
+        description: "Could not load the file.",
+        status: "error",
+        duration: null,
+        isClosable: true,
+      });
+    } finally {
+      if (ref.current) {
+        ref.current.value = "";
+      }
     }
   };
 
