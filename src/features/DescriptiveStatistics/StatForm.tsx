@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useSyncExternalStore } from "react";
 import { Checkbox } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { dataStore } from "~/dataStore";
 import { GridColumnName } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { SampleStatistics, TForm } from "./types";
@@ -14,7 +14,12 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
-  const { columnData } = useContext(DataColumnsContext);
+  // const { columnData } = useContext(DataColumnsContext);
+  const { columnData } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
+  console.log(columnData);
 
   const {
     handleSubmit,

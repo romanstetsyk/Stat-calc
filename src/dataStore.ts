@@ -13,12 +13,11 @@ function emitChange() {
 }
 
 // remove trailing empty slots in sparse array
-function adjustLength() {
-  rowData.length = rowData.findLastIndex((e) => e !== undefined) + 1;
+function adjustLength(arr: unknown[]) {
+  arr.length = arr.findLastIndex((e) => e !== undefined) + 1;
 }
 
 function finalize() {
-  adjustLength();
   snapshot = { ...snapshot };
   emitChange();
 }
@@ -56,7 +55,6 @@ type OnCellsEditedParams = readonly {
 }[];
 
 function onCellsEdited(newValues: OnCellsEditedParams) {
-  console.log("onCellsEdited");
   for (const { location: cell, value: newValue } of newValues) {
     if (newValue.kind !== GridCellKind.Text) continue;
 
@@ -69,10 +67,19 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
 
     // if cell is being deleted and row exists
     if (newValue.data === "" && rowIdx in rowData) {
-      delete rowData[rowIdx][col];
-      // if after deletion row is empty, delete it
-      if (Object.keys(rowData[rowIdx]).length === 0) {
-        delete rowData[rowIdx];
+      if (rowData[rowIdx][col]) {
+        delete rowData[rowIdx][col];
+        // if after deletion row is empty, delete it
+        if (Object.keys(rowData[rowIdx]).length === 0) {
+          delete rowData[rowIdx];
+          adjustLength(rowData);
+        }
+
+        delete columnData[col][rowIdx];
+        adjustLength(columnData[col]);
+        if (columnData[col].length === 0) {
+          delete columnData[col];
+        }
       }
       continue;
     }
@@ -80,6 +87,8 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
     if (newValue.data !== "") {
       if (!(rowIdx in rowData)) rowData[rowIdx] = {};
       rowData[rowIdx][col] = newValue.data;
+      if (!(col in columnData)) columnData[col] = [];
+      columnData[col][rowIdx] = newValue.data;
     }
   }
   finalize();
