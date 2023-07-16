@@ -93,11 +93,12 @@ type OverwriteRowsParams = {
 
 function overwriteRows({ datasetId: newId, newRows }: OverwriteRowsParams) {
   snapshot.datasetId = newId;
-  rowData = newRows;
+  rowData.length = 0;
+  newRows.forEach((row, i) => (rowData[i] = row));
   finalize();
 }
 
-let rowData: GridRow[] = [];
+const rowData: GridRow[] = [];
 const columnData = getColumns(rowData);
 let snapshot = {
   datasetId: "",

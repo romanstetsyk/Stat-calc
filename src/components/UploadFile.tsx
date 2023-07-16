@@ -1,5 +1,5 @@
-import { ChangeEvent, useRef, useSyncExternalStore } from "react";
-import { Button, useToast } from "@chakra-ui/react";
+import { ChangeEvent, useRef, useState, useSyncExternalStore } from "react";
+import { Button, Center, Spinner, useToast } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { WorkBook, read, utils } from "xlsx";
 import { dataStore } from "~/dataStore";
@@ -38,11 +38,12 @@ export const UploadFile = () => {
     dataStore.subscribe,
     dataStore.getSnapshot
   );
-
+  const [loading, setLoading] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   const toast = useToast();
 
   const handleClick = async (e: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     const file = e.target.files?.[0];
     if (!file) {
       return;
@@ -73,11 +74,35 @@ export const UploadFile = () => {
       if (ref.current) {
         ref.current.value = "";
       }
+      setLoading(false);
     }
   };
 
   return (
     <>
+      {loading && (
+        <Center
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            overflow: "hidden",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+          }}
+        >
+          <Spinner
+            id="asdf"
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+      )}
       <Button onClick={() => ref.current?.click()}>Upload</Button>
       <input
         ref={ref}
