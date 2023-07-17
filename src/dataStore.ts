@@ -5,6 +5,7 @@ import {
   Item,
 } from "@glideapps/glide-data-grid";
 import { GridTrack, GridTracks } from "~/Types";
+import { createGridTrack } from "~/utils/createGridTrack";
 
 // functions with which components subscribed to this datastore
 let listeners: (() => void)[] = [];
@@ -106,26 +107,18 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
   return true;
 }
 
-// type OverwriteRowsParams = {
-//   datasetId: string;
-//   newRows: GridRow[];
-// };
+type OverwriteRowsParams = {
+  datasetId: string;
+  newRows: GridTracks;
+};
 
-// function overwriteRows({ datasetId: newId, newRows }: OverwriteRowsParams) {
-//   snapshot.datasetId = newId;
-//   rowData.length = 0;
-//   newRows.forEach((row, i) => (rowData[i] = row));
-//   finalize();
-// }
-
-function createGridTrack<GridTrack>(): GridTrack;
-function createGridTrack<GridTracks>(): GridTracks;
-
-function createGridTrack() {
-  return Object.defineProperty({}, "length", { value: 0, writable: true });
+function overwriteRows({ datasetId: newId, newRows }: OverwriteRowsParams) {
+  snapshot.datasetId = newId;
+  rowData = newRows;
+  finalize();
 }
 
-const rowData = createGridTrack<GridTracks>();
+let rowData = createGridTrack<GridTracks>();
 const colData = createGridTrack<GridTracks>();
 
 let snapshot = {
@@ -133,7 +126,7 @@ let snapshot = {
   rowData,
   colData,
   onCellsEdited,
-  // overwriteRows,
+  overwriteRows,
   getContent,
 };
 

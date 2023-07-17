@@ -3,30 +3,36 @@ import { Button, Center, Spinner, useToast } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { WorkBook, read, utils } from "xlsx";
 import { dataStore } from "~/dataStore";
-import { GridColumnName, GridRow } from "~/Types";
+import { GridTrack, GridTracks } from "~/Types";
+import { createGridTrack } from "~/utils/createGridTrack";
 
-type FileRow = { [colName: `col${number}`]: unknown } & { __rowNum__: number };
+type FileRow = { [n: number]: unknown } & { __rowNum__: number };
 
 const parse_wb = (wb: WorkBook) => {
   const sheet = wb.Sheets[wb.SheetNames[0]];
   console.log("sheet");
   const range = utils.decode_range(sheet["!ref"] ?? "A1");
-  const headers = Array.from<unknown, GridColumnName>(
+  const headers = Array.from<unknown, `${number}`>(
     { length: range.e.c - range.s.c + 1 },
-    (_, i) => `col${i + 1 + range.s.c}`
+    (_, i) => `${i + range.s.c}`
   );
   const data = utils.sheet_to_json<FileRow>(sheet, {
     header: headers,
-    blankrows: true,
+    // blankrows: true,
   });
 
-  const newRows: GridRow[] = [];
+  console.log("data", data);
+
+  const newRows = createGridTrack<GridTracks>();
   data.forEach((row) => {
     const { __rowNum__, ...rest } = row;
+    const newRow = createGridTrack<GridTrack>();
     for (const col in rest) {
-      rest[col as GridColumnName] = String(rest[col as GridColumnName]);
+      newRow[col] = String(rest[col]);
+      newRow.length += 1;
     }
-    newRows[__rowNum__] = rest as GridRow;
+
+    newRows[__rowNum__] = newRow;
   });
 
   return { datasetId: nanoid(), newRows };
