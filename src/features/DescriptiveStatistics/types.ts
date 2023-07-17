@@ -1,5 +1,4 @@
 import { DataTableRow } from "~/components/DataTable";
-import { GridColumnName } from "~/Types";
 
 export const SampleStatistics = [
   "N",
@@ -16,7 +15,7 @@ export const SampleStatistics = [
 export type SampleStatistics = (typeof SampleStatistics)[number];
 
 export type TForm = {
-  columns: GridColumnName[];
+  columns: `${number}`[];
   options: SampleStatistics[];
   withLabel: boolean;
 };

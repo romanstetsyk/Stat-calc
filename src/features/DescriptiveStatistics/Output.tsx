@@ -21,15 +21,15 @@ export const Output = ({ id, setDisplay, setOutput, formSummary }: Props) => {
   const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
   // const { columnData } = useContext(DataColumnsContext);
-  const { columnData } = useSyncExternalStore(
+  const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot
   );
   const { columns, options, withLabel } = formSummary;
 
   const data = useMemo(
-    () => calcStatistics(columns, columnData, withLabel, options),
-    [columnData, columns, options, withLabel]
+    () => calcStatistics(columns, colData, withLabel, options),
+    [colData, columns, options, withLabel]
   );
 
   useEffect(() => {

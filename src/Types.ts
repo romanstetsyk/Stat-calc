@@ -4,13 +4,16 @@ import { HistogramSession } from "./features/Histogram/types";
 
 export type GridColumnName = `col${number}`;
 
-export type ColumnValues = {
-  [key: GridColumnName]: string[];
-};
+export type ArrayLikeMutable<T> = {
+  length: number;
+  [n: number]: T;
+} & object; // exclude strings
 
-export type GridRow = {
-  [colName: GridColumnName]: string;
-};
+/**
+ * @example { 0:'a', 8:'b', length: 2 }
+ */
+export type GridTrack = ArrayLikeMutable<string>;
+export type GridTracks = ArrayLikeMutable<ArrayLikeMutable<string>>;
 
 export const H0Sign = {
   equal: "\u003D",

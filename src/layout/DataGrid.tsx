@@ -13,7 +13,7 @@ import {
 } from "@glideapps/glide-data-grid";
 import { debounce } from "lodash-es";
 import { dataStore } from "~/dataStore";
-import { GridColumnName } from "~/Types";
+import { createColName } from "~/utils/createColName";
 
 const ROW_COUNT = 300;
 const ROW_HEIGHT = 24;
@@ -23,13 +23,10 @@ const HEADER_HEIGHT = 28;
 
 const generateHeaders = (colCount: number = COL_COUNT) =>
   Array.from({ length: colCount }, (_, i) => {
-    const col: {
-      title: GridColumnName;
-      id: GridColumnName;
-      width: number;
-    } = {
-      title: `col${i + 1}`,
-      id: `col${i + 1}`,
+    const colName = createColName(i);
+    const col: GridColumn = {
+      title: colName,
+      id: colName,
       width: COL_WIDTH,
     };
     return col;
@@ -38,7 +35,7 @@ const generateHeaders = (colCount: number = COL_COUNT) =>
 export const DataGrid = () => {
   const ref = useRef<DataEditorRef>(null);
 
-  const { datasetId, rowData, onCellsEdited, getContent } =
+  const { datasetId, onCellsEdited, rowData, getContent } =
     useSyncExternalStore(dataStore.subscribe, dataStore.getSnapshot);
 
   const [rowCount, setRowCount] = useState<number>(ROW_COUNT);

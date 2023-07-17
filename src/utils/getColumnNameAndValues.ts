@@ -1,17 +1,31 @@
-import { ColumnValues, GridColumnName } from "~/Types";
+import { GridTrack, GridTracks } from "~/Types";
+import { createColName } from "./createColName";
+
+function firstKey(obj: GridTrack) {
+  for (const prop in obj) {
+    return obj[prop];
+  }
+}
 
 export const getVarName = (
-  cols: ColumnValues,
-  colHeader: GridColumnName,
+  colData: GridTracks,
+  colHeader: number,
   withLabel: boolean
 ): string => {
-  return withLabel ? `${cols[colHeader][0]} (${colHeader})` : colHeader;
+  return withLabel
+    ? `${firstKey(colData[colHeader])} (${createColName(colHeader)})`
+    : createColName(colHeader);
 };
 
 export const getVarValues = (
-  cols: ColumnValues,
-  colHeader: GridColumnName,
+  colData: GridTracks,
+  colHeader: number,
   withLabel: boolean
 ): string[] => {
-  return withLabel ? cols[colHeader].slice(1) : cols[colHeader];
+  const arr = [];
+  for (const key in colData[colHeader]) {
+    arr.push(colData[colHeader][key]);
+  }
+  console.log("arr", arr);
+  return withLabel ? arr.slice(1) : arr;
 };

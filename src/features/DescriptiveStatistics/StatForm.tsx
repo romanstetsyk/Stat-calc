@@ -3,7 +3,6 @@ import { Checkbox } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
 import { dataStore } from "~/dataStore";
-import { GridColumnName } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { SampleStatistics, TForm } from "./types";
 
@@ -14,12 +13,10 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
-  // const { columnData } = useContext(DataColumnsContext);
-  const { columnData } = useSyncExternalStore(
+  const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot
   );
-  console.log(columnData);
 
   const {
     handleSubmit,
@@ -33,19 +30,17 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
-        data={(Object.keys(columnData) as GridColumnName[])
-          .sort()
-          .map((colHeader) => ({
-            title: getVarName(columnData, colHeader, watch("withLabel")),
-            value: colHeader,
-          }))}
+        data={Object.keys(colData).map((colHeader) => ({
+          title: getVarName(colData, Number(colHeader), watch("withLabel")),
+          value: colHeader,
+        }))}
         control={control}
         defaultValue={defaultValues.columns}
         rules={{ required: "Select at least one column" }}
         error={errors["columns"]}
       />
 
-      {Object.keys(columnData).length > 0 && (
+      {Object.keys(colData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}
