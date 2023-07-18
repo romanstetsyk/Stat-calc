@@ -5,18 +5,13 @@ import {
   Item,
 } from "@glideapps/glide-data-grid";
 import { GridTrack, GridTracks } from "~/Types";
-import { createGridTrack } from "~/utils/createGridTrack";
+import { ArrayLike } from "~/utils/ArrayLike";
 
 // functions with which components subscribed to this datastore
 let listeners: (() => void)[] = [];
 function emitChange() {
   listeners.forEach((listener) => listener());
 }
-
-// remove trailing empty slots in sparse array
-// function adjustLength(arr: unknown[]) {
-//   arr.length = arr.findLastIndex((e) => e !== undefined) + 1;
-// }
 
 function finalize() {
   snapshot = { ...snapshot };
@@ -38,7 +33,7 @@ function finalize() {
 
 function getContent(cell: Item): GridCell {
   const [colIdx, rowIdx] = cell;
-  const d = rowData?.[rowIdx]?.[colIdx] ?? "";
+  const d = snapshot.rowData?.[rowIdx]?.[colIdx] ?? "";
   return {
     kind: GridCellKind.Text,
     allowOverlay: true,
@@ -60,48 +55,37 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
     const [colIdx, rowIdx] = cell;
 
     // if cell is being deleted and row doesn't exist
-    if (newValue.data === "" && !(rowIdx in rowData)) continue;
+    if (newValue.data === "" && !(rowIdx in snapshot.rowData)) continue;
 
     // if cell is being deleted and row exists
-    if (newValue.data === "" && rowIdx in rowData) {
-      if (rowData[rowIdx][colIdx]) {
-        delete rowData[rowIdx][colIdx];
-        rowData[rowIdx].length -= 1;
-
-        delete colData[colIdx][rowIdx];
-        colData[colIdx].length -= 1;
+    if (newValue.data === "" && rowIdx in snapshot.rowData) {
+      if (snapshot.rowData[rowIdx][colIdx]) {
+        snapshot.rowData[rowIdx].delete(colIdx);
+        snapshot.colData[colIdx].delete(rowIdx);
 
         // if after deletion row is empty, delete it
-        if (rowData[rowIdx].length === 0) {
-          delete rowData[rowIdx];
-          rowData.length -= 1;
+        if (snapshot.rowData[rowIdx].length === 0) {
+          snapshot.rowData.delete(rowIdx);
         }
-        if (colData[colIdx].length === 0) {
-          delete colData[colIdx];
-          colData.length -= 1;
+        if (snapshot.colData[colIdx].length === 0) {
+          snapshot.colData.delete(rowIdx);
         }
       }
       continue;
     }
 
     if (newValue.data !== "") {
-      if (!(rowIdx in rowData)) {
-        rowData[rowIdx] = createGridTrack<GridTrack>();
-        rowData.length += 1;
+      if (!(rowIdx in snapshot.rowData)) {
+        snapshot.rowData.add(rowIdx, new ArrayLike<string>());
       }
-      rowData[rowIdx][colIdx] = newValue.data;
-      rowData[rowIdx].length += 1;
+      snapshot.rowData[rowIdx].add(colIdx, newValue.data);
 
-      if (!(colIdx in colData)) {
-        colData[colIdx] = createGridTrack<GridTrack>();
-        colData.length += 1;
+      if (!(colIdx in snapshot.colData)) {
+        snapshot.colData.add(colIdx, new ArrayLike<string>());
       }
-      colData[colIdx][rowIdx] = newValue.data;
-      colData[colIdx].length += 1;
+      snapshot.colData[colIdx].add(rowIdx, newValue.data);
     }
   }
-  console.log("rowData", rowData);
-  console.log("colData", colData);
 
   finalize();
   return true;
@@ -112,19 +96,16 @@ type OverwriteRowsParams = {
   newRows: GridTracks;
 };
 
-function overwriteRows({ datasetId: newId, newRows }: OverwriteRowsParams) {
-  snapshot.datasetId = newId;
-  rowData = newRows;
+function overwriteRows({ datasetId, newRows }: OverwriteRowsParams) {
+  snapshot.datasetId = datasetId;
+  snapshot.rowData = newRows;
   finalize();
 }
 
-let rowData = createGridTrack<GridTracks>();
-const colData = createGridTrack<GridTracks>();
-
 let snapshot = {
   datasetId: "",
-  rowData,
-  colData,
+  rowData: new ArrayLike<GridTrack>(),
+  colData: new ArrayLike<GridTrack>(),
   onCellsEdited,
   overwriteRows,
   getContent,

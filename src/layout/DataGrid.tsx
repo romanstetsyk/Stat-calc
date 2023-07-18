@@ -65,7 +65,7 @@ export const DataGrid = () => {
     [columnHeaders.length, rowCount, rowData.length]
   );
 
-  console.log("DataGrid", datasetId, rowData.length);
+  console.log("DataGrid", datasetId);
   return (
     <DataEditor
       ref={ref}
