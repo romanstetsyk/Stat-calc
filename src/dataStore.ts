@@ -18,19 +18,6 @@ function finalize() {
   emitChange();
 }
 
-// function getColumns(rows: GridRow[]): ColumnValues {
-//   const columns: ColumnValues = {};
-//   for (const obj of rows) {
-//     if (!obj) continue;
-//     (Object.keys(obj) as Array<keyof GridRow>).forEach((key) => {
-//       if (obj[key] !== "") {
-//         columns[key] = (columns[key] || []).concat([obj[key]]);
-//       }
-//     });
-//   }
-//   return columns;
-// }
-
 function getContent(cell: Item): GridCell {
   const [colIdx, rowIdx] = cell;
   const d = snapshot.rowData?.[rowIdx]?.[colIdx] ?? "";
@@ -86,7 +73,7 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
       snapshot.colData[colIdx].add(rowIdx, newValue.data);
     }
   }
-
+  console.log(snapshot.rowData, snapshot.colData);
   finalize();
   return true;
 }
@@ -94,11 +81,13 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
 type OverwriteRowsParams = {
   datasetId: string;
   newRows: GridTracks;
+  newCols: GridTracks;
 };
 
-function overwriteRows({ datasetId, newRows }: OverwriteRowsParams) {
+function overwriteRows({ datasetId, newRows, newCols }: OverwriteRowsParams) {
   snapshot.datasetId = datasetId;
   snapshot.rowData = newRows;
+  snapshot.colData = newCols;
   finalize();
 }
 

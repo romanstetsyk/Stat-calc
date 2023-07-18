@@ -22,17 +22,25 @@ const parse_wb = (wb: WorkBook) => {
   });
 
   const newRows = new ArrayLike<GridTrack>();
+  const newCols = new ArrayLike<GridTrack>();
+
   data.forEach((row) => {
     const { __rowNum__, ...rest } = row;
     const newRow = new ArrayLike<string>();
     for (const col in rest) {
       newRow.add(Number(col), String(rest[col]));
+
+      if (!(col in newCols)) {
+        const newCol = new ArrayLike<string>();
+        newCols.add(Number(col), newCol);
+      }
+      newCols[col].add(__rowNum__, String(rest[col]));
     }
 
     newRows.add(__rowNum__, newRow);
   });
 
-  return { datasetId: nanoid(), newRows };
+  return { datasetId: nanoid(), newRows, newCols };
 };
 
 export const UploadFile = () => {

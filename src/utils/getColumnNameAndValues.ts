@@ -26,6 +26,5 @@ export const getVarValues = (
   for (const key in colData[colHeader]) {
     arr.push(colData[colHeader][key]);
   }
-  console.log("arr", arr);
   return withLabel ? arr.slice(1) : arr;
 };
