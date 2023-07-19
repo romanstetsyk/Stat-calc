@@ -55,7 +55,7 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
           snapshot.rowData.delete(rowIdx);
         }
         if (snapshot.colData[colIdx].length === 0) {
-          snapshot.colData.delete(rowIdx);
+          snapshot.colData.delete(colIdx);
         }
       }
       continue;
