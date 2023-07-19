@@ -1,15 +1,24 @@
 import { MenuItem, Modal, ModalOverlay, useDisclosure } from "@chakra-ui/react";
+import { OpenModalBtn } from "~/components/OpenModalBtn";
 import { Content } from "./Content";
 
-export const StatModal = () => {
+type Props = {
+  id?: string;
+};
+
+export const StatModal = ({ id }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <MenuItem onClick={onOpen}>Group Numeric Data</MenuItem>
+      {id ? (
+        <OpenModalBtn onOpen={onOpen} />
+      ) : (
+        <MenuItem onClick={onOpen}>Group Numeric Data</MenuItem>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
         <ModalOverlay />
-        <Content onClose={onClose} />
+        <Content onClose={onClose} id={id} />
       </Modal>
     </>
   );

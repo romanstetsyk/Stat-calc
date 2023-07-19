@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { SessionContext } from "~/contexts/SessionContext";
 import { StatModal as DescriptiveStatisticsModal } from "~/features/DescriptiveStatistics/StatModal";
 import { StatModal as FrequencyDistributionModal } from "~/features/FrequencyDistribution/StatModal";
+import { StatModal as GroupNumericDataModal } from "~/features/GroupNumericData/StatModal";
 import { StatModal as HistogramModal } from "~/features/Histogram/StatModal";
 
 type Props = {
@@ -21,6 +22,9 @@ export const UpdateBtn = ({ id }: Props) => {
 
     case "histogram":
       return <HistogramModal id={id} />;
+
+    case "groupNumericalData":
+      return <GroupNumericDataModal id={id} />;
 
     default:
       throw new Error("unknown session type");

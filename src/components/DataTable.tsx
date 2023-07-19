@@ -13,12 +13,12 @@ export type DataTableRow<
   Title extends string = "column"
 > = Title extends "column"
   ? Partial<{
-      [key in T]: string;
+      [key in T]: string | number;
     }>
   : Partial<{
-      [key in T]: string;
+      [key in T]: string | number;
     }> &
-      Record<Title, string>;
+      Record<Title, string | number>;
 
 //
 type Props<T extends string, Title extends string = "column"> = {

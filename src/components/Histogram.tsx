@@ -9,7 +9,7 @@ import {
   TooltipItem,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { Bin } from "~/utils/computeBins";
+import { Bin } from "~/utils/Tabulate";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(

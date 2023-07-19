@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useSyncExternalStore } from "react";
 import {
   Checkbox,
   FormControl,
@@ -10,11 +10,11 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
 import { InputField } from "~/components/InputField";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { BinMethod, GridColumnName } from "~/Types";
+import { dataStore } from "~/dataStore";
+import { BinMethod } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { isFiniteNumber } from "~/utils/validators";
-import { FreqDist, TForm } from "./types";
+import { FrequencyDistribution, TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -23,7 +23,10 @@ type Props = {
 };
 
 export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
-  const { columnData } = useContext(DataColumnsContext);
+  const { colData } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
 
   const {
     handleSubmit,
@@ -40,19 +43,17 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
-        data={(Object.keys(columnData) as GridColumnName[])
-          .sort()
-          .map((colHeader) => ({
-            title: getVarName(columnData, colHeader, watch("withLabel")),
-            value: colHeader,
-          }))}
+        data={Object.keys(colData).map((colHeader) => ({
+          title: getVarName(colData, Number(colHeader), watch("withLabel")),
+          value: colHeader,
+        }))}
         control={control}
         defaultValue={defaultValues.columns}
         rules={{ required: "Select at least one column" }}
         error={errors["columns"]}
       />
 
-      {Object.keys(columnData).length > 0 && (
+      {Object.keys(colData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}
@@ -73,7 +74,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Statistics"
         name="options"
-        data={[...FreqDist]}
+        data={[...FrequencyDistribution]}
         control={control}
         defaultValue={defaultValues.options}
         rules={{ required: "Select at least one statistic" }}
@@ -105,7 +106,10 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                   register={register}
                   error={errors?.manual?.start}
                   rules={{
-                    validate: (value) => value === "" || isFiniteNumber(value),
+                    validate: (value) =>
+                      watch("method") !== BinMethod.MANUAL ||
+                      value === "" ||
+                      isFiniteNumber(value),
                   }}
                 />
                 <InputField
@@ -118,12 +122,34 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
                       value: watch("method") === BinMethod.MANUAL,
                       message: "This value is required",
                     },
-                    validate: isFiniteNumber,
+                    validate: (value) =>
+                      watch("method") !== BinMethod.MANUAL ||
+                      isFiniteNumber(value),
                   }}
                 />
               </HStack>
 
-              {/* <Radio value={BinMethod.OTHER}>Other</Radio> */}
+              <Radio value={BinMethod.SQUARE_ROOT}>Square Root</Radio>
+
+              <HStack
+                ml={8}
+                as="fieldset"
+                disabled={watch("method") !== BinMethod.SQUARE_ROOT}
+                opacity={watch("method") !== BinMethod.SQUARE_ROOT ? 0.5 : 1}
+              >
+                <InputField
+                  name="squareRoot.start"
+                  label="Start"
+                  register={register}
+                  error={errors?.squareRoot?.start}
+                  rules={{
+                    validate: (value) =>
+                      watch("method") !== BinMethod.SQUARE_ROOT ||
+                      value === "" ||
+                      isFiniteNumber(value),
+                  }}
+                />
+              </HStack>
             </RadioGroup>
           )}
         />

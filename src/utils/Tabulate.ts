@@ -38,7 +38,7 @@ type SquareRoot = {
 //   n: number;
 // };
 
-export type HistogramTableParameters = Manual | SquareRoot;
+export type TabulateParams = Manual | SquareRoot;
 
 type Config = {
   allowHidden?: boolean;
@@ -76,7 +76,7 @@ export class Tabulate {
   ticks: number[] = [];
   domain: [number, number] = [NaN, NaN]; // lower limit of first class, upper limit of last class
 
-  constructor(paramObj: HistogramTableParameters, config: Config) {
+  constructor(paramObj: TabulateParams, config: Config) {
     this.config = {
       allowHidden: config.allowHidden ?? false,
       showHidden: config.showHidden ?? true,

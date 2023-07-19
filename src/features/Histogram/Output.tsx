@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { dataStore } from "~/dataStore";
@@ -18,7 +18,7 @@ type Props = {
 export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
   const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
-  const { colData } = React.useSyncExternalStore(
+  const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot
   );

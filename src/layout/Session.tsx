@@ -6,6 +6,7 @@ import { SessionItemWrapper } from "~/components/Session/SessionItemWrapper";
 import { SessionContext } from "~/contexts/SessionContext";
 import { SampleStatistics } from "~/features/DescriptiveStatistics/types";
 import { OutputContent as FrequencyDistOutputContent } from "~/features/FrequencyDistribution/OutputContent";
+import { OutputContent as GroupedDataOutputContent } from "~/features/GroupNumericData/OutputContent";
 import { OutputContent as HistogramOutputContent } from "~/features/Histogram/OutputContent";
 import { TSession } from "~/Types";
 import { layoutFunction } from "~/utils/layoutFunction";
@@ -108,6 +109,27 @@ export const Session = () => {
                   overflow={"auto"}
                 >
                   <HistogramOutputContent outputData={data} key={timestamp} />
+                </CardBody>
+              </SessionItemWrapper>
+            );
+          } else if (item.type === "groupNumericalData") {
+            const { id, title, data, timestamp } = item;
+            return (
+              <SessionItemWrapper
+                key={id}
+                id={id}
+                title={title}
+                gridRef={gridRef}
+              >
+                <CardBody
+                  px={3}
+                  py={2}
+                  display={"flex"}
+                  gap={4}
+                  flexDirection={"column"}
+                  overflow={"auto"}
+                >
+                  <GroupedDataOutputContent outputData={data} key={timestamp} />
                 </CardBody>
               </SessionItemWrapper>
             );

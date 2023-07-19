@@ -1,5 +1,5 @@
 import { BinMethod } from "~/Types";
-import { Tabulate } from "~/utils/computeBins";
+import { Tabulate } from "~/utils/Tabulate";
 
 export const FrequencyDistribution = [
   "Frequency",
