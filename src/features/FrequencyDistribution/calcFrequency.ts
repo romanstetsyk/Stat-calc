@@ -1,20 +1,20 @@
 import gcusum from "@stdlib/blas-ext-base-gcusum";
 import tabulate from "@stdlib/utils-tabulate";
 import { DataTableRow } from "~/components/DataTable";
-import { ColumnValues, GridColumnName } from "~/Types";
+import { ArrayLike } from "~/utils/ArrayLike";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { parseNumber } from "~/utils/parseNumber";
 import { FreqDist, OutputReturn, topLeftCell } from "./types";
 
 export const calcFrequency = (
-  columns: GridColumnName[],
-  columnData: ColumnValues,
+  columns: `${number}`[],
+  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   withLabel: boolean,
   options: FreqDist[]
 ): OutputReturn[] =>
   columns.map((colHeader) => {
-    const varName = getVarName(columnData, colHeader, withLabel);
-    const varValues = getVarValues(columnData, colHeader, withLabel);
+    const varName = getVarName(colData, Number(colHeader), withLabel);
+    const varValues = getVarValues(colData, Number(colHeader), withLabel);
     const n = varValues.length;
     const out = tabulate(varValues);
 

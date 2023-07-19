@@ -1,5 +1,4 @@
 import { DataTableRow } from "~/components/DataTable";
-import { GridColumnName } from "~/Types";
 
 export const FreqDist = [
   "Frequency",
@@ -11,7 +10,7 @@ export const FreqDist = [
 export type FreqDist = (typeof FreqDist)[number];
 
 export type TForm = {
-  columns: GridColumnName[];
+  columns: `${number}`[];
   options: FreqDist[];
   withLabel: boolean;
 };

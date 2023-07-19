@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useContext, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { dataStore } from "~/dataStore";
 import { DisplayOptions } from "~/Types";
 import { calcFrequency } from "./calcFrequency";
 import { OutputContent } from "./OutputContent";
@@ -18,12 +18,15 @@ type Props = {
 export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
   const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
-  const { columnData } = useContext(DataColumnsContext);
+  const { colData } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
   const { columns, options, withLabel } = formSummary;
 
   const arrOfTables = useMemo(
-    () => calcFrequency(columns, columnData, withLabel, options),
-    [columnData, columns, options, withLabel]
+    () => calcFrequency(columns, colData, withLabel, options),
+    [colData, columns, options, withLabel]
   );
 
   useEffect(() => {

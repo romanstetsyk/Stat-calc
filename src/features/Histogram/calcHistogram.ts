@@ -1,18 +1,19 @@
-import { BinMethod, ColumnValues } from "~/Types";
+import { BinMethod } from "~/Types";
+import { ArrayLike } from "~/utils/ArrayLike";
 import { isFiniteNumberString } from "~/utils/assertions";
 import { HistogramTableParameters, Tabulate } from "~/utils/computeBins";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { OutputReturn, TForm } from "./types";
 
 export const calcHistogram = (
-  columnData: ColumnValues,
+  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   formSummary: TForm
 ): OutputReturn[] => {
   const { withLabel, columns, options, method } = formSummary;
 
   return columns.map((colHeader) => {
-    const varName = getVarName(columnData, colHeader, withLabel);
-    const varValues = getVarValues(columnData, colHeader, withLabel);
+    const varName = getVarName(colData, Number(colHeader), withLabel);
+    const varValues = getVarValues(colData, Number(colHeader), withLabel);
     const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
 
     let tabulateParams: HistogramTableParameters;

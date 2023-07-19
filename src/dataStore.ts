@@ -73,7 +73,7 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
       snapshot.colData[colIdx].add(rowIdx, newValue.data);
     }
   }
-  console.log(snapshot.rowData, snapshot.colData);
+
   finalize();
   return true;
 }

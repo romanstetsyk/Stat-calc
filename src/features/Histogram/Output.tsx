@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useContext, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
+import { dataStore } from "~/dataStore";
 import { DisplayOptions } from "~/Types";
 import { calcHistogram } from "./calcHistogram";
 import { OutputContent } from "./OutputContent";
@@ -16,13 +16,15 @@ type Props = {
 };
 
 export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
-  console.log("hist");
   const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
-  const { columnData } = useContext(DataColumnsContext);
+  const { colData } = React.useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
   const arrOfTables = useMemo(
-    () => calcHistogram(columnData, formSummary),
-    [columnData, formSummary]
+    () => calcHistogram(colData, formSummary),
+    [colData, formSummary]
   );
 
   useEffect(() => {

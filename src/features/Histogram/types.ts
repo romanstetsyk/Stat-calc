@@ -1,6 +1,4 @@
-// import { GridColumnName } from "../../Types";
-
-import { BinMethod, GridColumnName } from "~/Types";
+import { BinMethod } from "~/Types";
 import { Tabulate } from "~/utils/computeBins";
 
 export const FrequencyDistribution = [
@@ -13,7 +11,7 @@ export const FrequencyDistribution = [
 export type FrequencyDistribution = (typeof FrequencyDistribution)[number];
 
 export type TForm = {
-  columns: GridColumnName[];
+  columns: `${number}`[];
   options: FrequencyDistribution;
   withLabel: boolean;
   method: BinMethod;

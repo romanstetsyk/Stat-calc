@@ -139,7 +139,6 @@ export const Histogram = <T,>({
       },
     ],
   };
-  console.log(table);
 
   return (
     <div
