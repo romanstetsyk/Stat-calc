@@ -1,14 +1,14 @@
-import { GridTrack, GridTracks } from "~/Types";
+import { ArrayLike } from "./ArrayLike";
 import { createColName } from "./createColName";
 
-function firstKey(obj: GridTrack) {
+function firstKey(obj: InstanceType<typeof ArrayLike<string>>) {
   for (const prop in obj) {
     return obj[prop];
   }
 }
 
 export const getVarName = (
-  colData: GridTracks,
+  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   colHeader: number,
   withLabel: boolean
 ): string => {
@@ -18,7 +18,7 @@ export const getVarName = (
 };
 
 export const getVarValues = (
-  colData: GridTracks,
+  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   colHeader: number,
   withLabel: boolean
 ): string[] => {

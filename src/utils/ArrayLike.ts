@@ -29,8 +29,4 @@ export class ArrayLike<T> implements ArrayLike<T> {
       this.length -= 1;
     }
   }
-
-  keys() {
-    return Object.keys(this).map(Number);
-  }
 }

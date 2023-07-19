@@ -4,7 +4,7 @@ import range from "@stdlib/stats-base-range";
 import stdev from "@stdlib/stats-base-stdev";
 import variance from "@stdlib/stats-base-variance";
 import { DataTableRow } from "~/components/DataTable";
-import { GridTracks } from "~/Types";
+import { ArrayLike } from "~/utils/ArrayLike";
 import { isFiniteNumberString } from "~/utils/assertions";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { parseNumber } from "~/utils/parseNumber";
@@ -14,7 +14,7 @@ const DECIMAL = 6;
 
 export const calcStatistics = (
   columns: `${number}`[],
-  colData: GridTracks,
+  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   withLabel: boolean,
   options: SampleStatistics[]
 ) =>
