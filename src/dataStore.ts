@@ -4,7 +4,7 @@ import {
   GridCellKind,
   Item,
 } from "@glideapps/glide-data-grid";
-import { GridTrack, GridTracks } from "~/Types";
+
 import { ArrayLike } from "~/utils/ArrayLike";
 
 // functions with which components subscribed to this datastore
@@ -80,8 +80,8 @@ function onCellsEdited(newValues: OnCellsEditedParams) {
 
 type OverwriteRowsParams = {
   datasetId: string;
-  newRows: GridTracks;
-  newCols: GridTracks;
+  newRows: ArrayLike<ArrayLike<string>>;
+  newCols: ArrayLike<ArrayLike<string>>;
 };
 
 function overwriteRows({ datasetId, newRows, newCols }: OverwriteRowsParams) {
@@ -93,8 +93,8 @@ function overwriteRows({ datasetId, newRows, newCols }: OverwriteRowsParams) {
 
 let snapshot = {
   datasetId: "",
-  rowData: new ArrayLike<GridTrack>(),
-  colData: new ArrayLike<GridTrack>(),
+  rowData: new ArrayLike<ArrayLike<string>>(),
+  colData: new ArrayLike<ArrayLike<string>>(),
   onCellsEdited,
   overwriteRows,
   getContent,

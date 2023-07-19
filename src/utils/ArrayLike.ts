@@ -1,6 +1,4 @@
-import { ArrayLikeMutable } from "~/Types";
-
-export class ArrayLike<T> implements ArrayLikeMutable<T> {
+export class ArrayLike<T> implements ArrayLike<T> {
   public length;
   [key: number]: T;
 
@@ -30,5 +28,9 @@ export class ArrayLike<T> implements ArrayLikeMutable<T> {
       delete this[idx];
       this.length -= 1;
     }
+  }
+
+  keys() {
+    return Object.keys(this).map(Number);
   }
 }

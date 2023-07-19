@@ -3,7 +3,6 @@ import { Button, Center, Spinner, useToast } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { WorkBook, read, utils } from "xlsx";
 import { dataStore } from "~/dataStore";
-import { GridTrack } from "~/Types";
 import { ArrayLike } from "~/utils/ArrayLike";
 
 type FileRow = { [n: number]: unknown } & { __rowNum__: number };
@@ -21,8 +20,8 @@ const parse_wb = (wb: WorkBook) => {
     // blankrows: true,
   });
 
-  const newRows = new ArrayLike<GridTrack>();
-  const newCols = new ArrayLike<GridTrack>();
+  const newRows = new ArrayLike<ArrayLike<string>>();
+  const newCols = new ArrayLike<ArrayLike<string>>();
 
   data.forEach((row) => {
     const { __rowNum__, ...rest } = row;
