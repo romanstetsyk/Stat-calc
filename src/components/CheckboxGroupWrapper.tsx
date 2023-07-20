@@ -1,3 +1,4 @@
+import { useId } from "react";
 import {
   Box,
   Checkbox,
@@ -37,6 +38,7 @@ export const CheckboxGroupWrapper = <T extends FieldValues>({
   rules,
   error,
 }: Props<T>) => {
+  const checkboxID = useId();
   return (
     <FormControl isInvalid={Boolean(error)} as="fieldset" my={2}>
       {label && (
@@ -66,6 +68,7 @@ export const CheckboxGroupWrapper = <T extends FieldValues>({
                     )
                     .map(({ title, value }) => (
                       <Checkbox
+                        id={value + checkboxID}
                         key={value}
                         name={name}
                         value={value}

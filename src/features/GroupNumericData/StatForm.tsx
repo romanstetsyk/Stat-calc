@@ -60,6 +60,7 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
           defaultValue={defaultValues.withLabel}
           render={({ field: { onChange, value } }) => (
             <Checkbox
+              id={"withLabel" + formId}
               pl={2}
               display={"flex"}
               isChecked={value}
