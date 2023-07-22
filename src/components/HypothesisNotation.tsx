@@ -1,4 +1,4 @@
-import { H0Sign, H1Sign, HypothesisSignMap } from "../Types";
+import { H0Sign, H1Sign, HypothesisSignMap } from "~/Types";
 
 export const PopulationMean = () => {
   return <>&mu;</>;
