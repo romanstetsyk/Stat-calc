@@ -2,6 +2,7 @@ import { DescriptiveStatisticsSession } from "~/features/DescriptiveStatistics/t
 import { FreqDistSession } from "~/features/FrequencyDistribution/types";
 import { GroupNumericalDataSession } from "./features/GroupNumericData/types";
 import { HistogramSession } from "./features/Histogram/types";
+import { Z1SummarySession } from "./features/OneSampleZSummary/types";
 
 export type GridColumnName = `col${number}`;
 
@@ -36,7 +37,8 @@ export type TSession =
   | DescriptiveStatisticsSession
   | FreqDistSession
   | HistogramSession
-  | GroupNumericalDataSession;
+  | GroupNumericalDataSession
+  | Z1SummarySession;
 
 export const enum BinMethod {
   MANUAL = "MANUAL",

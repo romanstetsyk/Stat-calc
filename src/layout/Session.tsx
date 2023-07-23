@@ -8,6 +8,7 @@ import { SampleStatistics } from "~/features/DescriptiveStatistics/types";
 import { OutputContent as FrequencyDistOutputContent } from "~/features/FrequencyDistribution/OutputContent";
 import { OutputContent as GroupedDataOutputContent } from "~/features/GroupNumericData/OutputContent";
 import { OutputContent as HistogramOutputContent } from "~/features/Histogram/OutputContent";
+import { OutputContent as Z1OutputContent } from "~/features/OneSampleZSummary/OutputContent";
 import { TSession } from "~/Types";
 import { layoutFunction } from "~/utils/layoutFunction";
 
@@ -133,6 +134,26 @@ export const Session = () => {
                 </CardBody>
               </SessionItemWrapper>
             );
+          } else if (item.type === "z1summary") {
+            const { id, title, data, timestamp, formSummary } = item;
+            return (
+              <SessionItemWrapper
+                key={id}
+                id={id}
+                title={title}
+                gridRef={gridRef}
+              >
+                <CardBody px={3} py={2} overflow={"auto"}>
+                  <Z1OutputContent
+                    outputData={data}
+                    formSummary={formSummary}
+                    key={timestamp}
+                  />
+                </CardBody>
+              </SessionItemWrapper>
+            );
+          } else {
+            console.error("Unknown session type");
           }
         }}
       />
