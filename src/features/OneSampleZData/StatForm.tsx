@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import {
   Box,
   Checkbox,
@@ -13,8 +13,8 @@ import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
 import { HTFormPart } from "~/components/HTFormPart";
 import { PopulationMean } from "~/components/HypothesisNotation";
 import { InputField } from "~/components/InputField";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { GridColumnName, Perform } from "~/Types";
+import { dataStore } from "~/dataStore";
+import { Perform } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { isPositiveNumber, isValidLevel } from "~/utils/validators";
 import { TForm } from "./types";
@@ -26,7 +26,10 @@ type Props = {
 };
 
 export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
-  const { columnData } = useContext(DataColumnsContext);
+  const { colData } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
 
   const {
     register,
@@ -44,19 +47,17 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
-        data={(Object.keys(columnData) as GridColumnName[])
-          .sort()
-          .map((colHeader) => ({
-            title: getVarName(columnData, colHeader, watch("withLabel")),
-            value: colHeader,
-          }))}
+        data={Object.keys(colData).map((colHeader) => ({
+          title: getVarName(colData, Number(colHeader), watch("withLabel")),
+          value: colHeader,
+        }))}
         control={control}
         defaultValue={defaultValues.columns}
         rules={{ required: "Select at least one column" }}
         error={errors["columns"]}
       />
 
-      {Object.keys(columnData).length > 0 && (
+      {Object.keys(colData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}
