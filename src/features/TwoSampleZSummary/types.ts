@@ -1,3 +1,4 @@
+import { DataTableRow } from "~/components/DataTable";
 import { H1Sign, Perform } from "~/Types";
 
 export const SampleStatistics = [
@@ -39,4 +40,27 @@ export type TForm = {
   nullValue: string;
   alpha: string;
   level: string;
+};
+
+export type HTReturn = {
+  perform: Perform.HypothesisTest;
+  HTData: DataTableRow<HTColumns, "">[];
+  HTStats: ["", ...HTColumns[]];
+  CIData?: DataTableRow<CIColumns, "">[];
+  CIStats?: ["", ...CIColumns[]];
+  sampleData: DataTableRow<SampleStatistics, "">[];
+  sampleStats: ["", ...SampleStatistics[]];
+};
+
+export type CIReturn = {
+  perform: Perform.ConfidenceInerval;
+  CIData: DataTableRow<CIColumns, "">[];
+  CIStats: ["", ...CIColumns[]];
+  sampleData: DataTableRow<SampleStatistics, "">[];
+  sampleStats: ["", ...SampleStatistics[]];
+};
+
+export type OutputReturn = {
+  formSummary: TForm;
+  outputData: HTReturn | CIReturn;
 };
