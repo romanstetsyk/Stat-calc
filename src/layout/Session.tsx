@@ -8,7 +8,8 @@ import { SampleStatistics } from "~/features/DescriptiveStatistics/types";
 import { OutputContent as FrequencyDistOutputContent } from "~/features/FrequencyDistribution/OutputContent";
 import { OutputContent as GroupedDataOutputContent } from "~/features/GroupNumericData/OutputContent";
 import { OutputContent as HistogramOutputContent } from "~/features/Histogram/OutputContent";
-import { OutputContent as Z1OutputContent } from "~/features/OneSampleZSummary/OutputContent";
+import { OutputContent as Z1DataOutputContent } from "~/features/OneSampleZData/OutputContent";
+import { OutputContent as Z1SummaryOutputContent } from "~/features/OneSampleZSummary/OutputContent";
 import { TSession } from "~/Types";
 import { layoutFunction } from "~/utils/layoutFunction";
 
@@ -144,7 +145,25 @@ export const Session = () => {
                 gridRef={gridRef}
               >
                 <CardBody px={3} py={2} overflow={"auto"}>
-                  <Z1OutputContent
+                  <Z1SummaryOutputContent
+                    outputData={data}
+                    formSummary={formSummary}
+                    key={timestamp}
+                  />
+                </CardBody>
+              </SessionItemWrapper>
+            );
+          } else if (item.type === "z1data") {
+            const { id, title, data, timestamp, formSummary } = item;
+            return (
+              <SessionItemWrapper
+                key={id}
+                id={id}
+                title={title}
+                gridRef={gridRef}
+              >
+                <CardBody px={3} py={2} overflow={"auto"}>
+                  <Z1DataOutputContent
                     outputData={data}
                     formSummary={formSummary}
                     key={timestamp}

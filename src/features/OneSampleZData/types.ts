@@ -50,3 +50,12 @@ export type OutputReturn = {
   formSummary: TForm;
   outputData: HTReturn | CIReturn;
 };
+
+export type Z1DataSession = {
+  id: string;
+  timestamp: number;
+  title: string;
+  type: "z1data";
+  data: HTReturn | CIReturn;
+  formSummary: TForm;
+};
