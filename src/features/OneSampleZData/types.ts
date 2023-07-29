@@ -4,6 +4,7 @@ import { H1Sign, Perform } from "~/Types";
 export const SampleStatistics = [
   "N",
   "Mean",
+  "S.Stdev",
   "Known Stdev",
   "Std.Err",
 ] as const;

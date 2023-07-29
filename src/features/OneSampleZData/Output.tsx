@@ -25,17 +25,20 @@ export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
   );
   const { perform } = formSummary;
 
-  let outputData: CIReturn | HTReturn;
-  switch (perform) {
-    case Perform.HypothesisTest:
-      outputData = calcHT(formSummary, colData);
-      break;
-    case Perform.ConfidenceInerval:
-      outputData = calcCI(formSummary, colData);
-      break;
-    default:
-      throw new Error("Unknown z-test type");
-  }
+  const outputData: CIReturn | HTReturn = useMemo(() => {
+    let result;
+    switch (perform) {
+      case Perform.HypothesisTest:
+        result = calcHT(formSummary, colData);
+        break;
+      case Perform.ConfidenceInerval:
+        result = calcCI(formSummary, colData);
+        break;
+      default:
+        throw new Error("Unknown z-test type");
+    }
+    return result;
+  }, [colData, formSummary, perform]);
 
   useEffect(() => {
     setOutput({

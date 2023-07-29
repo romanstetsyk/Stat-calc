@@ -80,7 +80,10 @@ export const calcHT = (
         "": varName,
         N: n.toString(),
         Mean: parseNumber(xbar, DECIMAL),
-        "Known Stdev": parseNumber(stdevApprox, DECIMAL),
+        [knownStdev ? "Known Stdev" : "S.Stdev"]: parseNumber(
+          stdevApprox,
+          DECIMAL
+        ),
         "Std.Err": parseNumber(stderr, DECIMAL),
         "Z-crit": parseNumber(zcrit, DECIMAL),
         Alpha: parseNumber(alpha),
@@ -96,7 +99,7 @@ export const calcHT = (
     "",
     "N",
     "Mean",
-    "Known Stdev",
+    knownStdev ? "Known Stdev" : "S.Stdev",
     "Std.Err",
     "Z-crit",
     "Z-stat",

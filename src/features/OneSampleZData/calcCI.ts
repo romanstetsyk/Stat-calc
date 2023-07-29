@@ -36,7 +36,10 @@ export const calcCI = (
         "": varName,
         N: n.toString(),
         Mean: parseNumber(xbar, DECIMAL),
-        "Known Stdev": parseNumber(stdevApprox, DECIMAL),
+        [knownStdev ? "Known Stdev" : "S.Stdev"]: parseNumber(
+          stdevApprox,
+          DECIMAL
+        ),
         "Std.Err": parseNumber(stderr, DECIMAL),
         Level: level,
         "Z-crit": parseNumber(zcrit, DECIMAL),
@@ -52,7 +55,7 @@ export const calcCI = (
     "",
     "N",
     "Mean",
-    "Known Stdev",
+    knownStdev ? "Known Stdev" : "S.Stdev",
     "Std.Err",
     "Level",
     "Z-crit",
