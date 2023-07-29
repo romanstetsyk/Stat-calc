@@ -64,3 +64,12 @@ export type OutputReturn = {
   formSummary: TForm;
   outputData: HTReturn | CIReturn;
 };
+
+export type Z2SummarySession = {
+  id: string;
+  timestamp: number;
+  title: string;
+  type: "z2summary";
+  data: HTReturn | CIReturn;
+  formSummary: TForm;
+};

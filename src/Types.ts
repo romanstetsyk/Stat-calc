@@ -4,6 +4,7 @@ import { GroupNumericalDataSession } from "./features/GroupNumericData/types";
 import { HistogramSession } from "./features/Histogram/types";
 import { Z1DataSession } from "./features/OneSampleZData/types";
 import { Z1SummarySession } from "./features/OneSampleZSummary/types";
+import { Z2SummarySession } from "./features/TwoSampleZSummary/types";
 
 export type GridColumnName = `col${number}`;
 
@@ -40,7 +41,8 @@ export type TSession =
   | HistogramSession
   | GroupNumericalDataSession
   | Z1SummarySession
-  | Z1DataSession;
+  | Z1DataSession
+  | Z2SummarySession;
 
 export const enum BinMethod {
   MANUAL = "MANUAL",
