@@ -56,7 +56,7 @@ export const calcHT = (
           break;
         case "lessThan":
           ciLevel = 1 - 2 * Number(alpha);
-          zcrit = quantile(Number(alpha), 0, 1);
+          zcrit = -quantile(Number(alpha), 0, 1);
           pvalue = cdf(zstat, 0, 1);
           break;
         default:

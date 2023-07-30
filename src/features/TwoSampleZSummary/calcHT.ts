@@ -46,7 +46,7 @@ export const calcHT = (formSummary: TForm): HTReturn => {
       break;
     case "lessThan":
       ciLevel = 1 - 2 * alpha;
-      zcrit = quantile(alpha, 0, 1);
+      zcrit = -quantile(alpha, 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     default:
