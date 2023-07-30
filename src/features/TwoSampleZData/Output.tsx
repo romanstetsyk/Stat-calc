@@ -1,19 +1,24 @@
 import * as React from "react";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { Button } from "@chakra-ui/react";
+import { nanoid } from "nanoid";
 import { dataStore } from "~/dataStore";
 import { DisplayOptions, Perform } from "~/Types";
 import { calcCI } from "./calcCI";
 import { calcHT } from "./calcHT";
 import { OutputContent } from "./OutputContent";
-import { CIReturn, HTReturn, TForm } from "./types";
+import { CIReturn, HTReturn, TForm, Z2DataSession } from "./types";
 
 type Props = {
+  id?: string;
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
+  setOutput: React.Dispatch<React.SetStateAction<Z2DataSession | undefined>>;
 };
 
-export const Output = ({ setDisplay, formSummary }: Props) => {
+export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
+  const outputId = useMemo(() => (id ? id : nanoid()), [id]);
+
   const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot
@@ -35,6 +40,17 @@ export const Output = ({ setDisplay, formSummary }: Props) => {
     }
     return result;
   }, [colData, formSummary, perform]);
+
+  useEffect(() => {
+    setOutput({
+      id: outputId,
+      timestamp: Date.now(),
+      title: "Two Sample Z",
+      type: "z2data",
+      data: outputData,
+      formSummary,
+    });
+  }, [formSummary, outputData, outputId, setOutput]);
 
   return (
     <>

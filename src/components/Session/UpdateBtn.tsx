@@ -6,6 +6,7 @@ import { StatModal as GroupNumericDataModal } from "~/features/GroupNumericData/
 import { StatModal as HistogramModal } from "~/features/Histogram/StatModal";
 import { StatModal as OneSampleZDataModal } from "~/features/OneSampleZData/StatModal";
 import { StatModal as OneSampleZSummaryModal } from "~/features/OneSampleZSummary/StatModal";
+import { StatModal as TwoSampleZDataModal } from "~/features/TwoSampleZData/StatModal";
 import { StatModal as TwoSampleZSummaryModal } from "~/features/TwoSampleZSummary/StatModal";
 
 type Props = {
@@ -37,6 +38,9 @@ export const UpdateBtn = ({ id }: Props) => {
 
     case "z2summary":
       return <TwoSampleZSummaryModal id={id} />;
+
+    case "z2data":
+      return <TwoSampleZDataModal id={id} />;
 
     default:
       throw new Error("unknown session type");

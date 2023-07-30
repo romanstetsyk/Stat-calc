@@ -10,6 +10,7 @@ import { OutputContent as GroupedDataOutputContent } from "~/features/GroupNumer
 import { OutputContent as HistogramOutputContent } from "~/features/Histogram/OutputContent";
 import { OutputContent as Z1DataOutputContent } from "~/features/OneSampleZData/OutputContent";
 import { OutputContent as Z1SummaryOutputContent } from "~/features/OneSampleZSummary/OutputContent";
+import { OutputContent as Z2DataOutputContent } from "~/features/TwoSampleZData/OutputContent";
 import { OutputContent as Z2SummaryOutputContent } from "~/features/TwoSampleZSummary/OutputContent";
 import { TSession } from "~/Types";
 import { layoutFunction } from "~/utils/layoutFunction";
@@ -183,6 +184,24 @@ export const Session = () => {
               >
                 <CardBody px={3} py={2} overflow={"auto"}>
                   <Z2SummaryOutputContent
+                    outputData={data}
+                    formSummary={formSummary}
+                    key={timestamp}
+                  />
+                </CardBody>
+              </SessionItemWrapper>
+            );
+          } else if (item.type === "z2data") {
+            const { id, title, data, timestamp, formSummary } = item;
+            return (
+              <SessionItemWrapper
+                key={id}
+                id={id}
+                title={title}
+                gridRef={gridRef}
+              >
+                <CardBody px={3} py={2} overflow={"auto"}>
+                  <Z2DataOutputContent
                     outputData={data}
                     formSummary={formSummary}
                     key={timestamp}

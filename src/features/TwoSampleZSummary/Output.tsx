@@ -39,7 +39,7 @@ export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {
     setOutput({
       id: outputId,
       timestamp: Date.now(),
-      title: "One Sample Z",
+      title: "Two Sample Z",
       type: "z2summary",
       data: outputData,
       formSummary,

@@ -51,15 +51,21 @@ export const calcCI = (
     {
       "": var1Name,
       N: n1,
-      Mean: xbar1,
-      [knownStdev1 ? "Known Stdev" : "S.Stdev"]: stdevApprox1,
+      Mean: parseNumber(xbar1, DECIMAL),
+      [knownStdev1 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+        stdevApprox1,
+        DECIMAL
+      ),
       "Std.Err": parseNumber(stderr1, DECIMAL),
     },
     {
       "": var2Name,
       N: n2,
-      Mean: xbar2,
-      [knownStdev2 ? "Known Stdev" : "S.Stdev"]: stdevApprox2,
+      Mean: parseNumber(xbar2, DECIMAL),
+      [knownStdev2 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+        stdevApprox2,
+        DECIMAL
+      ),
       "Std.Err": parseNumber(stderr2, DECIMAL),
     },
   ];

@@ -46,8 +46,8 @@ export const calcHT = (
   const stdevApprox2 = knownStdev2 ? knownStdev2 : stdev(n2, 1, arrOfNums2, 1);
 
   const xdiff = xbar1 - xbar2;
-  const stderr1 = knownStdev1 / Math.sqrt(n1);
-  const stderr2 = knownStdev2 / Math.sqrt(n2);
+  const stderr1 = stdevApprox1 / Math.sqrt(n1);
+  const stderr2 = stdevApprox2 / Math.sqrt(n2);
   const stderrPooled = Math.sqrt(
     stdevApprox1 ** 2 / n1 + stdevApprox2 ** 2 / n2
   );
@@ -69,7 +69,7 @@ export const calcHT = (
       break;
     case "lessThan":
       ciLevel = 1 - 2 * alpha;
-      zcrit = quantile(alpha, 0, 1);
+      zcrit = -quantile(alpha, 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     default:
@@ -80,15 +80,21 @@ export const calcHT = (
     {
       "": var1Name,
       N: n1,
-      Mean: xbar1,
-      [knownStdev1 ? "Known Stdev" : "S.Stdev"]: stdevApprox1,
+      Mean: parseNumber(xbar1, DECIMAL),
+      [knownStdev1 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+        stdevApprox1,
+        DECIMAL
+      ),
       "Std.Err": parseNumber(stderr1, DECIMAL),
     },
     {
       "": var2Name,
       N: n2,
-      Mean: xbar2,
-      [knownStdev2 ? "Known Stdev" : "S.Stdev"]: stdevApprox2,
+      Mean: parseNumber(xbar2, DECIMAL),
+      [knownStdev2 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+        stdevApprox2,
+        DECIMAL
+      ),
       "Std.Err": parseNumber(stderr2, DECIMAL),
     },
   ];
@@ -106,10 +112,10 @@ export const calcHT = (
     {
       "": "\u03BC\u2081 - \u03BC\u2082",
       Alpha: parseNumber(alpha),
-      "Z-crit": zcrit.toFixed(DECIMAL),
-      "Std.Err.": stderrPooled.toFixed(DECIMAL),
-      "Z-stat": zstat.toFixed(DECIMAL),
-      "P-value": pvalue.toFixed(DECIMAL),
+      "Z-crit": parseNumber(zcrit, DECIMAL),
+      "Std.Err.": parseNumber(stderrPooled, DECIMAL),
+      "Z-stat": parseNumber(zstat, DECIMAL),
+      "P-value": parseNumber(pvalue, DECIMAL),
     },
   ];
 
