@@ -1,8 +1,10 @@
-import { GridColumnName, H1Sign, Perform } from "~/Types";
+import { DataTableRow } from "~/components/DataTable";
+import { H1Sign, Perform } from "~/Types";
 
 export const SampleStatistics = [
   "N",
   "Mean",
+  "S.Stdev",
   "Known Stdev",
   "Std.Err",
 ] as const;
@@ -29,8 +31,8 @@ export type HTColumns = (typeof HTColumns)[number];
 
 export type TForm = {
   withLabel: boolean;
-  sample1?: GridColumnName;
-  sample2?: GridColumnName;
+  sample1?: `${number}`;
+  sample2?: `${number}`;
   stdev1?: string;
   stdev2?: string;
   perform: Perform;
@@ -38,4 +40,36 @@ export type TForm = {
   nullValue: string;
   alpha: string;
   level: string;
+};
+
+export type HTReturn = {
+  perform: Perform.HypothesisTest;
+  HTData: DataTableRow<HTColumns, "">[];
+  HTStats: ["", ...HTColumns[]];
+  CIData?: DataTableRow<CIColumns, "">[];
+  CIStats?: ["", ...CIColumns[]];
+  sampleData: DataTableRow<SampleStatistics, "">[];
+  sampleStats: ["", ...SampleStatistics[]];
+};
+
+export type CIReturn = {
+  perform: Perform.ConfidenceInerval;
+  CIData: DataTableRow<CIColumns, "">[];
+  CIStats: ["", ...CIColumns[]];
+  sampleData: DataTableRow<SampleStatistics, "">[];
+  sampleStats: ["", ...SampleStatistics[]];
+};
+
+export type OutputReturn = {
+  formSummary: TForm;
+  outputData: HTReturn | CIReturn;
+};
+
+export type Z2DataSession = {
+  id: string;
+  timestamp: number;
+  title: string;
+  type: "z2data";
+  data: HTReturn | CIReturn;
+  formSummary: TForm;
 };

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import {
   Box,
   Checkbox,
@@ -10,11 +10,11 @@ import {
 } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { HTFormPart } from "~/components/HTFormPart";
-import { PopulationMean } from "~/components/HypothesisNotation";
+import { PopulationMeanDiff } from "~/components/HypothesisNotation";
 import { InputField } from "~/components/InputField";
 import { SelectField } from "~/components/SelectField";
-import { DataColumnsContext } from "~/contexts/DataColumnsContext";
-import { GridColumnName, Perform } from "~/Types";
+import { dataStore } from "~/dataStore";
+import { Perform } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
 import { isPositiveNumber, isValidLevel } from "~/utils/validators";
 import { TForm } from "./types";
@@ -26,7 +26,10 @@ type Props = {
 };
 
 export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
-  const { columnData } = useContext(DataColumnsContext);
+  const { colData } = useSyncExternalStore(
+    dataStore.subscribe,
+    dataStore.getSnapshot
+  );
 
   const {
     register,
@@ -41,7 +44,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={formId}>
-      {Object.keys(columnData).length > 0 && (
+      {Object.keys(colData).length > 0 && (
         <Controller
           name="withLabel"
           control={control}
@@ -69,13 +72,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {(Object.keys(columnData) as GridColumnName[])
-              .sort()
-              .map((colHeader) => (
-                <option key={colHeader} value={colHeader}>
-                  {getVarName(columnData, colHeader, watch("withLabel"))}
-                </option>
-              ))}
+            {Object.keys(colData).map((colHeader) => (
+              <option key={colHeader} value={colHeader}>
+                {getVarName(colData, Number(colHeader), watch("withLabel"))}
+              </option>
+            ))}
           </SelectField>
 
           <InputField
@@ -97,13 +98,11 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             rules={{ required: "This value is required" }}
             errors={errors}
           >
-            {(Object.keys(columnData) as GridColumnName[])
-              .sort()
-              .map((colHeader) => (
-                <option key={colHeader} value={colHeader}>
-                  {getVarName(columnData, colHeader, watch("withLabel"))}
-                </option>
-              ))}
+            {Object.keys(colData).map((colHeader) => (
+              <option key={colHeader} value={colHeader}>
+                {getVarName(colData, Number(colHeader), watch("withLabel"))}
+              </option>
+            ))}
           </SelectField>
           <InputField
             label="Std. dev."
@@ -140,7 +139,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                   <Radio value={Perform.HypothesisTest}>Hypothesis Test</Radio>
 
                   <HTFormPart
-                    param={<PopulationMean />}
+                    param={<PopulationMeanDiff />}
                     alternative="alternative"
                     alternativeDefault={defaultValues.alternative}
                     nullValue="nullValue"

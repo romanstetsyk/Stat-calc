@@ -52,7 +52,7 @@ export const DataTable = <T extends string, Title extends string = "column">({
         kind: GridCellKind.Text,
         allowOverlay: true,
         readonly: false,
-        displayData: String(d),
+        displayData: d === undefined ? "-" : String(d),
         data: String(d),
         contentAlign: "right",
       };
