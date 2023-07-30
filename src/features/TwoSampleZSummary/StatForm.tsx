@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { HTFormPart } from "~/components/HTFormPart";
-import { PopulationMean } from "~/components/HypothesisNotation";
+import { PopulationMeanDiff } from "~/components/HypothesisNotation";
 import { InputField } from "~/components/InputField";
 import { Perform } from "~/Types";
 import {
@@ -133,7 +133,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
                   <Radio value={Perform.HypothesisTest}>Hypothesis Test</Radio>
 
                   <HTFormPart
-                    param={<PopulationMean />}
+                    param={<PopulationMeanDiff />}
                     alternative="alternative"
                     alternativeDefault={defaultValues.alternative}
                     nullValue="nullValue"

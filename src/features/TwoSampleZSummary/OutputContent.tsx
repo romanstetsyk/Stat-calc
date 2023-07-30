@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 import { DataTable } from "~/components/DataTable";
 import {
   HypothesisNotation,
-  PopulationMean,
+  PopulationMeanDiff,
 } from "~/components/HypothesisNotation";
 import { Perform } from "~/Types";
 import { CIColumns, HTColumns, OutputReturn, SampleStatistics } from "./types";
@@ -16,7 +16,7 @@ export const OutputContent = ({ formSummary, outputData }: OutputReturn) => {
     return (
       <>
         <HypothesisNotation
-          param={<PopulationMean />}
+          param={<PopulationMeanDiff />}
           h1dir={alternative}
           h1val={nullValue}
         />
