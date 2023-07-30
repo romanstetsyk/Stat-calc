@@ -51,7 +51,7 @@ export const calcCI = (formSummary: TForm): CIReturn => {
 
   const CIData: DataTableRow<CIColumns, "">[] = [
     {
-      "": "mu1 - mu2",
+      "": "\u03BC\u2081 - \u03BC\u2082",
       Level: parseNumber(level),
       "Z-crit": parseNumber(zcrit, DECIMAL),
       "M.E.": parseNumber(me, DECIMAL),

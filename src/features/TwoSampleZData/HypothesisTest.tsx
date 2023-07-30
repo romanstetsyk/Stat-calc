@@ -91,7 +91,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
 
   const hypothesisTestData: DataTableRow<HTColumns, "">[] = [
     {
-      "": "mu1 - mu2",
+      "": "\u03BC\u2081 - \u03BC\u2082",
       Alpha: parseNumber(alpha),
       "Z-crit": zcrit.toFixed(DECIMAL),
       "Std.Err.": stderrPooled.toFixed(DECIMAL),
@@ -106,7 +106,7 @@ export const HypothesisTest = ({ formSummary }: Props) => {
 
   const confidenceIntervalData: DataTableRow<CIColumns, "">[] = [
     {
-      "": "mu1 - mu2",
+      "": "\u03BC\u2081 - \u03BC\u2082",
       Level: parseNumber(ciLevel),
       "M.E.": me.toFixed(DECIMAL),
       "L.Limit": ll.toFixed(DECIMAL),

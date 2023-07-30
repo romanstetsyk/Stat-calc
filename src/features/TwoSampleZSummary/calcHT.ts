@@ -80,7 +80,7 @@ export const calcHT = (formSummary: TForm): HTReturn => {
 
   const HTData: DataTableRow<HTColumns, "">[] = [
     {
-      "": "mu1 - mu2",
+      "": "\u03BC\u2081 - \u03BC\u2082",
       Alpha: parseNumber(alpha),
       "Z-crit": zcrit.toFixed(DECIMAL),
       "Std.Err.": stderrPooled.toFixed(DECIMAL),
@@ -113,7 +113,7 @@ export const calcHT = (formSummary: TForm): HTReturn => {
 
     const CIData: DataTableRow<CIColumns, "">[] = [
       {
-        "": "mu1 - mu2",
+        "": "\u03BC\u2081 - \u03BC\u2082",
         Level: parseNumber(ciLevel),
         "Z-crit": parseNumber(zcrit, DECIMAL),
         "M.E.": parseNumber(me, DECIMAL),

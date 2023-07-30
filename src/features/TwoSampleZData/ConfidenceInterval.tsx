@@ -64,7 +64,7 @@ export const ConfidenceInterval = ({ formSummary }: Props) => {
 
   const confidenceIntervalData: DataTableRow<CIColumns, "">[] = [
     {
-      "": "mu1 - mu2",
+      "": "\u03BC\u2081 - \u03BC\u2082",
       Level: level,
       "Z-crit": zcrit.toFixed(DECIMAL),
       "M.E.": me.toFixed(DECIMAL),
