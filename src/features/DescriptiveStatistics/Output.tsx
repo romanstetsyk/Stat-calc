@@ -20,7 +20,6 @@ type Props = {
 export const Output = ({ id, setDisplay, setOutput, formSummary }: Props) => {
   const outputId = useMemo(() => (id ? id : nanoid()), [id]);
 
-  // const { columnData } = useContext(DataColumnsContext);
   const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot
