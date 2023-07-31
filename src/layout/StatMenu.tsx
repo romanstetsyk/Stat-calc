@@ -19,15 +19,15 @@ import { StatModal as TwoSampleZSummaryModal } from "~/features/TwoSampleZSummar
 
 const StatMenu = () => {
   return (
-    <Flex>
+    <Flex wrap={"wrap"} fontSize={"sm"}>
       <UploadFile />
 
       <Menu>
         <MenuButton
-          px={4}
-          py={2}
+          px={2}
+          py={1}
           transition="all 0.2s"
-          borderRadius="md"
+          borderRadius="sm"
           borderWidth="1px"
           _hover={{ bg: "gray.400" }}
           _expanded={{ bg: "gray.500" }}
@@ -49,10 +49,10 @@ const StatMenu = () => {
       </Menu>
       <Menu>
         <MenuButton
-          px={4}
-          py={2}
+          px={2}
+          py={1}
           transition="all 0.2s"
-          borderRadius="md"
+          borderRadius="sm"
           borderWidth="1px"
           _hover={{ bg: "gray.400" }}
           _expanded={{ bg: "gray.500" }}
@@ -70,10 +70,10 @@ const StatMenu = () => {
 
       <Menu>
         <MenuButton
-          px={4}
-          py={2}
+          px={2}
+          py={1}
           transition="all 0.2s"
-          borderRadius="md"
+          borderRadius="sm"
           borderWidth="1px"
           _hover={{ bg: "gray.400" }}
           _expanded={{ bg: "gray.500" }}

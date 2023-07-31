@@ -112,7 +112,9 @@ export const UploadFile = () => {
           />
         </Center>
       )}
-      <Button onClick={() => ref.current?.click()}>Upload</Button>
+      <Button size="sm" borderRadius="sm" onClick={() => ref.current?.click()}>
+        Upload
+      </Button>
       <input
         ref={ref}
         type="file"
