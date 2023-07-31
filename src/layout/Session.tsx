@@ -1,5 +1,6 @@
 import { useContext, useRef } from "react";
 import { CardBody, Text } from "@chakra-ui/react";
+import Muuri from "muuri";
 import DraggableGrid, { DraggableGridHandle } from "ruuri";
 import { DataTable } from "~/components/DataTable";
 import { SessionItemWrapper } from "~/components/Session/SessionItemWrapper";
@@ -46,6 +47,8 @@ export const Session = () => {
           sortDuringScroll: false,
           threshold: 0,
           safeZone: 0.5,
+          // eslint-disable-next-line import/no-named-as-default-member
+          handle: Muuri.AutoScroller.pointerHandle(500),
         }}
         dragContainer={document.getElementById("dragContainer")}
         dragHandle={".draggableHeader"}
