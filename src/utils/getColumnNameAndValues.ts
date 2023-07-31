@@ -2,9 +2,14 @@ import { ArrayLike } from "./ArrayLike";
 import { createColName } from "./createColName";
 
 function firstKey(obj: InstanceType<typeof ArrayLike<string>>) {
-  for (const prop in obj) {
-    return obj[prop];
+  // for (const prop in obj) {
+  //   return obj[prop];
+  // }
+  let n = 0;
+  while (!(n in obj)) {
+    n += 1;
   }
+  return obj[n];
 }
 
 export const getVarName = (
