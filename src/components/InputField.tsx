@@ -33,17 +33,22 @@ const InputField = <T extends Record<string, unknown>>({
     <FormControl
       isInvalid={Boolean(error)}
       display="flex"
-      alignItems="baseline"
+      alignItems="flex-start"
       width="auto"
+      gap={3}
     >
-      {label && <FormLabel>{label}</FormLabel>}
-      <VStack alignItems="start">
+      {label && (
+        <FormLabel whiteSpace={"nowrap"} fontWeight={400} m={0}>
+          {label}
+        </FormLabel>
+      )}
+      <VStack alignItems="start" gap={0}>
         <Input
-          size="sm"
+          size="xs"
           width="80px"
           {...(register && register(name, rules))}
         />
-        <FormErrorMessage as="span">
+        <FormErrorMessage as="span" m={0}>
           {error?.type === "required" && error?.message}
           {error?.type === "validate" &&
             `${label || "This value"} ${error?.message}`}
