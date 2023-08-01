@@ -104,7 +104,8 @@ export const HTFormPart = <T extends FieldValues>({
         <Select
           name="nullSign"
           value={nullSign}
-          width="50px"
+          minWidth={14}
+          width={14}
           size="xs"
           onChange={onSelectChange}
         >
@@ -121,12 +122,12 @@ export const HTFormPart = <T extends FieldValues>({
           onChange={onNullValueChange}
           size="sm"
           height={6}
-          width="80px"
+          width={20}
         />
       </FormControl>
 
       <FormControl display="flex" gap={2} alignItems="start">
-        <FormLabel m={0} htmlFor={direrctionId}>
+        <FormLabel m={0} htmlFor={direrctionId} whiteSpace="nowrap">
           H<sub>a</sub>: {param}
         </FormLabel>
 
@@ -137,18 +138,17 @@ export const HTFormPart = <T extends FieldValues>({
           rules={{
             required: { value: !disabled, message: "This value is required" },
           }}
-          render={({ field: { onBlur, onChange, value, name } }) => (
+          render={({ field: { onChange, ...rest } }) => (
             <Select
               id={direrctionId}
-              width="50px"
+              minWidth={14}
+              width={14}
               size="xs"
-              onBlur={onBlur}
               onChange={(e) => {
                 onSelectChange(e);
                 onChange(e);
               }}
-              value={value}
-              name={name}
+              {...rest}
             >
               {Object.entries(H1Sign).map(([key, value]) => (
                 <option key={key} value={key}>
@@ -174,18 +174,16 @@ export const HTFormPart = <T extends FieldValues>({
               required: { value: !disabled, message: "This value is required" },
               validate: (value) => disabled || isFiniteNumber(value),
             }}
-            render={({ field: { onBlur, onChange, value, name } }) => (
+            render={({ field: { onChange, ...rest } }) => (
               <Input
-                width="80px"
+                width={20}
                 size="sm"
                 height={6}
-                onBlur={onBlur}
                 onChange={(e) => {
                   onNullValueChange(e);
                   onChange(e);
                 }}
-                value={value}
-                name={name}
+                {...rest}
               />
             )}
           />

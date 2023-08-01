@@ -1,4 +1,5 @@
 import { H0Sign, H1Sign, HypothesisSignMap } from "~/Types";
+import { parseNumber } from "~/utils/parseNumber";
 
 export const PopulationMean = () => {
   return <>&mu;</>;
@@ -22,10 +23,11 @@ export const HypothesisNotation = ({ param, h1dir, h1val }: Props) => {
   return (
     <div>
       <p>
-        H<sub>0</sub>: {param} {H0Sign[HypothesisSignMap[h1dir]]} {h1val}
+        H<sub>0</sub>: {param} {H0Sign[HypothesisSignMap[h1dir]]}{" "}
+        {parseNumber(h1val)}
       </p>
       <p>
-        H<sub>a</sub>: {param} {H1Sign[h1dir]} {h1val}
+        H<sub>a</sub>: {param} {H1Sign[h1dir]} {parseNumber(h1val)}
       </p>
     </div>
   );
