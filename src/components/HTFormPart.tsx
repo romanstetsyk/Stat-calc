@@ -1,11 +1,11 @@
 import { useId, useState } from "react";
 import {
+  FlexProps,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
   Select,
-  Stack,
 } from "@chakra-ui/react";
 import {
   Control,
@@ -19,6 +19,7 @@ import {
 } from "react-hook-form";
 import { H0Sign, H1Sign, HypothesisSignMap } from "~/Types";
 import { isFiniteNumber } from "~/utils/validators";
+import { FieldStack } from "./FieldStack";
 
 type Props<T extends FieldValues> = {
   param: JSX.Element;
@@ -32,7 +33,7 @@ type Props<T extends FieldValues> = {
   setValue: UseFormSetValue<T>;
   nullError?: FieldError;
   children?: React.ReactNode;
-};
+} & FlexProps;
 
 export const HTFormPart = <T extends FieldValues>({
   param,
@@ -45,6 +46,7 @@ export const HTFormPart = <T extends FieldValues>({
   nullError,
   children,
   setValue,
+  ...restProps
 }: Props<T>) => {
   const [nullSign, setNullSign] = useState<H0Sign>(
     HypothesisSignMap[alternativeDefault]
@@ -90,14 +92,13 @@ export const HTFormPart = <T extends FieldValues>({
   };
 
   return (
-    <Stack
+    <FieldStack
       disabled={disabled}
-      as="fieldset"
-      ml={5}
       opacity={disabled ? "0.5" : "1"}
+      {...restProps}
     >
       <FormControl display="flex" gap={2} alignItems="start">
-        <FormLabel m={0} htmlFor={nullId}>
+        <FormLabel m={0} htmlFor={nullId} whiteSpace={"nowrap"}>
           H<sub>0</sub>: {param}
         </FormLabel>
         <Select
@@ -116,7 +117,6 @@ export const HTFormPart = <T extends FieldValues>({
 
         <Input
           id={nullId}
-          name={"asd"}
           value={nullVal}
           onChange={onNullValueChange}
           size="sm"
@@ -134,6 +134,9 @@ export const HTFormPart = <T extends FieldValues>({
           defaultValue={alternativeDefault}
           name={alternative}
           control={control}
+          rules={{
+            required: { value: !disabled, message: "This value is required" },
+          }}
           render={({ field: { onBlur, onChange, value, name } }) => (
             <Select
               id={direrctionId}
@@ -168,7 +171,7 @@ export const HTFormPart = <T extends FieldValues>({
             name={nullValue}
             control={control}
             rules={{
-              required: "This value is required",
+              required: { value: !disabled, message: "This value is required" },
               validate: (value) => disabled || isFiniteNumber(value),
             }}
             render={({ field: { onBlur, onChange, value, name } }) => (
@@ -195,6 +198,6 @@ export const HTFormPart = <T extends FieldValues>({
       </FormControl>
 
       {children}
-    </Stack>
+    </FieldStack>
   );
 };
