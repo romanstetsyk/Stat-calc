@@ -1,10 +1,12 @@
 import { useSyncExternalStore } from "react";
 import {
   Box,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Radio,
+  Text,
 } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { PopulationMean } from "~/components/HypothesisNotation";
@@ -12,6 +14,7 @@ import {
   AskLabelCheckbox,
   CIFormPart,
   CheckboxGroupWrapper,
+  FieldStack,
   FormWraper,
   HTFormPart,
   InputField,
@@ -140,6 +143,16 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
         />
         <FormErrorMessage as="span">{errors.perform?.message}</FormErrorMessage>
       </FormControl>
+
+      {watch("perform") === Perform.HypothesisTest && (
+        <FieldStack>
+          <LegendWrapper elem={Text} legend="Optional tables:" />
+
+          <Checkbox {...register("optional.confidenceInterval")}>
+            ConfidenceInterval
+          </Checkbox>
+        </FieldStack>
+      )}
     </FormWraper>
   );
 };

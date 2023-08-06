@@ -22,6 +22,9 @@ const DEFAULT_SELECTED_FIELDS: TForm = {
   nullValue: "0",
   alpha: "0.05",
   level: "0.95",
+  optional: {
+    confidenceInterval: false,
+  },
 };
 
 type Props = {

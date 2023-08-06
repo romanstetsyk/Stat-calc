@@ -22,8 +22,14 @@ export const calcHT = (
   formSummary: TForm,
   colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>
 ): HTReturn => {
-  const { columns, alternative, nullValue, alpha, knownStdev, withLabel } =
-    formSummary;
+  const columns = formSummary.columns;
+  const withLabel = formSummary.withLabel;
+  const knownStdev = formSummary.knownStdev;
+  const nullValue = Number(formSummary.nullValue);
+  const alternative = formSummary.alternative;
+  const alpha = Number(formSummary.alpha);
+
+  const includeCI = formSummary.optional.confidenceInterval;
 
   const CIData: DataTableRow<CIColumns, "">[] = [];
 
@@ -63,7 +69,7 @@ export const calcHT = (
           throw new Error("Invalid hypothesis direction");
       }
 
-      if (alternative === "notEqual" || Number(alpha) < 0.5) {
+      if (includeCI && (alternative === "notEqual" || Number(alpha) < 0.5)) {
         const me = zcrit * stderr;
         const ll = Number(xbar) - me;
         const ul = Number(xbar) + me;
@@ -115,7 +121,8 @@ export const calcHT = (
   ];
 
   const output: HTReturn = { perform: Perform.HypothesisTest, HTData, HTStats };
-  if (alternative === "notEqual" || Number(alpha) < 0.5) {
+
+  if (includeCI && (alternative === "notEqual" || Number(alpha) < 0.5)) {
     output["CIData"] = CIData;
     output["CIStats"] = CIStats;
   }
