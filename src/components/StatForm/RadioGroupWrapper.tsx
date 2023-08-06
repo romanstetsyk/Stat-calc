@@ -8,7 +8,7 @@ type Props<T> = {
 
 // Inner function should have a name
 const RadioGroupWrapper = forwardRef(function RadioGroupWrapperInner<
-  T extends string
+  T extends string,
 >({ children, onChange, ...rest }: Props<T>, ref: Ref<HTMLDivElement>) {
   return (
     <RadioGroup

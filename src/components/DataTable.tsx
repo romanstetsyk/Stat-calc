@@ -10,7 +10,7 @@ import {
 // T can be const enum or union of literals
 export type DataTableRow<
   T extends string,
-  Title extends string = "column"
+  Title extends string = "column",
 > = Title extends "column"
   ? Partial<{
       [key in T]: string | number;
