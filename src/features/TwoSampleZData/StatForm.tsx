@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import {
   Box,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -69,7 +70,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             placeholder="Select column"
             register={register}
             rules={{ required: "This value is required" }}
-            errors={errors}
+            error={errors.sample1}
           >
             {Object.keys(colData).map((colHeader) => (
               <option key={colHeader} value={colHeader}>
@@ -98,7 +99,7 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
             placeholder="Select column"
             register={register}
             rules={{ required: "This value is required" }}
-            errors={errors}
+            error={errors.sample2}
           >
             {Object.keys(colData).map((colHeader) => (
               <option key={colHeader} value={colHeader}>
@@ -181,6 +182,18 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
         />
         <FormErrorMessage as="span">{errors.perform?.message}</FormErrorMessage>
       </FormControl>
+
+      <FieldStack>
+        <LegendWrapper elem={Text} legend="Optional tables:" />
+        <Checkbox {...register("optional.sampleStatistics")}>
+          Sample Statistics
+        </Checkbox>
+        {watch("perform") === Perform.HypothesisTest && (
+          <Checkbox {...register("optional.confidenceInterval")}>
+            ConfidenceInterval
+          </Checkbox>
+        )}
+      </FieldStack>
     </FormWraper>
   );
 };

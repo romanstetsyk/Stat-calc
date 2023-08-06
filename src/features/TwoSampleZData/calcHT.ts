@@ -31,6 +31,9 @@ export const calcHT = (
   const alternative = formSummary.alternative;
   const alpha = Number(formSummary.alpha);
 
+  const includeSampleData = formSummary.optional.sampleStatistics;
+  const includeCI = formSummary.optional.confidenceInterval;
+
   const var1Name = getVarName(colData, sample1, withLabel);
   const var1Values = getVarValues(colData, sample1, withLabel);
   const arrOfNums1 = var1Values.filter(isFiniteNumberString).map(Number);
@@ -76,38 +79,6 @@ export const calcHT = (
       throw new Error("Invalid hypothesis direction");
   }
 
-  const sampleData: DataTableRow<SampleStatistics, "">[] = [
-    {
-      "": var1Name,
-      N: n1,
-      Mean: parseNumber(xbar1, DECIMAL),
-      [knownStdev1 ? "Known Stdev" : "S.Stdev"]: parseNumber(
-        stdevApprox1,
-        DECIMAL
-      ),
-      "Std.Err": parseNumber(stderr1, DECIMAL),
-    },
-    {
-      "": var2Name,
-      N: n2,
-      Mean: parseNumber(xbar2, DECIMAL),
-      [knownStdev2 ? "Known Stdev" : "S.Stdev"]: parseNumber(
-        stdevApprox2,
-        DECIMAL
-      ),
-      "Std.Err": parseNumber(stderr2, DECIMAL),
-    },
-  ];
-
-  const sampleStats: ["", ...SampleStatistics[]] = ["", "N", "Mean", "Std.Err"];
-  if (knownStdev1 && knownStdev2) {
-    sampleStats.splice(3, 0, "Known Stdev");
-  } else if (!knownStdev1 && !knownStdev2) {
-    sampleStats.splice(3, 0, "S.Stdev");
-  } else {
-    sampleStats.splice(3, 0, "S.Stdev", "Known Stdev");
-  }
-
   const HTData: DataTableRow<HTColumns, "">[] = [
     {
       "": "\u03BC\u2081 - \u03BC\u2082",
@@ -132,11 +103,51 @@ export const calcHT = (
     perform: Perform.HypothesisTest,
     HTData,
     HTStats,
-    sampleData,
-    sampleStats,
   };
 
-  if (alternative === "notEqual" || alpha < 0.5) {
+  if (includeSampleData) {
+    const sampleData: DataTableRow<SampleStatistics, "">[] = [
+      {
+        "": var1Name,
+        N: n1,
+        Mean: parseNumber(xbar1, DECIMAL),
+        [knownStdev1 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+          stdevApprox1,
+          DECIMAL
+        ),
+        "Std.Err": parseNumber(stderr1, DECIMAL),
+      },
+      {
+        "": var2Name,
+        N: n2,
+        Mean: parseNumber(xbar2, DECIMAL),
+        [knownStdev2 ? "Known Stdev" : "S.Stdev"]: parseNumber(
+          stdevApprox2,
+          DECIMAL
+        ),
+        "Std.Err": parseNumber(stderr2, DECIMAL),
+      },
+    ];
+
+    const sampleStats: ["", ...SampleStatistics[]] = [
+      "",
+      "N",
+      "Mean",
+      "Std.Err",
+    ];
+    if (knownStdev1 && knownStdev2) {
+      sampleStats.splice(3, 0, "Known Stdev");
+    } else if (!knownStdev1 && !knownStdev2) {
+      sampleStats.splice(3, 0, "S.Stdev");
+    } else {
+      sampleStats.splice(3, 0, "S.Stdev", "Known Stdev");
+    }
+
+    outputData["sampleData"] = sampleData;
+    outputData["sampleStats"] = sampleStats;
+  }
+
+  if (includeCI && (alternative === "notEqual" || alpha < 0.5)) {
     const me = zcrit * stderrPooled;
     const ll = xdiff - me;
     const ul = xdiff + me;

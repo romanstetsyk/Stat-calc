@@ -32,13 +32,17 @@ export const OutputContent = ({ formSummary, outputData }: OutputReturn) => {
             <DataTable<CIColumns, ""> data={CIData} stats={CIStats} />
           </>
         )}
-        <Heading size="xs" as="h5" my={2}>
-          Sample Summary
-        </Heading>
-        <DataTable<SampleStatistics, "">
-          data={sampleData}
-          stats={sampleStats}
-        />
+        {sampleData && sampleStats && (
+          <>
+            <Heading size="xs" as="h5" my={2}>
+              Sample Summary
+            </Heading>
+            <DataTable<SampleStatistics, "">
+              data={sampleData}
+              stats={sampleStats}
+            />
+          </>
+        )}
       </>
     );
   } else if (outputData.perform === Perform.ConfidenceInerval) {
@@ -51,13 +55,17 @@ export const OutputContent = ({ formSummary, outputData }: OutputReturn) => {
         </Heading>
         <DataTable<CIColumns, ""> data={CIData} stats={CIStats} />
 
-        <Heading size="xs" as="h5" my={2}>
-          Sample Summary
-        </Heading>
-        <DataTable<SampleStatistics, "">
-          data={sampleData}
-          stats={sampleStats}
-        />
+        {sampleData && sampleStats && (
+          <>
+            <Heading size="xs" as="h5" my={2}>
+              Sample Summary
+            </Heading>
+            <DataTable<SampleStatistics, "">
+              data={sampleData}
+              stats={sampleStats}
+            />
+          </>
+        )}
       </>
     );
   } else {

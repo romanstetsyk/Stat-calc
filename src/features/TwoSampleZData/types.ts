@@ -40,6 +40,10 @@ export type TForm = {
   nullValue: string;
   alpha: string;
   level: string;
+  optional: {
+    sampleStatistics: boolean;
+    confidenceInterval: boolean;
+  };
 };
 
 export type HTReturn = {
@@ -48,16 +52,16 @@ export type HTReturn = {
   HTStats: ["", ...HTColumns[]];
   CIData?: DataTableRow<CIColumns, "">[];
   CIStats?: ["", ...CIColumns[]];
-  sampleData: DataTableRow<SampleStatistics, "">[];
-  sampleStats: ["", ...SampleStatistics[]];
+  sampleData?: DataTableRow<SampleStatistics, "">[];
+  sampleStats?: ["", ...SampleStatistics[]];
 };
 
 export type CIReturn = {
   perform: Perform.ConfidenceInerval;
   CIData: DataTableRow<CIColumns, "">[];
   CIStats: ["", ...CIColumns[]];
-  sampleData: DataTableRow<SampleStatistics, "">[];
-  sampleStats: ["", ...SampleStatistics[]];
+  sampleData?: DataTableRow<SampleStatistics, "">[];
+  sampleStats?: ["", ...SampleStatistics[]];
 };
 
 export type OutputReturn = {
