@@ -30,6 +30,9 @@ export type TForm = {
   nullValue: string;
   alpha: string;
   level: string;
+  optional: {
+    confidenceInterval: boolean;
+  };
 };
 
 export type HTReturn = {

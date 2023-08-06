@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -143,6 +144,16 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
         />
         <FormErrorMessage as="span">{errors.perform?.message}</FormErrorMessage>
       </FormControl>
+
+      {watch("perform") === Perform.HypothesisTest && (
+        <FieldStack>
+          <LegendWrapper elem={Text} legend="Optional tables:" />
+
+          <Checkbox {...register("optional.confidenceInterval")}>
+            ConfidenceInterval
+          </Checkbox>
+        </FieldStack>
+      )}
     </FormWraper>
   );
 };

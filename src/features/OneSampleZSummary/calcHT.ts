@@ -21,6 +21,8 @@ export const calcHT = (formSummary: TForm): HTReturn => {
   const nullValue = Number(formSummary.nullValue);
   const alpha = Number(formSummary.alpha);
 
+  const includeCI = formSummary.optional.confidenceInterval;
+
   const stderr = stdev / Math.sqrt(n);
   const zstat = (xbar - nullValue) / stderr;
 
@@ -78,7 +80,7 @@ export const calcHT = (formSummary: TForm): HTReturn => {
   };
 
   // render CI only if condition is true
-  if (!(alternative !== "notEqual" && alpha >= 0.5)) {
+  if (includeCI && (alternative === "notEqual" || alpha < 0.5)) {
     const me = zcrit * stderr;
     const ll = xbar - me;
     const ul = xbar + me;
