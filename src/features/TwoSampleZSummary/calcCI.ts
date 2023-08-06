@@ -15,6 +15,8 @@ export const calcCI = (formSummary: TForm): CIReturn => {
   const n2 = Number(formSummary.n2);
   const level = Number(formSummary.level);
 
+  const includeSampleData = formSummary.optional.sampleStatistics;
+
   const xdiff = xbar1 - xbar2;
   const stderr1 = stdev1 / Math.sqrt(n1);
   const stderr2 = stdev2 / Math.sqrt(n2);
@@ -23,31 +25,6 @@ export const calcCI = (formSummary: TForm): CIReturn => {
   const me = zcrit * stderrPooled;
   const ll = xdiff - me;
   const ul = xdiff + me;
-
-  const sampleData: DataTableRow<SampleStatistics, "">[] = [
-    {
-      "": "Sample 1",
-      N: n1,
-      Mean: xbar1,
-      "Known Stdev": stdev1,
-      "Std.Err": parseNumber(stderr1, DECIMAL),
-    },
-    {
-      "": "Sample 2",
-      N: n2,
-      Mean: xbar2,
-      "Known Stdev": stdev2,
-      "Std.Err": parseNumber(stderr2, DECIMAL),
-    },
-  ];
-
-  const sampleStats: ["", ...SampleStatistics[]] = [
-    "",
-    "N",
-    "Mean",
-    "Known Stdev",
-    "Std.Err",
-  ];
 
   const CIData: DataTableRow<CIColumns, "">[] = [
     {
@@ -71,11 +48,41 @@ export const calcCI = (formSummary: TForm): CIReturn => {
     "U.Limit",
   ];
 
-  return {
+  const outputData: CIReturn = {
     perform: Perform.ConfidenceInerval,
     CIData,
     CIStats,
-    sampleData,
-    sampleStats,
   };
+
+  if (includeSampleData) {
+    const sampleData: DataTableRow<SampleStatistics, "">[] = [
+      {
+        "": "Sample 1",
+        N: n1,
+        Mean: xbar1,
+        "Known Stdev": stdev1,
+        "Std.Err": parseNumber(stderr1, DECIMAL),
+      },
+      {
+        "": "Sample 2",
+        N: n2,
+        Mean: xbar2,
+        "Known Stdev": stdev2,
+        "Std.Err": parseNumber(stderr2, DECIMAL),
+      },
+    ];
+
+    const sampleStats: ["", ...SampleStatistics[]] = [
+      "",
+      "N",
+      "Mean",
+      "Known Stdev",
+      "Std.Err",
+    ];
+
+    outputData["sampleData"] = sampleData;
+    outputData["sampleStats"] = sampleStats;
+  }
+
+  return outputData;
 };

@@ -24,6 +24,9 @@ export const calcHT = (formSummary: TForm): HTReturn => {
   const alternative = formSummary.alternative;
   const alpha = Number(formSummary.alpha);
 
+  const includeSampleData = formSummary.optional.sampleStatistics;
+  const includeCI = formSummary.optional.confidenceInterval;
+
   const xdiff = xbar1 - xbar2;
   const stderr1 = stdev1 / Math.sqrt(n1);
   const stderr2 = stdev2 / Math.sqrt(n2);
@@ -53,31 +56,6 @@ export const calcHT = (formSummary: TForm): HTReturn => {
       throw new Error("Invalid hypothesis direction");
   }
 
-  const sampleData: DataTableRow<SampleStatistics, "">[] = [
-    {
-      "": "Sample 1",
-      N: n1,
-      Mean: xbar1,
-      "Known Stdev": stdev1,
-      "Std.Err": parseNumber(stderr1, DECIMAL),
-    },
-    {
-      "": "Sample 2",
-      N: n2,
-      Mean: xbar2,
-      "Known Stdev": stdev2,
-      "Std.Err": parseNumber(stderr2, DECIMAL),
-    },
-  ];
-
-  const sampleStats: ["", ...SampleStatistics[]] = [
-    "",
-    "N",
-    "Mean",
-    "Known Stdev",
-    "Std.Err",
-  ];
-
   const HTData: DataTableRow<HTColumns, "">[] = [
     {
       "": "\u03BC\u2081 - \u03BC\u2082",
@@ -102,11 +80,39 @@ export const calcHT = (formSummary: TForm): HTReturn => {
     perform: Perform.HypothesisTest,
     HTData,
     HTStats,
-    sampleData,
-    sampleStats,
   };
 
-  if (alternative === "notEqual" || alpha < 0.5) {
+  if (includeSampleData) {
+    const sampleData: DataTableRow<SampleStatistics, "">[] = [
+      {
+        "": "Sample 1",
+        N: n1,
+        Mean: xbar1,
+        "Known Stdev": stdev1,
+        "Std.Err": parseNumber(stderr1, DECIMAL),
+      },
+      {
+        "": "Sample 2",
+        N: n2,
+        Mean: xbar2,
+        "Known Stdev": stdev2,
+        "Std.Err": parseNumber(stderr2, DECIMAL),
+      },
+    ];
+
+    const sampleStats: ["", ...SampleStatistics[]] = [
+      "",
+      "N",
+      "Mean",
+      "Known Stdev",
+      "Std.Err",
+    ];
+
+    outputData["sampleData"] = sampleData;
+    outputData["sampleStats"] = sampleStats;
+  }
+
+  if (includeCI && (alternative === "notEqual" || alpha < 0.5)) {
     const me = zcrit * stderrPooled;
     const ll = xdiff - me;
     const ul = xdiff + me;
