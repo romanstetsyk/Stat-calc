@@ -1,18 +1,23 @@
-import { useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import {
   Box,
-  Checkbox,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Radio,
-  RadioGroup,
-  Stack,
 } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
-import { HTFormPart } from "~/components/HTFormPart";
 import { PopulationMean } from "~/components/HypothesisNotation";
-import { InputField } from "~/components/InputField";
+import {
+  AskLabelCheckbox,
+  CIFormPart,
+  CheckboxGroupWrapper,
+  FormWraper,
+  HTFormPart,
+  InputField,
+  LegendWrapper,
+  RadioGroupWrapper,
+} from "~/components/StatForm";
 import { dataStore } from "~/dataStore";
 import { Perform } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
@@ -40,10 +45,17 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
     formState: { errors },
   } = useForm<TForm>({ defaultValues });
 
-  const [perform, setPerform] = useState<Perform>(defaultValues.perform);
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={formId}>
+    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+      {colData.length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field }) => <AskLabelCheckbox {...field} />}
+        />
+      )}
+
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
@@ -57,113 +69,77 @@ export const StatForm = ({ formId, onSubmit, defaultValues }: Props) => {
         error={errors["columns"]}
       />
 
-      {Object.keys(colData).length > 0 && (
-        <Controller
-          name="withLabel"
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field: { onChange, value } }) => (
-            <Checkbox
-              pl={2}
-              display={"flex"}
-              isChecked={value}
-              onChange={onChange}
-            >
-              Labels in first row
-            </Checkbox>
-          )}
-        />
-      )}
-
       <InputField
-        label="Std. dev. (optional)"
+        label="Std. dev."
+        placeholder="optional"
         name="knownStdev"
         register={register}
         rules={{ validate: (value) => value === "" || isPositiveNumber(value) }}
         error={errors.knownStdev}
       />
 
-      <FormControl isInvalid={Boolean(errors.perform)}>
+      <FormControl as="fieldset" isInvalid={Boolean(errors.perform)}>
+        <LegendWrapper elem={FormLabel} legend="Perform:" />
+
         <Controller
           name="perform"
           control={control}
           rules={{ required: "This field is required" }}
-          defaultValue={perform}
-          render={({ field: { onChange, ...rest } }) => (
-            <RadioGroup
-              onChange={(value: Perform) => {
-                setPerform(
-                  value === Perform.HypothesisTest
-                    ? Perform.HypothesisTest
-                    : Perform.ConfidenceInerval
-                );
-                onChange(value);
-              }}
-              {...rest}
-            >
-              <Box display="flex" flexDirection="row">
-                <Box flex="1">
-                  <Radio value={Perform.HypothesisTest}>Hypothesis Test</Radio>
+          defaultValue={defaultValues.perform}
+          render={({ field }) => (
+            <RadioGroupWrapper<Perform> {...field}>
+              <Box flex="1">
+                <Radio value={Perform.HypothesisTest} mb={2}>
+                  Hypothesis Test
+                </Radio>
 
-                  <HTFormPart
-                    param={<PopulationMean />}
-                    alternative="alternative"
-                    alternativeDefault={defaultValues.alternative}
-                    nullValue="nullValue"
-                    nullValueDefault={defaultValues.nullValue}
-                    disabled={perform !== Perform.HypothesisTest}
-                    control={control}
-                    setValue={setValue}
-                    nullError={errors.nullValue}
-                  >
-                    <InputField
-                      label="&alpha;"
-                      name="alpha"
-                      register={register}
-                      rules={{
-                        required: "This value is required",
-                        validate: (value) =>
-                          perform !== Perform.HypothesisTest ||
-                          isValidLevel(value),
-                      }}
-                      error={errors.alpha}
-                    />
-                  </HTFormPart>
-                </Box>
-                <Box flex="1">
-                  <>
-                    <Radio value={Perform.ConfidenceInerval}>
-                      Confidence Interval
-                    </Radio>
-                    <Stack
-                      disabled={perform !== Perform.ConfidenceInerval}
-                      as="fieldset"
-                      ml={5}
-                      opacity={
-                        perform === Perform.ConfidenceInerval ? "1" : "0.5"
-                      }
-                    >
-                      <InputField
-                        label="Level"
-                        name="level"
-                        register={register}
-                        rules={{
-                          required: "This value is required",
-                          validate: (value) =>
-                            perform !== Perform.ConfidenceInerval ||
-                            isValidLevel(value),
-                        }}
-                        error={errors.level}
-                      />
-                    </Stack>
-                  </>
-                </Box>
+                <HTFormPart
+                  ml={6}
+                  param={<PopulationMean />}
+                  alternative="alternative"
+                  alternativeDefault={defaultValues.alternative}
+                  nullValue="nullValue"
+                  nullValueDefault={defaultValues.nullValue}
+                  disabled={watch("perform") !== Perform.HypothesisTest}
+                  control={control}
+                  setValue={setValue}
+                  nullError={errors.nullValue}
+                >
+                  <InputField
+                    label="&alpha;"
+                    name="alpha"
+                    register={register}
+                    rules={{
+                      required: {
+                        value: watch("perform") === Perform.HypothesisTest,
+                        message: "This value is required",
+                      },
+                      validate: (value) =>
+                        watch("perform") !== Perform.HypothesisTest ||
+                        isValidLevel(value),
+                    }}
+                    error={errors.alpha}
+                  />
+                </HTFormPart>
               </Box>
-            </RadioGroup>
+              <Box flex="1">
+                <Radio value={Perform.ConfidenceInerval} mb={2}>
+                  Confidence Interval
+                </Radio>
+
+                <CIFormPart
+                  ml={6}
+                  register={register}
+                  disabled={watch("perform") !== Perform.ConfidenceInerval}
+                  level="level"
+                  levelError={errors.level}
+                />
+              </Box>
+            </RadioGroupWrapper>
           )}
         />
         <FormErrorMessage as="span">{errors.perform?.message}</FormErrorMessage>
       </FormControl>
-    </form>
+    </FormWraper>
   );
 };

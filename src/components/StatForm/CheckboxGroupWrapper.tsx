@@ -18,6 +18,7 @@ import {
   PathValue,
   RegisterOptions,
 } from "react-hook-form";
+import { LegendWrapper } from "./LegendWrapper";
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -40,13 +41,9 @@ export const CheckboxGroupWrapper = <T extends FieldValues>({
 }: Props<T>) => {
   const checkboxID = useId();
   return (
-    <FormControl isInvalid={Boolean(error)} as="fieldset" my={2}>
-      {label && (
-        <FormLabel as="legend" m={0}>
-          {label}
-        </FormLabel>
-      )}
-      <Box p={2}>
+    <FormControl isInvalid={Boolean(error)} as="fieldset">
+      {label && <LegendWrapper legend={label} elem={FormLabel} />}
+      <Box pl={2}>
         {data.length > 0 ? (
           <>
             <Controller

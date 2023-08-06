@@ -103,7 +103,6 @@ export const UploadFile = () => {
           }}
         >
           <Spinner
-            id="asdf"
             thickness="4px"
             speed="0.65s"
             emptyColor="gray.200"

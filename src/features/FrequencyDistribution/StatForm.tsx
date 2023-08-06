@@ -1,10 +1,13 @@
 import { useSyncExternalStore } from "react";
-import { Checkbox } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
+import {
+  AskLabelCheckbox,
+  CheckboxGroupWrapper,
+  FormWraper,
+} from "~/components/StatForm";
 import { dataStore } from "~/dataStore";
 import { getVarName } from "~/utils/getColumnNameAndValues";
-import { FreqDist, TForm } from "./types";
+import { FrequencyDistribution, TForm } from "./types";
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
@@ -28,9 +31,18 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={formId}>
+    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+      {colData.length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field }) => <AskLabelCheckbox {...field} />}
+        />
+      )}
+
       <CheckboxGroupWrapper
-        label="Choose columns"
+        label="Choose columns:"
         name="columns"
         data={Object.keys(colData).map((colHeader) => ({
           title: getVarName(colData, Number(colHeader), watch("withLabel")),
@@ -42,34 +54,15 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
         error={errors["columns"]}
       />
 
-      {Object.keys(colData).length > 0 && (
-        <Controller
-          name="withLabel"
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field: { onChange, value } }) => (
-            <Checkbox
-              id={"withLabel" + formId}
-              pl={2}
-              display={"flex"}
-              isChecked={value}
-              onChange={onChange}
-            >
-              Labels in first row
-            </Checkbox>
-          )}
-        />
-      )}
-
       <CheckboxGroupWrapper
-        label="Statistics"
+        label="Statistics:"
         name="options"
-        data={[...FreqDist]}
+        data={[...FrequencyDistribution]}
         control={control}
         defaultValue={defaultValues.options}
         rules={{ required: "Select at least one statistic" }}
         error={errors["options"]}
       />
-    </form>
+    </FormWraper>
   );
 };

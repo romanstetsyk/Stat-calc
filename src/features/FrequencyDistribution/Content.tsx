@@ -12,11 +12,15 @@ import { SessionContext } from "~/contexts/SessionContext";
 import { DisplayOptions } from "~/Types";
 import { Output } from "./Output";
 import { StatForm } from "./StatForm";
-import { FreqDist, FreqDistSession, TForm } from "./types";
+import {
+  FrequencyDistribution,
+  FrequencyDistributionSession,
+  TForm,
+} from "./types";
 
 const DEFAULT_SELECTED_FIELDS = {
   columns: [],
-  options: [...FreqDist],
+  options: [...FrequencyDistribution],
   withLabel: false,
 };
 
@@ -38,7 +42,7 @@ export const Content = ({ onClose, id }: Props) => {
       : DEFAULT_SELECTED_FIELDS;
   });
 
-  const [output, setOutput] = useState<FreqDistSession>();
+  const [output, setOutput] = useState<FrequencyDistributionSession>();
 
   const onSaveToSession = () => {
     if (output) {

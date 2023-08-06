@@ -4,13 +4,13 @@ import { DataTableRow } from "~/components/DataTable";
 import { ArrayLike } from "~/utils/ArrayLike";
 import { getVarName, getVarValues } from "~/utils/getColumnNameAndValues";
 import { parseNumber } from "~/utils/parseNumber";
-import { FreqDist, OutputReturn, topLeftCell } from "./types";
+import { FrequencyDistribution, OutputReturn, topLeftCell } from "./types";
 
 export const calcFrequency = (
   columns: `${number}`[],
   colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
   withLabel: boolean,
-  options: FreqDist[]
+  options: FrequencyDistribution[]
 ): OutputReturn[] =>
   columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
@@ -18,16 +18,15 @@ export const calcFrequency = (
     const n = varValues.length;
     const out = tabulate(varValues);
 
-    const table: DataTableRow<FreqDist, typeof topLeftCell>[] = out.map(
-      ([x, fr, relFr]) => {
-        const row: DataTableRow<FreqDist, typeof topLeftCell> = {
+    const table: DataTableRow<FrequencyDistribution, typeof topLeftCell>[] =
+      out.map(([x, fr, relFr]) => {
+        const row: DataTableRow<FrequencyDistribution, typeof topLeftCell> = {
           Value: x.toString(),
           Frequency: (fr as number).toString(),
           "Relative Frequency": parseNumber(relFr as number),
         };
         return row;
-      }
-    );
+      });
 
     if (options.includes("Cumulative Frequency")) {
       const freqArr = out.map((e) => e[1]);

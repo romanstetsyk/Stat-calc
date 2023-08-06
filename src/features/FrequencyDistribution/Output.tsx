@@ -6,13 +6,15 @@ import { dataStore } from "~/dataStore";
 import { DisplayOptions } from "~/Types";
 import { calcFrequency } from "./calcFrequency";
 import { OutputContent } from "./OutputContent";
-import { FreqDistSession, TForm } from "./types";
+import { FrequencyDistributionSession, TForm } from "./types";
 
 type Props = {
   id?: string;
   setDisplay: React.Dispatch<React.SetStateAction<DisplayOptions>>;
   formSummary: TForm;
-  setOutput: React.Dispatch<React.SetStateAction<FreqDistSession | undefined>>;
+  setOutput: React.Dispatch<
+    React.SetStateAction<FrequencyDistributionSession | undefined>
+  >;
 };
 
 export const Output = ({ id, setDisplay, formSummary, setOutput }: Props) => {

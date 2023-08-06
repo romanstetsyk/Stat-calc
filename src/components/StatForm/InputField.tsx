@@ -16,6 +16,7 @@ import {
 
 type Props<T extends FieldValues> = {
   label?: string;
+  placeholder?: string;
   name: Path<T>;
   rules?: RegisterOptions;
   register?: UseFormRegister<T>;
@@ -28,6 +29,7 @@ const InputField = <T extends Record<string, unknown>>({
   error,
   register,
   rules,
+  placeholder,
 }: Props<T>) => {
   return (
     <FormControl
@@ -46,6 +48,7 @@ const InputField = <T extends Record<string, unknown>>({
         <Input
           size="xs"
           width="80px"
+          placeholder={placeholder}
           {...(register && register(name, rules))}
         />
         <FormErrorMessage as="span" m={0}>

@@ -1,20 +1,23 @@
 import { useSyncExternalStore } from "react";
 import {
-  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Radio,
-  RadioGroup,
 } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { CheckboxGroupWrapper } from "~/components/CheckboxGroupWrapper";
-import { InputField } from "~/components/InputField";
+import {
+  AskLabelCheckbox,
+  BinManual,
+  BinSquareRoot,
+  CheckboxGroupWrapper,
+  FormWraper,
+  LegendWrapper,
+  RadioGroupWrapper,
+} from "~/components/StatForm";
 import { dataStore } from "~/dataStore";
 import { BinMethod } from "~/Types";
 import { getVarName } from "~/utils/getColumnNameAndValues";
-import { isFiniteNumber } from "~/utils/validators";
 import { FrequencyDistribution, TForm } from "./types";
 
 type Props = {
@@ -40,7 +43,16 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={formId}>
+    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+      {colData.length > 0 && (
+        <Controller
+          name="withLabel"
+          control={control}
+          defaultValue={defaultValues.withLabel}
+          render={({ field }) => <AskLabelCheckbox {...field} />}
+        />
+      )}
+
       <CheckboxGroupWrapper
         label="Choose columns"
         name="columns"
@@ -54,126 +66,71 @@ export const StatForm = ({ onSubmit, formId, defaultValues }: Props) => {
         error={errors["columns"]}
       />
 
-      {Object.keys(colData).length > 0 && (
-        <Controller
-          name="withLabel"
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field: { onChange, value } }) => (
-            <Checkbox
-              id={"withLabel" + formId}
-              pl={2}
-              display={"flex"}
-              isChecked={value}
-              onChange={onChange}
-            >
-              Labels in first row
-            </Checkbox>
-          )}
-        />
-      )}
+      <FormControl isInvalid={Boolean(errors.method)} as={"fieldset"}>
+        <LegendWrapper elem={FormLabel} legend="Statiscics:" />
 
-      <FormControl isInvalid={Boolean(errors.method)} as={"fieldset"} my={8}>
-        <FormLabel as="legend" m={0}>
-          Select type
-        </FormLabel>
         <Controller
           name="options"
           control={control}
           rules={{ required: "This field is required" }}
           defaultValue={defaultValues.options}
-          render={({ field: { onChange, ...rest } }) => (
-            <RadioGroup
-              onChange={(value: FrequencyDistribution) => onChange(value)}
-              {...rest}
-              display={"flex"}
-              flexDirection={"column"}
+          render={({ field }) => (
+            <RadioGroupWrapper<FrequencyDistribution>
+              {...field}
+              flexDirection="column"
+              gap={0}
             >
               {FrequencyDistribution.map((opt) => (
                 <Radio key={opt} value={opt}>
                   {opt}
                 </Radio>
               ))}
-            </RadioGroup>
+            </RadioGroupWrapper>
           )}
         />
         <FormErrorMessage as="span">{errors.method?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={Boolean(errors.method)}>
+      <FormControl isInvalid={Boolean(errors.method)} as={"fieldset"}>
+        <LegendWrapper elem={FormLabel} legend="Binning method:" />
+
         <Controller
           name="method"
           control={control}
           rules={{ required: "This field is required" }}
           defaultValue={defaultValues.method}
-          render={({ field: { onChange, ...rest } }) => (
-            <RadioGroup
-              onChange={(value: BinMethod) => onChange(value)}
-              {...rest}
+          render={({ field }) => (
+            <RadioGroupWrapper<BinMethod>
+              {...field}
+              flexDirection="column"
+              gap={0}
             >
               <Radio value={BinMethod.MANUAL}>Manual</Radio>
 
-              <HStack
-                ml={8}
-                as="fieldset"
+              <BinManual
+                ml={6}
+                register={register}
                 disabled={watch("method") !== BinMethod.MANUAL}
-                opacity={watch("method") !== BinMethod.MANUAL ? 0.5 : 1}
-              >
-                <InputField
-                  name="manual.start"
-                  label="Start"
-                  register={register}
-                  error={errors?.manual?.start}
-                  rules={{
-                    validate: (value) =>
-                      watch("method") !== BinMethod.MANUAL ||
-                      value === "" ||
-                      isFiniteNumber(value),
-                  }}
-                />
-                <InputField
-                  name="manual.width"
-                  label="Width"
-                  register={register}
-                  error={errors?.manual?.width}
-                  rules={{
-                    required: {
-                      value: watch("method") === BinMethod.MANUAL,
-                      message: "This value is required",
-                    },
-                    validate: (value) =>
-                      watch("method") !== BinMethod.MANUAL ||
-                      isFiniteNumber(value),
-                  }}
-                />
-              </HStack>
+                start="manual.start"
+                startError={errors.manual?.start}
+                width="manual.width"
+                widthError={errors.manual?.width}
+              />
 
               <Radio value={BinMethod.SQUARE_ROOT}>Square Root</Radio>
 
-              <HStack
-                ml={8}
-                as="fieldset"
+              <BinSquareRoot
+                ml={6}
+                register={register}
                 disabled={watch("method") !== BinMethod.SQUARE_ROOT}
-                opacity={watch("method") !== BinMethod.SQUARE_ROOT ? 0.5 : 1}
-              >
-                <InputField
-                  name="squareRoot.start"
-                  label="Start"
-                  register={register}
-                  error={errors?.squareRoot?.start}
-                  rules={{
-                    validate: (value) =>
-                      watch("method") !== BinMethod.SQUARE_ROOT ||
-                      value === "" ||
-                      isFiniteNumber(value),
-                  }}
-                />
-              </HStack>
-            </RadioGroup>
+                start="squareRoot.start"
+                startError={errors.squareRoot?.start}
+              />
+            </RadioGroupWrapper>
           )}
         />
         <FormErrorMessage as="span">{errors.method?.message}</FormErrorMessage>
       </FormControl>
-    </form>
+    </FormWraper>
   );
 };

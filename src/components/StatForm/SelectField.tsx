@@ -40,12 +40,18 @@ const SelectField = <TFormValues extends Record<string, unknown>>({
       display="flex"
       alignItems="baseline"
       width="auto"
+      gap={3}
     >
-      {label && <FormLabel>{label}</FormLabel>}
-      <VStack alignItems="start">
+      {label && (
+        <FormLabel whiteSpace={"nowrap"} fontWeight={400} m={0}>
+          {label}
+        </FormLabel>
+      )}
+      <VStack alignItems="start" gap={0}>
         <Select
-          {...(register && register(name, rules))}
+          size="sm"
           placeholder={placeholder}
+          {...(register && register(name, rules))}
         >
           {children}
         </Select>

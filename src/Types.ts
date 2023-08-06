@@ -1,5 +1,5 @@
 import { DescriptiveStatisticsSession } from "~/features/DescriptiveStatistics/types";
-import { FreqDistSession } from "~/features/FrequencyDistribution/types";
+import { FrequencyDistributionSession } from "~/features/FrequencyDistribution/types";
 import { GroupNumericalDataSession } from "./features/GroupNumericData/types";
 import { HistogramSession } from "./features/Histogram/types";
 import { Z1DataSession } from "./features/OneSampleZData/types";
@@ -38,7 +38,7 @@ export type DisplayOptions = "form" | "result";
 
 export type TSession =
   | DescriptiveStatisticsSession
-  | FreqDistSession
+  | FrequencyDistributionSession
   | HistogramSession
   | GroupNumericalDataSession
   | Z1SummarySession
