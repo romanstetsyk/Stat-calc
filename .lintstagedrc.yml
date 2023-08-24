@@ -1,0 +1,3 @@
+'*': npm run lint:editorconfig && npm run lint:fs
+'*.{ts,tsx,json,md,html}': prettier --check
+'frontend/src/**/*.{ts,tsx}': npm run lint -w frontend

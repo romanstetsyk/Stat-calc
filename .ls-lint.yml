@@ -1,0 +1,13 @@
+ls:
+  .dir: kebab-case
+  .tsx: kebab-case
+  .ts: kebab-case
+  .html: kebab-case
+  .json: kebab-case
+
+ignore:
+  - .git
+  - node_modules
+  - frontend/node_modules
+  - frontend/src/vite-env.d.ts
+  - frontend/vite.config.ts
