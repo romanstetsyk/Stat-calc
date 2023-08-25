@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "18.x.x",
+    "npm": "9.x.x"
+  },
+  "scripts": {
+    "lint:types": "npx tsc --noEmit",
+    "lint:ts": "npx eslint \"src/**/*.ts\"",
+    "dev": "nodemon --exec \"node --loader ts-paths-esm-loader\" src/index.ts",
+    "build": "tsc",
+    "start": "node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "envalid": "^7.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-paths-esm-loader": "^1.4.3"
+  }
+}

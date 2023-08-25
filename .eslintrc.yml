@@ -124,14 +124,6 @@ rules:
     - off
   '@typescript-eslint/no-redundant-type-constituents':
     - off
-  react/jsx-curly-brace-presence:
-    - error
-    - props: never
-      children: never
-      propElementValues: always
-  jsx-quotes:
-    - error
-    - prefer-single
 
 overrides:
   - files:

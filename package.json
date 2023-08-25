@@ -8,7 +8,8 @@
     "npm": "9.x.x"
   },
   "workspaces": [
-    "frontend"
+    "frontend",
+    "backend"
   ],
   "scripts": {
     "build:frontend": "npm run build -w frontend",
