@@ -3,13 +3,15 @@ import path from 'node:path';
 import type { Logger as PinoLogger, TransportTargetOptions } from 'pino';
 import { pino } from 'pino';
 
-import type { ConfigSchema } from '~/config/types.js';
+import type { Config } from '~/config/types.js';
 
-class BaseLogger {
-  private config: ConfigSchema;
+import type { Logger } from './types.js';
+
+class BaseLogger implements Logger {
+  private config: Config;
   private logger: PinoLogger;
 
-  public constructor(config: ConfigSchema) {
+  public constructor(config: Config) {
     this.config = config;
 
     const {
@@ -87,7 +89,4 @@ class BaseLogger {
   }
 }
 
-type Logger = InstanceType<typeof BaseLogger>;
-
-export type { Logger };
 export { BaseLogger };

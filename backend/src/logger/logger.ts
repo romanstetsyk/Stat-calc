@@ -5,4 +5,4 @@ import { BaseLogger } from './logger.package.js';
 const logger = new BaseLogger(config);
 
 export { logger };
-export type { Logger } from './logger.package.js';
+export type { Logger } from './types.js';
