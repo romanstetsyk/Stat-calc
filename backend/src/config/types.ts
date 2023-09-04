@@ -1,11 +1,11 @@
-const Environments = ['development', 'production', 'test'] as const;
-type Environments = (typeof Environments)[number];
+const ENVIRONMENTS = ['development', 'production', 'test'] as const;
+type ENVIRONMENTS = (typeof ENVIRONMENTS)[number];
 
 const LOG_LEVEL = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'] as const;
 type LOG_LEVEL = (typeof LOG_LEVEL)[number];
 
 type EnvSchema = {
-  NODE_ENV: Environments;
+  NODE_ENV: ENVIRONMENTS;
   PORT: number;
   LOG_LEVEL: LOG_LEVEL;
   LOG_TO_FILE: boolean;
@@ -13,7 +13,7 @@ type EnvSchema = {
 };
 
 type ConfigSchema = {
-  ENV: Environments;
+  ENV: ENVIRONMENTS;
   PORT: number;
   LOG: {
     LEVEL: LOG_LEVEL;
@@ -25,4 +25,4 @@ type ConfigSchema = {
 };
 
 export type { ConfigSchema, EnvSchema };
-export { Environments, LOG_LEVEL };
+export { ENVIRONMENTS, LOG_LEVEL };

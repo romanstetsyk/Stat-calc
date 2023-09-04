@@ -2,7 +2,7 @@ import { config as dotenvInit } from 'dotenv';
 import { bool, cleanEnv, port, str, url } from 'envalid';
 
 import type { ConfigSchema, EnvSchema } from './types.js';
-import { Environments, LOG_LEVEL } from './types.js';
+import { ENVIRONMENTS, LOG_LEVEL } from './types.js';
 
 class BaseConfig implements ConfigSchema {
   private envVars;
@@ -30,7 +30,7 @@ class BaseConfig implements ConfigSchema {
   private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
     return cleanEnv(process.env, {
       NODE_ENV: str({
-        choices: Environments,
+        choices: ENVIRONMENTS,
         default: 'production',
       }),
       PORT: port({ devDefault: 3000 }),

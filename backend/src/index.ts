@@ -1,4 +1,4 @@
 import { config } from './config/config.js';
+import { logger } from './logger/logger.js';
 
-// eslint-disable-next-line no-console
-console.log(config);
+logger.info(JSON.stringify(config));
