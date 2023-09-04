@@ -12,7 +12,7 @@ type EnvSchema = {
   MONGODB_URL: string;
 };
 
-type ConfigSchema = {
+type Config = {
   ENV: ENVIRONMENTS;
   PORT: number;
   LOG: {
@@ -24,5 +24,5 @@ type ConfigSchema = {
   };
 };
 
-export type { ConfigSchema, EnvSchema };
+export type { Config, EnvSchema };
 export { ENVIRONMENTS, LOG_LEVEL };

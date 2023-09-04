@@ -1,10 +1,10 @@
 import { config as dotenvInit } from 'dotenv';
 import { bool, cleanEnv, port, str, url } from 'envalid';
 
-import type { ConfigSchema, EnvSchema } from './types.js';
+import type { Config, EnvSchema } from './types.js';
 import { ENVIRONMENTS, LOG_LEVEL } from './types.js';
 
-class BaseConfig implements ConfigSchema {
+class BaseConfig implements Config {
   private envVars;
 
   public ENV;
