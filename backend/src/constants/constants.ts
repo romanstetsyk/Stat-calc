@@ -1,2 +1,2 @@
-export { EXIT_CODES } from './exit-codes.js';
+export { EXIT_CODES, HTTP_CODES } from './status-codes.js';
 export { TIMEOUT } from './timeouts.js';
