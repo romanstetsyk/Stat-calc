@@ -1,5 +1,5 @@
 type Database = {
-  connect(): void;
+  connect(): Promise<void>;
 };
 
 export type { Database };

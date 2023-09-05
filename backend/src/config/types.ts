@@ -1,7 +1,17 @@
+import type { TransportTargetOptions } from 'pino';
+
 const ENVIRONMENTS = ['development', 'production', 'test'] as const;
 type ENVIRONMENTS = (typeof ENVIRONMENTS)[number];
 
-const LOG_LEVEL = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'] as const;
+const LOG_LEVEL = [
+  'fatal',
+  'error',
+  'warn',
+  'info',
+  'debug',
+  'trace',
+  'silent',
+] as const;
 type LOG_LEVEL = (typeof LOG_LEVEL)[number];
 
 type EnvSchema = {
@@ -17,7 +27,9 @@ type Config = {
   PORT: number;
   LOG: {
     LEVEL: LOG_LEVEL;
-    FILE: boolean;
+    LOG_TO_FILE: boolean;
+    FILE_LOCATION: string;
+    TARGETS: TransportTargetOptions[];
   };
   MONGOOSE: {
     URL: string;

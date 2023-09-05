@@ -1,4 +1,5 @@
-import { config } from './config/config.js';
-import { logger } from './logger/logger.js';
+import { serverApp } from './core/server-app.js';
 
-logger.info(JSON.stringify(config));
+const server = await serverApp.init();
+
+export { server };

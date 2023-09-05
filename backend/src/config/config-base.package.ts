@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { config as dotenvInit } from 'dotenv';
 import { bool, cleanEnv, port, str, url } from 'envalid';
 
@@ -18,10 +20,35 @@ class BaseConfig implements Config {
 
     this.ENV = this.envVars.NODE_ENV;
     this.PORT = this.envVars.PORT;
+
     this.LOG = {
       LEVEL: this.envVars.LOG_LEVEL,
-      FILE: this.envVars.LOG_TO_FILE,
+      LOG_TO_FILE: this.envVars.LOG_TO_FILE,
+      FILE_LOCATION: '',
+      TARGETS: [
+        {
+          level: this.envVars.LOG_LEVEL,
+          target: 'pino/file', // prints json to console if no destination in options
+          options: {},
+        },
+      ],
     };
+
+    if (this.envVars.LOG_TO_FILE) {
+      const fileLocation = path.join(
+        'logs',
+        `logs-${this.envVars.NODE_ENV}-${this.envVars.LOG_LEVEL}.log`,
+      );
+
+      this.LOG.FILE_LOCATION = fileLocation;
+
+      this.LOG.TARGETS.push({
+        level: this.envVars.LOG_LEVEL,
+        target: 'pino/file',
+        options: { destination: fileLocation, mkdir: true },
+      });
+    }
+
     this.MONGOOSE = {
       URL: this.envVars.MONGODB_URL,
     };

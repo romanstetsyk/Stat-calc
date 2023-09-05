@@ -1,6 +1,4 @@
-import path from 'node:path';
-
-import type { Logger as PinoLogger, TransportTargetOptions } from 'pino';
+import type { Logger as PinoLogger } from 'pino';
 import { pino } from 'pino';
 
 import type { Config } from '~/config/types.js';
@@ -14,36 +12,18 @@ class BaseLogger implements Logger {
   public constructor(config: Config) {
     this.config = config;
 
-    const {
-      ENV,
-      LOG: { LEVEL, FILE },
-    } = this.config;
-
-    const targets: TransportTargetOptions[] = [
-      {
-        level: LEVEL,
-        target: 'pino/file', // prints json to console if no destination in options
-        options: {},
-      },
-    ];
-
-    if (FILE) {
-      const logFilename = `logs-${ENV}-${LEVEL}.log`;
-      targets.push({
-        level: LEVEL,
-        target: 'pino/file',
-        options: { destination: path.join('logs', logFilename), mkdir: true },
-      });
-    }
-
     this.logger = pino(
       {
         timestamp: pino.stdTimeFunctions.isoTime,
       },
-      pino.transport({ targets }),
+      pino.transport({ targets: this.config.LOG.TARGETS }),
     );
 
     this.logger.info('Logger is created...');
+  }
+
+  public get level(): string {
+    return this.logger.level;
   }
 
   public fatal(
@@ -86,6 +66,13 @@ class BaseLogger implements Logger {
     parameters: Record<string, unknown> = {},
   ): ReturnType<PinoLogger['trace']> {
     this.logger.trace(parameters, message);
+  }
+
+  public silent(
+    message: string,
+    parameters: Record<string, unknown> = {},
+  ): ReturnType<PinoLogger['silent']> {
+    this.logger.silent(parameters, message);
   }
 }
 
