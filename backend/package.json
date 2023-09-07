@@ -10,11 +10,13 @@
   },
   "scripts": {
     "lint:types": "npx tsc --noEmit",
-    "lint:ts": "npx eslint \"src/**/*.ts\"",
+    "lint:ts:generic": "npx eslint --ext .ts",
+    "lint:ts": "npm run lint:ts:generic -- .",
+    "lint": "npm run lint:types && npm run lint:ts",
     "dev": "nodemon --exec \"node --loader ts-paths-esm-loader\" src/index.ts | npx pino-pretty",
     "build": "tsc && cp -r package.json build",
     "start": "node ./build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

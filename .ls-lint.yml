@@ -2,14 +2,18 @@ ls:
   .dir: kebab-case
   .tsx: kebab-case
   .ts: kebab-case
+  .d.ts: kebab-case
+  .test.ts: kebab-case
   .html: kebab-case
   .json: kebab-case
+  .workspace.json: kebab-case
   .package.ts: kebab-case
+  .config.ts: kebab-case
 
 ignore:
   - .git
   - node_modules
   - frontend/node_modules
   - backend/node_modules
-  - frontend/src/vite-env.d.ts
-  - frontend/vite.config.ts
+  - coverage
+  - backend/logs

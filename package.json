@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "18.x.x",
     "npm": "9.x.x"
@@ -15,8 +16,12 @@
     "build:frontend": "npm run build -w frontend",
     "lint:editorconfig": "editorconfig-checker",
     "lint:fs": "ls-lint",
-    "lint": "npm run lint:editorconfig && npm run lint:fs && npm run format && npm run lint --workspaces --if-present -- --max-warnings=0",
-    "format": "prettier --check \"**/*.{ts,tsx,json,md,html}\""
+    "lint:types": "npm run lint:types --workspaces --if-present",
+    "lint:ts": "npm run lint:ts --workspaces --if-present -- --max-warnings=0",
+    "lint": "npm run lint:editorconfig && npm run lint:fs && npm run format && npm run lint:types && npm run lint:ts",
+    "format": "prettier --check \"**/*.{ts,tsx,json,md,html}\"",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -26,23 +31,23 @@
     "@commitlint/config-conventional": "^17.7.0",
     "@ls-lint/ls-lint": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@vitest/coverage-v8": "^0.34.3",
     "editorconfig-checker": "^5.1.1",
     "eslint": "^8.47.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-sonarjs": "^0.20.0",
     "eslint-plugin-unicorn": "^48.0.1",
+    "jsdom": "^22.1.0",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.2",
     "simple-git-hooks": "^2.9.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.34.3"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
     "commit-msg": "npx commitlint --edit ${1}"
-  },
-  "lint-staged": {
-    "*.{ts,js}": "eslint",
-    "*": "prettier --check"
   }
 }
