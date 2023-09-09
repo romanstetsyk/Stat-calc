@@ -1,4 +1,5 @@
-import path from 'node:path';
+import * as path from 'node:path';
+import * as nodeUrl from 'node:url';
 
 import { config as dotenvInit } from 'dotenv';
 import { bool, cleanEnv, port, str, url } from 'envalid';
@@ -15,7 +16,6 @@ class BaseConfig implements Config {
   public MONGOOSE;
 
   public constructor() {
-    dotenvInit();
     this.envVars = this.loadEnv();
 
     this.ENV = this.envVars.NODE_ENV;
@@ -55,7 +55,13 @@ class BaseConfig implements Config {
   }
 
   private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
-    return cleanEnv(process.env, {
+    const pathToEnv = path.resolve(
+      path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
+      path.join('..', '..', '.env'),
+    );
+    dotenvInit({ path: pathToEnv });
+
+    const envSpecs: Parameters<typeof cleanEnv<EnvSchema>>[1] = {
       NODE_ENV: str({
         choices: ENVIRONMENTS,
         default: 'production',
@@ -67,7 +73,9 @@ class BaseConfig implements Config {
       }),
       LOG_TO_FILE: bool({ default: true }),
       MONGODB_URL: url({ desc: 'MongoDB connection string' }),
-    });
+    };
+
+    return cleanEnv(process.env, envSpecs);
   }
 }
 
