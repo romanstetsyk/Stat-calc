@@ -1,3 +1,4 @@
+import pino from 'pino';
 import { pinoHttp } from 'pino-http';
 
 import { config } from '~/config/config.js';
@@ -8,6 +9,7 @@ const HTTP_ERRORS = {
 } as const;
 
 const httpLogger = pinoHttp({
+  timestamp: pino.stdTimeFunctions.isoTime,
   customLogLevel: function (_req, res, err) {
     if (err) {
       return 'error';
