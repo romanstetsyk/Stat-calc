@@ -8,7 +8,11 @@ import { EXIT_CODES } from '~/constants/constants.js';
 import type { Database } from '~/database/database.js';
 import { unexpectedErrorHandler } from '~/error-handler/error-handler.js';
 import type { Logger } from '~/logger/logger.js';
-import { httpLogger } from '~/middleware/middleware.js';
+import {
+  errorConverter,
+  errorHandler,
+  httpLogger,
+} from '~/middleware/middleware.js';
 
 class AppBase {
   private config: Config;
@@ -40,6 +44,8 @@ class AppBase {
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       res.sendStatus(200);
     });
+
+    this.app.use(errorConverter, errorHandler);
 
     return this.app
       .listen(this.config.PORT, () => {
