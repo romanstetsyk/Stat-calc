@@ -7,6 +7,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       globals: false,
+      clearMocks: true,
       environment: 'node',
     },
   }),
