@@ -1,24 +1,16 @@
-import type { Request, Response } from 'express';
 import { describe, expect, it, vi } from 'vitest';
 
 import { HTTP_CODES } from '~/constants/constants.js';
 import { HttpError } from '~/exceptions/exceptions.js';
+import { mockNext, mockReq, mockRes } from '~/test/helpers/express-mock.js';
 
 import { errorConverter } from './error-converter.js';
-
-const mockReq = (req?: Record<string, unknown>): Request => {
-  return { ...req } as unknown as Request;
-};
-
-const mockRes = (res?: Record<string, unknown>): Response => {
-  return { ...res } as unknown as Response;
-};
 
 describe('error converter', () => {
   it('should call next() with error if it is an instance of HttpError', () => {
     const req = mockReq();
     const res = mockRes();
-    const next = vi.fn();
+    const next = mockNext();
     const error = new HttpError({
       message: 'error message',
       status: HTTP_CODES.INTERNAL_SERVER_ERROR,
