@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import * as nodeUrl from 'node:url';
 
 import { config as dotenvInit } from 'dotenv';
-import { bool, cleanEnv, port, str, url } from 'envalid';
+import { bool, cleanEnv, port, str, testOnly, url } from 'envalid';
 
 import type { Config, EnvSchema } from './types.js';
 import { ENVIRONMENTS, LOG_LEVEL } from './types.js';
@@ -70,6 +70,7 @@ class BaseConfig implements Config {
       LOG_LEVEL: str({
         choices: LOG_LEVEL,
         default: 'info',
+        devDefault: testOnly('silent'),
       }),
       LOG_TO_FILE: bool({ default: true }),
       MONGODB_URL: url({ desc: 'MongoDB connection string' }),

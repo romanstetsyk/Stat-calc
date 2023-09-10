@@ -1,7 +1,7 @@
 import type { Logger as PinoLogger } from 'pino';
 import { pino } from 'pino';
 
-import type { Config } from '~/config/types.js';
+import type { Config } from '~/config/config.js';
 
 import type { Logger } from './types.js';
 
