@@ -14,12 +14,15 @@ import type {
   FindByIdResponseDTO,
 } from '~/types/types.js';
 
-class UserController extends ControllerBase {
-  // private userService: UserService;
+import type { UserService } from './user.service.js';
 
-  public constructor(logger: Logger /*userService: UserService*/) {
+class UserController extends ControllerBase {
+  private userService: UserService;
+
+  public constructor(logger: Logger, userService: UserService) {
     super(logger, API_PATHS.USERS);
-    // this.userService = userService;
+    this.userService = userService;
+
     this.addRoute({
       path: API_PATHS_USERS.ROOT,
       method: HTTP_METHODS.GET,
@@ -34,12 +37,11 @@ class UserController extends ControllerBase {
   }
 
   private async findAll(): Promise<ApiResponse<FindAllResponseDTO>> {
+    const users = await this.userService.findAll();
+
     return {
       status: HTTP_CODES.OK,
-      // payload: await this.userService.findAll(),
-      payload: await Promise.resolve([
-        { id: 'af' },
-      ] satisfies FindAllResponseDTO),
+      payload: users,
     };
   }
 
@@ -47,10 +49,10 @@ class UserController extends ControllerBase {
     options: ApiRequest<FindByIdRequestDTO>,
   ): Promise<ApiResponse<FindByIdResponseDTO>> {
     const { id } = options.params;
-
+    const user = await this.userService.findById(id);
     return {
       status: HTTP_CODES.OK,
-      payload: await Promise.resolve({ id } satisfies FindByIdResponseDTO),
+      payload: user,
     };
   }
 }

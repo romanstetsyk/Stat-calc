@@ -10,6 +10,8 @@ ls:
   .package.ts: kebab-case
   .config.ts: kebab-case
   .controller.ts: kebab-case
+  .repository.ts: kebab-case
+  .service.ts: kebab-case
 
 ignore:
   - .git

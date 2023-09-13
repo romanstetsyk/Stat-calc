@@ -8,7 +8,17 @@ type ErrorCommon = {
   message: HttpError['message'];
 };
 
-export type { ErrorCommon, Override, ValueOf };
+type Service<T = unknown> = {
+  findAll(): Promise<T[]>;
+  findById(id: string | number): Promise<T>;
+};
+
+type Repository<T = unknown> = {
+  findAll(): Promise<T[]>;
+  findById(id: string | number): Promise<T>;
+};
+
+export type { ErrorCommon, Override, Repository, Service, ValueOf };
 export type {
   ApiRequest,
   ApiResponse,
