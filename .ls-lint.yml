@@ -9,6 +9,7 @@ ls:
   .workspace.json: kebab-case
   .package.ts: kebab-case
   .config.ts: kebab-case
+  .controller.ts: kebab-case
 
 ignore:
   - .git
