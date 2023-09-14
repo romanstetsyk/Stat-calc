@@ -1,11 +1,13 @@
-import type { Repository, Service } from '~/types/types.js';
+import type { Service } from '~/types/types.js';
 
-import type { UserEntity } from './types.js';
+import type { CreateRequestDTO } from './types.js';
+import type { UserEntity } from './user.entity.js';
+import type { UserRepository } from './user.repository.js';
 
 class UserService implements Service<UserEntity> {
-  private userRepository: Repository<UserEntity>;
+  private userRepository: UserRepository;
 
-  public constructor(userRepository: Repository<UserEntity>) {
+  public constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
 
@@ -17,6 +19,11 @@ class UserService implements Service<UserEntity> {
   public async findById(id: UserEntity['id']): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findById(id);
     return await Promise.resolve(user);
+  }
+
+  public async create(body: CreateRequestDTO['body']): Promise<UserEntity> {
+    const user: UserEntity = await this.userRepository.create(body);
+    return user;
   }
 }
 

@@ -14,6 +14,7 @@ import type {
   FindByIdResponseDTO,
 } from '~/types/types.js';
 
+import type { CreateRequestDTO, CreateResponseDTO } from './types.js';
 import type { UserService } from './user.service.js';
 
 class UserController extends ControllerBase {
@@ -34,6 +35,12 @@ class UserController extends ControllerBase {
       method: HTTP_METHODS.GET,
       handler: this.findById.bind(this),
     });
+
+    this.addRoute({
+      path: API_PATHS_USERS.ROOT,
+      method: HTTP_METHODS.POST,
+      handler: this.create.bind(this),
+    });
   }
 
   private async findAll(): Promise<ApiResponse<FindAllResponseDTO>> {
@@ -52,6 +59,17 @@ class UserController extends ControllerBase {
     const user = await this.userService.findById(id);
     return {
       status: HTTP_CODES.OK,
+      payload: user,
+    };
+  }
+
+  private async create(
+    options: ApiRequest<CreateRequestDTO>,
+  ): Promise<ApiResponse<CreateResponseDTO>> {
+    const { name } = options.body;
+    const user = await this.userService.create({ name });
+    return {
+      status: HTTP_CODES.CREATED,
       payload: user,
     };
   }

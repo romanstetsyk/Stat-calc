@@ -11,6 +11,7 @@ type ErrorCommon = {
 type Service<T = unknown> = {
   findAll(): Promise<T[]>;
   findById(id: string | number): Promise<T>;
+  create(body: unknown): Promise<T>;
 };
 
 type Repository<T = unknown> = {
@@ -32,5 +33,4 @@ export type {
   FindAllResponseDTO,
   FindByIdRequestDTO,
   FindByIdResponseDTO,
-  UserEntity,
 } from '~/users/types.js';

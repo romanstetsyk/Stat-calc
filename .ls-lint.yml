@@ -12,6 +12,8 @@ ls:
   .controller.ts: kebab-case
   .repository.ts: kebab-case
   .service.ts: kebab-case
+  .entity.ts: kebab-case
+  .model.ts: kebab-case
 
 ignore:
   - .git
