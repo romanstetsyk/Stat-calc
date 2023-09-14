@@ -71,6 +71,8 @@ class AppBase {
 
     // Autolog http requests and responses
     this.app.use(httpLogger);
+    // parse request json body
+    this.app.use(express.json());
 
     this.initRoutes();
 
