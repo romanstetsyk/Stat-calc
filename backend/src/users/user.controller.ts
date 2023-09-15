@@ -53,7 +53,7 @@ class UserController extends ControllerBase {
   }
 
   private async findById(
-    options: ApiRequest<FindByIdRequestDTO>,
+    options: ApiRequest<{ params: FindByIdRequestDTO }>,
   ): Promise<ApiResponse<FindByIdResponseDTO>> {
     const { id } = options.params;
     const user = await this.userService.findById(id);
@@ -64,7 +64,7 @@ class UserController extends ControllerBase {
   }
 
   private async create(
-    options: ApiRequest<CreateRequestDTO>,
+    options: ApiRequest<{ body: CreateRequestDTO }>,
   ): Promise<ApiResponse<CreateResponseDTO>> {
     const { name, email, passwordHash } = options.body;
     const user = await this.userService.create({ name, email, passwordHash });

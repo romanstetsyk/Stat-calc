@@ -30,7 +30,7 @@ class UserService implements Service<UserEntity> {
     return user;
   }
 
-  public async create(body: CreateRequestDTO['body']): Promise<UserEntity> {
+  public async create(body: CreateRequestDTO): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.create(body);
     return user;
   }

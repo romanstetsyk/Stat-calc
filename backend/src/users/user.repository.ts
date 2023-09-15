@@ -44,7 +44,7 @@ class UserRepository implements Repository<UserEntity> {
     return user ? new UserEntity(user.toObject()) : null;
   }
 
-  public async create(body: CreateRequestDTO['body']): Promise<UserEntity> {
+  public async create(body: CreateRequestDTO): Promise<UserEntity> {
     const newUser: HydratedDocument<UserDocument> =
       await this.userModel.create(body);
 
