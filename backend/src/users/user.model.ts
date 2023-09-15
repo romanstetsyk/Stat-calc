@@ -1,12 +1,11 @@
-import { randomUUID } from 'node:crypto';
-
 import * as mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const schema = new mongoose.Schema(
   {
     _id: {
       type: mongoose.Schema.Types.UUID,
-      default: randomUUID,
+      default: uuidv4,
     },
     name: {
       type: String,
@@ -14,7 +13,11 @@ const schema = new mongoose.Schema(
       trim: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    id: true,
+    toObject: { getters: true },
+  },
 );
 
 type UserDocument = mongoose.InferSchemaType<typeof schema>;

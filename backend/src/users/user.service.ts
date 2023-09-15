@@ -1,3 +1,6 @@
+import { ERROR_MESSAGES } from '~/constants/constants.js';
+import { HTTP_CODES } from '~/constants/status-codes.js';
+import { HttpError } from '~/exceptions/http-error.js';
 import type { Service } from '~/types/types.js';
 
 import type { CreateRequestDTO } from './types.js';
@@ -17,8 +20,14 @@ class UserService implements Service<UserEntity> {
   }
 
   public async findById(id: UserEntity['id']): Promise<UserEntity> {
-    const user: UserEntity = await this.userRepository.findById(id);
-    return await Promise.resolve(user);
+    const user: UserEntity | null = await this.userRepository.findById(id);
+    if (!user) {
+      throw new HttpError({
+        status: HTTP_CODES.NOT_FOUND,
+        message: ERROR_MESSAGES.NOT_FOUND,
+      });
+    }
+    return user;
   }
 
   public async create(body: CreateRequestDTO['body']): Promise<UserEntity> {

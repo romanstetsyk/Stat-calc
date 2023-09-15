@@ -16,7 +16,7 @@ type Service<T = unknown> = {
 
 type Repository<T = unknown> = {
   findAll(): Promise<T[]>;
-  findById(id: string | number): Promise<T>;
+  findById(id: string | number): Promise<T | null>;
 };
 
 export type { ErrorCommon, Override, Repository, Service, ValueOf };

@@ -1,3 +1,9 @@
+import type { HydratedDocument } from 'mongoose';
+import { Error as MongooseError } from 'mongoose';
+
+import { ERROR_MESSAGES } from '~/constants/error-messages.js';
+import { HTTP_CODES } from '~/constants/status-codes.js';
+import { HttpError } from '~/exceptions/http-error.js';
 import type { Repository } from '~/types/types.js';
 
 import type { CreateRequestDTO } from './types.js';
@@ -12,28 +18,37 @@ class UserRepository implements Repository<UserEntity> {
   }
 
   public async findAll(): Promise<UserEntity[]> {
-    const users = await this.userModel.find<UserDocument>({});
+    const allUsers: HydratedDocument<UserDocument>[] =
+      await this.userModel.find({});
 
-    // const n = await this.userModel.create({ name: 'test' });
-    // console.log(n);
-
-    return users.map((user) => {
-      const { _id, name } = user;
-      const id = _id.toString();
-      return new UserEntity({ id, name });
-    });
+    return allUsers.map((user) => new UserEntity(user.toObject()));
   }
 
-  public findById(id: UserEntity['id']): Promise<UserEntity> {
-    const user = { id, name: 'iii' };
-    return Promise.resolve(user);
+  public async findById(id: UserEntity['id']): Promise<UserEntity | null> {
+    let user: HydratedDocument<UserDocument> | null;
+
+    try {
+      user = await this.userModel.findById(id);
+    } catch (error) {
+      if (error instanceof MongooseError.CastError) {
+        user = null;
+      } else {
+        throw new HttpError({
+          status: HTTP_CODES.INTERNAL_SERVER_ERROR,
+          message: ERROR_MESSAGES.UNKNOWN,
+          cause: error,
+        });
+      }
+    }
+
+    return user ? new UserEntity(user.toObject()) : null;
   }
 
   public async create(body: CreateRequestDTO['body']): Promise<UserEntity> {
-    const newUser = await this.userModel.create(body);
-    const { _id, name } = newUser;
-    const id = _id.toString();
-    return new UserEntity({ id, name });
+    const newUser: HydratedDocument<UserDocument> =
+      await this.userModel.create(body);
+
+    return new UserEntity(newUser.toObject());
   }
 }
 

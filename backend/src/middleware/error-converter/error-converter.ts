@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from 'express';
+import { Error as MongooseError } from 'mongoose';
 
-import { HTTP_CODES } from '~/constants/constants.js';
+import { ERROR_MESSAGES, HTTP_CODES } from '~/constants/constants.js';
 import { HttpError } from '~/exceptions/exceptions.js';
 
 const errorConverter: ErrorRequestHandler = (
@@ -9,21 +10,31 @@ const errorConverter: ErrorRequestHandler = (
   _res,
   next,
 ) => {
-  let error = err;
-  if (error instanceof HttpError) {
-    next(error);
-  } else if (error instanceof Error) {
-    const status = HTTP_CODES.INTERNAL_SERVER_ERROR;
-    const { message, cause } = error;
-    error = new HttpError({ status, message, cause });
-    next(error);
-  } else {
-    const status = HTTP_CODES.INTERNAL_SERVER_ERROR;
-    const message = 'Internal Server Error';
-    const cause = err;
-    error = new HttpError({ status, message, cause });
-    next(error);
+  if (err instanceof HttpError) {
+    next(err);
+    return;
   }
+
+  if (!(err instanceof Error)) {
+    const status = HTTP_CODES.INTERNAL_SERVER_ERROR;
+    const message = ERROR_MESSAGES.UNKNOWN;
+    const error = new HttpError({ status, message, cause: err });
+    next(error);
+    return;
+  }
+
+  let status, message;
+  if (err instanceof MongooseError.CastError) {
+    status = HTTP_CODES.BAD_REQUEST;
+    message = ERROR_MESSAGES.BAD_REQUEST;
+  } else {
+    status = HTTP_CODES.INTERNAL_SERVER_ERROR;
+    message = err.message;
+  }
+
+  const error = new HttpError({ status, message, cause: err });
+
+  next(error);
 };
 
 export { errorConverter };
