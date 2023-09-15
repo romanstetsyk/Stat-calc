@@ -66,8 +66,8 @@ class UserController extends ControllerBase {
   private async create(
     options: ApiRequest<CreateRequestDTO>,
   ): Promise<ApiResponse<CreateResponseDTO>> {
-    const { name } = options.body;
-    const user = await this.userService.create({ name });
+    const { name, email, passwordHash } = options.body;
+    const user = await this.userService.create({ name, email, passwordHash });
     return {
       status: HTTP_CODES.CREATED,
       payload: user,

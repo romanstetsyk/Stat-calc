@@ -9,4 +9,4 @@ const userRepository = new UserRepository(UserModel);
 const userService = new UserService(userRepository);
 const userController = new UserController(logger, userService);
 
-export { userController };
+export { userController, userService };

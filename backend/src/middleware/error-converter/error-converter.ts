@@ -3,6 +3,7 @@ import { Error as MongooseError } from 'mongoose';
 
 import { ERROR_MESSAGES, HTTP_CODES } from '~/constants/constants.js';
 import { HttpError } from '~/exceptions/exceptions.js';
+import { hasValue } from '~/helpers/type-guards.js';
 
 const errorConverter: ErrorRequestHandler = (
   err: unknown,
@@ -28,7 +29,10 @@ const errorConverter: ErrorRequestHandler = (
     status = HTTP_CODES.BAD_REQUEST;
     message = ERROR_MESSAGES.BAD_REQUEST;
   } else {
-    status = HTTP_CODES.INTERNAL_SERVER_ERROR;
+    status =
+      'status' in err && hasValue(HTTP_CODES, err.status)
+        ? err.status
+        : HTTP_CODES.INTERNAL_SERVER_ERROR;
     message = err.message;
   }
 
