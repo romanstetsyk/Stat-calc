@@ -1,9 +1,9 @@
 import type { ErrorRequestHandler } from 'express';
 import { Error as MongooseError } from 'mongoose';
 
-import { ERROR_MESSAGES, HTTP_CODES } from '~/constants/constants.js';
-import { HttpError } from '~/exceptions/exceptions.js';
-import { hasValue } from '~/helpers/helpers.js';
+import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
+import { hasValue } from '~/common/helpers/helpers.js';
+import { HttpError } from '~/packages/http-error/http-error.js';
 
 const errorConverter: ErrorRequestHandler = (
   err: unknown,

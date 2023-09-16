@@ -1,7 +1,7 @@
 import pino from 'pino';
 import { pinoHttp } from 'pino-http';
 
-import { config } from '~/config/config.js';
+import { config } from '~/packages/config/config.js';
 
 const HTTP_ERRORS = {
   CLIENT: 400,

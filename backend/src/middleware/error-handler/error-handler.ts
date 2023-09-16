@@ -1,8 +1,8 @@
 import type { ErrorRequestHandler } from 'express';
 
-import type { HttpError } from '~/exceptions/exceptions.js';
-import { logger } from '~/logger/logger.js';
-import type { ErrorCommon } from '~/types/types.js';
+import type { ErrorCommon } from '~/common/types/types.js';
+import type { HttpError } from '~/packages/http-error/http-error.js';
+import { logger } from '~/packages/logger/logger.js';
 
 const errorHandler: ErrorRequestHandler = (
   err: HttpError,

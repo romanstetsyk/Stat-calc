@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { HTTP_CODES } from '~/constants/constants.js';
-import { HttpError } from '~/exceptions/exceptions.js';
+import { HTTP_CODES } from '~/common/constants/constants.js';
+import type { ErrorCommon } from '~/common/types/types.js';
+import { HttpError } from '~/packages/http-error/http-error.js';
 import { mockNext, mockReq, mockRes } from '~/test/helpers/express-mock.js';
-import type { ErrorCommon } from '~/types/types.js';
 
 import { errorHandler } from './error-handler.js';
 

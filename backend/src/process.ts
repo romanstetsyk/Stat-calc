@@ -1,6 +1,6 @@
-import { EXIT_CODES } from '~/constants/constants.js';
-import { unexpectedErrorHandler } from '~/error-handler/error-handler.js';
-import { logger } from '~/logger/logger.js';
+import { EXIT_CODES } from '~/common/constants/constants.js';
+import { logger } from '~/packages/logger/logger.js';
+import { unexpectedErrorHandler } from '~/packages/unexpected-error-handler/unexpected-error-handler.js';
 
 import { server } from './index.js';
 

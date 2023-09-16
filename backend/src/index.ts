@@ -1,4 +1,4 @@
-import { serverApp } from './core/server-app.js';
+import { serverApp } from './packages/core/server-app.js';
 
 const server = await serverApp.init();
 

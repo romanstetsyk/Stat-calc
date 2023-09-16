@@ -8,6 +8,7 @@ ls:
   .json: kebab-case
   .workspace.json: kebab-case
   .package.ts: kebab-case
+  .package.test.ts: kebab-case
   .config.ts: kebab-case
   .controller.ts: kebab-case
   .repository.ts: kebab-case
