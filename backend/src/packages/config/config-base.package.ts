@@ -62,7 +62,7 @@ class BaseConfig implements Config {
   private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
     const pathToEnv = path.resolve(
       path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
-      path.join('..', '..', '.env'),
+      path.join('..', '..', '..', '.env'),
     );
     dotenvInit({ path: pathToEnv });
 
