@@ -1,17 +1,21 @@
-import { ERROR_MESSAGES } from '~/constants/constants.js';
-import { HTTP_CODES } from '~/constants/status-codes.js';
-import { HttpError } from '~/exceptions/http-error.js';
+import { validate as validateUUID } from 'uuid';
+
+import type { SignUpRequestDTO } from '~/auth/types.js';
+import { ERROR_MESSAGES, HTTP_CODES } from '~/constants/constants.js';
+import type { Encrypt } from '~/encrypt/encrypt.js';
+import { HttpError } from '~/exceptions/exceptions.js';
 import type { Service } from '~/types/types.js';
 
-import type { CreateRequestDTO } from './types.js';
-import type { UserEntity } from './user.entity.js';
+import { UserEntity } from './user.entity.js';
 import type { UserRepository } from './user.repository.js';
 
 class UserService implements Service<UserEntity> {
   private userRepository: UserRepository;
+  private encrypt: Encrypt;
 
-  public constructor(userRepository: UserRepository) {
+  public constructor(userRepository: UserRepository, encrypt: Encrypt) {
     this.userRepository = userRepository;
+    this.encrypt = encrypt;
   }
 
   public async findAll(): Promise<UserEntity[]> {
@@ -20,7 +24,15 @@ class UserService implements Service<UserEntity> {
   }
 
   public async findById(id: UserEntity['id']): Promise<UserEntity> {
+    if (!validateUUID(id)) {
+      throw new HttpError({
+        status: HTTP_CODES.NOT_FOUND,
+        message: ERROR_MESSAGES.NOT_FOUND,
+      });
+    }
+
     const user: UserEntity | null = await this.userRepository.findById(id);
+
     if (!user) {
       throw new HttpError({
         status: HTTP_CODES.NOT_FOUND,
@@ -30,8 +42,17 @@ class UserService implements Service<UserEntity> {
     return user;
   }
 
-  public async create(body: CreateRequestDTO): Promise<UserEntity> {
-    const user: UserEntity = await this.userRepository.create(body);
+  public async create(payload: SignUpRequestDTO): Promise<UserEntity> {
+    const { name, email, password } = payload;
+    const passwordHash = await this.encrypt.hashString(password);
+
+    const userObjWithoutID = UserEntity.createObject({
+      name,
+      email,
+      passwordHash,
+    });
+
+    const user: UserEntity = await this.userRepository.create(userObjWithoutID);
     return user;
   }
 }

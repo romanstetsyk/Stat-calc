@@ -8,3 +8,4 @@ const authService = new AuthService(userService);
 const authController = new AuthController(logger, authService);
 
 export { authController };
+export type { SignUpRequestDTO, SignUpResponseDTO } from './types.js';

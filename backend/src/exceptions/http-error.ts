@@ -2,9 +2,9 @@ import type { HTTP_CODES } from '~/constants/constants.js';
 import type { ValueOf } from '~/types/types.js';
 
 type HttpErrorConstructor = {
+  status: ValueOf<typeof HTTP_CODES>;
   message: string;
   cause?: unknown;
-  status: ValueOf<typeof HTTP_CODES>;
 };
 
 class HttpError extends Error {

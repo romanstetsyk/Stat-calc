@@ -8,16 +8,9 @@ type FindAllResponseDTO = UserEntity[];
 
 type FindByIdResponseDTO = UserEntity;
 
-type CreateRequestDTO = {
-  name: UserEntity['name'];
-  email: UserEntity['email'];
-  passwordHash: UserEntity['passwordHash'];
-};
-
 type CreateResponseDTO = UserEntity;
 
 export type {
-  CreateRequestDTO,
   CreateResponseDTO,
   FindAllResponseDTO,
   FindByIdRequestDTO,

@@ -1,11 +1,12 @@
 import type { Logger } from '~/logger/logger.js';
 import { logger } from '~/logger/logger.js';
+
 import type {
   Controller,
   ControllerRoute,
   RequestHandlerWrapped,
   ServerRoute,
-} from '~/types/types.js';
+} from './types.js';
 
 abstract class ControllerBase implements Controller {
   public logger: Logger;

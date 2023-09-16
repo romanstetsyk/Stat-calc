@@ -1,9 +1,12 @@
-import { API_PATHS, API_PATHS_AUTH } from '~/constants/api-paths.js';
-import { HTTP_METHODS } from '~/constants/http-methods.js';
-import { HTTP_CODES } from '~/constants/status-codes.js';
-import { ControllerBase } from '~/controller/controller-base.js';
-import type { ApiRequest, ApiResponse } from '~/controller/types.js';
-import { HttpError } from '~/exceptions/http-error.js';
+import {
+  API_PATHS,
+  API_PATHS_AUTH,
+  HTTP_CODES,
+  HTTP_METHODS,
+} from '~/constants/constants.js';
+import type { ApiRequest, ApiResponse } from '~/controller/controller.js';
+import { ControllerBase } from '~/controller/controller.js';
+import { HttpError } from '~/exceptions/exceptions.js';
 import type { Logger } from '~/logger/logger.js';
 
 import type { AuthService } from './auth.service.js';

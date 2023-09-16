@@ -26,6 +26,18 @@ class UserEntity {
   }: UserEntityConstructor): UserEntity {
     return new UserEntity({ id, name, email, passwordHash });
   }
+
+  public static createObject({
+    name,
+    email,
+    passwordHash,
+  }: Omit<UserEntityConstructor, 'id'>): Omit<UserEntity, 'id'> {
+    return {
+      name,
+      email,
+      passwordHash,
+    };
+  }
 }
 
 export { UserEntity };

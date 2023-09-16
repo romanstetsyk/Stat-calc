@@ -1,4 +1,4 @@
-import type { Controller, ServerApi } from '~/types/types.js';
+import type { Controller, ServerApi } from '~/controller/controller.js';
 
 class ApiBase implements ServerApi {
   public version: string;

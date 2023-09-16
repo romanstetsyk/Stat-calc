@@ -1,20 +1,20 @@
+import type { SignUpRequestDTO } from '~/auth/auth.js';
 import {
   API_PATHS,
   API_PATHS_USERS,
   HTTP_CODES,
   HTTP_METHODS,
 } from '~/constants/constants.js';
-import { ControllerBase } from '~/controller/controller-base.js';
+import type { ApiRequest, ApiResponse } from '~/controller/controller.js';
+import { ControllerBase } from '~/controller/controller.js';
 import type { Logger } from '~/logger/logger.js';
+
 import type {
-  ApiRequest,
-  ApiResponse,
+  CreateResponseDTO,
   FindAllResponseDTO,
   FindByIdRequestDTO,
   FindByIdResponseDTO,
-} from '~/types/types.js';
-
-import type { CreateRequestDTO, CreateResponseDTO } from './types.js';
+} from './types.js';
 import type { UserService } from './user.service.js';
 
 class UserController extends ControllerBase {
@@ -64,10 +64,10 @@ class UserController extends ControllerBase {
   }
 
   private async create(
-    options: ApiRequest<{ body: CreateRequestDTO }>,
+    options: ApiRequest<{ body: SignUpRequestDTO }>,
   ): Promise<ApiResponse<CreateResponseDTO>> {
-    const { name, email, passwordHash } = options.body;
-    const user = await this.userService.create({ name, email, passwordHash });
+    const { name, email, password } = options.body;
+    const user = await this.userService.create({ name, email, password });
     return {
       status: HTTP_CODES.CREATED,
       payload: user,

@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import * as nodeUrl from 'node:url';
 
 import { config as dotenvInit } from 'dotenv';
-import { bool, cleanEnv, port, str, testOnly, url } from 'envalid';
+import { bool, cleanEnv, num, port, str, testOnly, url } from 'envalid';
 
 import type { Config, EnvSchema } from './types.js';
 import { ENVIRONMENTS, LOG_LEVEL } from './types.js';
@@ -14,6 +14,7 @@ class BaseConfig implements Config {
   public PORT;
   public LOG;
   public MONGOOSE;
+  public ENCRYPT;
 
   public constructor() {
     this.envVars = this.loadEnv();
@@ -52,6 +53,10 @@ class BaseConfig implements Config {
     this.MONGOOSE = {
       URL: this.envVars.MONGODB_URL,
     };
+
+    this.ENCRYPT = {
+      PASSWORD_SALT_ROUNDS: this.envVars.PASSWORD_SALT_ROUNDS,
+    };
   }
 
   private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
@@ -74,6 +79,7 @@ class BaseConfig implements Config {
       }),
       LOG_TO_FILE: bool({ default: true }),
       MONGODB_URL: url({ desc: 'MongoDB connection string' }),
+      PASSWORD_SALT_ROUNDS: num({ default: 10 }),
     };
 
     return cleanEnv(process.env, envSpecs);

@@ -20,6 +20,7 @@ type EnvSchema = {
   LOG_LEVEL: LOG_LEVEL;
   LOG_TO_FILE: boolean;
   MONGODB_URL: string;
+  PASSWORD_SALT_ROUNDS: number;
 };
 
 type Config = {
@@ -33,6 +34,9 @@ type Config = {
   };
   MONGOOSE: {
     URL: string;
+  };
+  ENCRYPT: {
+    PASSWORD_SALT_ROUNDS: number;
   };
 };
 
