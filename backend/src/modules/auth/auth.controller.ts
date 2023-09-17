@@ -1,6 +1,7 @@
 import {
   API_PATHS,
   API_PATHS_AUTH,
+  ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
 } from '~/common/constants/constants.js';
@@ -42,10 +43,23 @@ class AuthController extends ControllerBase {
       });
     }
 
-    const user = await this.authService.signUp(body);
+    let userWithToken: SignUpResponseDTO;
+    try {
+      userWithToken = await this.authService.signUp(body);
+    } catch (error) {
+      throw error instanceof Error &&
+        (error.message === ERROR_MESSAGES.USER_ALREADY_EXIST ||
+          error.message === ERROR_MESSAGES.DUPLICATE_KEY)
+        ? new HttpError({
+            status: HTTP_CODES.BAD_REQUEST,
+            message: error.message,
+          })
+        : error;
+    }
+
     return {
       status: HTTP_CODES.CREATED,
-      payload: user,
+      payload: userWithToken,
     };
   }
 }

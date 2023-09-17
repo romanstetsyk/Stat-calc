@@ -25,7 +25,10 @@ const errorConverter: ErrorRequestHandler = (
   }
 
   let status, message;
-  if (err instanceof MongooseError.CastError) {
+  if (
+    err instanceof MongooseError.CastError ||
+    err instanceof MongooseError.ValidationError
+  ) {
     status = HTTP_CODES.BAD_REQUEST;
     message = ERROR_MESSAGES.BAD_REQUEST;
   } else {

@@ -1,9 +1,6 @@
 import type { HydratedDocument } from 'mongoose';
-import { Error as MongooseError } from 'mongoose';
 
-import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
 import type { Repository } from '~/common/types/types.js';
-import { HttpError } from '~/packages/http-error/http-error.js';
 
 import { UserEntity } from './user.entity.js';
 import type { UserDocument, UserModel } from './user.model.js';
@@ -23,21 +20,17 @@ class UserRepository implements Repository<UserEntity> {
   }
 
   public async findById(id: UserEntity['id']): Promise<UserEntity | null> {
-    let user: HydratedDocument<UserDocument> | null;
+    const user: HydratedDocument<UserDocument> | null =
+      await this.userModel.findById(id);
 
-    try {
-      user = await this.userModel.findById(id);
-    } catch (error) {
-      if (error instanceof MongooseError.CastError) {
-        user = null;
-      } else {
-        throw new HttpError({
-          status: HTTP_CODES.INTERNAL_SERVER_ERROR,
-          message: ERROR_MESSAGES.UNKNOWN,
-          cause: error,
-        });
-      }
-    }
+    return user ? new UserEntity(user.toObject()) : null;
+  }
+
+  public async findByEmail(
+    email: UserEntity['email'],
+  ): Promise<UserEntity | null> {
+    const user: HydratedDocument<UserDocument> | null =
+      await this.userModel.findOne({ email });
 
     return user ? new UserEntity(user.toObject()) : null;
   }

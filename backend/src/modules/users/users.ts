@@ -11,4 +11,5 @@ const userService = new UserService(userRepository, encrypt);
 const userController = new UserController(logger, userService);
 
 export { userController, userService };
+export { UserEntity } from './user.entity.js';
 export type { UserService } from './user.service.js';

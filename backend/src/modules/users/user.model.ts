@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ERROR_MESSAGES } from '~/common/constants/constants.js';
+
 const schema = new mongoose.Schema(
   {
     _id: {
@@ -29,6 +31,25 @@ const schema = new mongoose.Schema(
     toObject: { getters: true },
   },
 );
+
+const errorHandler: mongoose.ErrorHandlingMiddlewareFunction = (
+  error,
+  _doc,
+  next,
+) => {
+  const DUPLICATE_KEY_ERROR = 11_000;
+
+  if (
+    error.name === 'MongoServerError' &&
+    'code' in error &&
+    error.code === DUPLICATE_KEY_ERROR
+  ) {
+    next(new Error(ERROR_MESSAGES.DUPLICATE_KEY));
+  } else {
+    next();
+  }
+};
+schema.post('save', errorHandler);
 
 type UserDocument = mongoose.InferSchemaType<typeof schema>;
 

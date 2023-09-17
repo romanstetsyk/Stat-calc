@@ -1,19 +1,21 @@
+import { validate as validateUUID } from 'uuid';
+
 import {
   API_PATHS,
   API_PATHS_USERS,
+  ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
 } from '~/common/constants/constants.js';
-import type { SignUpRequestDTO } from '~/modules/auth/auth.js';
 import type {
   ApiRequest,
   ApiResponse,
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
+import { HttpError } from '~/packages/http-error/http-error.js';
 import type { Logger } from '~/packages/logger/logger.js';
 
 import type {
-  CreateResponseDTO,
   FindAllResponseDTO,
   FindByIdRequestDTO,
   FindByIdResponseDTO,
@@ -38,12 +40,6 @@ class UserController extends ControllerBase {
       method: HTTP_METHODS.GET,
       handler: this.findById.bind(this),
     });
-
-    this.addRoute({
-      path: API_PATHS_USERS.ROOT,
-      method: HTTP_METHODS.POST,
-      handler: this.create.bind(this),
-    });
   }
 
   private async findAll(): Promise<ApiResponse<FindAllResponseDTO>> {
@@ -59,20 +55,25 @@ class UserController extends ControllerBase {
     options: ApiRequest<{ params: FindByIdRequestDTO }>,
   ): Promise<ApiResponse<FindByIdResponseDTO>> {
     const { id } = options.params;
+
+    if (!validateUUID(id)) {
+      throw new HttpError({
+        status: HTTP_CODES.NOT_FOUND,
+        message: ERROR_MESSAGES.NOT_FOUND,
+      });
+    }
+
     const user = await this.userService.findById(id);
+
+    if (!user) {
+      throw new HttpError({
+        status: HTTP_CODES.NOT_FOUND,
+        message: ERROR_MESSAGES.NOT_FOUND,
+      });
+    }
+
     return {
       status: HTTP_CODES.OK,
-      payload: user,
-    };
-  }
-
-  private async create(
-    options: ApiRequest<{ body: SignUpRequestDTO }>,
-  ): Promise<ApiResponse<CreateResponseDTO>> {
-    const { name, email, password } = options.body;
-    const user = await this.userService.create({ name, email, password });
-    return {
-      status: HTTP_CODES.CREATED,
       payload: user,
     };
   }

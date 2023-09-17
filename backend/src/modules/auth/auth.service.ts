@@ -1,4 +1,5 @@
-import type { UserService } from '~/modules/users/users.js';
+import { ERROR_MESSAGES } from '~/common/constants/constants.js';
+import type { UserEntity, UserService } from '~/modules/users/users.js';
 
 import type { SignUpRequestDTO, SignUpResponseDTO } from './types.js';
 
@@ -9,7 +10,12 @@ class AuthService {
   }
 
   public async signUp(payload: SignUpRequestDTO): Promise<SignUpResponseDTO> {
-    const user = await this.userService.create(payload);
+    const existingUser = await this.userService.findByEmail(payload.email);
+    if (existingUser) {
+      throw new Error(ERROR_MESSAGES.USER_ALREADY_EXIST);
+    }
+
+    const user: UserEntity = await this.userService.create(payload);
     return {
       id: user.id,
       email: user.email,

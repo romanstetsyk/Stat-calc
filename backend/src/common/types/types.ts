@@ -10,7 +10,7 @@ type ErrorCommon = {
 
 type Service<T = unknown> = {
   findAll(): Promise<T[]>;
-  findById(id: string | number): Promise<T>;
+  findById(id: string | number): Promise<T | null>;
   create(body: unknown): Promise<T>;
 };
 

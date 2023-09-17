@@ -1,10 +1,6 @@
-import { validate as validateUUID } from 'uuid';
-
-import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
 import type { Service } from '~/common/types/types.js';
 import type { SignUpRequestDTO } from '~/modules/auth/auth.js';
 import type { Encrypt } from '~/packages/encrypt/encrypt.js';
-import { HttpError } from '~/packages/http-error/http-error.js';
 
 import { UserEntity } from './user.entity.js';
 import type { UserRepository } from './user.repository.js';
@@ -23,22 +19,17 @@ class UserService implements Service<UserEntity> {
     return users;
   }
 
-  public async findById(id: UserEntity['id']): Promise<UserEntity> {
-    if (!validateUUID(id)) {
-      throw new HttpError({
-        status: HTTP_CODES.NOT_FOUND,
-        message: ERROR_MESSAGES.NOT_FOUND,
-      });
-    }
-
+  public async findById(id: UserEntity['id']): Promise<UserEntity | null> {
     const user: UserEntity | null = await this.userRepository.findById(id);
+    return user;
+  }
 
-    if (!user) {
-      throw new HttpError({
-        status: HTTP_CODES.NOT_FOUND,
-        message: ERROR_MESSAGES.NOT_FOUND,
-      });
-    }
+  public async findByEmail(
+    email: UserEntity['email'],
+  ): Promise<UserEntity | null> {
+    const user: UserEntity | null =
+      await this.userRepository.findByEmail(email);
+
     return user;
   }
 
