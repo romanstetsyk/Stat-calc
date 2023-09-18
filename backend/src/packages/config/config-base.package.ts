@@ -15,6 +15,7 @@ class BaseConfig implements Config {
   public LOG;
   public MONGOOSE;
   public ENCRYPT;
+  public JWT;
 
   public constructor() {
     this.envVars = this.loadEnv();
@@ -57,6 +58,12 @@ class BaseConfig implements Config {
     this.ENCRYPT = {
       PASSWORD_SALT_ROUNDS: this.envVars.PASSWORD_SALT_ROUNDS,
     };
+
+    this.JWT = {
+      SECRET: this.envVars.JWT_SECRET,
+      ACCESS_EXPIRATION_MINUTES: this.envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+      REFRESH_EXPIRATION_DAYS: this.envVars.JWT_REFRESH_EXPIRATION_DAYS,
+    };
   }
 
   private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
@@ -80,6 +87,15 @@ class BaseConfig implements Config {
       LOG_TO_FILE: bool({ default: true }),
       MONGODB_URL: url({ desc: 'MongoDB connection string' }),
       PASSWORD_SALT_ROUNDS: num({ default: 10 }),
+      JWT_SECRET: str({ desc: 'Secret key to sign jwt tokens' }),
+      JWT_ACCESS_EXPIRATION_MINUTES: num({
+        desc: 'Number of minutes after which an access token expires',
+        default: 15,
+      }),
+      JWT_REFRESH_EXPIRATION_DAYS: num({
+        desc: 'Number of days after which a refresh token expires',
+        default: 15,
+      }),
     };
 
     return cleanEnv(process.env, envSpecs);

@@ -21,6 +21,9 @@ type EnvSchema = {
   LOG_TO_FILE: boolean;
   MONGODB_URL: string;
   PASSWORD_SALT_ROUNDS: number;
+  JWT_SECRET: string;
+  JWT_ACCESS_EXPIRATION_MINUTES: number;
+  JWT_REFRESH_EXPIRATION_DAYS: number;
 };
 
 type Config = {
@@ -37,6 +40,11 @@ type Config = {
   };
   ENCRYPT: {
     PASSWORD_SALT_ROUNDS: number;
+  };
+  JWT: {
+    SECRET: string;
+    ACCESS_EXPIRATION_MINUTES: number;
+    REFRESH_EXPIRATION_DAYS: number;
   };
 };
 
