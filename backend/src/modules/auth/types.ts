@@ -6,10 +6,28 @@ type SignUpRequestDTO = {
   password: string;
 };
 
-type SignUpResponseDTO = {
-  id: UserEntity['id'];
-  email: UserEntity['email'];
-  token: string;
+type SignInRequestDTO = {
+  email: string;
+  password: string;
 };
 
-export type { SignUpRequestDTO, SignUpResponseDTO };
+type SignUpResponseDTO = {
+  message: string;
+};
+
+type UserWithTokens = {
+  id: UserEntity['id'];
+  email: UserEntity['email'];
+  accessToken: string;
+  refreshToken: string;
+};
+
+type SignInResponseDTO = Omit<UserWithTokens, 'refreshToken'>;
+
+export type {
+  SignInRequestDTO,
+  SignInResponseDTO,
+  SignUpRequestDTO,
+  SignUpResponseDTO,
+  UserWithTokens,
+};

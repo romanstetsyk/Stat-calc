@@ -1,4 +1,5 @@
 import type { ErrorRequestHandler } from 'express';
+import Joi from 'joi';
 import { Error as MongooseError } from 'mongoose';
 
 import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
@@ -31,6 +32,9 @@ const errorConverter: ErrorRequestHandler = (
   ) {
     status = HTTP_CODES.BAD_REQUEST;
     message = ERROR_MESSAGES.BAD_REQUEST;
+  } else if (err instanceof Joi.ValidationError) {
+    status = HTTP_CODES.BAD_REQUEST;
+    message = err.message;
   } else {
     status =
       'status' in err && hasValue(HTTP_CODES, err.status)

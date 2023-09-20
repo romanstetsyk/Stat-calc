@@ -1,3 +1,6 @@
+import type Joi from 'joi';
+import type { ValidationResult } from 'joi';
+
 import type { Logger } from '~/packages/logger/logger.js';
 import { logger } from '~/packages/logger/logger.js';
 
@@ -36,12 +39,26 @@ abstract class ControllerBase implements Controller {
     return async (req, res, next) => {
       // try..catch to catch async errors
       try {
-        const { status, payload } = await handler(req);
+        const { status, payload, cookies } = await handler(req);
+
+        if (cookies) {
+          for (const cookie of cookies) {
+            res.cookie(...cookie);
+          }
+        }
+
         res.status(status).json(payload);
       } catch (error) {
         next(error);
       }
     };
+  }
+
+  protected validateBody<T>(schema: Joi.ObjectSchema<T>, body: T): void {
+    const { error }: ValidationResult<T> = schema.validate(body);
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 }
 
