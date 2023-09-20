@@ -2,16 +2,16 @@ import { compare, hash } from 'bcrypt';
 
 import type { Config } from '~/packages/config/config.js';
 
-import type { Encrypt } from './types.js';
+import type { PasswordUtil } from './types.js';
 
-class EncryptBase implements Encrypt {
+class PasswordUtilBase implements PasswordUtil {
   private config: Config;
 
   public constructor(config: Config) {
     this.config = config;
   }
 
-  public async hashString(data: string): Promise<string> {
+  public async hash(data: string): Promise<string> {
     const { PASSWORD_SALT_ROUNDS } = this.config.ENCRYPT;
     return await hash(data, PASSWORD_SALT_ROUNDS);
   }
@@ -21,4 +21,4 @@ class EncryptBase implements Encrypt {
   }
 }
 
-export { EncryptBase };
+export { PasswordUtilBase };

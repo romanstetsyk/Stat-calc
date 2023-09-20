@@ -1,5 +1,5 @@
-import { encrypt } from '~/packages/encrypt/encrypt.js';
 import { logger } from '~/packages/logger/logger.js';
+import { passwordUtil } from '~/packages/password-util/password-util.js';
 
 import { UserController } from './user.controller.js';
 import { UserModel } from './user.model.js';
@@ -7,7 +7,7 @@ import { UserRepository } from './user.repository.js';
 import { UserService } from './user.service.js';
 
 const userRepository = new UserRepository(UserModel);
-const userService = new UserService(userRepository, encrypt);
+const userService = new UserService(userRepository, passwordUtil);
 const userController = new UserController(logger, userService);
 
 export { userController, userService };

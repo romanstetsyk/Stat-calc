@@ -1,17 +1,20 @@
 import type { Service } from '~/common/types/types.js';
 import type { SignUpRequestDTO } from '~/modules/auth/auth.js';
-import type { Encrypt } from '~/packages/encrypt/encrypt.js';
+import type { PasswordUtil } from '~/packages/password-util/password-util.js';
 
 import { UserEntity } from './user.entity.js';
 import type { UserRepository } from './user.repository.js';
 
 class UserService implements Service<UserEntity> {
   private userRepository: UserRepository;
-  private encrypt: Encrypt;
+  private passwordUtil: PasswordUtil;
 
-  public constructor(userRepository: UserRepository, encrypt: Encrypt) {
+  public constructor(
+    userRepository: UserRepository,
+    passwordUtil: PasswordUtil,
+  ) {
     this.userRepository = userRepository;
-    this.encrypt = encrypt;
+    this.passwordUtil = passwordUtil;
   }
 
   public async findAll(): Promise<UserEntity[]> {
@@ -35,7 +38,7 @@ class UserService implements Service<UserEntity> {
 
   public async create(payload: SignUpRequestDTO): Promise<UserEntity> {
     const { name, email, password } = payload;
-    const passwordHash = await this.encrypt.hashString(password);
+    const passwordHash = await this.passwordUtil.hash(password);
 
     const userObjWithoutID = UserEntity.createObject({
       name,
