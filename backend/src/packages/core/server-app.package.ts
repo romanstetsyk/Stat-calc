@@ -1,5 +1,6 @@
 import type { Server } from 'node:http';
 
+import cookieParser from 'cookie-parser';
 import type { Express } from 'express';
 import express from 'express';
 
@@ -72,6 +73,8 @@ class AppBase {
 
     this.logger.info('Connected to database');
 
+    // Parse and sign cookies
+    this.app.use(cookieParser(this.config.JWT.SECRET));
     // Autolog http requests and responses
     this.app.use(httpLogger);
     // parse request json body
