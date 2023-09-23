@@ -15,6 +15,7 @@ ls:
   .service.ts: kebab-case
   .entity.ts: kebab-case
   .model.ts: kebab-case
+  .build.json: kebab-case
 
 ignore:
   - .git

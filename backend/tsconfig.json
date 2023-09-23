@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["src", "vitest.config.ts"],
+  "include": ["src", "test", "vitest.config.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "ESNext",
@@ -8,10 +8,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "#/test/*": ["./test/*"]
     },
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "outDir": "build"
+    "noEmit": true
   }
 }

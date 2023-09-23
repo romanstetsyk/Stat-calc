@@ -14,8 +14,9 @@
     "lint:ts": "npm run lint:ts:generic -- .",
     "lint": "npm run lint:types && npm run lint:ts",
     "dev": "nodemon --exec \"node --loader ts-paths-esm-loader\" src/index.ts | npx pino-pretty",
-    "build": "tsc && cp -r package.json build",
-    "start": "node ./build/index.js",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "postbuild": "cp -r package.json build",
+    "preview": "node ./build/index.js",
     "test": "vitest"
   },
   "dependencies": {

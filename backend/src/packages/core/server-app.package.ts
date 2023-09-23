@@ -1,4 +1,7 @@
+import * as fs from 'node:fs';
 import type { Server } from 'node:http';
+import * as path from 'node:path';
+import * as nodeUrl from 'node:url';
 
 import cookieParser from 'cookie-parser';
 import type { Express } from 'express';
@@ -9,6 +12,7 @@ import {
   errorConverter,
   errorHandler,
   httpLogger,
+  notFoundHandler,
 } from '~/middleware/middleware.js';
 import type { Config } from '~/packages/config/config.js';
 import type {
@@ -73,6 +77,13 @@ class AppBase {
 
     this.logger.info('Connected to database');
 
+    // Render React as View
+    const frontendDir = path.resolve(
+      path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
+      path.join('..', '..', '..', '..', 'build', 'frontend'),
+    );
+    this.app.use(express.static(frontendDir));
+
     // Parse and sign cookies
     this.app.use(cookieParser(this.config.JWT.SECRET));
     // Autolog http requests and responses
@@ -86,6 +97,15 @@ class AppBase {
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       res.sendStatus(200);
     });
+
+    const index = path.join(frontendDir, 'index.html');
+    if (fs.existsSync(index)) {
+      this.app.use((_req, res) => {
+        res.sendFile(index);
+      });
+    } else {
+      this.app.use(notFoundHandler);
+    }
 
     this.app.use(errorConverter, errorHandler);
 

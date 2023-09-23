@@ -12,6 +12,10 @@ settings:
   typescript: true
   node: true
 
+ignorePatterns:
+  - node_modules
+  - build
+
 extends:
   - eslint:recommended
   - plugin:import/recommended

@@ -13,7 +13,11 @@
     "backend"
   ],
   "scripts": {
+    "start": "node ./build/backend/index.js",
     "build:frontend": "npm run build -w frontend",
+    "build:backend": "npm run build -w backend",
+    "build": "npm run build --workspaces --if-present",
+    "postbuild": "sh ./postbuild.sh",
     "lint:editorconfig": "editorconfig-checker",
     "lint:fs": "ls-lint",
     "lint:types": "npm run lint:types --workspaces --if-present",
