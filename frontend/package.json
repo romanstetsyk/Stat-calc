@@ -38,6 +38,7 @@
     "@stdlib/stats-base-variance": "^0.0.10",
     "@stdlib/utils-tabulate": "^0.0.8",
     "@stdlib/utils-tabulate-by": "^0.0.8",
+    "@tanstack/react-query": "^4.35.3",
     "allotment": "^1.19.3",
     "chart.js": "^4.4.0",
     "chartjs-plugin-datalabels": "^2.2.0",

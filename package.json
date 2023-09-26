@@ -10,7 +10,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "shared"
   ],
   "scripts": {
     "start": "node ./build/backend/index.js",

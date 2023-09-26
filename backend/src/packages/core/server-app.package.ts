@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import * as nodeUrl from 'node:url';
 
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import type { Express } from 'express';
 import express from 'express';
 
@@ -84,6 +85,8 @@ class AppBase {
     );
     this.app.use(express.static(frontendDir));
 
+    // enable cors
+    this.app.use(cors());
     // Parse and sign cookies
     this.app.use(cookieParser(this.config.JWT.SECRET));
     // Autolog http requests and responses

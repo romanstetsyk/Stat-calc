@@ -6,6 +6,9 @@ ls:
   .test.ts: kebab-case
   .html: kebab-case
   .json: kebab-case
+  .cjs.json: kebab-case
+  .esm.json: kebab-case
+  .node.json: kebab-case
   .workspace.json: kebab-case
   .package.ts: kebab-case
   .package.test.ts: kebab-case
