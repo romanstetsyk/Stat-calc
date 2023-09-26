@@ -53,9 +53,12 @@ class AppBase {
   }
 
   private initApi(api: ServerApi): void {
-    const prefix = '/api/';
     for (const controller of api.controllers) {
-      const segment = prefix + api.version + controller.segment;
+      const segment = [
+        this.config.API_PREFIX,
+        api.version,
+        controller.segment,
+      ].join('');
       this.initController(controller, segment);
     }
   }

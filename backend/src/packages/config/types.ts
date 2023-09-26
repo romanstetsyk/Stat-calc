@@ -17,6 +17,7 @@ type LOG_LEVEL = (typeof LOG_LEVEL)[number];
 type EnvSchema = {
   NODE_ENV: ENVIRONMENTS;
   PORT: number;
+  API_PREFIX: string;
   LOG_LEVEL: LOG_LEVEL;
   LOG_TO_FILE: boolean;
   MONGODB_URL: string;
@@ -29,6 +30,7 @@ type EnvSchema = {
 type Config = {
   ENV: ENVIRONMENTS;
   PORT: number;
+  API_PREFIX: string;
   LOG: {
     LEVEL: LOG_LEVEL;
     LOG_TO_FILE: boolean;

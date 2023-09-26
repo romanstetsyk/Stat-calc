@@ -12,6 +12,7 @@ class BaseConfig implements Config {
 
   public ENV;
   public PORT;
+  public API_PREFIX;
   public LOG;
   public MONGOOSE;
   public ENCRYPT;
@@ -22,6 +23,7 @@ class BaseConfig implements Config {
 
     this.ENV = this.envVars.NODE_ENV;
     this.PORT = this.envVars.PORT;
+    this.API_PREFIX = this.envVars.API_PREFIX;
 
     this.LOG = {
       LEVEL: this.envVars.LOG_LEVEL,
@@ -79,6 +81,7 @@ class BaseConfig implements Config {
         default: 'production',
       }),
       PORT: port({ devDefault: 3000 }),
+      API_PREFIX: str({ desc: 'API Prefix', example: '/api' }),
       LOG_LEVEL: str({
         choices: LOG_LEVEL,
         default: 'info',
