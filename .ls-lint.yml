@@ -23,7 +23,11 @@ ls:
 ignore:
   - .git
   - node_modules
+  - build
   - frontend/node_modules
   - backend/node_modules
+  - frontend/build
+  - backend/build
+  - shared/build
   - coverage
   - backend/logs
