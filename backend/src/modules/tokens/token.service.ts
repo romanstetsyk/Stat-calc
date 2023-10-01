@@ -2,6 +2,7 @@ import { TOKEN_TYPES } from '~/packages/token-util/token-util.js';
 import type { TokenUtilBase } from '~/packages/token-util/token-util-base.package.js';
 
 import type { TokenRepository } from './token.repository.js';
+import type { TokenBody } from './types.js';
 
 class TokenService {
   private tokenRepository: TokenRepository;
@@ -48,6 +49,34 @@ class TokenService {
     if (!token) {
       throw new Error("Couldn't delete token. Token not found");
     }
+  }
+
+  public async updateRefreshToken(
+    userId: string,
+    oldToken: string,
+    newToken: string,
+  ): Promise<string> {
+    const oldTokenObject: TokenBody = {
+      token: oldToken,
+      userId,
+      blacklisted: false,
+      type: 'refresh',
+    };
+    const newTokenObject: TokenBody = {
+      token: newToken,
+      userId,
+      blacklisted: false,
+      type: 'refresh',
+    };
+
+    const tokenEntity = await this.tokenRepository.update(
+      oldTokenObject,
+      newTokenObject,
+    );
+    if (!tokenEntity) {
+      throw new Error('refresh token not updated');
+    }
+    return tokenEntity.token;
   }
 }
 

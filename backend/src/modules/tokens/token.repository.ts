@@ -2,6 +2,7 @@ import type { HydratedDocument } from 'mongoose';
 
 import { TokenEntity } from './token.entity.js';
 import type { TokenDocument, TokenModel } from './token.model.js';
+import type { TokenBody } from './types.js';
 
 class TokenRepository {
   private tokenModel: typeof TokenModel;
@@ -10,9 +11,13 @@ class TokenRepository {
     this.tokenModel = tokenModel;
   }
 
-  public async saveToken(
-    payload: Omit<TokenEntity, 'id'>,
-  ): Promise<TokenEntity> {
+  public async getAll(): Promise<TokenEntity[]> {
+    const allTokens: HydratedDocument<TokenDocument>[] =
+      await this.tokenModel.find({});
+    return allTokens.map((token) => new TokenEntity(token.toObject()));
+  }
+
+  public async saveToken(payload: TokenBody): Promise<TokenEntity> {
     const newToken: HydratedDocument<TokenDocument> =
       await this.tokenModel.create(payload);
 
@@ -27,6 +32,18 @@ class TokenRepository {
       await this.tokenModel.findOneAndDelete(payload);
 
     return deletedToken ? new TokenEntity(deletedToken.toObject()) : null;
+  }
+
+  public async update(
+    oldToken: TokenBody,
+    newToken: TokenBody,
+  ): Promise<TokenEntity | null> {
+    const savedToken: HydratedDocument<TokenDocument> | null =
+      await this.tokenModel.findOneAndReplace(oldToken, newToken, {
+        new: true,
+      });
+
+    return savedToken ? new TokenEntity(savedToken.toObject()) : null;
   }
 }
 

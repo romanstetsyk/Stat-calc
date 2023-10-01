@@ -15,6 +15,7 @@ ls:
   .config.ts: kebab-case
   .controller.ts: kebab-case
   .repository.ts: kebab-case
+  .repository.test.ts: kebab-case
   .service.ts: kebab-case
   .entity.ts: kebab-case
   .model.ts: kebab-case

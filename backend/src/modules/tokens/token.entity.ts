@@ -6,6 +6,8 @@ type TokenEntityConstructor = {
   userId: string;
   type: TOKEN_TYPES;
   blacklisted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 class TokenEntity {
@@ -14,6 +16,8 @@ class TokenEntity {
   public userId: string;
   public type: TOKEN_TYPES;
   public blacklisted: boolean;
+  public createdAt: Date;
+  public updatedAt: Date;
 
   public constructor({
     id,
@@ -21,12 +25,16 @@ class TokenEntity {
     userId,
     type,
     blacklisted = false,
+    createdAt,
+    updatedAt,
   }: TokenEntityConstructor) {
     this.id = id;
     this.token = token;
     this.userId = userId;
     this.type = type;
     this.blacklisted = blacklisted;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
