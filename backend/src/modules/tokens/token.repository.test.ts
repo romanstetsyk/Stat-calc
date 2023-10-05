@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { Database } from '#/test/helpers/mongo-memory-server.js';
+import { TOKEN_TYPES } from '~/packages/token-util/constants.js';
 
 import type { TokenBody } from './tokens.js';
 import { TokenEntity, TokenModel, TokenRepository } from './tokens.js';
@@ -10,7 +11,7 @@ import { TokenEntity, TokenModel, TokenRepository } from './tokens.js';
 describe('token repository', () => {
   const testDb = new Database();
   const token1: TokenBody = {
-    type: 'refresh',
+    type: TOKEN_TYPES.REFRESH,
     userId: uuidv4(),
     token: 'testtoken',
     blacklisted: false,
@@ -18,7 +19,7 @@ describe('token repository', () => {
 
   const token2: TokenBody = {
     token: 'a new token',
-    type: 'refresh',
+    type: TOKEN_TYPES.REFRESH,
     userId: token1.userId,
     blacklisted: false,
   };
