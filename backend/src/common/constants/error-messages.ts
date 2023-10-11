@@ -8,6 +8,7 @@ const ERROR_MESSAGES = {
   USER_NOT_FOUND: 'User not found',
   PASSWORD_INCORRECT: 'Incorrect password',
   WRONG_CREDENTIALS: "That username or password didn't work",
+  MISSING_TOKEN: 'The token is missing in the request',
 } as const;
 
 export { ERROR_MESSAGES };
