@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import Joi from 'joi';
+import jwt from 'jsonwebtoken';
 import { Error as MongooseError } from 'mongoose';
 
 import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
@@ -34,6 +35,9 @@ const errorConverter: ErrorRequestHandler = (
     message = ERROR_MESSAGES.BAD_REQUEST;
   } else if (err instanceof Joi.ValidationError) {
     status = HTTP_CODES.BAD_REQUEST;
+    message = err.message;
+  } else if (err instanceof jwt.JsonWebTokenError) {
+    status = HTTP_CODES.FORBIDDEN;
     message = err.message;
   } else {
     status =
