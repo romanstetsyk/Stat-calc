@@ -1,3 +1,5 @@
+import type { IncomingHttpHeaders } from 'node:http';
+
 import type Joi from 'joi';
 import type { ValidationResult } from 'joi';
 
@@ -57,8 +59,27 @@ abstract class ControllerBase implements Controller {
   protected validateBody<T>(schema: Joi.ObjectSchema<T>, body: T): void {
     const { error }: ValidationResult<T> = schema.validate(body);
     if (error) {
-      throw new Error(error.message);
+      throw error;
     }
+  }
+
+  protected getTokenFromHeaders(headers: IncomingHttpHeaders): string | null {
+    const AUTH_HEADER = 'authorization';
+    const AUTH_SCHEMA = 'bearer';
+    if (!headers[AUTH_HEADER]) {
+      return null;
+    }
+
+    const [schema, token] = headers.authorization.split(' ');
+    if (schema.toLowerCase() !== AUTH_SCHEMA) {
+      return null;
+    }
+
+    if (!token) {
+      return null;
+    }
+
+    return token;
   }
 }
 
