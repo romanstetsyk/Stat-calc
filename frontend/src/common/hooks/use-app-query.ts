@@ -5,7 +5,6 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-// import type { HTTP_STATES, ValueOf } from 'shared/build/esm';
 
 const useAppQuery = <
   TQueryFnData = unknown,
