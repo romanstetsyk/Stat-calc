@@ -1,7 +1,6 @@
+import { ERROR_MESSAGES } from '@shared/build/esm/index.js';
 import * as mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-
-import { ERROR_MESSAGES } from '~/common/constants/constants.js';
 
 const schema = new mongoose.Schema(
   {

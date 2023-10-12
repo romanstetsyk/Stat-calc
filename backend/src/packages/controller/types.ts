@@ -1,7 +1,11 @@
+import type {
+  HTTP_CODES,
+  HTTP_METHODS,
+  ValueOf,
+} from '@shared/build/esm/index.js';
 import type { CookieOptions, RequestHandler } from 'express';
 
-import type { HTTP_CODES, HTTP_METHODS } from '~/common/constants/constants.js';
-import type { Override, ValueOf } from '~/common/types/types.js';
+import type { Override } from '~/common/types/types.js';
 
 type DefaultRequestOption = {
   body?: Parameters<RequestHandler>[0]['body'];
@@ -41,13 +45,22 @@ type ControllerRoute = {
 
 type ApiRequest<T> = Override<DefaultRequestOption, T>;
 
+type AllowedCookies = {
+  refreshToken: string;
+};
+
+type CookieArray = {
+  [C in keyof AllowedCookies]: [C, AllowedCookies[C], CookieOptions]; // [ name, value, options ]
+}[keyof AllowedCookies];
+
 type ApiResponse<T = unknown> = {
   status: ValueOf<typeof HTTP_CODES>;
   payload: T;
-  cookies?: [string, string, CookieOptions][]; // [ name, value, options ]
+  cookies?: CookieArray[];
 };
 
 export type {
+  AllowedCookies,
   ApiRequest,
   ApiResponse,
   Controller,

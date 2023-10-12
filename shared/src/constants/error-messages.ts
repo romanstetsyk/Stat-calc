@@ -9,6 +9,7 @@ const ERROR_MESSAGES = {
   PASSWORD_INCORRECT: 'Incorrect password',
   WRONG_CREDENTIALS: "That username or password didn't work",
   MISSING_TOKEN: 'The token is missing in the request',
+  TOKEN_EXPIRED: 'JWT token expired',
 } as const;
 
 export { ERROR_MESSAGES };

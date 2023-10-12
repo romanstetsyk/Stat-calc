@@ -1,11 +1,13 @@
+import {
+  ERROR_MESSAGES,
+  HTTP_CODES,
+  HttpError,
+  isHttpCode,
+} from '@shared/build/esm/index.js';
 import type { ErrorRequestHandler } from 'express';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import { Error as MongooseError } from 'mongoose';
-
-import { ERROR_MESSAGES, HTTP_CODES } from '~/common/constants/constants.js';
-import { hasValue } from '~/common/helpers/helpers.js';
-import { HttpError } from '~/packages/http-error/http-error.js';
 
 const errorConverter: ErrorRequestHandler = (
   err: unknown,
@@ -38,10 +40,13 @@ const errorConverter: ErrorRequestHandler = (
     message = err.message;
   } else if (err instanceof jwt.JsonWebTokenError) {
     status = HTTP_CODES.FORBIDDEN;
-    message = err.message;
+    message =
+      err.name === 'TokenExpiredError'
+        ? ERROR_MESSAGES.TOKEN_EXPIRED
+        : err.message;
   } else {
     status =
-      'status' in err && hasValue(HTTP_CODES, err.status)
+      'status' in err && isHttpCode(err.status)
         ? err.status
         : HTTP_CODES.INTERNAL_SERVER_ERROR;
     message = err.message;

@@ -1,7 +1,6 @@
+import type { ErrorCommon, HttpError } from '@shared/build/esm/index.js';
 import type { ErrorRequestHandler } from 'express';
 
-import type { ErrorCommon } from '~/common/types/types.js';
-import type { HttpError } from '~/packages/http-error/http-error.js';
 import { logger } from '~/packages/logger/logger.js';
 
 const errorHandler: ErrorRequestHandler = (

@@ -45,10 +45,7 @@ class TokenService {
     token: string;
     userId: string;
   }): Promise<void> {
-    const token = await this.tokenRepository.delete(payload);
-    if (!token) {
-      throw new Error("Couldn't delete token. Token not found");
-    }
+    await this.tokenRepository.delete(payload);
   }
 
   public async updateRefreshToken(

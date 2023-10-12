@@ -1,9 +1,10 @@
 /* eslint-disable unicorn/no-process-exit */
 import type { Server } from 'node:http';
 
+import type { ValueOf } from '@shared/build/esm/index.js';
+
 import type { EXIT_CODES } from '~/common/constants/constants.js';
 import { TIMEOUT } from '~/common/constants/constants.js';
-import type { ValueOf } from '~/common/types/types.js';
 import { logger } from '~/packages/logger/logger.js';
 
 const unexpectedErrorHandler = (

@@ -1,8 +1,7 @@
+import { HTTP_CODES, HttpError } from '@shared/build/esm/index.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { mockNext, mockReq, mockRes } from '#/test/helpers/express-mock.js';
-import { HTTP_CODES } from '~/common/constants/constants.js';
-import { HttpError } from '~/packages/http-error/http-error.js';
 
 import { errorConverter } from './error-converter.js';
 

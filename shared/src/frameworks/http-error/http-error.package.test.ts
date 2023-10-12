@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { HTTP_CODES } from '~/common/constants/status-codes.js';
+import { HTTP_CODES } from '~/constants/constants.js';
 
 import { HttpError } from './http-error.package.js';
 

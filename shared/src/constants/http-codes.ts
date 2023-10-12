@@ -1,8 +1,3 @@
-const EXIT_CODES = {
-  SUCCESS: 0,
-  FATAL: 1,
-} as const;
-
 const HTTP_CODES = {
   OK: 200,
   CREATED: 201,
@@ -13,4 +8,4 @@ const HTTP_CODES = {
   INTERNAL_SERVER_ERROR: 500,
 } as const;
 
-export { EXIT_CODES, HTTP_CODES };
+export { HTTP_CODES };

@@ -1,4 +1,4 @@
-import type { HTTP_METHODS, ValueOf } from 'shared/build/esm';
+import type { HTTP_METHODS, ValueOf } from '@shared/build/esm/index';
 
 type Http = {
   makeRequest: (url: URL, options: HttpOptions) => Promise<Response>;

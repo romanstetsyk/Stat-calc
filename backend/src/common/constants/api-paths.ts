@@ -11,7 +11,8 @@ const API_PATHS_USERS = {
 const API_PATHS_AUTH = {
   SIGN_UP: '/sign-up',
   SIGN_IN: '/sign-in',
-  CURRENT_USER: '/current-user',
+  REFRESH: '/refresh',
+  ME: '/me',
 } as const;
 
 export { API_PATHS, API_PATHS_AUTH, API_PATHS_USERS };

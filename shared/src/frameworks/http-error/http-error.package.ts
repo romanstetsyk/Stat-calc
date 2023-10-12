@@ -1,5 +1,5 @@
-import type { HTTP_CODES } from '~/common/constants/constants.js';
-import type { ValueOf } from '~/common/types/types.js';
+import type { HTTP_CODES } from '~/constants/constants.js';
+import type { ValueOf } from '~/types/types.js';
 
 type HttpErrorConstructor = {
   status: ValueOf<typeof HTTP_CODES>;

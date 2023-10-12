@@ -1,4 +1,4 @@
-import type { ValueOf } from '~/common/types/types.js';
+import type { ValueOf } from '@shared/build/esm/index.js';
 
 const TOKEN_TYPES = {
   ACCESS: 'access',
