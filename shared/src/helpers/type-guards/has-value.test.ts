@@ -4,7 +4,7 @@ import { hasValue } from './has-value';
 
 describe('has-value', () => {
   const arr = Array.from({ length: 5 }, (_, i) => i);
-  const obj = { a: 'A', b: 'B' };
+  const obj = { a: 'A', b: 'B' } as const;
 
   it('should return false if obj is primitive', () => {
     expect(hasValue(Math.random(), true)).toBe(false);
