@@ -6,9 +6,10 @@ type Http = {
 
 type HttpOptions = {
   method: ValueOf<typeof HTTP_METHODS>;
-  payload?: RequestInit['body'];
-  headers: RequestInit['headers'];
+  body?: RequestInit['body'];
+  headers?: RequestInit['headers'];
   credentials?: RequestInit['credentials'];
+  signal?: RequestInit['signal'];
 };
 
 export type { Http, HttpOptions };
