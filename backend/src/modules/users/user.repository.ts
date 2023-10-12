@@ -2,6 +2,7 @@ import type { HydratedDocument } from 'mongoose';
 
 import type { Repository } from '~/common/types/types.js';
 
+import type { UserReposirotyCreate } from './types.js';
 import { UserEntity } from './user.entity.js';
 import type { UserDocument, UserModel } from './user.model.js';
 
@@ -35,7 +36,7 @@ class UserRepository implements Repository<UserEntity> {
     return user ? new UserEntity(user.toObject()) : null;
   }
 
-  public async create(payload: Omit<UserEntity, 'id'>): Promise<UserEntity> {
+  public async create(payload: UserReposirotyCreate): Promise<UserEntity> {
     const newUser: HydratedDocument<UserDocument> =
       await this.userModel.create(payload);
 

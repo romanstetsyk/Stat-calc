@@ -1,3 +1,5 @@
+import type { UserInfo } from './types.js';
+
 type UserEntityConstructor = {
   id: string;
   name: string;
@@ -31,12 +33,18 @@ class UserEntity {
     name,
     email,
     passwordHash,
-  }: Omit<UserEntityConstructor, 'id'>): Omit<UserEntity, 'id'> {
+  }: Omit<UserEntityConstructor, 'id'>): UserInfo &
+    Pick<UserEntity, 'passwordHash'> {
     return {
       name,
       email,
       passwordHash,
     };
+  }
+
+  public toObject(): UserInfo {
+    const { name, email } = this;
+    return { name, email };
   }
 }
 

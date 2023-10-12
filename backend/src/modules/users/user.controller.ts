@@ -1,18 +1,17 @@
-import { validate as validateUUID } from 'uuid';
-
 import {
-  API_PATHS,
-  API_PATHS_USERS,
   ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
-} from '~/common/constants/constants.js';
+  HttpError,
+} from '@shared/build/esm/index.js';
+import { validate as validateUUID } from 'uuid';
+
+import { API_PATHS, API_PATHS_USERS } from '~/common/constants/constants.js';
 import type {
   ApiRequest,
   ApiResponse,
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
-import { HttpError } from '~/packages/http-error/http-error.js';
 import type { Logger } from '~/packages/logger/logger.js';
 
 import type {
