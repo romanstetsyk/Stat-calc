@@ -1,1 +1,1 @@
-export { hasKeys, hasValue } from './type-guards.js';
+export { hasKeys } from './type-guards.js';
