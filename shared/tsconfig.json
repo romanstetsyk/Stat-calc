@@ -3,15 +3,13 @@
   "include": ["src"],
   "compilerOptions": {
     "target": "ESNext",
+    "moduleResolution": "Node",
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     },
-
     "esModuleInterop": true,
-    "declaration": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext"
+    "declaration": true
   }
 }

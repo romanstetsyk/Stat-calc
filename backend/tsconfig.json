@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
+      "@shared/*": ["../shared/*"],
       "#/test/*": ["./test/*"]
     },
     "moduleResolution": "NodeNext",
