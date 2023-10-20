@@ -1,9 +1,5 @@
-import type {
-  HTTP_CODES,
-  HTTP_METHODS,
-  ValueOf,
-} from '@shared/build/esm/index.js';
 import type { CookieOptions, RequestHandler } from 'express';
+import type { HTTP_CODES, HTTP_METHODS, ValueOf } from 'shared/build/index.js';
 
 import type { Override } from '~/common/types/types.js';
 
@@ -13,6 +9,7 @@ type DefaultRequestOption = {
   params?: Parameters<RequestHandler>[0]['params'];
   headers?: Parameters<RequestHandler>[0]['headers'];
   cookies?: Parameters<RequestHandler>[0]['cookies'];
+  signedCookies?: Parameters<RequestHandler>[0]['signedCookies'];
 };
 
 type ServerApi = {

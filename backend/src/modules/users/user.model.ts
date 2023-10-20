@@ -1,5 +1,5 @@
-import { ERROR_MESSAGES } from '@shared/build/esm/index.js';
 import * as mongoose from 'mongoose';
+import { ERROR_MESSAGES } from 'shared/build/index.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const schema = new mongoose.Schema(

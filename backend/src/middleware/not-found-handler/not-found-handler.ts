@@ -1,8 +1,4 @@
-import {
-  ERROR_MESSAGES,
-  HTTP_CODES,
-  HttpError,
-} from '@shared/build/esm/index.js';
+import { ERROR_MESSAGES, HTTP_CODES, HttpError } from 'shared/build/index.js';
 
 import type { RequestHandlerWrapped } from '~/packages/controller/controller.js';
 

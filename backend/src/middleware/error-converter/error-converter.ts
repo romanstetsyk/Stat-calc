@@ -1,13 +1,13 @@
+import type { ErrorRequestHandler } from 'express';
+import Joi from 'joi';
+import jwt from 'jsonwebtoken';
+import { Error as MongooseError } from 'mongoose';
 import {
   ERROR_MESSAGES,
   HTTP_CODES,
   HttpError,
   isHttpCode,
-} from '@shared/build/esm/index.js';
-import type { ErrorRequestHandler } from 'express';
-import Joi from 'joi';
-import jwt from 'jsonwebtoken';
-import { Error as MongooseError } from 'mongoose';
+} from 'shared/build/index.js';
 
 const errorConverter: ErrorRequestHandler = (
   err: unknown,

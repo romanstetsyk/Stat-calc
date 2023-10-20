@@ -1,5 +1,5 @@
-import type { ErrorCommon } from '@shared/build/esm/index.js';
-import { HTTP_CODES, HttpError } from '@shared/build/esm/index.js';
+import type { ErrorCommon } from 'shared/build/index.js';
+import { HTTP_CODES, HttpError } from 'shared/build/index.js';
 import { describe, expect, it } from 'vitest';
 
 import { mockNext, mockReq, mockRes } from '#/test/helpers/express-mock.js';

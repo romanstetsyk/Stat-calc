@@ -1,4 +1,4 @@
-import { HTTP_CODES, HttpError } from '@shared/build/esm/index.js';
+import { HTTP_CODES, HttpError } from 'shared/build/index.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import { mockNext, mockReq, mockRes } from '#/test/helpers/express-mock.js';

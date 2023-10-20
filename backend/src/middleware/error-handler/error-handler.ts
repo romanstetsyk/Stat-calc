@@ -1,5 +1,5 @@
-import type { ErrorCommon, HttpError } from '@shared/build/esm/index.js';
 import type { ErrorRequestHandler } from 'express';
+import type { ErrorCommon, HttpError } from 'shared/build/index.js';
 
 import { logger } from '~/packages/logger/logger.js';
 

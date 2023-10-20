@@ -3,7 +3,7 @@ import {
   HTTP_CODES,
   HTTP_METHODS,
   HttpError,
-} from '@shared/build/esm/index.js';
+} from 'shared/build/index.js';
 import { validate as validateUUID } from 'uuid';
 
 import { API_PATHS, API_PATHS_USERS } from '~/common/constants/constants.js';
