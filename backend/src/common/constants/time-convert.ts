@@ -1,0 +1,6 @@
+const TIME_CONVERT = {
+  DAY_TO_MS: 2_592_000_000,
+  MIN_TO_MS: 1_800_000,
+};
+
+export { TIME_CONVERT };
