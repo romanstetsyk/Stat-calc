@@ -7,6 +7,7 @@ parserOptions:
     - ./tsconfig.json
     - ./backend/tsconfig.json
     - ./frontend/tsconfig.json
+    - ./shared/tsconfig.json
 
 settings:
   typescript: true
@@ -75,6 +76,8 @@ rules:
     - error
     - count: 1
   import/no-default-export:
+    - error
+  import/group-exports:
     - error
   import/consistent-type-specifier-style:
     - error
