@@ -1,5 +1,6 @@
+import type { SignUpRequestDTO } from 'shared/build/index.js';
+
 import type { Service } from '~/common/types/types.js';
-import type { SignUpRequestDTO } from '~/modules/auth/auth.js';
 import type { PasswordUtil } from '~/packages/password-util/password-util.js';
 
 import { UserEntity } from './user.entity.js';

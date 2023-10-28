@@ -1,3 +1,4 @@
+import { config } from '~/packages/config/config.js';
 import { logger } from '~/packages/logger/logger.js';
 import { passwordUtil } from '~/packages/password-util/password-util.js';
 
@@ -8,7 +9,7 @@ import { UserService } from './user.service.js';
 
 const userRepository = new UserRepository(UserModel);
 const userService = new UserService(userRepository, passwordUtil);
-const userController = new UserController(logger, userService);
+const userController = new UserController(logger, userService, config);
 
 export { userController, userService };
 export type { UserInfo } from './types.js';

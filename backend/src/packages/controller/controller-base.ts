@@ -1,8 +1,10 @@
 import type { IncomingHttpHeaders } from 'node:http';
 
+import type { CookieOptions } from 'express';
 import type Joi from 'joi';
 import type { ValidationResult } from 'joi';
 
+import type { Config } from '~/packages/config/config.js';
 import type { Logger } from '~/packages/logger/logger.js';
 import { logger } from '~/packages/logger/logger.js';
 
@@ -17,11 +19,17 @@ abstract class ControllerBase implements Controller {
   public logger: Logger;
   public segment: Controller['segment'];
   public routes: ServerRoute[];
+  protected config: Config;
 
-  public constructor(logger: Logger, segment: Controller['segment']) {
+  public constructor(
+    logger: Logger,
+    segment: Controller['segment'],
+    config: Config,
+  ) {
     this.logger = logger;
     this.segment = segment;
     this.routes = [];
+    this.config = config;
   }
 
   protected addRoute(route: ControllerRoute): void {
@@ -80,6 +88,16 @@ abstract class ControllerBase implements Controller {
     }
 
     return token;
+  }
+
+  protected defaultCookieOptions(): CookieOptions {
+    return {
+      sameSite: 'strict',
+      secure: true,
+      httpOnly: true,
+      signed: true,
+      path: '/',
+    };
   }
 }
 

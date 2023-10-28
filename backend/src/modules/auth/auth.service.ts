@@ -1,15 +1,17 @@
-import { ERROR_MESSAGES } from '~/common/constants/constants.js';
-import type { UserEntity, UserService } from '~/modules/users/users.js';
+import type { SignInRequestDTO, SignUpRequestDTO } from 'shared/build/index.js';
+import { ERROR_MESSAGES } from 'shared/build/index.js';
+
+import type {
+  UserEntity,
+  UserInfo,
+  UserService,
+} from '~/modules/users/users.js';
 import type { PasswordUtil } from '~/packages/password-util/password-util.js';
+import type { TOKEN_TYPES } from '~/packages/token-util/constants.js';
 import type { TokenUtilBase } from '~/packages/token-util/token-util-base.package.js';
-import type { JWTPayload } from '~/packages/token-util/types.js';
 
 import type { TokenService } from '../tokens/tokens.js';
-import type {
-  SignInRequestDTO,
-  SignUpRequestDTO,
-  UserWithTokens,
-} from './types.js';
+import type { Tokens, UserWithTokens } from './types.js';
 
 class AuthService {
   private userService: UserService;
@@ -36,31 +38,32 @@ class AuthService {
     await this.tokenService.deleteToken({ token, userId });
   }
 
-  public verifyAccessToken(headers: {
-    authorization?: string;
-  }): JWTPayload<'access'> {
-    const AUTH_HEADER = 'authorization';
-    const AUTH_SCHEMA = 'bearer';
+  public async updateTokens(refreshTokenOld: string): Promise<Tokens> {
+    const jwtPayload =
+      this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.REFRESH>(refreshTokenOld);
 
-    if (!headers[AUTH_HEADER]) {
-      throw new Error('No authorization header');
-    }
-
-    const [schema, token] = headers.authorization.split(' ');
-    if (schema.toLowerCase() !== AUTH_SCHEMA) {
-      throw new Error('Schema is not `bearer`');
-    }
-
-    if (!token) {
-      throw new Error('Token missing in authorization string');
-    }
-
-    return this.tokenUtil.verifyJWT<'access'>(token);
+    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+      jwtPayload.id,
+    );
+    const savedRefreshToken = await this.tokenService.updateRefreshToken(
+      jwtPayload.id,
+      refreshTokenOld,
+      refreshToken,
+    );
+    return { accessToken, refreshToken: savedRefreshToken };
   }
 
-  public isAuthenticated(headers: { authorization?: string }): boolean {
+  public async getCurrentUser(accessToken: string): Promise<UserInfo | null> {
+    const payloadAccess =
+      this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.ACCESS>(accessToken);
+
+    const user = await this.userService.findById(payloadAccess.id);
+    return user ? user.toObject() : user;
+  }
+
+  public isAuthenticated(token: string): boolean {
     try {
-      this.verifyAccessToken(headers);
+      this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.ACCESS>(token);
       return true;
     } catch {
       return false;
@@ -87,14 +90,13 @@ class AuthService {
     await this.tokenService.saveRefreshToken(refreshToken, user.id);
 
     return {
-      id: user.id,
-      email: user.email,
+      userId: user.id,
       accessToken,
       refreshToken,
     };
   }
 
-  public async signUp(payload: SignUpRequestDTO): Promise<UserEntity> {
+  public async signUp(payload: SignUpRequestDTO): Promise<UserWithTokens> {
     const existingUser = await this.userService.findByEmail(payload.email);
     if (existingUser) {
       throw new Error(ERROR_MESSAGES.USER_ALREADY_EXIST);
@@ -102,7 +104,16 @@ class AuthService {
 
     const user: UserEntity = await this.userService.create(payload);
 
-    return user;
+    const { accessToken, refreshToken } = this.tokenService.generateTokens(
+      user.id,
+    );
+    await this.tokenService.saveRefreshToken(refreshToken, user.id);
+
+    return {
+      userId: user.id,
+      accessToken,
+      refreshToken,
+    };
   }
 }
 

@@ -14,7 +14,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Link as RRDLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 const NavBar = (): JSX.Element => {
   const location = useLocation();
@@ -50,7 +50,7 @@ const NavBar = (): JSX.Element => {
               />
               <MenuList>
                 {NAV_ITEMS.map(({ label, href }) => (
-                  <MenuItem key={label} as={RRDLink} to={href}>
+                  <MenuItem key={label} as={RouterLink} to={href}>
                     {label}
                   </MenuItem>
                 ))}
@@ -81,17 +81,17 @@ const NavBar = (): JSX.Element => {
           spacing={6}
         >
           <Button
-            as={RRDLink}
+            as={RouterLink}
             fontSize='sm'
             fontWeight={400}
             variant='link'
-            to='#'
+            to='/sign-in'
           >
             Sign In
           </Button>
           {location.pathname !== '/app' && (
             <Button
-              as={RRDLink}
+              as={RouterLink}
               to='/app'
               display={{ base: 'none', md: 'inline-flex' }}
               fontSize='sm'
@@ -122,7 +122,7 @@ const DesktopNav = (): JSX.Element => {
         <Box key={navItem.label}>
           <Link
             p={2}
-            as={RRDLink}
+            as={RouterLink}
             to={navItem.href ?? '#'}
             fontSize='sm'
             fontWeight={500}

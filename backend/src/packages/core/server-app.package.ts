@@ -88,8 +88,15 @@ class AppBase {
     );
     this.app.use(express.static(frontendDir));
 
-    // enable cors
-    this.app.use(cors());
+    // enable cors if frontend runs on different server
+    if (this.config.ENV !== 'production') {
+      this.app.use(
+        cors({
+          origin: ['http://localhost:5173'],
+          credentials: true,
+        }),
+      );
+    }
     // Parse and sign cookies
     this.app.use(cookieParser(this.config.JWT.SECRET));
     // Autolog http requests and responses

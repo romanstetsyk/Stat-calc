@@ -1,16 +1,25 @@
-type UserWithTokens = {
-  id: string;
-  email: string;
-  accessToken: string;
-  refreshToken: string;
-};
-
 type SignUpRequestDTO = {
   name: string;
   email: string;
   password: string;
 };
 
-type SignUpResponseDTO = Omit<UserWithTokens, 'refreshToken'>;
+type SignUpResponseDTO = {
+  accessToken: string;
+};
 
-export type { SignUpRequestDTO, SignUpResponseDTO };
+type SignInRequestDTO = {
+  email: string;
+  password: string;
+};
+
+type SignInResponseDTO = {
+  accessToken: string;
+};
+
+export type {
+  SignInRequestDTO,
+  SignInResponseDTO,
+  SignUpRequestDTO,
+  SignUpResponseDTO,
+};

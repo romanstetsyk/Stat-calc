@@ -10,7 +10,7 @@ import type { HttpBase, HttpOptions } from '~/framework/http';
 
 abstract class ApiBase {
   private baseUrl: string;
-  private prefix: string;
+  private prefix: string[];
   private http: HttpBase;
 
   protected constructor({
@@ -19,7 +19,7 @@ abstract class ApiBase {
     http,
   }: {
     baseUrl: string;
-    prefix: string;
+    prefix: string[];
     http: HttpBase;
   }) {
     this.baseUrl = baseUrl;
@@ -42,7 +42,7 @@ abstract class ApiBase {
   }
 
   protected constructURL(path: string): URL {
-    return new URL([this.prefix, path].join(''), this.baseUrl);
+    return new URL([...this.prefix, path].join(''), this.baseUrl);
   }
 }
 

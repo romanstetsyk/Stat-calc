@@ -1,4 +1,5 @@
 import {
+  API_PATHS,
   ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
@@ -6,7 +7,8 @@ import {
 } from 'shared/build/index.js';
 import { validate as validateUUID } from 'uuid';
 
-import { API_PATHS, API_PATHS_USERS } from '~/common/constants/constants.js';
+import { API_PATHS_USERS } from '~/common/constants/constants.js';
+import type { Config } from '~/packages/config/config.js';
 import type {
   ApiRequest,
   ApiResponse,
@@ -24,8 +26,8 @@ import type { UserService } from './user.service.js';
 class UserController extends ControllerBase {
   private userService: UserService;
 
-  public constructor(logger: Logger, userService: UserService) {
-    super(logger, API_PATHS.USERS);
+  public constructor(logger: Logger, userService: UserService, config: Config) {
+    super(logger, API_PATHS.USERS, config);
     this.userService = userService;
 
     this.addRoute({
