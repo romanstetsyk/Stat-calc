@@ -3,9 +3,10 @@ import type {
   SignUpRequestDTO,
   SignUpResponseDTO,
 } from '@shared/build/esm/index';
-import { ERROR_MESSAGES } from '@shared/build/esm/index';
+import { ERROR_MESSAGES, TIME_CONVERT } from '@shared/build/esm/index';
 
 import { useAppMutation, useAppQuery } from '~/common/hooks';
+import { config } from '~/config';
 import { storage } from '~/framework/storage/storage';
 
 import { authApi } from './auth-api';
@@ -26,7 +27,8 @@ const getCurrentUser = function useGetCurrentUser(): ReturnType<
       retry: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      staleTime: 60_000,
+      staleTime:
+        config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS,
     },
   );
 

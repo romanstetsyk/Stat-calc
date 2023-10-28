@@ -11,9 +11,9 @@ import {
   HTTP_CODES,
   HTTP_METHODS,
   HttpError,
+  TIME_CONVERT,
 } from 'shared/build/index.js';
 
-import { TIME_CONVERT } from '~/common/constants/constants.js';
 import type { UserInfo } from '~/modules/users/users.js';
 import type { Config } from '~/packages/config/config.js';
 import type {

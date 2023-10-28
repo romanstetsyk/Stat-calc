@@ -4,6 +4,7 @@ export {
   HTTP_CODES,
   HTTP_METHODS,
   HTTP_STATES,
+  TIME_CONVERT,
 } from '~/constants/constants.js';
 export { HttpError } from '~/frameworks/frameworks.js';
 export { hasValue, isHttpCode } from '~/helpers/helpers.js';
