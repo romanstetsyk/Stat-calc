@@ -1,4 +1,5 @@
 import { useAppQuery, useQueryClient } from '~/common/hooks';
+import { storage } from '~/framework/storage';
 
 import { authApi } from '../auth-api';
 
@@ -8,6 +9,7 @@ const useSignOut = (): ReturnType<typeof useAppQuery<string>> & {
   const queryClient = useQueryClient();
 
   const invalidateCurrentUser = (): void => {
+    storage.drop('token');
     queryClient.removeQueries(['currentUser']);
   };
 

@@ -1,7 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import { storage } from '~/framework/storage';
 import { useCurrentUser, useSignOut } from '~/modules/auth/hooks';
 
 const About = (): JSX.Element => {
@@ -11,7 +10,6 @@ const About = (): JSX.Element => {
   const navigate = useNavigate();
 
   const handleSignOut = async (): Promise<void> => {
-    storage.drop('token');
     const { isSuccess } = await signOut.refetch();
     if (isSuccess) {
       signOut.invalidateCurrentUser();

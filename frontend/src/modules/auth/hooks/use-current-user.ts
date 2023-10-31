@@ -20,7 +20,7 @@ const useCurrentUser = (): ReturnType<typeof useAppQuery<UserInfo | null>> => {
       staleTime:
         config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS,
       enabled: Boolean(accessToken),
-      initialData: null,
+      placeholderData: null,
     },
   );
 
