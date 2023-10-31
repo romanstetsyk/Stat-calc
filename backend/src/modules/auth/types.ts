@@ -11,8 +11,4 @@ type Tokens = {
   refreshToken: string;
 };
 
-type RefreshTokenResponseDTO = {
-  accessToken: string;
-};
-
-export type { RefreshTokenResponseDTO, Tokens, UserWithTokens };
+export type { Tokens, UserWithTokens };

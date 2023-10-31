@@ -85,10 +85,21 @@ const NavBar = (): JSX.Element => {
             fontSize='sm'
             fontWeight={400}
             variant='link'
+            to='/sign-up'
+          >
+            Sign Up
+          </Button>
+
+          <Button
+            as={RouterLink}
+            fontSize='sm'
+            fontWeight={400}
+            variant='link'
             to='/sign-in'
           >
             Sign In
           </Button>
+
           {location.pathname !== '/app' && (
             <Button
               as={RouterLink}

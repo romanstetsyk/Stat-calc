@@ -12,6 +12,5 @@ const userService = new UserService(userRepository, passwordUtil);
 const userController = new UserController(logger, userService, config);
 
 export { userController, userService };
-export type { UserInfo } from './types.js';
 export { UserEntity } from './user.entity.js';
 export type { UserService } from './user.service.js';

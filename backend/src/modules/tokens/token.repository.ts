@@ -24,10 +24,7 @@ class TokenRepository {
     return new TokenEntity(newToken.toObject());
   }
 
-  public async delete(payload: {
-    token: string;
-    userId: string;
-  }): Promise<TokenEntity | null> {
+  public async delete(payload: { token: string }): Promise<TokenEntity | null> {
     const deletedToken: HydratedDocument<TokenDocument> | null =
       await this.tokenModel.findOneAndDelete(payload);
 

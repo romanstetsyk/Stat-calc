@@ -1,8 +1,10 @@
 import type {
+  RefreshTokenResponseDTO,
   SignInRequestDTO,
   SignInResponseDTO,
   SignUpRequestDTO,
   SignUpResponseDTO,
+  UserInfo,
 } from 'shared/build/index.js';
 import {
   API_PATHS,
@@ -14,7 +16,6 @@ import {
   TIME_CONVERT,
 } from 'shared/build/index.js';
 
-import type { UserInfo } from '~/modules/users/users.js';
 import type { Config } from '~/packages/config/config.js';
 import type {
   ApiRequest,
@@ -25,7 +26,7 @@ import type { AllowedCookies } from '~/packages/controller/types.js';
 import type { Logger } from '~/packages/logger/logger.js';
 
 import type { AuthService } from './auth.service.js';
-import type { RefreshTokenResponseDTO, UserWithTokens } from './types.js';
+import type { UserWithTokens } from './types.js';
 import {
   signInSchema,
   signUpSchema,
@@ -60,6 +61,12 @@ class AuthController extends ControllerBase {
       path: API_PATHS_AUTH.ME,
       method: HTTP_METHODS.GET,
       handler: this.me.bind(this),
+    });
+
+    this.addRoute({
+      path: API_PATHS_AUTH.SIGN_OUT,
+      method: HTTP_METHODS.GET,
+      handler: this.signOut.bind(this),
     });
   }
 
@@ -161,10 +168,7 @@ class AuthController extends ControllerBase {
     }
 
     if (refreshTokenFromCookies) {
-      await this.authService.deleteRefreshToken(
-        refreshTokenFromCookies,
-        userWithTokens.userId,
-      );
+      await this.authService.deleteRefreshToken(refreshTokenFromCookies);
     }
 
     const { refreshToken, accessToken } = userWithTokens;
@@ -185,6 +189,23 @@ class AuthController extends ControllerBase {
       status: HTTP_CODES.OK,
       payload: { accessToken },
       cookies,
+    };
+  }
+
+  private async signOut(
+    options: ApiRequest<{
+      signedCookies: Partial<Pick<AllowedCookies, 'refreshToken'>>;
+    }>,
+  ): Promise<ApiResponse> {
+    const { refreshToken } = options.signedCookies;
+
+    if (refreshToken) {
+      await this.authService.deleteRefreshToken(refreshToken);
+    }
+
+    return {
+      status: HTTP_CODES.NO_CONTENT,
+      clearCookies: [['refreshToken', { ...this.defaultCookieOptions() }]],
     };
   }
 
@@ -220,10 +241,7 @@ class AuthController extends ControllerBase {
     }
 
     if (refreshTokenFromCookies) {
-      await this.authService.deleteRefreshToken(
-        refreshTokenFromCookies,
-        userWithTokens.userId,
-      );
+      await this.authService.deleteRefreshToken(refreshTokenFromCookies);
     }
 
     const { refreshToken, accessToken } = userWithTokens;

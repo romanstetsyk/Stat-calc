@@ -58,15 +58,15 @@ describe('token repository', () => {
 
   describe('delete', () => {
     it('should return null if token was not deleted', async () => {
-      const { userId, token } = token1;
-      const deletedToken = await tokenRepository.delete({ userId, token });
+      const { token } = token1;
+      const deletedToken = await tokenRepository.delete({ token });
       expect(deletedToken).toBeNull();
     });
 
     it('should return deleted token', async () => {
       await tokenRepository.saveToken(token1);
-      const { userId, token } = token1;
-      const deletedToken = await tokenRepository.delete({ userId, token });
+      const { token } = token1;
+      const deletedToken = await tokenRepository.delete({ token });
       expect(deletedToken).toBeInstanceOf(TokenEntity);
       expect(deletedToken?.token).toBe(token);
     });

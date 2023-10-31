@@ -1,11 +1,11 @@
-import type { SignInRequestDTO, SignUpRequestDTO } from 'shared/build/index.js';
+import type {
+  SignInRequestDTO,
+  SignUpRequestDTO,
+  UserInfo,
+} from 'shared/build/index.js';
 import { ERROR_MESSAGES } from 'shared/build/index.js';
 
-import type {
-  UserEntity,
-  UserInfo,
-  UserService,
-} from '~/modules/users/users.js';
+import type { UserEntity, UserService } from '~/modules/users/users.js';
 import type { PasswordUtil } from '~/packages/password-util/password-util.js';
 import type { TOKEN_TYPES } from '~/packages/token-util/constants.js';
 import type { TokenUtilBase } from '~/packages/token-util/token-util-base.package.js';
@@ -31,11 +31,8 @@ class AuthService {
     this.tokenUtil = tokenUtil;
   }
 
-  public async deleteRefreshToken(
-    token: string,
-    userId: string,
-  ): Promise<void> {
-    await this.tokenService.deleteToken({ token, userId });
+  public async deleteRefreshToken(token: string): Promise<void> {
+    await this.tokenService.deleteToken({ token });
   }
 
   public async updateTokens(refreshTokenOld: string): Promise<Tokens> {

@@ -1,9 +1,7 @@
-import type { UserInfo } from './types.js';
+import type { UserInfo } from 'shared/build/index.js';
 
-type UserEntityConstructor = {
+type UserEntityConstructor = UserInfo & {
   id: string;
-  name: string;
-  email: string;
   passwordHash: string;
 };
 

@@ -1,13 +1,25 @@
-import { getCurrentUser } from '~/modules/auth/actions';
+import { Button } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+
+import { storage } from '~/framework/storage';
+import { useCurrentUser, useSignOut } from '~/modules/auth/hooks';
 
 const About = (): JSX.Element => {
-  const {
-    status: statusCur,
-    data: dataCur,
-    isError: isErrorCur,
-  } = getCurrentUser();
+  const { status, data: currentUser, isError: isErrorCur } = useCurrentUser();
+  const signOut = useSignOut();
 
-  if (statusCur === 'loading') {
+  const navigate = useNavigate();
+
+  const handleSignOut = async (): Promise<void> => {
+    storage.drop('token');
+    const { isSuccess } = await signOut.refetch();
+    if (isSuccess) {
+      signOut.invalidateCurrentUser();
+      navigate('/sign-in');
+    }
+  };
+
+  if (status === 'loading') {
     return <span>LoadingCur...</span>;
   }
 
@@ -18,7 +30,12 @@ const About = (): JSX.Element => {
   // We can assume by this point that `isSuccess === true`
   return (
     <>
-      <div>{dataCur.email}</div>
+      <pre>{JSON.stringify(currentUser)}</pre>
+      {currentUser && (
+        <Button type='button' onClick={handleSignOut} width={150}>
+          Sign Out
+        </Button>
+      )}
     </>
   );
 };

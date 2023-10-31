@@ -1,31 +1,27 @@
 import { Button } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
-import type { SignUpRequestDTO } from 'shared/build/esm/index';
+import type { SignInRequestDTO } from 'shared/build/esm/index';
 
 import { InputField } from '~/components/stat-form';
 import { storage } from '~/framework/storage';
 
-import { useSignUp } from '../hooks';
+import { useSignIn } from '../hooks';
 
-const SignUp = (): JSX.Element => {
-  const { isSuccess, data, mutate: signUp } = useSignUp();
+const SignIn = (): JSX.Element => {
+  const { isSuccess, data, mutate: signIn } = useSignIn();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpRequestDTO>();
+  } = useForm<SignInRequestDTO>();
 
-  const onSubmit = (data: SignUpRequestDTO): void => {
-    signUp(data);
+  const onSubmit = (data: SignInRequestDTO): void => {
+    signIn(data);
   };
 
-  // if (signUpAction.isError) {
-  //   console.log(signUpAction.error.message);
-  // }
-
   if (isSuccess) {
-    // redirect to sign in
     storage.set('token', data.accessToken);
     return <Navigate to='/app' replace={true} />;
   }
@@ -33,13 +29,6 @@ const SignUp = (): JSX.Element => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          label='Name'
-          name='name'
-          register={register}
-          error={errors.name}
-        />
-
         <InputField
           label='Email'
           name='email'
@@ -54,10 +43,10 @@ const SignUp = (): JSX.Element => {
           error={errors.password}
         />
 
-        <Button type='submit'>Sign up</Button>
+        <Button type='submit'>Sign in</Button>
       </form>
     </>
   );
 };
 
-export { SignUp };
+export { SignIn };

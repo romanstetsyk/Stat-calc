@@ -69,7 +69,7 @@ describe('token service', () => {
       const token = 'test.token';
       const userId = uuidv4();
       await tokenService.saveRefreshToken(token, userId);
-      await tokenService.deleteToken({ token, userId });
+      await tokenService.deleteToken({ token });
       const existingTokens = await tokenRepository.getAll();
       expect(existingTokens).toHaveLength(0);
     });

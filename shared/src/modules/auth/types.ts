@@ -17,7 +17,12 @@ type SignInResponseDTO = {
   accessToken: string;
 };
 
+type RefreshTokenResponseDTO = {
+  accessToken: string;
+};
+
 export type {
+  RefreshTokenResponseDTO,
   SignInRequestDTO,
   SignInResponseDTO,
   SignUpRequestDTO,

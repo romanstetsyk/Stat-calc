@@ -41,10 +41,7 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
-  public async deleteToken(payload: {
-    token: string;
-    userId: string;
-  }): Promise<void> {
+  public async deleteToken(payload: { token: string }): Promise<void> {
     await this.tokenRepository.delete(payload);
   }
 

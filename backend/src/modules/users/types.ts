@@ -1,6 +1,6 @@
-import type { UserEntity } from './user.entity.js';
+import type { UserInfo } from 'shared/build/index.js';
 
-type UserInfo = Pick<UserEntity, 'name' | 'email'>;
+import type { UserEntity } from './user.entity.js';
 
 type UserReposirotyCreate = UserInfo & Pick<UserEntity, 'passwordHash'>;
 
@@ -19,6 +19,5 @@ export type {
   FindAllResponseDTO,
   FindByIdRequestDTO,
   FindByIdResponseDTO,
-  UserInfo,
   UserReposirotyCreate,
 };

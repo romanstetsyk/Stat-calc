@@ -49,7 +49,7 @@ abstract class ControllerBase implements Controller {
     return async (req, res, next) => {
       // try..catch to catch async errors
       try {
-        const { status, payload, cookies } = await handler(req);
+        const { status, payload, cookies, clearCookies } = await handler(req);
 
         if (cookies) {
           for (const cookie of cookies) {
@@ -57,7 +57,13 @@ abstract class ControllerBase implements Controller {
           }
         }
 
-        res.status(status).json(payload);
+        if (clearCookies) {
+          for (const cookie of clearCookies) {
+            res.clearCookie(...cookie);
+          }
+        }
+
+        payload ? res.status(status).json(payload) : res.sendStatus(status);
       } catch (error) {
         next(error);
       }

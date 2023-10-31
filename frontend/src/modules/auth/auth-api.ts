@@ -1,21 +1,22 @@
 import type {
+  RefreshTokenResponseDTO,
+  SignInRequestDTO,
+  SignInResponseDTO,
   SignUpRequestDTO,
   SignUpResponseDTO,
+  UserInfo,
 } from '@shared/build/esm/index';
 import {
   API_PATHS,
   API_PATHS_AUTH,
-  ERROR_MESSAGES,
-  HTTP_CODES,
   HTTP_METHODS,
-  HttpError,
 } from '@shared/build/esm/index';
 
 import { config } from '~/config';
 import { ApiBase } from '~/framework/api';
 import type { HttpBase } from '~/framework/http';
 import { http } from '~/framework/http';
-import { storage } from '~/framework/storage/storage';
+import { storage } from '~/framework/storage';
 
 class AuthApi extends ApiBase {
   public constructor({
@@ -31,31 +32,40 @@ class AuthApi extends ApiBase {
   }
 
   public async signUp(payload: SignUpRequestDTO): Promise<SignUpResponseDTO> {
-    const headers = new Headers();
-    headers.set('Content-Type', 'application/json');
-
     const res = await this.load(this.constructURL(API_PATHS_AUTH.SIGN_UP), {
       method: HTTP_METHODS.POST,
       body: JSON.stringify(payload),
       credentials: 'include',
-      headers,
+      headers: new Headers({ 'Content-Type': 'application/json' }),
     });
     return res.json();
   }
 
-  public async currentUser(): Promise<{ name: string; email: string }> {
+  public async signIn(payload: SignInRequestDTO): Promise<SignInResponseDTO> {
+    const res = await this.load(this.constructURL(API_PATHS_AUTH.SIGN_IN), {
+      method: HTTP_METHODS.POST,
+      body: JSON.stringify(payload),
+      credentials: 'include',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+    return res.json();
+  }
+
+  public async signOut(): Promise<string> {
+    const res = await this.load(this.constructURL(API_PATHS_AUTH.SIGN_OUT), {
+      method: HTTP_METHODS.GET,
+      credentials: 'include',
+    });
+    return res.text(); // no body to parse as json for code 204
+  }
+
+  public async currentUser(): Promise<UserInfo> {
     const accessToken = storage.get('token');
 
-    if (!accessToken) {
-      throw new HttpError({
-        status: HTTP_CODES.UNAUTHORIZED,
-        message: ERROR_MESSAGES.MISSING_TOKEN,
-      });
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    if (accessToken) {
+      headers.set('Authorization', `Bearer ${accessToken}`);
     }
-
-    const headers = new Headers();
-    headers.set('Content-Type', 'application/json');
-    headers.set('Authorization', `Bearer ${accessToken}`);
 
     const res = await this.load(this.constructURL(API_PATHS_AUTH.ME), {
       method: HTTP_METHODS.GET,
@@ -64,10 +74,10 @@ class AuthApi extends ApiBase {
     return res.json();
   }
 
-  public async refresh(): Promise<{ accessToken: string }> {
+  public async refresh(): Promise<RefreshTokenResponseDTO> {
     const res = await this.load(this.constructURL(API_PATHS_AUTH.REFRESH), {
-      credentials: 'include',
       method: HTTP_METHODS.GET,
+      credentials: 'include',
     });
     return res.json();
   }
