@@ -40,7 +40,9 @@ type ControllerRoute = {
   handler(options: ApiRequest<DefaultRequestOption>): Promise<ApiResponse>;
 };
 
-type ApiRequest<T> = Override<DefaultRequestOption, T>;
+type ApiRequest<
+  T extends Partial<Record<keyof DefaultRequestOption, unknown>>,
+> = Override<DefaultRequestOption, T>;
 
 type AllowedCookies = {
   refreshToken: string;

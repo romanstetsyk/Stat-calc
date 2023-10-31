@@ -6,4 +6,6 @@ const API_PATHS_AUTH = {
   ME: '/me',
 } as const;
 
-export { API_PATHS_AUTH };
+const AUTH_SCHEMA = 'Bearer';
+
+export { API_PATHS_AUTH, AUTH_SCHEMA };

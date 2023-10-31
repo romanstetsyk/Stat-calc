@@ -1,7 +1,9 @@
 export {
   API_PATHS,
+  CONTENT_TYPE,
   ERROR_MESSAGES,
   HTTP_CODES,
+  HTTP_HEADERS,
   HTTP_METHODS,
   HTTP_STATES,
   TIME_CONVERT,
@@ -15,6 +17,6 @@ export type {
   SignUpRequestDTO,
   SignUpResponseDTO,
 } from '~/modules/auth/auth.js';
-export { API_PATHS_AUTH } from '~/modules/auth/auth.js';
+export { API_PATHS_AUTH, AUTH_SCHEMA } from '~/modules/auth/auth.js';
 export type { UserInfo } from '~/modules/users/users.js';
 export type { ErrorCommon, ValueOf } from '~/types/types.js';

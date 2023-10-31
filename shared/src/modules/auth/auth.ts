@@ -1,4 +1,4 @@
-export { API_PATHS_AUTH } from './constants.js';
+export { API_PATHS_AUTH, AUTH_SCHEMA } from './constants.js';
 export type {
   RefreshTokenResponseDTO,
   SignInRequestDTO,

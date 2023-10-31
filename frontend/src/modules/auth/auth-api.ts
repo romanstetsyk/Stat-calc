@@ -9,6 +9,9 @@ import type {
 import {
   API_PATHS,
   API_PATHS_AUTH,
+  AUTH_SCHEMA,
+  CONTENT_TYPE,
+  HTTP_HEADERS,
   HTTP_METHODS,
 } from '@shared/build/esm/index';
 
@@ -36,7 +39,7 @@ class AuthApi extends ApiBase {
       method: HTTP_METHODS.POST,
       body: JSON.stringify(payload),
       credentials: 'include',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({ [HTTP_HEADERS.CONTENT_TYPE]: CONTENT_TYPE.JSON }),
     });
     return res.json();
   }
@@ -46,7 +49,7 @@ class AuthApi extends ApiBase {
       method: HTTP_METHODS.POST,
       body: JSON.stringify(payload),
       credentials: 'include',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({ [HTTP_HEADERS.CONTENT_TYPE]: CONTENT_TYPE.JSON }),
     });
     return res.json();
   }
@@ -62,9 +65,11 @@ class AuthApi extends ApiBase {
   public async currentUser(): Promise<UserInfo> {
     const accessToken = storage.get('token');
 
-    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = new Headers({
+      [HTTP_HEADERS.CONTENT_TYPE]: CONTENT_TYPE.JSON,
+    });
     if (accessToken) {
-      headers.set('Authorization', `Bearer ${accessToken}`);
+      headers.set(HTTP_HEADERS.AUTHORIZATION, `${AUTH_SCHEMA} ${accessToken}`);
     }
 
     const res = await this.load(this.constructURL(API_PATHS_AUTH.ME), {

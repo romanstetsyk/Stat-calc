@@ -1,4 +1,8 @@
-type Override<T, R> = Omit<T, keyof R> & R;
+type Override<T, R extends Partial<Record<keyof T, unknown>>> = Omit<
+  T,
+  keyof R
+> &
+  R;
 
 type Service<T = unknown> = {
   findAll(): Promise<T[]>;

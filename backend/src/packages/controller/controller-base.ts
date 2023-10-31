@@ -3,6 +3,7 @@ import type { IncomingHttpHeaders } from 'node:http';
 import type { CookieOptions } from 'express';
 import type Joi from 'joi';
 import type { ValidationResult } from 'joi';
+import { AUTH_SCHEMA, HTTP_HEADERS } from 'shared/build/index.js';
 
 import type { Config } from '~/packages/config/config.js';
 import type { Logger } from '~/packages/logger/logger.js';
@@ -78,14 +79,14 @@ abstract class ControllerBase implements Controller {
   }
 
   protected getTokenFromHeaders(headers: IncomingHttpHeaders): string | null {
-    const AUTH_HEADER = 'authorization';
-    const AUTH_SCHEMA = 'bearer';
+    const AUTH_HEADER = HTTP_HEADERS.AUTHORIZATION;
+
     if (!headers[AUTH_HEADER]) {
       return null;
     }
 
     const [schema, token] = headers.authorization.split(' ');
-    if (schema.toLowerCase() !== AUTH_SCHEMA) {
+    if (schema.toLowerCase() !== AUTH_SCHEMA.toLowerCase()) {
       return null;
     }
 

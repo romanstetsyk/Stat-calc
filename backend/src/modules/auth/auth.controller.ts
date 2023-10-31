@@ -1,4 +1,5 @@
 import type {
+  HTTP_HEADERS,
   RefreshTokenResponseDTO,
   SignInRequestDTO,
   SignInResponseDTO,
@@ -71,7 +72,7 @@ class AuthController extends ControllerBase {
   }
 
   private async me(
-    options: ApiRequest<{ headers: { authorization?: string } }>,
+    options: ApiRequest<{ headers: { [HTTP_HEADERS.AUTHORIZATION]?: string } }>,
   ): Promise<ApiResponse<UserInfo>> {
     const { headers } = options;
 
@@ -139,7 +140,7 @@ class AuthController extends ControllerBase {
   private async signIn(
     options: ApiRequest<{
       body: SignInRequestDTO;
-      headers: { authorization?: string };
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
       signedCookies: Partial<Pick<AllowedCookies, 'refreshToken'>>;
     }>,
   ): Promise<ApiResponse<SignInResponseDTO>> {
@@ -212,7 +213,7 @@ class AuthController extends ControllerBase {
   private async signUp(
     options: ApiRequest<{
       body: SignUpRequestDTO;
-      headers: { authorization?: string };
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
       signedCookies: Partial<Pick<AllowedCookies, 'refreshToken'>>;
     }>,
   ): Promise<ApiResponse<SignUpResponseDTO>> {
@@ -265,7 +266,9 @@ class AuthController extends ControllerBase {
     };
   }
 
-  private ensureNotLoggedIn(headers: { authorization?: string }): void {
+  private ensureNotLoggedIn(headers: {
+    [HTTP_HEADERS.AUTHORIZATION]?: string;
+  }): void {
     const accessToken = this.getTokenFromHeaders(headers);
 
     if (!accessToken) {
