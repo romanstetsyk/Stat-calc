@@ -9,7 +9,7 @@ const SplitPanes = lazy(() => import('~/layout/split-panes'));
 // Should be default export to use with dynamic import
 const Application = (): JSX.Element => {
   return (
-    <Flex direction='column' height='100vh'>
+    <Flex direction='column' flexGrow={1}>
       <Suspense fallback={<div>Loading...</div>}>
         <StatMenu />
       </Suspense>
