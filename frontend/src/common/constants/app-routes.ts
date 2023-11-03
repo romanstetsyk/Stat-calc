@@ -3,7 +3,7 @@ const APP_ROUTES = {
   APP: '/app',
   ABOUT: '/about',
   SIGN_IN: '/sign-in',
-  SIGN_UP: 'sign-up',
+  SIGN_UP: '/sign-up',
   OTHER: '*',
 } as const;
 
