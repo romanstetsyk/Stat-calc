@@ -12,7 +12,7 @@ import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
 import { SessionProvider } from '~/contexts/session-context';
 import { SignInPage } from '~/modules/auth/pages/sign-in-page';
-import { SignUp } from '~/modules/auth/pages/sign-up';
+import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
 import { About } from '~/pages/about';
 
 const Application = React.lazy(() => import('~/pages/application'));
@@ -37,7 +37,7 @@ const routes: RouteObject[] = [
       },
       {
         path: APP_ROUTES.SIGN_UP,
-        element: <SignUp />,
+        element: <SignUpPage />,
       },
       {
         path: APP_ROUTES.SIGN_IN,

@@ -7,22 +7,22 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import type { SignInRequestDTO } from '@shared/build/esm/index';
+import type { SignUpRequestDTO } from '@shared/build/esm/index';
 import { useCallback } from 'react';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
 
 import { APP_ROUTES } from '~/common/constants';
 
-import { SignInForm } from '../forms';
-import { useCurrentUser, useSignIn } from '../hooks';
+import { SignUpForm } from '../forms';
+import { useCurrentUser, useSignUp } from '../hooks';
 
-const SignInPage = (): JSX.Element => {
+const SignUpPage = (): JSX.Element => {
   const { data: currentUser } = useCurrentUser();
 
-  const { isSuccess, mutate: signIn } = useSignIn();
+  const { isSuccess, mutate: signIn } = useSignUp();
 
   const onSubmit = useCallback(
-    (data: SignInRequestDTO): void => {
+    (data: SignUpRequestDTO): void => {
       signIn(data);
     },
     [signIn],
@@ -42,14 +42,14 @@ const SignInPage = (): JSX.Element => {
   return (
     <Center as='main' flexGrow={1} bg={bgColor}>
       <Stack spacing={8} mx='auto' maxW='md' w='100%' py={12} px={3}>
-        <Heading fontSize='4xl'>Sign in to your account</Heading>
+        <Heading fontSize='4xl'>Sign up</Heading>
 
         <Box rounded='lg' bg={boxBgColor} boxShadow='lg' p={8}>
-          <SignInForm onSubmit={onSubmit} />
+          <SignUpForm onSubmit={onSubmit} />
           <Text align='center' mt={8}>
-            Not registered yet?{' '}
-            <Link as={RouterLink} to={APP_ROUTES.SIGN_UP} color='blue.400'>
-              Sign up
+            Already a user?{' '}
+            <Link as={RouterLink} to={APP_ROUTES.SIGN_IN} color='blue.400'>
+              Sign in
             </Link>
           </Text>
         </Box>
@@ -58,4 +58,4 @@ const SignInPage = (): JSX.Element => {
   );
 };
 
-export { SignInPage };
+export { SignUpPage };
