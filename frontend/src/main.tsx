@@ -11,7 +11,7 @@ import { APP_ROUTES } from '~/common/constants';
 import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
 import { SessionProvider } from '~/contexts/session-context';
-import { SignIn } from '~/modules/auth/pages/sign-in';
+import { SignInPage } from '~/modules/auth/pages/sign-in-page';
 import { SignUp } from '~/modules/auth/pages/sign-up';
 import { About } from '~/pages/about';
 
@@ -41,7 +41,7 @@ const routes: RouteObject[] = [
       },
       {
         path: APP_ROUTES.SIGN_IN,
-        element: <SignIn />,
+        element: <SignInPage />,
       },
       {
         path: APP_ROUTES.OTHER,
