@@ -6,3 +6,7 @@ export type {
   SignUpRequestDTO,
   SignUpResponseDTO,
 } from './types.js';
+export {
+  signInSchema,
+  signUpSchema,
+} from './validation-schemas/validation-schemas.js';

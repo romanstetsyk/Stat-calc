@@ -14,6 +14,8 @@ import {
   HTTP_CODES,
   HTTP_METHODS,
   HttpError,
+  signInSchema,
+  signUpSchema,
   TIME_CONVERT,
 } from 'shared/build/index.js';
 
@@ -28,10 +30,6 @@ import type { Logger } from '~/packages/logger/logger.js';
 
 import type { AuthService } from './auth.service.js';
 import type { UserWithTokens } from './types.js';
-import {
-  signInSchema,
-  signUpSchema,
-} from './validation-schemas/validation-schemas.js';
 
 class AuthController extends ControllerBase {
   private authService: AuthService;

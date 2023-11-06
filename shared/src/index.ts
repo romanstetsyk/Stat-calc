@@ -17,6 +17,11 @@ export type {
   SignUpRequestDTO,
   SignUpResponseDTO,
 } from '~/modules/auth/auth.js';
-export { API_PATHS_AUTH, AUTH_SCHEMA } from '~/modules/auth/auth.js';
+export {
+  API_PATHS_AUTH,
+  AUTH_SCHEMA,
+  signInSchema,
+  signUpSchema,
+} from '~/modules/auth/auth.js';
 export type { UserInfo } from '~/modules/users/users.js';
 export type { ErrorCommon, ValueOf } from '~/types/types.js';

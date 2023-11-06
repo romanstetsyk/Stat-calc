@@ -1,0 +1,22 @@
+import Joi from 'joi';
+
+import {
+  USER_VALIDATION_CONSTANTS,
+  USER_VALIDATION_MESSAGES,
+} from '../../constants.js';
+
+const password = Joi.string()
+  .trim()
+  .required()
+  .min(USER_VALIDATION_CONSTANTS.MIN_PASSWORD_LENGTH)
+  .max(USER_VALIDATION_CONSTANTS.MAX_LOGIN_INPUT_LENGTH)
+  .regex(USER_VALIDATION_CONSTANTS.PASSWORD_REGEXP)
+  .messages({
+    'any.required': USER_VALIDATION_MESSAGES.PASSWORD_REQUIRED,
+    'string.empty': USER_VALIDATION_MESSAGES.PASSWORD_REQUIRED,
+    'string.min': USER_VALIDATION_MESSAGES.PASSWORD_SHORT,
+    'string.pattern.base': USER_VALIDATION_MESSAGES.PASSWORD_INVALID,
+    'string.max': USER_VALIDATION_MESSAGES.MAX_LOGIN_INPUT_LENGTH_EXCEEDED,
+  });
+
+export { password };
