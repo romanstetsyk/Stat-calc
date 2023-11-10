@@ -17,6 +17,10 @@ class Database {
       await this.mongod.stop();
     }
   }
+
+  public async clearDB(): Promise<void> {
+    await mongoose.connection.dropDatabase();
+  }
 }
 
 export { Database };

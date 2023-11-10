@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { v4 as uuidv4 } from 'uuid';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { Database } from '#/test/helpers/mongo-memory-server.js';
 import { TOKEN_TYPES, tokenUtil } from '~/packages/token-util/token-util.js';
@@ -12,14 +12,18 @@ describe('token service', () => {
   let tokenRepository: TokenRepository;
   let tokenService: TokenService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     tokenRepository = new TokenRepository(TokenModel);
     tokenService = new TokenService(tokenRepository, tokenUtil);
     await testDb.setUp();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await testDb.tearDown();
+  });
+
+  afterEach(async () => {
+    await testDb.clearDB();
   });
 
   describe('saveRefreshToken', () => {

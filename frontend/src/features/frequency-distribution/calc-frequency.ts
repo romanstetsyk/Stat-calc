@@ -26,8 +26,8 @@ const calcFrequency = (
       out.map(([x, fr, relFr]) => {
         const row: DataTableRow<FrequencyDistribution, typeof topLeftCell> = {
           Value: x.toString(),
-          Frequency: (fr as number).toString(),
-          'Relative Frequency': parseNumber(relFr as number),
+          Frequency: fr.toString(),
+          'Relative Frequency': parseNumber(relFr),
         };
         return row;
       });
