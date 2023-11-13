@@ -1,32 +1,29 @@
 import type { ErrorCommon } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
 
-import { useAppQuery, useQueryClient } from '~/common/hooks';
+import { useQuery, useQueryClient } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
 import { authApi } from '../auth-api';
 
-type UseSignOut = () => UseQueryResult<string, ErrorCommon> & {
-  invalidateCurrentUser: () => void;
-};
+type UseSignOut = () => UseQueryResult<string, ErrorCommon>;
 
 const useSignOut: UseSignOut = () => {
   const queryClient = useQueryClient();
 
-  const invalidateCurrentUser = (): void => {
+  const signOutQuery = useQuery<string, ErrorCommon>({
+    queryKey: ['signOut'],
+    queryFn: authApi.signOut.bind(authApi),
+    enabled: false,
+  });
+
+  if (signOutQuery.isSuccess) {
     storage.drop('token');
-    queryClient.removeQueries(['currentUser']);
-  };
+    queryClient.removeQueries({ queryKey: ['currentUser'] });
+    queryClient.removeQueries({ queryKey: ['signOut'] });
+  }
 
-  const signOutQuery = useAppQuery<string, ErrorCommon>(
-    ['signOut'],
-    authApi.signOut.bind(authApi),
-    {
-      enabled: false,
-    },
-  );
-
-  return { ...signOutQuery, invalidateCurrentUser };
+  return signOutQuery;
 };
 
 export { useSignOut };

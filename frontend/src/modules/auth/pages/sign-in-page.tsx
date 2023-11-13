@@ -31,12 +31,12 @@ const SignInPage = (): JSX.Element => {
   const bgColor = useColorModeValue('gray.50', 'gray.800');
   const boxBgColor = useColorModeValue('white', 'gray.700');
 
-  if (currentUser) {
-    return <Navigate to={APP_ROUTES.HOME} replace={true} />;
+  if (currentUser && isSuccess) {
+    return <Navigate to={APP_ROUTES.APP} replace={true} />;
   }
 
-  if (isSuccess) {
-    return <Navigate to={APP_ROUTES.APP} replace={true} />;
+  if (currentUser) {
+    return <Navigate to={APP_ROUTES.HOME} replace={true} />;
   }
 
   return (

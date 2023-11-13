@@ -12,12 +12,11 @@ const About = (): JSX.Element => {
   const handleSignOut = async (): Promise<void> => {
     const { isSuccess } = await signOut.refetch();
     if (isSuccess) {
-      signOut.invalidateCurrentUser();
       navigate('/sign-in');
     }
   };
 
-  if (status === 'loading') {
+  if (status === 'pending') {
     return <span>LoadingCur...</span>;
   }
 

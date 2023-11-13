@@ -8,7 +8,7 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
-import { useAppMutation } from '~/common/hooks';
+import { useMutation } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
 import { authApi } from '../auth-api';
@@ -20,11 +20,14 @@ type UseSignUp = () => UseMutationResult<
 >;
 
 const useSignUp: UseSignUp = () => {
-  const mutationResult = useAppMutation<
+  const mutationResult = useMutation<
     SignUpResponseDTO,
     ErrorCommon,
     SignUpRequestDTO
-  >(['signUp'], authApi.signUp.bind(authApi));
+  >({
+    mutationKey: ['signUp'],
+    mutationFn: authApi.signUp.bind(authApi),
+  });
 
   const toast = useToast();
   const toastRef = useRef<ToastId>();
