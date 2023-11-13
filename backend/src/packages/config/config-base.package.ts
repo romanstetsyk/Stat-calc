@@ -2,6 +2,7 @@ import * as path from 'node:path';
 import * as nodeUrl from 'node:url';
 
 import { config as dotenvInit } from 'dotenv';
+import type { SpecsOutput } from 'envalid';
 import { bool, cleanEnv, num, port, str, testOnly, url } from 'envalid';
 
 import type { Config, EnvSchema } from './types.js';
@@ -68,14 +69,15 @@ class BaseConfig implements Config {
     };
   }
 
-  private loadEnv(): ReturnType<typeof cleanEnv<EnvSchema>> {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  private loadEnv() {
     const pathToEnv = path.resolve(
       path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
       path.join('..', '..', '..', '.env'),
     );
     dotenvInit({ path: pathToEnv });
 
-    const envSpecs: Parameters<typeof cleanEnv<EnvSchema>>[1] = {
+    const envSpecs = {
       NODE_ENV: str({
         choices: ENVIRONMENTS,
         default: 'production',
@@ -99,7 +101,7 @@ class BaseConfig implements Config {
         desc: 'Number of days after which a refresh token expires',
         default: 15,
       }),
-    };
+    } satisfies SpecsOutput<EnvSchema>;
 
     return cleanEnv(process.env, envSpecs);
   }
