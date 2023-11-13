@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "18.x.x",
-    "npm": "9.x.x"
+    "node": "21.1.x",
+    "npm": "10.2.x"
   },
   "scripts": {
     "lint:types": "npx tsc --noEmit",
