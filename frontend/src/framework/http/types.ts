@@ -4,12 +4,11 @@ type Http = {
   makeRequest: (url: URL, options: HttpOptions) => Promise<Response>;
 };
 
-type HttpOptions = {
+type HttpOptions = Pick<
+  RequestInit,
+  'body' | 'credentials' | 'signal' | 'headers'
+> & {
   method: ValueOf<typeof HTTP_METHODS>;
-  body?: RequestInit['body'];
-  headers?: RequestInit['headers'];
-  credentials?: RequestInit['credentials'];
-  signal?: RequestInit['signal'];
 };
 
 export type { Http, HttpOptions };

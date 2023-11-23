@@ -1,58 +1,52 @@
 import type { ErrorCommon, UserInfo } from '@shared/build/esm/index';
-import { ERROR_MESSAGES, TIME_CONVERT } from '@shared/build/esm/index';
+import { TIME_CONVERT } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
 
 import { useQuery, useQueryClient } from '~/common/hooks';
 import { config } from '~/config';
 import { storage } from '~/framework/storage';
 
-import { authApi } from '../auth-api';
+import { authApi } from '../api';
 
 const useCurrentUser = (): UseQueryResult<UserInfo | null, ErrorCommon> => {
   const queryClient = useQueryClient();
 
-  const accessToken = storage.get('token');
+  const accessToken = useMemo(() => storage.get('token'), []);
 
-  const currentUserQuery = useQuery<UserInfo | null, ErrorCommon>({
+  const staleTime =
+    config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
+
+  const queryResult = useQuery<UserInfo | null, ErrorCommon>({
     queryKey: ['currentUser'],
-    queryFn: authApi.currentUser.bind(authApi),
+    queryFn: ({ signal }) => authApi.currentUser(signal),
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    staleTime:
-      config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS,
     enabled: Boolean(accessToken),
     placeholderData: null,
+    staleTime,
   });
 
-  const shouldRefresh =
-    Boolean(accessToken) &&
-    currentUserQuery.error instanceof Error &&
-    currentUserQuery.error.message === ERROR_MESSAGES.TOKEN_EXPIRED;
+  const { isError } = queryResult;
 
-  const refreshQuery = useQuery({
-    queryKey: ['refresh'],
-    queryFn: authApi.refresh.bind(authApi),
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    enabled: shouldRefresh,
-  });
+  useEffect(() => {
+    if (
+      !accessToken &&
+      queryClient.getQueryData<UserInfo | null>(['currentUser'])
+    ) {
+      queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
+    }
+  }, [accessToken, queryClient]);
 
-  if (
-    refreshQuery.isSuccess &&
-    storage.get('token') !== refreshQuery.data.accessToken
-  ) {
-    storage.set('token', refreshQuery.data.accessToken);
-    void currentUserQuery.refetch();
-  }
+  useEffect(() => {
+    if (isError) {
+      storage.drop('token');
+      queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
+    }
+  }, [isError, queryClient]);
 
-  if (refreshQuery.isError) {
-    storage.drop('token');
-    queryClient.removeQueries({ queryKey: ['currentUser'] });
-  }
-
-  return currentUserQuery;
+  return queryResult;
 };
 
 export { useCurrentUser };

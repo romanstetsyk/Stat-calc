@@ -31,7 +31,7 @@ const SignInPage = (): JSX.Element => {
   const bgColor = useColorModeValue('gray.50', 'gray.800');
   const boxBgColor = useColorModeValue('white', 'gray.700');
 
-  if (currentUser && isSuccess) {
+  if (isSuccess) {
     return <Navigate to={APP_ROUTES.APP} replace={true} />;
   }
 

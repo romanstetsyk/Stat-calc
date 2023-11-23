@@ -8,10 +8,10 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
-import { useMutation } from '~/common/hooks';
+import { useMutation, useQueryClient } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
-import { authApi } from '../auth-api';
+import { authApi } from '../api';
 
 type UseSignIn = () => UseMutationResult<
   SignInResponseDTO,
@@ -20,6 +20,8 @@ type UseSignIn = () => UseMutationResult<
 >;
 
 const useSignIn: UseSignIn = () => {
+  const queryClient = useQueryClient();
+
   const mutationResult = useMutation<
     SignInResponseDTO,
     ErrorCommon,
@@ -30,6 +32,13 @@ const useSignIn: UseSignIn = () => {
   const toastRef = useRef<ToastId>();
 
   const { isError, error, isSuccess, data } = mutationResult;
+
+  useEffect(() => {
+    if (isSuccess) {
+      storage.set('token', data.accessToken);
+      void queryClient.resetQueries({ queryKey: ['currentUser'] });
+    }
+  }, [data?.accessToken, isSuccess, queryClient]);
 
   useEffect(() => {
     if (isError) {
@@ -44,11 +53,7 @@ const useSignIn: UseSignIn = () => {
     return () => {
       toastRef.current && toast.close(toastRef.current);
     };
-  }, [error?.message, isError, toast]);
-
-  if (isSuccess) {
-    storage.set('token', data.accessToken);
-  }
+  }, [error, isError, toast]);
 
   return mutationResult;
 };

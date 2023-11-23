@@ -1,20 +1,15 @@
-import { Button } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
+import { SignOutForm } from '~/modules/auth/forms';
 import { useCurrentUser, useSignOut } from '~/modules/auth/hooks';
 
 const About = (): JSX.Element => {
   const { status, data: currentUser, isError: isErrorCur } = useCurrentUser();
-  const signOut = useSignOut();
+  const { mutate: signOut } = useSignOut();
 
-  const navigate = useNavigate();
-
-  const handleSignOut = async (): Promise<void> => {
-    const { isSuccess } = await signOut.refetch();
-    if (isSuccess) {
-      navigate('/sign-in');
-    }
-  };
+  const onSubmit = useCallback((): void => {
+    signOut();
+  }, [signOut]);
 
   if (status === 'pending') {
     return <span>LoadingCur...</span>;
@@ -28,11 +23,7 @@ const About = (): JSX.Element => {
   return (
     <>
       <pre>{JSON.stringify(currentUser)}</pre>
-      {currentUser && (
-        <Button type='button' onClick={handleSignOut} width={150}>
-          Sign Out
-        </Button>
-      )}
+      {currentUser && <SignOutForm onSubmit={onSubmit} />}
     </>
   );
 };

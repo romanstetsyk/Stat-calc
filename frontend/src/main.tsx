@@ -2,6 +2,7 @@ import './index.css';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import type { RouteObject } from 'react-router-dom';
@@ -59,6 +60,7 @@ ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
           <RouterProvider router={createBrowserRouter(routes)} />
         </SessionProvider>
       </ChakraProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>,
 );

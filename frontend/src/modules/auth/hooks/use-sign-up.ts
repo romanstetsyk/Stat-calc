@@ -11,7 +11,7 @@ import { useEffect, useRef } from 'react';
 import { useMutation } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
-import { authApi } from '../auth-api';
+import { authApi } from '../api';
 
 type UseSignUp = () => UseMutationResult<
   SignUpResponseDTO,

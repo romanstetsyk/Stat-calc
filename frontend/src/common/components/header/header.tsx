@@ -3,11 +3,14 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { Logo } from '~/common/components';
 import { APP_ROUTES } from '~/common/constants';
+import { useCurrentUser } from '~/modules/auth/hooks';
 
-import { DesktopNav, MobileNav } from './components';
+import { DesktopNav, MobileNav, MyProfile } from './components';
 
 function Header(): JSX.Element {
   const location = useLocation();
+
+  const { data: currentUser } = useCurrentUser();
 
   return (
     <Flex
@@ -39,31 +42,24 @@ function Header(): JSX.Element {
         direction='row'
         spacing={6}
       >
-        <Button
-          as={RouterLink}
-          to={APP_ROUTES.SIGN_UP}
-          fontSize='sm'
-          fontWeight={400}
-          variant='link'
-        >
-          Sign Up
-        </Button>
-
-        <Button
-          as={RouterLink}
-          to={APP_ROUTES.SIGN_IN}
-          fontSize='sm'
-          fontWeight={400}
-          variant='link'
-        >
-          Sign In
-        </Button>
+        {currentUser ? (
+          <MyProfile />
+        ) : (
+          <Button
+            as={RouterLink}
+            to={APP_ROUTES.SIGN_UP}
+            fontSize='sm'
+            fontWeight={400}
+            variant='link'
+          >
+            Sign Up
+          </Button>
+        )}
 
         {location.pathname !== APP_ROUTES.APP && (
           <Button
             as={RouterLink}
             to={APP_ROUTES.APP}
-            display={{ base: 'none', md: 'inline-flex' }}
             fontSize='sm'
             fontWeight={600}
             colorScheme='green'
