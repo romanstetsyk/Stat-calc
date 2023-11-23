@@ -1,4 +1,5 @@
 export {
+  ACCEPT,
   API_PATHS,
   CONTENT_TYPE,
   ERROR_MESSAGES,

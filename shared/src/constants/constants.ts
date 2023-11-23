@@ -1,3 +1,4 @@
+export { ACCEPT } from './accept.js';
 export { API_PATHS } from './api-paths.js';
 export { CONTENT_TYPE } from './content-type.js';
 export { ERROR_MESSAGES } from './error-messages.js';
