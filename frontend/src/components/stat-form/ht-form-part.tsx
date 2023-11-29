@@ -34,6 +34,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   setValue: UseFormSetValue<T>;
   nullError?: FieldError;
+  alternativeError?: FieldError;
   children?: React.ReactNode;
 } & FlexProps;
 
@@ -46,6 +47,7 @@ const HTFormPart = <T extends FieldValues>({
   disabled,
   control,
   nullError,
+  alternativeError,
   children,
   setValue,
   ...restProps
@@ -135,7 +137,12 @@ const HTFormPart = <T extends FieldValues>({
         />
       </FormControl>
 
-      <FormControl display='flex' gap={2} alignItems='start'>
+      <FormControl
+        display='flex'
+        gap={2}
+        alignItems='start'
+        isInvalid={Boolean(alternativeError)}
+      >
         <FormLabel m={0} htmlFor={direrctionId} whiteSpace='nowrap'>
           H<sub>a</sub>: {param}
         </FormLabel>
@@ -167,6 +174,9 @@ const HTFormPart = <T extends FieldValues>({
             </Select>
           )}
         />
+        <FormErrorMessage as='span'>
+          {alternativeError?.message}
+        </FormErrorMessage>
 
         <FormControl
           isInvalid={Boolean(nullError)}
@@ -200,6 +210,7 @@ const HTFormPart = <T extends FieldValues>({
             {nullError?.type === 'required' && nullError.message}
             {nullError?.type === 'validate' &&
               `This value ${nullError.message}`}
+            {nullError?.message}
           </FormErrorMessage>
         </FormControl>
       </FormControl>

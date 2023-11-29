@@ -16,7 +16,7 @@ const PopulationMeanDiff = (): JSX.Element => {
 type Props = {
   param: JSX.Element;
   h1dir: H1Sign;
-  h1val: string;
+  h1val: number | string;
 };
 
 const HypothesisNotation = ({ param, h1dir, h1val }: Props): JSX.Element => {

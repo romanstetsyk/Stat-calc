@@ -32,8 +32,8 @@ const HypothesisSignMap: Record<H1Sign, H0Sign> = {
 } as const;
 
 const enum Perform {
-  HypothesisTest = 'hypothesisTest',
-  ConfidenceInerval = 'confidenceInterval',
+  HypothesisTest = 'Hypothesis Test',
+  ConfidenceInerval = 'Confidence Interval',
 }
 
 type DisplayOptions = 'form' | 'result';

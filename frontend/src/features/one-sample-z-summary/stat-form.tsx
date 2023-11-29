@@ -7,6 +7,7 @@ import {
   Radio,
   Text,
 } from '@chakra-ui/react';
+import { joiResolver } from '@hookform/resolvers/joi';
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -21,19 +22,19 @@ import {
   RadioGroupWrapper,
 } from '~/components/stat-form';
 import { Perform } from '~/types';
-import {
-  isFiniteNumber,
-  isIntegerGreaterThanOne,
-  isPositiveNumber,
-  isValidLevel,
-} from '~/utils/validators';
 
 import type { TForm } from './types';
+import { schema } from './validation-schema/schema';
+
+const resolver = joiResolver(schema, {
+  abortEarly: false,
+  errors: { wrap: { label: false } },
+});
 
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
-  defaultValues: TForm;
+  defaultValues: Omit<TForm, 'sampleData'>;
 };
 
 const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
@@ -44,7 +45,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<TForm>({ defaultValues });
+  } = useForm<TForm>({ defaultValues, resolver });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
@@ -53,36 +54,23 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
 
         <InputField
           label='Sample mean'
-          name='xbar'
+          name='sampleData.xbar'
           register={register}
-          rules={{
-            // eslint-disable-next-line sonarjs/no-duplicate-string
-            required: 'This value is required',
-            validate: isFiniteNumber,
-          }}
-          error={errors.xbar}
+          error={errors.sampleData?.xbar}
         />
 
         <InputField
           label='Std. dev.'
-          name='stdev'
+          name='sampleData.stdev'
           register={register}
-          rules={{
-            required: 'This value is required',
-            validate: isPositiveNumber,
-          }}
-          error={errors.stdev}
+          error={errors.sampleData?.stdev}
         />
 
         <InputField
           label='Sample size'
-          name='n'
+          name='sampleData.n'
           register={register}
-          rules={{
-            required: 'This value is required',
-            validate: isIntegerGreaterThanOne,
-          }}
-          error={errors.n}
+          error={errors.sampleData?.n}
         />
       </FieldStack>
 
@@ -92,7 +80,6 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
         <Controller
           name='perform'
           control={control}
-          rules={{ required: 'This field is required' }}
           defaultValue={defaultValues.perform}
           render={({ field }): JSX.Element => (
             <RadioGroupWrapper {...field}>
@@ -104,29 +91,21 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
                 <HTFormPart
                   ml={6}
                   param={<PopulationMean />}
-                  alternative='alternative'
-                  alternativeDefault={defaultValues.alternative}
-                  nullValue='nullValue'
-                  nullValueDefault={defaultValues.nullValue}
+                  alternative='hypothesisTest.alternative'
+                  alternativeDefault={defaultValues.hypothesisTest.alternative}
+                  nullValue='hypothesisTest.nullValue'
+                  nullValueDefault={defaultValues.hypothesisTest.nullValue}
                   disabled={watch('perform') !== Perform.HypothesisTest}
                   control={control}
                   setValue={setValue}
-                  nullError={errors.nullValue}
+                  nullError={errors.hypothesisTest?.nullValue}
+                  alternativeError={errors.hypothesisTest?.alternative}
                 >
                   <InputField
                     label='&alpha;'
-                    name='alpha'
+                    name='hypothesisTest.alpha'
                     register={register}
-                    rules={{
-                      required: {
-                        value: watch('perform') === Perform.HypothesisTest,
-                        message: 'This value is required',
-                      },
-                      validate: (value) =>
-                        watch('perform') !== Perform.HypothesisTest ||
-                        isValidLevel(value),
-                    }}
-                    error={errors.alpha}
+                    error={errors.hypothesisTest?.alpha}
                   />
                 </HTFormPart>
               </Box>
@@ -139,8 +118,8 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
                   ml={6}
                   register={register}
                   disabled={watch('perform') !== Perform.ConfidenceInerval}
-                  level='level'
-                  levelError={errors.level}
+                  level='confidenceInterval.confidenceLevel'
+                  levelError={errors.confidenceInterval?.confidenceLevel}
                 />
               </Box>
             </RadioGroupWrapper>
@@ -153,7 +132,9 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
         <FieldStack>
           <LegendWrapper elem={Text} legend='Optional tables:' />
 
-          <Checkbox {...register('optional.confidenceInterval')}>
+          <Checkbox
+            {...register('hypothesisTest.optional.includeConfidenceInterval')}
+          >
             Confidence Interval
           </Checkbox>
         </FieldStack>

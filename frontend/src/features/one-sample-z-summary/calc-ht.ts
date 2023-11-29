@@ -17,14 +17,13 @@ import type {
 const DECIMAL = 6;
 
 const calcHT = (formSummary: TForm): HTReturn => {
-  const xbar = Number(formSummary.xbar);
-  const stdev = Number(formSummary.stdev);
-  const n = Number(formSummary.n);
-  const alternative = formSummary.alternative;
-  const nullValue = Number(formSummary.nullValue);
-  const alpha = Number(formSummary.alpha);
-
-  const includeCI = formSummary.optional.confidenceInterval;
+  const { xbar, stdev, n } = formSummary.sampleData;
+  const {
+    alternative,
+    nullValue,
+    alpha,
+    optional: { includeConfidenceInterval },
+  } = formSummary.hypothesisTest;
 
   const stderr = stdev / Math.sqrt(n);
   const zstat = (xbar - nullValue) / stderr;
@@ -87,7 +86,10 @@ const calcHT = (formSummary: TForm): HTReturn => {
   };
 
   // render CI only if condition is true
-  if (includeCI && (alternative === 'notEqual' || alpha < 0.5)) {
+  if (
+    includeConfidenceInterval &&
+    (alternative === 'notEqual' || alpha < 0.5)
+  ) {
     const me = zcrit * stderr;
     const ll = xbar - me;
     const ul = xbar + me;

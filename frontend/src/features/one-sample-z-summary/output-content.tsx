@@ -20,7 +20,7 @@ const OutputContent = ({
 }: OutputReturn): JSX.Element => {
   switch (outputData.perform) {
     case Perform.HypothesisTest: {
-      const { alternative, nullValue } = formSummary;
+      const { alternative, nullValue } = formSummary.hypothesisTest;
       const { HTData, HTStats, CIData, CIStats } = outputData;
 
       return (

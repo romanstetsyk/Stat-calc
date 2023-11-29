@@ -14,16 +14,20 @@ const HTColumns = ['Alpha', 'Z-crit', 'Z-stat', 'P-value'] as const;
 type HTColumns = (typeof HTColumns)[number];
 
 type TForm = {
-  xbar: string;
-  stdev: string;
-  n: string;
+  sampleData: {
+    xbar: number;
+    stdev: number;
+    n: number;
+  };
   perform: Perform;
-  alternative: H1Sign;
-  nullValue: string;
-  alpha: string;
-  level: string;
-  optional: {
-    confidenceInterval: boolean;
+  hypothesisTest: {
+    alternative: H1Sign;
+    nullValue: number;
+    alpha: number;
+    optional: { includeConfidenceInterval: boolean };
+  };
+  confidenceInterval: {
+    confidenceLevel: number;
   };
 };
 

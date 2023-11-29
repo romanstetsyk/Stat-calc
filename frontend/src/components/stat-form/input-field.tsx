@@ -55,6 +55,7 @@ const InputField = <T extends Record<string, unknown>>({
           {error?.type === 'required' && error.message}
           {error?.type === 'validate' &&
             `${label ?? 'This value'} ${error.message}`}
+          {error?.message}
         </FormErrorMessage>
       </VStack>
     </FormControl>

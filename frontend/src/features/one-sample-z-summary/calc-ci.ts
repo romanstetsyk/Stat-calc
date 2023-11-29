@@ -10,20 +10,18 @@ import type { CIColumns, CIReturn, SampleStatistics, TForm } from './types';
 const DECIMAL = 6;
 
 const calcCI = (formSummary: TForm): CIReturn => {
-  const xbar = Number(formSummary.xbar);
-  const stdev = Number(formSummary.stdev);
-  const n = Number(formSummary.n);
-  const level = Number(formSummary.level);
+  const { xbar, stdev, n } = formSummary.sampleData;
+  const { confidenceLevel } = formSummary.confidenceInterval;
 
   const stderr = stdev / Math.sqrt(n);
-  const zcrit = -1 * quantile((1 - level) / 2, 0, 1);
+  const zcrit = -1 * quantile((1 - confidenceLevel) / 2, 0, 1);
   const me = zcrit * stderr;
   const ll = xbar - me;
   const ul = xbar + me;
 
   const CIData: DataTableRow<CIColumns | SampleStatistics>[] = [
     {
-      Level: parseNumber(level),
+      Level: parseNumber(confidenceLevel),
       'Z-crit': parseNumber(zcrit, DECIMAL),
       N: n,
       Mean: xbar,
