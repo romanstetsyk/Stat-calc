@@ -25,4 +25,4 @@ export {
   signUpSchema,
 } from '~/modules/auth/auth.js';
 export type { UserInfo } from '~/modules/users/users.js';
-export type { ErrorCommon, ValueOf } from '~/types/types.js';
+export type { ErrorCommon, ValueOf, WithRequired } from '~/types/types.js';
