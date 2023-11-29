@@ -1,0 +1,9 @@
+export { alpha } from './alpha';
+export { alternative } from './alternative';
+export { confidenceLevel } from './confidence-level';
+export { includeConfidenceInterval } from './include-confidence-interval';
+export { n } from './n';
+export { nullValue } from './null-value';
+export { perform } from './perform';
+export { stdev } from './stdev';
+export { xbar } from './xbar';
