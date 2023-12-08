@@ -18,18 +18,11 @@ import { StatForm } from './stat-form';
 import type { GroupNumericalDataSession, TForm } from './types';
 import { FrequencyDistribution } from './types';
 
-const DEFAULT_SELECTED_FIELDS = {
+const defaultValues: Omit<TForm, 'manual' | 'squareRoot'> = {
   columns: [],
   options: [...FrequencyDistribution],
   withLabel: false,
   method: BinMethod.MANUAL,
-  manual: {
-    start: '',
-    width: '',
-  },
-  squareRoot: {
-    start: '',
-  },
 };
 
 type Props = {
@@ -43,11 +36,11 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>('form');
-  const [formSummary, setFormSummary] = useState<TForm>(() => {
+  const [formSummary, setFormSummary] = useState<TForm | null>(() => {
     const sessionItem = session.find((item) => item.id === id);
     return sessionItem && sessionItem.type === 'groupNumericalData'
       ? sessionItem.formSummary
-      : DEFAULT_SELECTED_FIELDS;
+      : null;
   });
 
   const [output, setOutput] = useState<GroupNumericalDataSession>();
@@ -60,11 +53,6 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
   };
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
-    const { columns } = data;
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    if (columns.length === 0) {
-      return;
-    }
     setFormSummary(data);
     setDisplay('result');
   };
@@ -82,10 +70,10 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           <StatForm
             onSubmit={onSubmit}
             formId={formId}
-            defaultValues={formSummary}
+            defaultValues={formSummary ?? defaultValues}
           />
         )}
-        {display === 'result' && (
+        {display === 'result' && formSummary && (
           <Output
             id={id}
             setDisplay={setDisplay}

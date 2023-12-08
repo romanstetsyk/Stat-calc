@@ -1,13 +1,13 @@
 export { AskLabelCheckbox } from './ask-label-checkbox';
 export { BinManual } from './bin-manual';
 export { BinSquareRoot } from './bin-square-root';
-export { CheckboxGroupWrapper } from './checkbox-group-wrapper';
+export { CheckboxGroupControlled } from './checkbox-group-controlled';
 export { CIFormPart } from './ci-form-part';
 export { FieldStack } from './field-stack';
 export { FormBlock } from './form-block';
 export { FormWraper } from './form-wraper';
 export { HTFormPart } from './ht-form-part';
 export { InputField } from './input-field';
-export { LegendWrapper } from './legend-wrapper';
-export { RadioGroupWrapper } from './radio-group-wrapper';
+export { Legend } from './legend';
+export { RadioGroupControlled } from './radio-group-controlled';
 export { SelectField } from './select-field';

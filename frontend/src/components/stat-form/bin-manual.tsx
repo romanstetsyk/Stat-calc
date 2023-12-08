@@ -1,32 +1,22 @@
 import type { FlexProps } from '@chakra-ui/react';
-import type {
-  FieldError,
-  FieldValues,
-  Path,
-  UseFormRegister,
-} from 'react-hook-form';
-
-import { isFiniteNumber, isPositiveNumber } from '~/utils/validators';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { FieldStack } from './field-stack';
 import { InputField } from './input-field';
 
-type Props<T extends FieldValues> = {
-  register: UseFormRegister<T>;
-  disabled: boolean;
-  start: Path<T>;
-  startError?: FieldError;
-  width: Path<T>;
-  widthError?: FieldError;
+type Props<T extends FieldValues> = Pick<
+  UseControllerProps<T>,
+  'control' | 'disabled'
+> & {
+  start: Omit<UseControllerProps<T>, 'control'>;
+  binWidth: Omit<UseControllerProps<T>, 'control'>;
 } & FlexProps;
 
 const BinManual = <T extends FieldValues>({
-  register,
+  control,
   disabled,
   start,
-  startError,
-  width,
-  widthError,
+  binWidth,
   ...restProps
 }: Props<T>): JSX.Element => {
   return (
@@ -37,30 +27,13 @@ const BinManual = <T extends FieldValues>({
       {...restProps}
     >
       <InputField
-        name={start}
-        placeholder='optional'
         label='Start'
-        register={register}
-        error={startError}
-        rules={{
-          validate: (value) =>
-            disabled || value === '' || isFiniteNumber(value),
-        }}
+        control={control}
+        placeholder='optional'
+        {...start}
       />
 
-      <InputField
-        name={width}
-        label='Width'
-        register={register}
-        error={widthError}
-        rules={{
-          required: {
-            value: !disabled,
-            message: 'This value is required',
-          },
-          validate: (value) => disabled || isPositiveNumber(value),
-        }}
-      />
+      <InputField label='Width' control={control} {...binWidth} />
     </FieldStack>
   );
 };

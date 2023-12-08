@@ -6,7 +6,7 @@ import mean from '@stdlib/stats-base-mean';
 import stdev from '@stdlib/stats-base-stdev';
 
 import type { DataTableRow } from '~/components/data-table';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 import type { ArrayLike } from '~/utils/array-like';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
@@ -24,34 +24,33 @@ const DECIMAL = 6;
 
 const calcHT = (
   formSummary: TForm,
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 ): HTReturn => {
-  const sample1 = Number(formSummary.sample1);
-  const sample2 = Number(formSummary.sample2);
-  const withLabel = formSummary.withLabel;
-  const knownStdev1 = Number(formSummary.stdev1);
-  const knownStdev2 = Number(formSummary.stdev2);
-  const nullValue = Number(formSummary.nullValue);
-  const alternative = formSummary.alternative;
-  const alpha = Number(formSummary.alpha);
+  const { sample1, knownStdev1 } = formSummary.sample1Data;
+  const { sample2, knownStdev2 } = formSummary.sample2Data;
+  const {
+    nullValue,
+    alternative,
+    alpha,
+    optional: { includeConfidenceInterval },
+  } = formSummary.hypothesisTest;
+  const { includeSampleStatistics } = formSummary.optional;
+  const { withLabel } = formSummary;
 
-  const includeSampleData = formSummary.optional.sampleStatistics;
-  const includeCI = formSummary.optional.confidenceInterval;
-
-  const var1Name = getVarName(colData, sample1, withLabel);
-  const var1Values = getVarValues(colData, sample1, withLabel);
+  const var1Name = getVarName(colData, Number(sample1), withLabel);
+  const var1Values = getVarValues(colData, Number(sample1), withLabel);
   const arrOfNums1 = var1Values.filter(isFiniteNumberString).map(Number);
   const n1 = arrOfNums1.length;
   const xbar1 = mean(n1, arrOfNums1, 1);
-  const stdevApprox1 = knownStdev1 || stdev(n1, 1, arrOfNums1, 1);
+  const stdevApprox1 = knownStdev1 ?? stdev(n1, 1, arrOfNums1, 1);
 
-  const var2Name = getVarName(colData, sample2, withLabel);
-  const var2Values = getVarValues(colData, sample2, withLabel);
+  const var2Name = getVarName(colData, Number(sample2), withLabel);
+  const var2Values = getVarValues(colData, Number(sample2), withLabel);
   const arrOfNums2 = var2Values.filter(isFiniteNumberString).map(Number);
   const n2 = arrOfNums2.length;
   const xbar2 = mean(n2, arrOfNums2, 1);
-  const stdevApprox2 = knownStdev2 || stdev(n2, 1, arrOfNums2, 1);
+  const stdevApprox2 = knownStdev2 ?? stdev(n2, 1, arrOfNums2, 1);
 
   const xdiff = xbar1 - xbar2;
   const stderr1 = stdevApprox1 / Math.sqrt(n1);
@@ -65,21 +64,21 @@ const calcHT = (
   let zcrit: number;
   let pvalue: number;
   switch (alternative) {
-    case 'notEqual': {
+    case HypothesisType.TwoTailed: {
       ciLevel = 1 - alpha;
-      zcrit = -quantile(alpha / 2, 0, 1);
+      zcrit = -1 * quantile(alpha / 2, 0, 1);
       pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
       break;
     }
-    case 'greaterThan': {
+    case HypothesisType.RightTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
     }
-    case 'lessThan': {
+    case HypothesisType.LeftTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     }
@@ -114,7 +113,7 @@ const calcHT = (
     HTStats,
   };
 
-  if (includeSampleData) {
+  if (includeSampleStatistics) {
     const sampleData: DataTableRow<SampleStatistics, ''>[] = [
       {
         '': var1Name,
@@ -157,7 +156,10 @@ const calcHT = (
     outputData.sampleStats = sampleStats;
   }
 
-  if (includeCI && (alternative === 'notEqual' || alpha < 0.5)) {
+  if (
+    includeConfidenceInterval &&
+    (alternative === HypothesisType.TwoTailed || alpha < 0.5)
+  ) {
     const me = zcrit * stderrPooled;
     const ll = xdiff - me;
     const ul = xdiff + me;

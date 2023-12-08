@@ -1,35 +1,33 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Radio,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Checkbox, Radio, Text } from '@chakra-ui/react';
+import { joiResolver } from '@hookform/resolvers/joi';
 import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { Controller, useForm } from 'react-hook-form';
 
+import { CheckboxControlled } from '~/common/components';
+import { useForm } from '~/common/hooks';
 import { PopulationMean } from '~/components/hypothesis-notation';
 import {
-  AskLabelCheckbox,
-  CheckboxGroupWrapper,
+  CheckboxGroupControlled,
   CIFormPart,
   FieldStack,
   FormWraper,
   HTFormPart,
   InputField,
-  LegendWrapper,
-  RadioGroupWrapper,
+  Legend,
+  RadioGroupControlled,
 } from '~/components/stat-form';
 import { dataStore } from '~/data-store';
 import { Perform } from '~/types';
 import { getVarName } from '~/utils/get-column-name-and-values';
-import { isPositiveNumber, isValidLevel } from '~/utils/validators';
 
 import type { TForm } from './types';
+import { schema } from './validation-schema/schema';
+
+const resolver = joiResolver(schema, {
+  abortEarly: false,
+  errors: { wrap: { label: false } },
+});
 
 type Props = {
   formId: string;
@@ -43,118 +41,107 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
     dataStore.getSnapshot,
   );
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<TForm>({ defaultValues });
+  const { handleSubmit, control, setValue, watch } = useForm<TForm>({
+    defaultValues,
+    resolver,
+  });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
-      {colData.length > 0 && (
-        <Controller
-          name='withLabel'
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field }): JSX.Element => <AskLabelCheckbox {...field} />}
-        />
+      {colData.length > 0 ? (
+        <>
+          <CheckboxControlled control={control} name='sampleData.withLabel'>
+            Labels in first row
+          </CheckboxControlled>
+
+          <CheckboxGroupControlled
+            legend='Choose columns:'
+            name='sampleData.columns'
+            control={control}
+          >
+            {Object.keys(colData).map((colHeader) => {
+              return (
+                <Checkbox key={colHeader} value={colHeader}>
+                  {getVarName(
+                    colData,
+                    Number(colHeader),
+                    watch('sampleData.withLabel'),
+                  )}
+                </Checkbox>
+              );
+            })}
+          </CheckboxGroupControlled>
+        </>
+      ) : (
+        <FieldStack>
+          <Legend>Choose columns:</Legend>
+          <Text pl={2}>No data in the table</Text>
+        </FieldStack>
       )}
 
-      <CheckboxGroupWrapper
-        label='Choose columns'
-        name='columns'
-        data={Object.keys(colData).map((colHeader) => ({
-          title: getVarName(colData, Number(colHeader), watch('withLabel')),
-          value: colHeader,
-        }))}
-        control={control}
-        defaultValue={defaultValues.columns}
-        rules={{ required: 'Select at least one column' }}
-        error={errors.columns}
-      />
-
       <InputField
-        label='Std. dev.'
+        label='Known Standard Deviation:'
         placeholder='optional'
-        name='knownStdev'
-        register={register}
-        rules={{ validate: (value) => value === '' || isPositiveNumber(value) }}
-        error={errors.knownStdev}
+        name='sampleData.knownStdev'
+        control={control}
       />
 
-      <FormControl as='fieldset' isInvalid={Boolean(errors.perform)}>
-        <LegendWrapper elem={FormLabel} legend='Perform:' />
+      <FieldStack>
+        <Legend>Perform:</Legend>
 
-        <Controller
-          name='perform'
+        <RadioGroupControlled
           control={control}
-          rules={{ required: 'This field is required' }}
-          defaultValue={defaultValues.perform}
-          render={({ field }): JSX.Element => (
-            <RadioGroupWrapper<Perform> {...field}>
-              <Box flex='1'>
-                <Radio value={Perform.HypothesisTest} mb={2}>
-                  Hypothesis Test
-                </Radio>
+          name='perform'
+          display='grid'
+          gridTemplateColumns={{ md: '1fr 1fr' }}
+          gridGap={4}
+        >
+          <Box>
+            <Radio value={Perform.HypothesisTest} mb={2}>
+              Hypothesis Test
+            </Radio>
 
-                <HTFormPart
-                  ml={6}
-                  param={<PopulationMean />}
-                  alternative='alternative'
-                  alternativeDefault={defaultValues.alternative}
-                  nullValue='nullValue'
-                  nullValueDefault={defaultValues.nullValue}
-                  disabled={watch('perform') !== Perform.HypothesisTest}
-                  control={control}
-                  setValue={setValue}
-                  nullError={errors.nullValue}
-                >
-                  <InputField
-                    label='&alpha;'
-                    name='alpha'
-                    register={register}
-                    rules={{
-                      required: {
-                        value: watch('perform') === Perform.HypothesisTest,
-                        message: 'This value is required',
-                      },
-                      validate: (value) =>
-                        watch('perform') !== Perform.HypothesisTest ||
-                        isValidLevel(value),
-                    }}
-                    error={errors.alpha}
-                  />
-                </HTFormPart>
-              </Box>
-              <Box flex='1'>
-                <Radio value={Perform.ConfidenceInerval} mb={2}>
-                  Confidence Interval
-                </Radio>
+            <HTFormPart<TForm>
+              ml={6}
+              param={<PopulationMean />}
+              alternative={{ name: 'hypothesisTest.alternative' }}
+              nullValue={{ name: 'hypothesisTest.nullValue' }}
+              disabled={watch('perform') !== Perform.HypothesisTest}
+              control={control}
+              setValue={setValue}
+            >
+              <InputField
+                label='Significance:'
+                name='hypothesisTest.alpha'
+                control={control}
+              />
+            </HTFormPart>
+          </Box>
+          <Box>
+            <Radio value={Perform.ConfidenceInerval} mb={2}>
+              Confidence Interval
+            </Radio>
 
-                <CIFormPart
-                  ml={6}
-                  register={register}
-                  disabled={watch('perform') !== Perform.ConfidenceInerval}
-                  level='level'
-                  levelError={errors.level}
-                />
-              </Box>
-            </RadioGroupWrapper>
-          )}
-        />
-        <FormErrorMessage as='span'>{errors.perform?.message}</FormErrorMessage>
-      </FormControl>
+            <CIFormPart
+              control={control}
+              level={{ name: 'confidenceInterval.confidenceLevel' }}
+              disabled={watch('perform') !== Perform.ConfidenceInerval}
+              ml={6}
+            />
+          </Box>
+        </RadioGroupControlled>
+      </FieldStack>
 
       {watch('perform') === Perform.HypothesisTest && (
         <FieldStack>
-          <LegendWrapper elem={Text} legend='Optional tables:' />
+          <Legend>Optional tables:</Legend>
 
-          <Checkbox {...register('optional.confidenceInterval')}>
+          <CheckboxControlled
+            name='hypothesisTest.optional.includeConfidenceInterval'
+            control={control}
+          >
             Confidence Interval
-          </Checkbox>
+          </CheckboxControlled>
         </FieldStack>
       )}
     </FormWraper>

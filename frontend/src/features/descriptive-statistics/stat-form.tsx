@@ -1,68 +1,88 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { Checkbox, Text } from '@chakra-ui/react';
+import { joiResolver } from '@hookform/resolvers/joi';
 import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { Controller, useForm } from 'react-hook-form';
 
-import { AskLabelCheckbox, FormWraper } from '~/components/stat-form';
-import { CheckboxGroupWrapper } from '~/components/stat-form/checkbox-group-wrapper';
+import { CheckboxControlled } from '~/common/components';
+import { useForm } from '~/common/hooks';
+import {
+  CheckboxGroupControlled,
+  FieldStack,
+  FormWraper,
+  Legend,
+} from '~/components/stat-form';
 import { dataStore } from '~/data-store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';
 import { SampleStatistics } from './types';
+import { schema } from './validation-schema/schema';
+
+const resolver = joiResolver(schema, {
+  abortEarly: false,
+  errors: { wrap: { label: false } },
+});
 
 type Props = {
-  onSubmit: SubmitHandler<TForm>;
   formId: string;
+  onSubmit: SubmitHandler<TForm>;
   defaultValues: TForm;
 };
 
-const StatForm = ({ onSubmit, formId, defaultValues }: Props): JSX.Element => {
+const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot,
   );
 
-  const {
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm<TForm>({ defaultValues });
+  const { handleSubmit, control, watch } = useForm<TForm>({
+    defaultValues,
+    resolver,
+  });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
-      {colData.length > 0 && (
-        <Controller
-          name='withLabel'
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field }): JSX.Element => <AskLabelCheckbox {...field} />}
-        />
+      {colData.length > 0 ? (
+        <>
+          <CheckboxControlled control={control} name='withLabel'>
+            Labels in first row
+          </CheckboxControlled>
+
+          <CheckboxGroupControlled
+            legend='Choose columns:'
+            name='columns'
+            control={control}
+          >
+            {Object.keys(colData).map((colHeader) => {
+              return (
+                <Checkbox key={colHeader} value={colHeader}>
+                  {getVarName(colData, Number(colHeader), watch('withLabel'))}
+                </Checkbox>
+              );
+            })}
+          </CheckboxGroupControlled>
+        </>
+      ) : (
+        <FieldStack>
+          <Legend>Choose columns:</Legend>
+          <Text pl={2}>No data in the table</Text>
+        </FieldStack>
       )}
 
-      <CheckboxGroupWrapper
-        label='Choose columns:'
-        name='columns'
-        data={Object.keys(colData).map((colHeader) => ({
-          title: getVarName(colData, Number(colHeader), watch('withLabel')),
-          value: colHeader,
-        }))}
-        control={control}
-        defaultValue={defaultValues.columns}
-        rules={{ required: 'Select at least one column' }}
-        error={errors.columns}
-      />
-
-      <CheckboxGroupWrapper
-        label='Statistics:'
+      <CheckboxGroupControlled
+        legend='Statistics:'
         name='options'
-        data={[...SampleStatistics]}
         control={control}
-        defaultValue={defaultValues.options}
-        rules={{ required: 'Select at least one statistic' }}
-        error={errors.options}
-      />
+      >
+        {SampleStatistics.map((statistic) => {
+          return (
+            <Checkbox key={statistic} value={statistic}>
+              {statistic}
+            </Checkbox>
+          );
+        })}
+      </CheckboxGroupControlled>
     </FormWraper>
   );
 };

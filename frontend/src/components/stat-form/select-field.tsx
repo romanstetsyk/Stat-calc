@@ -1,65 +1,84 @@
-import type { InputProps } from '@chakra-ui/react';
+import type { FormControlProps, SelectProps } from '@chakra-ui/react';
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Portal,
   Select,
-  VStack,
 } from '@chakra-ui/react';
-import type {
-  FieldError,
-  FieldValues,
-  Path,
-  RegisterOptions,
-  UseFormRegister,
-} from 'react-hook-form';
+import type { ComponentProps, RefObject } from 'react';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
-type Props<TFormValues extends FieldValues> = {
-  label?: string;
-  name: Path<TFormValues>;
-  placeholder: string;
-  rules?: RegisterOptions;
-  register?: UseFormRegister<TFormValues>;
-  error?: FieldError;
-  children: React.ReactNode;
-} & Omit<InputProps, 'name'>;
+import { useController } from '~/common/hooks';
 
-const SelectField = <TFormValues extends Record<string, unknown>>({
-  label,
+const COL_2 = 2;
+
+type Props<T extends FieldValues> = UseControllerProps<T> &
+  SelectProps &
+  ComponentProps<'select'> & {
+    label?: string;
+    errorContainerRef?: RefObject<HTMLElement>;
+    formControlProps?: FormControlProps;
+  };
+
+const SelectField = <T extends FieldValues>({
   name,
-  error,
-  register,
+  control,
+  defaultValue,
   rules,
+  shouldUnregister,
+  disabled,
+  label,
   children,
-  placeholder,
-}: Props<TFormValues>): JSX.Element => {
+  errorContainerRef,
+  formControlProps,
+  ...selectProps
+}: Props<T>): JSX.Element => {
+  const {
+    field,
+    fieldState: { error, invalid },
+  } = useController({
+    name,
+    control,
+    defaultValue,
+    rules,
+    shouldUnregister,
+    disabled,
+  });
+
   return (
     <FormControl
-      isInvalid={Boolean(error)}
-      display='flex'
+      isInvalid={invalid}
+      display='inline-grid'
+      gridTemplateColumns={label ? 'auto 1fr' : 'none'}
       alignItems='baseline'
       width='auto'
-      gap={3}
+      gridColumnGap={3}
+      gridRowGap={0}
+      {...formControlProps}
     >
       {label && (
         <FormLabel whiteSpace='nowrap' fontWeight={400} m={0}>
           {label}
         </FormLabel>
       )}
-      <VStack alignItems='start' gap={0}>
-        <Select
-          size='sm'
-          placeholder={placeholder}
-          {...register?.(name, rules)}
-        >
-          {children}
-        </Select>
-        <FormErrorMessage as='span'>
-          {error?.type === 'required' && error.message}
-          {error?.type === 'validate' &&
-            `${label ?? 'This value'} ${error.message}`}
-        </FormErrorMessage>
-      </VStack>
+
+      <Select {...field} {...selectProps}>
+        {children}
+      </Select>
+
+      {error &&
+        (errorContainerRef ? (
+          <Portal containerRef={errorContainerRef}>
+            <FormErrorMessage as='span' m={0}>
+              {error.message}
+            </FormErrorMessage>
+          </Portal>
+        ) : (
+          <FormErrorMessage as='span' m={0} gridColumn={label && COL_2}>
+            {error.message}
+          </FormErrorMessage>
+        ))}
     </FormControl>
   );
 };

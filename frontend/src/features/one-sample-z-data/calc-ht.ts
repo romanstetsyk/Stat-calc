@@ -5,7 +5,7 @@ import mean from '@stdlib/stats-base-mean';
 import stdev from '@stdlib/stats-base-stdev';
 
 import type { DataTableRow } from '~/components/data-table';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 import type { ArrayLike } from '~/utils/array-like';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
@@ -23,16 +23,15 @@ const DECIMAL = 6;
 
 const calcHT = (
   formSummary: TForm,
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
 ): HTReturn => {
-  const columns = formSummary.columns;
-  const withLabel = formSummary.withLabel;
-  const knownStdev = formSummary.knownStdev;
-  const nullValue = Number(formSummary.nullValue);
-  const alternative = formSummary.alternative;
-  const alpha = Number(formSummary.alpha);
-
-  const includeCI = formSummary.optional.confidenceInterval;
+  const { columns, withLabel, knownStdev } = formSummary.sampleData;
+  const {
+    nullValue,
+    alternative,
+    alpha,
+    optional: { includeConfidenceInterval },
+  } = formSummary.hypothesisTest;
 
   const CIData: DataTableRow<CIColumns, ''>[] = [];
 
@@ -44,31 +43,29 @@ const calcHT = (
       const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
       const n = arrOfNums.length;
       const xbar = mean(n, arrOfNums, 1);
-      const stdevApprox = knownStdev
-        ? Number(knownStdev)
-        : stdev(n, 1, arrOfNums, 1);
+      const stdevApprox = knownStdev ?? stdev(n, 1, arrOfNums, 1);
       const stderr = stdevApprox / Math.sqrt(n);
-      const zstat = (xbar - Number(nullValue)) / stderr;
+      const zstat = (xbar - nullValue) / stderr;
 
       let ciLevel: number;
       let zcrit: number;
       let pvalue: number;
       switch (alternative) {
-        case 'notEqual': {
-          ciLevel = 1 - Number(alpha);
-          zcrit = -quantile(Number(alpha) / 2, 0, 1);
+        case HypothesisType.TwoTailed: {
+          ciLevel = 1 - alpha;
+          zcrit = -1 * quantile(alpha / 2, 0, 1);
           pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
           break;
         }
-        case 'greaterThan': {
-          ciLevel = 1 - 2 * Number(alpha);
-          zcrit = -quantile(Number(alpha), 0, 1);
+        case HypothesisType.RightTailed: {
+          ciLevel = 1 - 2 * alpha;
+          zcrit = -1 * quantile(alpha, 0, 1);
           pvalue = 1 - cdf(zstat, 0, 1);
           break;
         }
-        case 'lessThan': {
-          ciLevel = 1 - 2 * Number(alpha);
-          zcrit = -quantile(Number(alpha), 0, 1);
+        case HypothesisType.LeftTailed: {
+          ciLevel = 1 - 2 * alpha;
+          zcrit = -1 * quantile(alpha, 0, 1);
           pvalue = cdf(zstat, 0, 1);
           break;
         }
@@ -77,10 +74,13 @@ const calcHT = (
         }
       }
 
-      if (includeCI && (alternative === 'notEqual' || Number(alpha) < 0.5)) {
+      if (
+        includeConfidenceInterval &&
+        (alternative === HypothesisType.TwoTailed || alpha < 0.5)
+      ) {
         const me = zcrit * stderr;
-        const ll = Number(xbar) - me;
-        const ul = Number(xbar) + me;
+        const ll = xbar - me;
+        const ul = xbar + me;
         CIData.push({
           '': varName,
           Level: parseNumber(ciLevel),
@@ -130,7 +130,10 @@ const calcHT = (
 
   const output: HTReturn = { perform: Perform.HypothesisTest, HTData, HTStats };
 
-  if (includeCI && (alternative === 'notEqual' || Number(alpha) < 0.5)) {
+  if (
+    includeConfidenceInterval &&
+    (alternative === HypothesisType.TwoTailed || Number(alpha) < 0.5)
+  ) {
     output.CIData = CIData;
     output.CIStats = CIStats;
   }

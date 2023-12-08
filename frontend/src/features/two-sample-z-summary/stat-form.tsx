@@ -1,15 +1,9 @@
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Radio,
-  Text,
-} from '@chakra-ui/react';
+import { Box, FormLabel, Grid, Radio, useId } from '@chakra-ui/react';
+import { joiResolver } from '@hookform/resolvers/joi';
 import type { SubmitHandler } from 'react-hook-form';
-import { Controller, useForm } from 'react-hook-form';
 
+import { CheckboxControlled } from '~/common/components';
+import { useForm } from '~/common/hooks';
 import { PopulationMeanDiff } from '~/components/hypothesis-notation';
 import {
   CIFormPart,
@@ -18,186 +12,206 @@ import {
   FormWraper,
   HTFormPart,
   InputField,
-  LegendWrapper,
-  RadioGroupWrapper,
+  Legend,
+  RadioGroupControlled,
 } from '~/components/stat-form';
 import { Perform } from '~/types';
-import {
-  isFiniteNumber,
-  isIntegerGreaterThanOne,
-  isPositiveNumber,
-  isValidLevel,
-} from '~/utils/validators';
 
 import type { TForm } from './types';
+import { schema } from './validation-schema/schema';
+
+const resolver = joiResolver(schema, {
+  abortEarly: false,
+  errors: { wrap: { label: false } },
+});
 
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
-  defaultValues: TForm;
+  defaultValues: Omit<TForm, 'sample1Summary' | 'sample2Summary'>;
 };
 
 const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<TForm>({ defaultValues });
+  const id = useId();
+
+  const { handleSubmit, control, setValue, watch } = useForm<TForm>({
+    defaultValues,
+    resolver,
+  });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
       <FormBlock>
         <FieldStack flex='1'>
-          <LegendWrapper elem={Text} legend='Sample 1' />
+          <Legend>Sample 1</Legend>
 
-          <InputField
-            label='Sample mean'
-            name='xbar1'
-            register={register}
-            rules={{
-              // eslint-disable-next-line sonarjs/no-duplicate-string
-              required: 'This value is required',
-              validate: isFiniteNumber,
-            }}
-            error={errors.xbar1}
-          />
+          <Grid
+            templateColumns='auto 1fr'
+            alignItems='baseline'
+            gridColumnGap={4}
+            gridRowGap={1}
+          >
+            <FormLabel
+              m={0}
+              htmlFor={id + 'xbar1'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Sample mean:
+            </FormLabel>
+            <InputField
+              id={id + 'xbar1'}
+              name='sample1Summary.xbar1'
+              control={control}
+            />
 
-          <InputField
-            label='Std. dev.'
-            name='stdev1'
-            register={register}
-            rules={{
-              required: 'This value is required',
-              validate: isPositiveNumber,
-            }}
-            error={errors.stdev1}
-          />
+            <FormLabel
+              m={0}
+              htmlFor={id + 'stdev1'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Standard deviation:
+            </FormLabel>
+            <InputField
+              id={id + 'stdev1'}
+              name='sample1Summary.stdev1'
+              control={control}
+            />
 
-          <InputField
-            label='Sample size'
-            name='n1'
-            register={register}
-            rules={{
-              required: 'This value is required',
-              validate: isIntegerGreaterThanOne,
-            }}
-            error={errors.n1}
-          />
+            <FormLabel
+              m={0}
+              htmlFor={id + 'n1'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Sample size:
+            </FormLabel>
+            <InputField
+              id={id + 'n1'}
+              name='sample1Summary.n1'
+              control={control}
+            />
+          </Grid>
         </FieldStack>
 
         <FieldStack flex='1'>
-          <LegendWrapper elem={Text} legend='Sample 2' />
+          <Legend>Sample 2</Legend>
 
-          <InputField
-            label='Sample mean'
-            name='xbar2'
-            register={register}
-            rules={{
-              required: 'This value is required',
-              validate: isFiniteNumber,
-            }}
-            error={errors.xbar2}
-          />
+          <Grid
+            templateColumns='auto 1fr'
+            alignItems='baseline'
+            gridColumnGap={4}
+            gridRowGap={1}
+          >
+            <FormLabel
+              m={0}
+              htmlFor={id + 'xbar2'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Sample mean:
+            </FormLabel>
+            <InputField
+              id={id + 'xbar2'}
+              name='sample2Summary.xbar2'
+              control={control}
+            />
 
-          <InputField
-            label='Std. dev.'
-            name='stdev2'
-            register={register}
-            rules={{
-              required: 'This value is required',
-              validate: isPositiveNumber,
-            }}
-            error={errors.stdev2}
-          />
+            <FormLabel
+              m={0}
+              htmlFor={id + 'stdev2'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Standard deviation:
+            </FormLabel>
+            <InputField
+              id={id + 'stdev2'}
+              name='sample2Summary.stdev2'
+              control={control}
+            />
 
-          <InputField
-            label='Sample size'
-            name='n2'
-            register={register}
-            rules={{
-              required: 'This value is required',
-              validate: isIntegerGreaterThanOne,
-            }}
-            error={errors.n2}
-          />
+            <FormLabel
+              m={0}
+              htmlFor={id + 'n2'}
+              whiteSpace='nowrap'
+              fontWeight={400}
+            >
+              Sample size:
+            </FormLabel>
+            <InputField
+              id={id + 'n2'}
+              name='sample2Summary.n2'
+              control={control}
+            />
+          </Grid>
         </FieldStack>
       </FormBlock>
 
-      <FormControl as='fieldset' isInvalid={Boolean(errors.perform)}>
-        <LegendWrapper elem={FormLabel} legend='Perform:' />
+      <FieldStack>
+        <Legend>Perform:</Legend>
 
-        <Controller
-          name='perform'
+        <RadioGroupControlled
           control={control}
-          rules={{ required: 'This field is required' }}
-          defaultValue={defaultValues.perform}
-          render={({ field }): JSX.Element => (
-            <RadioGroupWrapper {...field}>
-              <Box flex='1'>
-                <Radio value={Perform.HypothesisTest} mb={2}>
-                  Hypothesis Test
-                </Radio>
+          name='perform'
+          display='grid'
+          gridTemplateColumns={{ md: '1fr 1fr' }}
+          gridGap={4}
+        >
+          <Box>
+            <Radio value={Perform.HypothesisTest} mb={2}>
+              Hypothesis Test
+            </Radio>
 
-                <HTFormPart
-                  ml={6}
-                  param={<PopulationMeanDiff />}
-                  alternative='alternative'
-                  alternativeDefault={defaultValues.alternative}
-                  nullValue='nullValue'
-                  nullValueDefault={defaultValues.nullValue}
-                  disabled={watch('perform') !== Perform.HypothesisTest}
-                  control={control}
-                  setValue={setValue}
-                  nullError={errors.nullValue}
-                >
-                  <InputField
-                    label='&alpha;'
-                    name='alpha'
-                    register={register}
-                    rules={{
-                      required: {
-                        value: watch('perform') === Perform.HypothesisTest,
-                        message: 'This value is required',
-                      },
-                      validate: (value) =>
-                        watch('perform') !== Perform.HypothesisTest ||
-                        isValidLevel(value),
-                    }}
-                    error={errors.alpha}
-                  />
-                </HTFormPart>
-              </Box>
-              <Box flex='1'>
-                <Radio value={Perform.ConfidenceInerval} mb={2}>
-                  Confidence Interval
-                </Radio>
+            <HTFormPart
+              ml={6}
+              param={<PopulationMeanDiff />}
+              alternative={{ name: 'hypothesisTest.alternative' }}
+              nullValue={{ name: 'hypothesisTest.nullValue' }}
+              disabled={watch('perform') !== Perform.HypothesisTest}
+              control={control}
+              setValue={setValue}
+            >
+              <InputField
+                label='Significance:'
+                name='hypothesisTest.alpha'
+                control={control}
+              />
+            </HTFormPart>
+          </Box>
+          <Box>
+            <Radio value={Perform.ConfidenceInerval} mb={2}>
+              Confidence Interval
+            </Radio>
 
-                <CIFormPart
-                  ml={6}
-                  register={register}
-                  disabled={watch('perform') !== Perform.ConfidenceInerval}
-                  level='level'
-                  levelError={errors.level}
-                />
-              </Box>
-            </RadioGroupWrapper>
-          )}
-        />
-        <FormErrorMessage as='span'>{errors.perform?.message}</FormErrorMessage>
-      </FormControl>
+            <CIFormPart
+              control={control}
+              level={{ name: 'confidenceInterval.confidenceLevel' }}
+              disabled={watch('perform') !== Perform.ConfidenceInerval}
+              ml={6}
+            />
+          </Box>
+        </RadioGroupControlled>
+      </FieldStack>
 
       <FieldStack>
-        <LegendWrapper elem={Text} legend='Optional tables:' />
-        <Checkbox {...register('optional.sampleStatistics')}>
+        <Legend>Optional tables:</Legend>
+
+        <CheckboxControlled
+          name='optional.includeSampleStatistics'
+          control={control}
+        >
           Sample Statistics
-        </Checkbox>
+        </CheckboxControlled>
+
         {watch('perform') === Perform.HypothesisTest && (
-          <Checkbox {...register('optional.confidenceInterval')}>
-            ConfidenceInterval
-          </Checkbox>
+          <CheckboxControlled
+            name='hypothesisTest.optional.includeConfidenceInterval'
+            control={control}
+          >
+            Confidence Interval
+          </CheckboxControlled>
         )}
       </FieldStack>
     </FormWraper>

@@ -1,3 +1,4 @@
+export { CheckboxControlled } from './checkbox-controlled';
 export { Footer } from './footer';
 export { Header } from './header';
 export { InputControlled } from './input-controlled';

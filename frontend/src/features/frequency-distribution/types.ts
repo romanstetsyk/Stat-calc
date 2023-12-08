@@ -1,4 +1,5 @@
 import type { DataTableRow } from '~/components/data-table';
+import type { ColumnHeading } from '~/types';
 
 const FrequencyDistribution = [
   'Frequency',
@@ -10,7 +11,7 @@ const FrequencyDistribution = [
 type FrequencyDistribution = (typeof FrequencyDistribution)[number];
 
 type TForm = {
-  columns: `${number}`[];
+  columns: ColumnHeading[];
   options: FrequencyDistribution[];
   withLabel: boolean;
 };

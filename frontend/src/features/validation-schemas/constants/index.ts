@@ -5,4 +5,6 @@ const PROBABILITY = {
   MAX: 1,
 } as const;
 
-export { MIN_SAMPLE_SIZE, PROBABILITY };
+const COLUMN_NAME_PATTERN = /^\d+$/;
+
+export { COLUMN_NAME_PATTERN, MIN_SAMPLE_SIZE, PROBABILITY };

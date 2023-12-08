@@ -11,27 +11,27 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { SessionContext } from '~/contexts/session-context';
 import type { DisplayOptions } from '~/types';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 
 import { Output } from './output';
 import { StatForm } from './stat-form';
 import type { TForm, Z2SummarySession } from './types';
 
-const DEFAULT_SELECTED_FIELDS: TForm = {
-  xbar1: '',
-  xbar2: '',
-  stdev1: '',
-  stdev2: '',
-  n1: '',
-  n2: '',
+const defaultValues: Omit<TForm, 'sample1Summary' | 'sample2Summary'> = {
   perform: Perform.HypothesisTest,
-  alternative: 'notEqual',
-  nullValue: '0',
-  alpha: '0.05',
-  level: '0.95',
+  hypothesisTest: {
+    alternative: HypothesisType.TwoTailed,
+    nullValue: 0,
+    alpha: 0.05,
+    optional: {
+      includeConfidenceInterval: false,
+    },
+  },
+  confidenceInterval: {
+    confidenceLevel: 0.95,
+  },
   optional: {
-    sampleStatistics: false,
-    confidenceInterval: false,
+    includeSampleStatistics: false,
   },
 };
 
@@ -46,11 +46,11 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>('form');
-  const [formSummary, setFormSummary] = useState<TForm>(() => {
+  const [formSummary, setFormSummary] = useState<TForm | null>(() => {
     const sessionItem = session.find((item) => item.id === id);
     return sessionItem && sessionItem.type === 'z2summary'
       ? sessionItem.formSummary
-      : DEFAULT_SELECTED_FIELDS;
+      : null;
   });
 
   const [output, setOutput] = useState<Z2SummarySession>();
@@ -80,10 +80,10 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           <StatForm
             formId={formId}
             onSubmit={onSubmit}
-            defaultValues={formSummary}
+            defaultValues={formSummary ?? defaultValues}
           />
         )}
-        {display === 'result' && (
+        {display === 'result' && formSummary && (
           <Output
             id={id}
             setDisplay={setDisplay}

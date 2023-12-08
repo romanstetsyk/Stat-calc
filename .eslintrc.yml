@@ -121,6 +121,8 @@ rules:
   '@typescript-eslint/semi':
     - error
     - always
+  'no-magic-numbers':
+    - off
   '@typescript-eslint/no-magic-numbers':
     - error
     - ignoreEnums: true

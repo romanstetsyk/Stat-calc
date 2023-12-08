@@ -3,6 +3,7 @@ import gcusum from '@stdlib/blas-ext-base-gcusum';
 import tabulate from '@stdlib/utils-tabulate';
 
 import type { DataTableRow } from '~/components/data-table';
+import type { ColumnHeading } from '~/types';
 import type { ArrayLike } from '~/utils/array-like';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import { parseNumber } from '~/utils/parse-number';
@@ -11,8 +12,8 @@ import type { FrequencyDistribution, OutputReturn } from './types';
 import { topLeftCell } from './types';
 
 const calcFrequency = (
-  columns: `${number}`[],
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  columns: ColumnHeading[],
+  colData: ArrayLike<ArrayLike<string>>,
   withLabel: boolean,
   options: FrequencyDistribution[],
 ): OutputReturn[] =>

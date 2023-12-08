@@ -6,9 +6,7 @@ const FieldStack = forwardRef<FlexProps, 'fieldset'>(
     return (
       <Flex
         as='fieldset'
-        // flex="1"
         direction='column'
-        gap={2}
         ref={ref} // ref needed to use 'as' prop
         {...props}
       >

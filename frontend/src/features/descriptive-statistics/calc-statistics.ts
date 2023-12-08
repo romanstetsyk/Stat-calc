@@ -6,6 +6,7 @@ import stdev from '@stdlib/stats-base-stdev';
 import variance from '@stdlib/stats-base-variance';
 
 import type { DataTableRow } from '~/components/data-table';
+import type { ColumnHeading } from '~/types';
 import type { ArrayLike } from '~/utils/array-like';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
@@ -16,8 +17,8 @@ import type { SampleStatistics } from './types';
 const DECIMAL = 6;
 
 const calcStatistics = (
-  columns: `${number}`[],
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  columns: ColumnHeading[],
+  colData: ArrayLike<ArrayLike<string>>,
   withLabel: boolean,
   options: SampleStatistics[],
 ): DataTableRow<SampleStatistics, ''>[] =>

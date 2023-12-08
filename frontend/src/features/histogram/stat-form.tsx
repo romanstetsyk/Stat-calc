@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Radio,
-} from '@chakra-ui/react';
+import { Box, Checkbox, Radio, Text } from '@chakra-ui/react';
+import { joiResolver } from '@hookform/resolvers/joi';
 import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { Controller, useForm } from 'react-hook-form';
 
+import { CheckboxControlled } from '~/common/components';
+import { useForm } from '~/common/hooks';
 import {
-  AskLabelCheckbox,
   BinManual,
   BinSquareRoot,
-  CheckboxGroupWrapper,
+  CheckboxGroupControlled,
+  FieldStack,
   FormWraper,
-  LegendWrapper,
-  RadioGroupWrapper,
+  Legend,
+  RadioGroupControlled,
 } from '~/components/stat-form';
 import { dataStore } from '~/data-store';
 import { BinMethod } from '~/types';
@@ -24,118 +21,103 @@ import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';
 import { FrequencyDistribution } from './types';
+import { schema } from './validation-schema/schema';
+
+const resolver = joiResolver(schema, {
+  abortEarly: false,
+  errors: { wrap: { label: false } },
+});
 
 type Props = {
   onSubmit: SubmitHandler<TForm>;
   formId: string;
-  defaultValues: TForm;
+  defaultValues: Omit<TForm, 'manual' | 'squareRoot'>;
 };
 
-const StatForm = ({ onSubmit, formId, defaultValues }: Props): JSX.Element => {
+const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   const { colData } = useSyncExternalStore(
     dataStore.subscribe,
     dataStore.getSnapshot,
   );
 
-  const {
-    handleSubmit,
-    control,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm<TForm>({
+  const { handleSubmit, control, watch } = useForm<TForm>({
     defaultValues,
+    resolver,
   });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
-      {colData.length > 0 && (
-        <Controller
-          name='withLabel'
-          control={control}
-          defaultValue={defaultValues.withLabel}
-          render={({ field }): JSX.Element => <AskLabelCheckbox {...field} />}
-        />
+      {colData.length > 0 ? (
+        <>
+          <CheckboxControlled control={control} name='withLabel'>
+            Labels in first row
+          </CheckboxControlled>
+
+          <CheckboxGroupControlled
+            legend='Choose columns:'
+            name='columns'
+            control={control}
+          >
+            {Object.keys(colData).map((colHeader) => {
+              return (
+                <Checkbox key={colHeader} value={colHeader}>
+                  {getVarName(colData, Number(colHeader), watch('withLabel'))}
+                </Checkbox>
+              );
+            })}
+          </CheckboxGroupControlled>
+        </>
+      ) : (
+        <FieldStack>
+          <Legend>Choose columns:</Legend>
+          <Text pl={2}>No data in the table</Text>
+        </FieldStack>
       )}
 
-      <CheckboxGroupWrapper
-        label='Choose columns'
-        name='columns'
-        data={Object.keys(colData).map((colHeader) => ({
-          title: getVarName(colData, Number(colHeader), watch('withLabel')),
-          value: colHeader,
-        }))}
-        control={control}
-        defaultValue={defaultValues.columns}
-        rules={{ required: 'Select at least one column' }}
-        error={errors.columns}
-      />
+      <FieldStack>
+        <Legend>Statiscics:</Legend>
 
-      <FormControl isInvalid={Boolean(errors.method)} as='fieldset'>
-        <LegendWrapper elem={FormLabel} legend='Statiscics:' />
-
-        <Controller
+        <RadioGroupControlled
+          control={control}
           name='options'
-          control={control}
-          rules={{ required: 'This field is required' }}
-          defaultValue={defaultValues.options}
-          render={({ field }): JSX.Element => (
-            <RadioGroupWrapper<FrequencyDistribution>
-              {...field}
-              flexDirection='column'
-              gap={0}
-            >
-              {FrequencyDistribution.map((opt) => (
-                <Radio key={opt} value={opt}>
-                  {opt}
-                </Radio>
-              ))}
-            </RadioGroupWrapper>
-          )}
-        />
-        <FormErrorMessage as='span'>{errors.method?.message}</FormErrorMessage>
-      </FormControl>
+          display='flex'
+          flexDirection='column'
+        >
+          {FrequencyDistribution.map((option) => (
+            <Radio key={option} value={option}>
+              {option}
+            </Radio>
+          ))}
+        </RadioGroupControlled>
+      </FieldStack>
 
-      <FormControl isInvalid={Boolean(errors.method)} as='fieldset'>
-        <LegendWrapper elem={FormLabel} legend='Binning method:' />
+      <FieldStack>
+        <Legend>Binning method:</Legend>
 
-        <Controller
-          name='method'
-          control={control}
-          rules={{ required: 'This field is required' }}
-          defaultValue={defaultValues.method}
-          render={({ field }): JSX.Element => (
-            <RadioGroupWrapper<BinMethod>
-              {...field}
-              flexDirection='column'
-              gap={0}
-            >
-              <Radio value={BinMethod.MANUAL}>Manual</Radio>
+        <RadioGroupControlled control={control} name='method'>
+          <Box>
+            <Radio value={BinMethod.MANUAL}>Manual</Radio>
 
-              <BinManual
-                ml={6}
-                register={register}
-                disabled={watch('method') !== BinMethod.MANUAL}
-                start='manual.start'
-                startError={errors.manual?.start}
-                width='manual.width'
-                widthError={errors.manual?.width}
-              />
+            <BinManual
+              ml={6}
+              control={control}
+              disabled={watch('method') !== BinMethod.MANUAL}
+              start={{ name: 'manual.start' }}
+              binWidth={{ name: 'manual.width' }}
+            />
+          </Box>
+          <Box>
+            <Radio value={BinMethod.SQUARE_ROOT}>Square Root</Radio>
 
-              <Radio value={BinMethod.SQUARE_ROOT}>Square Root</Radio>
-
-              <BinSquareRoot
-                ml={6}
-                register={register}
-                disabled={watch('method') !== BinMethod.SQUARE_ROOT}
-                start='squareRoot.start'
-                startError={errors.squareRoot?.start}
-              />
-            </RadioGroupWrapper>
-          )}
-        />
-        <FormErrorMessage as='span'>{errors.method?.message}</FormErrorMessage>
-      </FormControl>
+            <BinSquareRoot
+              ml={6}
+              control={control}
+              disabled={watch('method') !== BinMethod.SQUARE_ROOT}
+              start={{ name: 'squareRoot.start' }}
+            />
+          </Box>
+        </RadioGroupControlled>
+      </FieldStack>
     </FormWraper>
   );
 };

@@ -1,5 +1,5 @@
 import type { DataTableRow } from '~/components/data-table';
-import type { BinMethod } from '~/types';
+import type { BinMethod, ColumnHeading } from '~/types';
 
 const FrequencyDistribution = [
   'Frequency',
@@ -11,16 +11,16 @@ const FrequencyDistribution = [
 type FrequencyDistribution = (typeof FrequencyDistribution)[number];
 
 type TForm = {
-  columns: `${number}`[];
+  columns: ColumnHeading[];
   options: FrequencyDistribution[];
   withLabel: boolean;
   method: BinMethod;
   manual: {
-    start?: string;
-    width: string;
+    start?: number;
+    width: number;
   };
   squareRoot: {
-    start?: string;
+    start?: number;
   };
 };
 

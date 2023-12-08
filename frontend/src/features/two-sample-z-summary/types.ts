@@ -1,5 +1,5 @@
 import type { DataTableRow } from '~/components/data-table';
-import type { H1Sign, Perform } from '~/types';
+import type { HypothesisType, Perform } from '~/types';
 
 const SampleStatistics = ['N', 'Mean', 'Known Stdev', 'Std.Err'] as const;
 
@@ -21,20 +21,30 @@ const HTColumns = ['Alpha', 'Z-crit', 'Std.Err.', 'Z-stat', 'P-value'] as const;
 type HTColumns = (typeof HTColumns)[number];
 
 type TForm = {
-  xbar1: string;
-  xbar2: string;
-  stdev1: string;
-  stdev2: string;
-  n1: string;
-  n2: string;
+  sample1Summary: {
+    xbar1: number;
+    stdev1: number;
+    n1: number;
+  };
+  sample2Summary: {
+    xbar2: number;
+    stdev2: number;
+    n2: number;
+  };
   perform: Perform;
-  alternative: H1Sign;
-  nullValue: string;
-  alpha: string;
-  level: string;
+  hypothesisTest: {
+    alternative: HypothesisType;
+    nullValue: number;
+    alpha: number;
+    optional: {
+      includeConfidenceInterval: boolean;
+    };
+  };
+  confidenceInterval: {
+    confidenceLevel: number;
+  };
   optional: {
-    sampleStatistics: boolean;
-    confidenceInterval: boolean;
+    includeSampleStatistics: boolean;
   };
 };
 

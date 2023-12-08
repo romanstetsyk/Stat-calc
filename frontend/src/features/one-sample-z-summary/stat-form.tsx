@@ -1,16 +1,10 @@
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Radio,
-  Text,
-} from '@chakra-ui/react';
+import { Box, FormLabel, Grid, Radio } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { useId } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
-import { Controller, useForm } from 'react-hook-form';
 
+import { CheckboxControlled } from '~/common/components';
+import { useForm } from '~/common/hooks';
 import { PopulationMean } from '~/components/hypothesis-notation';
 import {
   CIFormPart,
@@ -18,8 +12,8 @@ import {
   FormWraper,
   HTFormPart,
   InputField,
-  LegendWrapper,
-  RadioGroupWrapper,
+  Legend,
+  RadioGroupControlled,
 } from '~/components/stat-form';
 import { Perform } from '~/types';
 
@@ -34,109 +28,128 @@ const resolver = joiResolver(schema, {
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
-  defaultValues: Omit<TForm, 'sampleData'>;
+  defaultValues: Omit<TForm, 'sampleSummary'>;
 };
 
 const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<TForm>({ defaultValues, resolver });
+  const id = useId();
+
+  const { handleSubmit, control, setValue, watch } = useForm<TForm>({
+    defaultValues,
+    resolver,
+  });
 
   return (
     <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
       <FieldStack>
-        <LegendWrapper elem={Text} legend='Sample 1' />
+        <Legend>Sample 1</Legend>
 
-        <InputField
-          label='Sample mean'
-          name='sampleData.xbar'
-          register={register}
-          error={errors.sampleData?.xbar}
-        />
+        <Grid
+          templateColumns='auto 1fr'
+          alignItems='baseline'
+          gridColumnGap={4}
+          gridRowGap={1}
+        >
+          <FormLabel
+            m={0}
+            htmlFor={id + 'xbar'}
+            whiteSpace='nowrap'
+            fontWeight={400}
+          >
+            Sample mean:
+          </FormLabel>
+          <InputField
+            id={id + 'xbar'}
+            name='sampleSummary.xbar'
+            control={control}
+          />
 
-        <InputField
-          label='Std. dev.'
-          name='sampleData.stdev'
-          register={register}
-          error={errors.sampleData?.stdev}
-        />
+          <FormLabel
+            m={0}
+            htmlFor={id + 'stdev'}
+            whiteSpace='nowrap'
+            fontWeight={400}
+          >
+            Standard deviation:
+          </FormLabel>
+          <InputField
+            id={id + 'stdev'}
+            name='sampleSummary.stdev'
+            control={control}
+          />
 
-        <InputField
-          label='Sample size'
-          name='sampleData.n'
-          register={register}
-          error={errors.sampleData?.n}
-        />
+          <FormLabel
+            m={0}
+            htmlFor={id + 'size'}
+            whiteSpace='nowrap'
+            fontWeight={400}
+          >
+            Sample size:
+          </FormLabel>
+          <InputField
+            id={id + 'size'}
+            name='sampleSummary.n'
+            control={control}
+          />
+        </Grid>
       </FieldStack>
 
-      <FormControl as='fieldset' isInvalid={Boolean(errors.perform)}>
-        <LegendWrapper elem={FormLabel} legend='Perform:' />
+      <FieldStack>
+        <Legend>Perform:</Legend>
 
-        <Controller
-          name='perform'
+        <RadioGroupControlled
           control={control}
-          defaultValue={defaultValues.perform}
-          render={({ field }): JSX.Element => (
-            <RadioGroupWrapper {...field}>
-              <Box flex='1'>
-                <Radio value={Perform.HypothesisTest} mb={2}>
-                  Hypothesis Test
-                </Radio>
+          name='perform'
+          display='grid'
+          gridTemplateColumns={{ md: '1fr 1fr' }}
+          gridGap={4}
+        >
+          <Box>
+            <Radio value={Perform.HypothesisTest} mb={2}>
+              Hypothesis Test
+            </Radio>
 
-                <HTFormPart
-                  ml={6}
-                  param={<PopulationMean />}
-                  alternative='hypothesisTest.alternative'
-                  alternativeDefault={defaultValues.hypothesisTest.alternative}
-                  nullValue='hypothesisTest.nullValue'
-                  nullValueDefault={defaultValues.hypothesisTest.nullValue}
-                  disabled={watch('perform') !== Perform.HypothesisTest}
-                  control={control}
-                  setValue={setValue}
-                  nullError={errors.hypothesisTest?.nullValue}
-                  alternativeError={errors.hypothesisTest?.alternative}
-                >
-                  <InputField
-                    label='&alpha;'
-                    name='hypothesisTest.alpha'
-                    register={register}
-                    error={errors.hypothesisTest?.alpha}
-                  />
-                </HTFormPart>
-              </Box>
-              <Box flex='1'>
-                <Radio value={Perform.ConfidenceInerval} mb={2}>
-                  Confidence Interval
-                </Radio>
+            <HTFormPart<TForm>
+              ml={6}
+              param={<PopulationMean />}
+              alternative={{ name: 'hypothesisTest.alternative' }}
+              nullValue={{ name: 'hypothesisTest.nullValue' }}
+              disabled={watch('perform') !== Perform.HypothesisTest}
+              control={control}
+              setValue={setValue}
+            >
+              <InputField
+                label='Significance:'
+                name='hypothesisTest.alpha'
+                control={control}
+              />
+            </HTFormPart>
+          </Box>
+          <Box>
+            <Radio value={Perform.ConfidenceInerval} mb={2}>
+              Confidence Interval
+            </Radio>
 
-                <CIFormPart
-                  ml={6}
-                  register={register}
-                  disabled={watch('perform') !== Perform.ConfidenceInerval}
-                  level='confidenceInterval.confidenceLevel'
-                  levelError={errors.confidenceInterval?.confidenceLevel}
-                />
-              </Box>
-            </RadioGroupWrapper>
-          )}
-        />
-        <FormErrorMessage as='span'>{errors.perform?.message}</FormErrorMessage>
-      </FormControl>
+            <CIFormPart
+              control={control}
+              level={{ name: 'confidenceInterval.confidenceLevel' }}
+              disabled={watch('perform') !== Perform.ConfidenceInerval}
+              ml={6}
+            />
+          </Box>
+        </RadioGroupControlled>
+      </FieldStack>
 
       {watch('perform') === Perform.HypothesisTest && (
         <FieldStack>
-          <LegendWrapper elem={Text} legend='Optional tables:' />
+          <Legend>Optional tables:</Legend>
 
-          <Checkbox
-            {...register('hypothesisTest.optional.includeConfidenceInterval')}
+          <CheckboxControlled
+            name='hypothesisTest.optional.includeConfidenceInterval'
+            control={control}
           >
             Confidence Interval
-          </Checkbox>
+          </CheckboxControlled>
         </FieldStack>
       )}
     </FormWraper>

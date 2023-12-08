@@ -1,106 +1,69 @@
 import type { FlexProps } from '@chakra-ui/react';
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Select,
-} from '@chakra-ui/react';
-import { useId, useState } from 'react';
+import { Box, FormLabel, Grid, Input, Select } from '@chakra-ui/react';
+import { useId, useRef } from 'react';
 import type {
-  Control,
-  FieldError,
   FieldValues,
   Path,
   PathValue,
-  RegisterOptions,
+  UseControllerProps,
   UseFormSetValue,
 } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
 
-import { H0Sign, H1Sign, HypothesisSignMap } from '~/types';
-import { isFiniteNumber } from '~/utils/validators';
+import { get } from '~/common/helpers';
+import { useFormState, useWatch } from '~/common/hooks';
+import { H0Sign, H1Sign } from '~/types';
 
 import { FieldStack } from './field-stack';
+import { InputField } from './input-field';
+import { SelectField } from './select-field';
 
-type Props<T extends FieldValues> = {
+type Props<T extends FieldValues> = Pick<
+  UseControllerProps<T>,
+  'control' | 'disabled'
+> & {
   param: JSX.Element;
-  alternative: Path<T>;
-  alternativeDefault: PathValue<T, Path<T>>;
-  nullValue: Path<T>;
-  nullValueDefault: PathValue<T, Path<T>>;
-  nullValueRules?: RegisterOptions;
-  disabled: boolean;
-  control: Control<T>;
+  alternative: Omit<UseControllerProps<T>, 'control'>;
+  nullValue: Omit<UseControllerProps<T>, 'control'>;
   setValue: UseFormSetValue<T>;
-  nullError?: FieldError;
-  alternativeError?: FieldError;
-  children?: React.ReactNode;
 } & FlexProps;
 
 const HTFormPart = <T extends FieldValues>({
   param,
   alternative,
-  alternativeDefault,
   nullValue,
-  nullValueDefault,
   disabled,
   control,
-  nullError,
-  alternativeError,
   children,
   setValue,
   ...restProps
 }: Props<T>): JSX.Element => {
-  const [nullSign, setNullSign] = useState<H0Sign>(
-    HypothesisSignMap[alternativeDefault],
-  );
-  const [nullVal, setNullVal] = useState<string>(nullValueDefault);
+  const { isSubmitted, errors } = useFormState({
+    control,
+    name: [nullValue.name, alternative.name],
+  });
 
-  const nullId = useId();
-  const direrctionId = useId();
+  const id = useId();
+  const nullValueId = id + nullValue.name;
+  const signId = id + alternative.name;
+
+  const currentNullValue = useWatch({ control, name: nullValue.name });
+  const currentAlternative = useWatch({ control, name: alternative.name });
 
   const onSelectChange = (event: React.ChangeEvent): void => {
-    const { value } = event.target as HTMLInputElement;
-    switch (value as H0Sign | H1Sign) {
-      case 'equal': {
-        setNullSign('equal');
-        setValue(alternative, 'notEqual' as PathValue<T, Path<T>>);
-        break;
-      }
-      case 'greaterThanEqual': {
-        setNullSign('greaterThanEqual');
-        setValue(alternative, 'lessThan' as PathValue<T, Path<T>>);
-        break;
-      }
-      case 'lessThanEqual': {
-        setNullSign('lessThanEqual');
-        setValue(alternative, 'greaterThan' as PathValue<T, Path<T>>);
-        break;
-      }
-      case 'notEqual': {
-        setNullSign(HypothesisSignMap.notEqual);
-        break;
-      }
-      case 'greaterThan': {
-        setNullSign(HypothesisSignMap.greaterThan);
-        break;
-      }
-      case 'lessThan': {
-        setNullSign(HypothesisSignMap.lessThan);
-        break;
-      }
-      default: {
-        throw new Error('Unknown hypothesis test sign');
-      }
-    }
+    const { value } = event.target as HTMLSelectElement;
+    setValue(alternative.name, value as PathValue<T, Path<T>>, {
+      shouldValidate: isSubmitted,
+    });
   };
 
   const onNullValueChange = (e: React.ChangeEvent): void => {
     const { value } = e.target as HTMLInputElement;
-    setNullVal(value);
-    setValue(nullValue, value as PathValue<T, Path<T>>);
+    setValue(nullValue.name, value as PathValue<T, Path<T>>, {
+      shouldValidate: isSubmitted,
+    });
   };
+
+  const ref = useRef<HTMLDivElement>(null);
 
   return (
     <FieldStack
@@ -108,17 +71,21 @@ const HTFormPart = <T extends FieldValues>({
       opacity={disabled ? '0.5' : '1'}
       {...restProps}
     >
-      <FormControl display='flex' gap={2} alignItems='start'>
-        <FormLabel m={0} htmlFor={nullId} whiteSpace='nowrap'>
+      <Grid
+        gridTemplateColumns='min-content max-content auto'
+        alignItems='baseline'
+        gridColumnGap={2}
+      >
+        <FormLabel m={0} htmlFor={nullValueId} whiteSpace='nowrap'>
           H<sub>0</sub>: {param}
         </FormLabel>
+
         <Select
-          name='nullSign'
-          value={nullSign}
-          minWidth={14}
-          width={14}
-          size='xs'
+          id={id + 'currentAlternative'}
+          name='currentAlternative'
+          value={currentAlternative}
           onChange={onSelectChange}
+          isInvalid={get(errors, alternative.name)}
         >
           {Object.entries(H0Sign).map(([key, value]) => (
             <option key={key} value={key}>
@@ -127,93 +94,38 @@ const HTFormPart = <T extends FieldValues>({
           ))}
         </Select>
 
-        <Input
-          id={nullId}
-          value={nullVal}
-          onChange={onNullValueChange}
-          size='sm'
-          height={6}
-          width={20}
+        <InputField
+          id={nullValueId}
+          errorContainerRef={ref}
+          control={control}
+          {...nullValue}
         />
-      </FormControl>
 
-      <FormControl
-        display='flex'
-        gap={2}
-        alignItems='start'
-        isInvalid={Boolean(alternativeError)}
-      >
-        <FormLabel m={0} htmlFor={direrctionId} whiteSpace='nowrap'>
+        <FormLabel m={0} htmlFor={signId} whiteSpace='nowrap'>
           H<sub>a</sub>: {param}
         </FormLabel>
 
-        <Controller
-          defaultValue={alternativeDefault}
-          name={alternative}
+        <SelectField
+          id={signId}
           control={control}
-          rules={{
-            required: { value: !disabled, message: 'This value is required' },
-          }}
-          render={({ field: { onChange, ...rest } }): JSX.Element => (
-            <Select
-              id={direrctionId}
-              minWidth={14}
-              width={14}
-              size='xs'
-              onChange={(e): void => {
-                onSelectChange(e);
-                onChange(e);
-              }}
-              {...rest}
-            >
-              {Object.entries(H1Sign).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value}
-                </option>
-              ))}
-            </Select>
-          )}
-        />
-        <FormErrorMessage as='span'>
-          {alternativeError?.message}
-        </FormErrorMessage>
-
-        <FormControl
-          isInvalid={Boolean(nullError)}
-          display='flex'
-          flexDirection='column'
-          alignItems='baseline'
-          width='auto'
+          {...alternative}
+          errorContainerRef={ref}
         >
-          <Controller
-            defaultValue={nullValueDefault}
-            name={nullValue}
-            control={control}
-            rules={{
-              required: { value: !disabled, message: 'This value is required' },
-              validate: (value) => disabled || isFiniteNumber(value),
-            }}
-            render={({ field: { onChange, ...rest } }): JSX.Element => (
-              <Input
-                width={20}
-                size='sm'
-                height={6}
-                onChange={(e): void => {
-                  onNullValueChange(e);
-                  onChange(e);
-                }}
-                {...rest}
-              />
-            )}
-          />
-          <FormErrorMessage as='span'>
-            {nullError?.type === 'required' && nullError.message}
-            {nullError?.type === 'validate' &&
-              `This value ${nullError.message}`}
-            {nullError?.message}
-          </FormErrorMessage>
-        </FormControl>
-      </FormControl>
+          {Object.entries(H1Sign).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </SelectField>
+
+        <Input
+          id={id + 'currentNullValue'}
+          value={currentNullValue}
+          onChange={onNullValueChange}
+          isInvalid={get(errors, nullValue.name)}
+        />
+        <Box ref={ref} gridColumn={3}></Box>
+      </Grid>
 
       {children}
     </FieldStack>

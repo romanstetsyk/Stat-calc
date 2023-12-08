@@ -11,22 +11,28 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { SessionContext } from '~/contexts/session-context';
 import type { DisplayOptions } from '~/types';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 
 import { Output } from './output';
 import { StatForm } from './stat-form';
 import type { TForm, Z1DataSession } from './types';
 
-const DEFAULT_SELECTED_FIELDS: TForm = {
-  columns: [],
-  withLabel: false,
+const defaultValues: TForm = {
+  sampleData: {
+    columns: [],
+    withLabel: false,
+  },
   perform: Perform.HypothesisTest,
-  alternative: 'notEqual',
-  nullValue: '0',
-  alpha: '0.05',
-  level: '0.95',
-  optional: {
-    confidenceInterval: false,
+  hypothesisTest: {
+    alternative: HypothesisType.TwoTailed,
+    nullValue: 0,
+    alpha: 0.05,
+    optional: {
+      includeConfidenceInterval: false,
+    },
+  },
+  confidenceInterval: {
+    confidenceLevel: 0.95,
   },
 };
 
@@ -41,11 +47,11 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>('form');
-  const [formSummary, setFormSummary] = useState<TForm>(() => {
+  const [formSummary, setFormSummary] = useState<TForm | null>(() => {
     const sessionItem = session.find((item) => item.id === id);
     return sessionItem && sessionItem.type === 'z1data'
       ? sessionItem.formSummary
-      : DEFAULT_SELECTED_FIELDS;
+      : null;
   });
 
   const [output, setOutput] = useState<Z1DataSession>();
@@ -58,11 +64,6 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
   };
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
-    const { columns } = data;
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    if (columns.length === 0) {
-      return;
-    }
     setFormSummary(data);
     setDisplay('result');
   };
@@ -80,10 +81,10 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           <StatForm
             formId={formId}
             onSubmit={onSubmit}
-            defaultValues={formSummary}
+            defaultValues={formSummary ?? defaultValues}
           />
         )}
-        {display === 'result' && (
+        {display === 'result' && formSummary && (
           <Output
             id={id}
             setDisplay={setDisplay}

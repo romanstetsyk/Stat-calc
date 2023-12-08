@@ -3,7 +3,7 @@ import cdf from '@stdlib/stats-base-dists-normal-cdf';
 import quantile from '@stdlib/stats-base-dists-normal-quantile';
 
 import type { DataTableRow } from '~/components/data-table';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 import { parseNumber } from '~/utils/parse-number';
 
 import type {
@@ -17,7 +17,7 @@ import type {
 const DECIMAL = 6;
 
 const calcHT = (formSummary: TForm): HTReturn => {
-  const { xbar, stdev, n } = formSummary.sampleData;
+  const { xbar, stdev, n } = formSummary.sampleSummary;
   const {
     alternative,
     nullValue,
@@ -32,21 +32,21 @@ const calcHT = (formSummary: TForm): HTReturn => {
   let zcrit: number;
   let pvalue: number;
   switch (alternative) {
-    case 'notEqual': {
+    case HypothesisType.TwoTailed: {
       ciLevel = 1 - alpha;
-      zcrit = -quantile(alpha / 2, 0, 1);
+      zcrit = -1 * quantile(alpha / 2, 0, 1);
       pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
       break;
     }
-    case 'greaterThan': {
+    case HypothesisType.RightTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
     }
-    case 'lessThan': {
+    case HypothesisType.LeftTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     }
@@ -88,7 +88,7 @@ const calcHT = (formSummary: TForm): HTReturn => {
   // render CI only if condition is true
   if (
     includeConfidenceInterval &&
-    (alternative === 'notEqual' || alpha < 0.5)
+    (alternative === HypothesisType.TwoTailed || alpha < 0.5)
   ) {
     const me = zcrit * stderr;
     const ll = xbar - me;

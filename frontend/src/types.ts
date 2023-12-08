@@ -9,26 +9,24 @@ import type { Z2SummarySession } from '~/features/two-sample-z-summary/types';
 
 type GridColumnName = `col${number}`;
 
-const H0Sign = {
-  equal: '\u003D',
-  greaterThanEqual: '\u2265',
-  lessThanEqual: '\u2264',
-} as const;
+type ColumnHeading = `${number}`;
 
-type H0Sign = keyof typeof H0Sign;
+const enum HypothesisType {
+  LeftTailed = 'left-tailed',
+  RightTailed = 'right-tailed',
+  TwoTailed = 'two-tailed',
+}
+
+const H0Sign = {
+  [HypothesisType.TwoTailed]: '\u003D',
+  [HypothesisType.LeftTailed]: '\u2265',
+  [HypothesisType.RightTailed]: '\u2264',
+} as const;
 
 const H1Sign = {
-  notEqual: '\u2260',
-  lessThan: '\u003C',
-  greaterThan: '\u003E',
-} as const;
-
-type H1Sign = keyof typeof H1Sign;
-
-const HypothesisSignMap: Record<H1Sign, H0Sign> = {
-  notEqual: 'equal',
-  greaterThan: 'lessThanEqual',
-  lessThan: 'greaterThanEqual',
+  [HypothesisType.TwoTailed]: '\u2260',
+  [HypothesisType.LeftTailed]: '\u003C',
+  [HypothesisType.RightTailed]: '\u003E',
 } as const;
 
 const enum Perform {
@@ -54,5 +52,5 @@ const enum BinMethod {
   // OTHER = "OTHER",
 }
 
-export type { DisplayOptions, GridColumnName, TSession };
-export { BinMethod, H0Sign, H1Sign, HypothesisSignMap, Perform };
+export type { ColumnHeading, DisplayOptions, GridColumnName, TSession };
+export { BinMethod, H0Sign, H1Sign, HypothesisType, Perform };

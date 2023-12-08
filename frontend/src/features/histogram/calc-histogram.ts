@@ -8,10 +8,11 @@ import { Tabulate } from '~/utils/tabulate';
 import type { OutputReturn, TForm } from './types';
 
 const calcHistogram = (
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
   formSummary: TForm,
 ): OutputReturn[] => {
-  const { withLabel, columns, options, method } = formSummary;
+  const { withLabel, columns, options, method, manual, squareRoot } =
+    formSummary;
 
   return columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
@@ -21,24 +22,20 @@ const calcHistogram = (
 
     let tabulateParams: TabulateParams;
     if (method === BinMethod.MANUAL) {
-      const {
-        manual: { start, width },
-      } = formSummary;
+      const { start, width } = manual;
       tabulateParams = {
         method,
         dataset: arrOfNums,
-        start: start === '' ? Number.NaN : Number(start),
-        width: Number(width),
+        start: start ?? Number.NaN,
+        width,
       };
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     } else if (method === BinMethod.SQUARE_ROOT) {
-      const {
-        squareRoot: { start },
-      } = formSummary;
+      const { start } = squareRoot;
       tabulateParams = {
         method,
         dataset: arrOfNums,
-        start: start === '' ? Number.NaN : Number(start),
+        start: start ?? Number.NaN,
       };
     } else {
       throw new Error('Unknown bin method');

@@ -1,4 +1,5 @@
-import { H0Sign, H1Sign, HypothesisSignMap } from '~/types';
+import type { HypothesisType } from '~/types';
+import { H0Sign, H1Sign } from '~/types';
 import { parseNumber } from '~/utils/parse-number';
 
 const PopulationMean = (): JSX.Element => {
@@ -15,7 +16,7 @@ const PopulationMeanDiff = (): JSX.Element => {
 
 type Props = {
   param: JSX.Element;
-  h1dir: H1Sign;
+  h1dir: HypothesisType;
   h1val: number | string;
 };
 
@@ -23,8 +24,7 @@ const HypothesisNotation = ({ param, h1dir, h1val }: Props): JSX.Element => {
   return (
     <div>
       <p>
-        H<sub>0</sub>: {param} {H0Sign[HypothesisSignMap[h1dir]]}{' '}
-        {parseNumber(h1val)}
+        H<sub>0</sub>: {param} {H0Sign[h1dir]} {parseNumber(h1val)}
       </p>
       <p>
         H<sub>a</sub>: {param} {H1Sign[h1dir]} {parseNumber(h1val)}

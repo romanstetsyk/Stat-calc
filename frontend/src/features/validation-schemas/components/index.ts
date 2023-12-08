@@ -1,9 +1,17 @@
 export { alpha } from './alpha';
 export { alternative } from './alternative';
+export { binMethod } from './bin-method';
+export { columnHeading } from './column-heading';
+export { columns } from './columns';
 export { confidenceLevel } from './confidence-level';
 export { includeConfidenceInterval } from './include-confidence-interval';
+export { includeSampleStatistics } from './include-sample-statistics';
+export { knownStdev } from './known-stdev';
 export { n } from './n';
 export { nullValue } from './null-value';
 export { perform } from './perform';
+export { start } from './start';
 export { stdev } from './stdev';
+export { width } from './width';
+export { withLabel } from './with-label';
 export { xbar } from './xbar';

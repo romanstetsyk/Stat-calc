@@ -16,29 +16,40 @@ import { Perform } from '~/types';
 
 import type { TForm } from '../types';
 
+const sampleSummary = Joi.object<TForm['sampleSummary'], true>({
+  xbar,
+  stdev,
+  n,
+}).required();
+
+const hypothesisTestOptional = Joi.object<
+  TForm['hypothesisTest']['optional'],
+  true
+>({
+  includeConfidenceInterval,
+});
+
+const hypothesisTest = Joi.object<TForm['hypothesisTest'], true>({
+  alternative,
+  nullValue,
+  alpha,
+  optional: hypothesisTestOptional,
+});
+
+const confidenceInterval = Joi.object<TForm['confidenceInterval'], true>({
+  confidenceLevel,
+});
+
 const schema = Joi.object<TForm>({
-  sampleData: Joi.object({
-    xbar,
-    stdev,
-    n,
-  }).required(),
+  sampleSummary,
   perform,
   hypothesisTest: Joi.when('perform', {
     is: Perform.HypothesisTest,
-    then: Joi.object({
-      alternative,
-      nullValue,
-      alpha,
-      optional: Joi.object({
-        includeConfidenceInterval,
-      }).required(),
-    }),
+    then: hypothesisTest,
   }),
   confidenceInterval: Joi.when('perform', {
     is: Perform.ConfidenceInerval,
-    then: Joi.object({
-      confidenceLevel,
-    }),
+    then: confidenceInterval,
   }),
 });
 

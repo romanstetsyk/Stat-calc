@@ -1,4 +1,5 @@
 import type { DataTableRow } from '~/components/data-table';
+import type { ColumnHeading } from '~/types';
 
 const SampleStatistics = [
   'N',
@@ -15,7 +16,7 @@ const SampleStatistics = [
 type SampleStatistics = (typeof SampleStatistics)[number];
 
 type TForm = {
-  columns: `${number}`[];
+  columns: ColumnHeading[];
   options: SampleStatistics[];
   withLabel: boolean;
 };

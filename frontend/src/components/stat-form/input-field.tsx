@@ -1,63 +1,85 @@
-import type { InputProps } from '@chakra-ui/react';
+import type { FormControlProps, InputProps } from '@chakra-ui/react';
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
-  VStack,
+  Portal,
 } from '@chakra-ui/react';
-import type {
-  FieldError,
-  FieldValues,
-  Path,
-  RegisterOptions,
-  UseFormRegister,
-} from 'react-hook-form';
+import type { ComponentProps, HTMLInputTypeAttribute, RefObject } from 'react';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
-type Props<T extends FieldValues> = {
-  label?: string;
-  placeholder?: string;
-  name: Path<T>;
-  rules?: RegisterOptions;
-  register?: UseFormRegister<T>;
-  error?: FieldError;
-} & Omit<InputProps, 'name'>;
+import { useController } from '~/common/hooks';
 
-const InputField = <T extends Record<string, unknown>>({
-  label,
+const COL_2 = 2;
+
+type InputType = Extract<HTMLInputTypeAttribute, 'text' | 'email' | 'password'>;
+
+type Props<T extends FieldValues> = UseControllerProps<T> &
+  InputProps &
+  ComponentProps<'input'> & {
+    type?: InputType;
+    label?: string;
+    errorContainerRef?: RefObject<HTMLElement>;
+    formControlProps?: FormControlProps;
+  };
+
+const InputField = <T extends FieldValues>({
+  type = 'text',
   name,
-  error,
-  register,
+  control,
+  defaultValue,
   rules,
-  placeholder,
+  shouldUnregister,
+  disabled,
+  label,
+  errorContainerRef,
+  formControlProps,
+  ...inputProps
 }: Props<T>): JSX.Element => {
+  const {
+    field: { value, ...fieldRest },
+    fieldState: { error, invalid },
+  } = useController({
+    name,
+    control,
+    defaultValue,
+    rules,
+    shouldUnregister,
+    disabled,
+  });
+
   return (
     <FormControl
-      isInvalid={Boolean(error)}
-      display='flex'
-      alignItems='flex-start'
+      isInvalid={invalid}
+      display='inline-grid'
+      gridTemplateColumns={label ? 'auto 1fr' : 'none'}
+      alignItems='baseline'
       width='auto'
-      gap={3}
+      gridColumnGap={3}
+      gridRowGap={0}
+      {...formControlProps}
     >
       {label && (
         <FormLabel whiteSpace='nowrap' fontWeight={400} m={0}>
           {label}
         </FormLabel>
       )}
-      <VStack alignItems='start' gap={0}>
-        <Input
-          size='xs'
-          width='80px'
-          placeholder={placeholder}
-          {...register?.(name, rules)}
-        />
-        <FormErrorMessage as='span' m={0}>
-          {error?.type === 'required' && error.message}
-          {error?.type === 'validate' &&
-            `${label ?? 'This value'} ${error.message}`}
-          {error?.message}
-        </FormErrorMessage>
-      </VStack>
+
+      <Input type={type} value={value ?? ''} {...fieldRest} {...inputProps} />
+
+      {error &&
+        (errorContainerRef ? (
+          <Portal containerRef={errorContainerRef}>
+            <FormErrorMessage as='span' m={0}>
+              {error.message}
+            </FormErrorMessage>
+          </Portal>
+        ) : (
+          <FormErrorMessage as='span' m={0} gridColumn={label && COL_2}>
+            {error.message}
+          </FormErrorMessage>
+        ))}
     </FormControl>
   );
 };

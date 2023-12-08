@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { ArrayLike } from './array-like';
 import { createColName } from './create-col-name';
 
-function firstKey(obj: InstanceType<typeof ArrayLike<string>>): string {
+function firstKey(obj: ArrayLike<string>): string {
   let n = 0;
   while (!(n in obj)) {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     n += 1;
   }
   return obj[n];
 }
 
 const getVarName = (
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
   colHeader: number,
   withLabel: boolean,
 ): string => {
@@ -21,7 +21,7 @@ const getVarName = (
 };
 
 const getVarValues = (
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
   colHeader: number,
   withLabel: boolean,
 ): string[] => {

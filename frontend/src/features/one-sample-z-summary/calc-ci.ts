@@ -10,7 +10,7 @@ import type { CIColumns, CIReturn, SampleStatistics, TForm } from './types';
 const DECIMAL = 6;
 
 const calcCI = (formSummary: TForm): CIReturn => {
-  const { xbar, stdev, n } = formSummary.sampleData;
+  const { xbar, stdev, n } = formSummary.sampleSummary;
   const { confidenceLevel } = formSummary.confidenceInterval;
 
   const stderr = stdev / Math.sqrt(n);

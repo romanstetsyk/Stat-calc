@@ -17,7 +17,7 @@ import { StatForm } from './stat-form';
 import type { FrequencyDistributionSession, TForm } from './types';
 import { FrequencyDistribution } from './types';
 
-const DEFAULT_SELECTED_FIELDS = {
+const defaultValues: TForm = {
   columns: [],
   options: [...FrequencyDistribution],
   withLabel: false,
@@ -34,11 +34,11 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>('form');
-  const [formSummary, setFormSummary] = useState<TForm>(() => {
+  const [formSummary, setFormSummary] = useState<TForm | null>(() => {
     const sessionItem = session.find((item) => item.id === id);
     return sessionItem && sessionItem.type === 'frequencyDistribution'
       ? sessionItem.formSummary
-      : DEFAULT_SELECTED_FIELDS;
+      : null;
   });
 
   const [output, setOutput] = useState<FrequencyDistributionSession>();
@@ -51,11 +51,6 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
   };
 
   const onSubmit: SubmitHandler<TForm> = (data) => {
-    const { columns } = data;
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    if (columns.length === 0) {
-      return;
-    }
     setFormSummary(data);
     setDisplay('result');
   };
@@ -73,10 +68,10 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           <StatForm
             onSubmit={onSubmit}
             formId={formId}
-            defaultValues={formSummary}
+            defaultValues={formSummary ?? defaultValues}
           />
         )}
-        {display === 'result' && (
+        {display === 'result' && formSummary && (
           <Output
             id={id}
             setDisplay={setDisplay}

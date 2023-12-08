@@ -1,6 +1,7 @@
 '*':
   - npm run lint:editorconfig
   - npm run lint:fs
+    # Can't compile single file with -p flag (https://github.com/microsoft/TypeScript/issues/27379)
   - bash -c "npm run lint:types" # Run with bash to avoid appending filenames to command
 
 '*.{ts,tsx,json,md,html}':

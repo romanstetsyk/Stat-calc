@@ -1,49 +1,29 @@
 import type { FlexProps } from '@chakra-ui/react';
-import type {
-  FieldError,
-  FieldValues,
-  Path,
-  UseFormRegister,
-} from 'react-hook-form';
-
-import { isValidLevel } from '~/utils/validators';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { FieldStack } from './field-stack';
 import { InputField } from './input-field';
 
-type Props<T extends FieldValues> = {
-  register: UseFormRegister<T>;
-  disabled: boolean;
-  level: Path<T>;
-  levelError?: FieldError;
+type Props<T extends FieldValues> = Pick<
+  UseControllerProps<T>,
+  'control' | 'disabled'
+> & {
+  level: Omit<UseControllerProps<T>, 'control'>;
 } & FlexProps;
 
 const CIFormPart = <T extends FieldValues>({
+  control,
   disabled,
-  register,
   level,
-  levelError,
-  ...restProps
+  ...flexProps
 }: Props<T>): JSX.Element => {
   return (
     <FieldStack
       disabled={disabled}
       opacity={disabled ? '0.5' : '1'}
-      {...restProps}
+      {...flexProps}
     >
-      <InputField
-        label='Level'
-        name={level}
-        register={register}
-        rules={{
-          required: {
-            value: !disabled,
-            message: 'This value is required',
-          },
-          validate: (value) => disabled || isValidLevel(value),
-        }}
-        error={levelError}
-      />
+      <InputField label='Level:' control={control} {...level} />
     </FieldStack>
   );
 };

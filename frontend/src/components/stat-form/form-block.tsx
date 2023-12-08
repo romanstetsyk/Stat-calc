@@ -6,7 +6,6 @@ const FormBlock = forwardRef<FlexProps, 'fieldset'>(
     return (
       <Flex
         ref={ref}
-        as='fieldset'
         flexDirection={{ base: 'column', md: 'row' }}
         gap={4}
         {...restProps}

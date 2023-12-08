@@ -11,16 +11,16 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { SessionContext } from '~/contexts/session-context';
 import type { DisplayOptions } from '~/types';
-import { Perform } from '~/types';
+import { HypothesisType, Perform } from '~/types';
 
 import { Output } from './output';
 import { StatForm } from './stat-form';
 import type { TForm, Z1SummarySession } from './types';
 
-const DEFAULT_SELECTED_FIELDS: Omit<TForm, 'sampleData'> = {
+const defaultValues: Omit<TForm, 'sampleSummary'> = {
   perform: Perform.HypothesisTest,
   hypothesisTest: {
-    alternative: 'notEqual',
+    alternative: HypothesisType.TwoTailed,
     nullValue: 0,
     alpha: 0.05,
     optional: {
@@ -77,7 +77,7 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           <StatForm
             formId={formId}
             onSubmit={onSubmit}
-            defaultValues={formSummary ?? DEFAULT_SELECTED_FIELDS}
+            defaultValues={formSummary ?? defaultValues}
           />
         )}
         {display === 'result' && formSummary && (

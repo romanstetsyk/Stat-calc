@@ -16,9 +16,11 @@ const DECIMAL = 6;
 
 const calcCI = (
   formSummary: TForm,
-  colData: InstanceType<typeof ArrayLike<ArrayLike<string>>>,
+  colData: ArrayLike<ArrayLike<string>>,
 ): CIReturn => {
-  const { columns, withLabel, knownStdev, level } = formSummary;
+  const { columns, withLabel, knownStdev } = formSummary.sampleData;
+  const { confidenceLevel } = formSummary.confidenceInterval;
+
   const CIData: DataTableRow<CIColumns | SampleStatistics, ''>[] = columns.map(
     (colHeader) => {
       const varName = getVarName(colData, Number(colHeader), withLabel);
@@ -27,14 +29,11 @@ const calcCI = (
       const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
       const n = arrOfNums.length;
       const xbar = mean(n, arrOfNums, 1);
-      const stdevApprox = knownStdev
-        ? Number(knownStdev)
-        : stdev(n, 1, arrOfNums, 1);
+      const stdevApprox = knownStdev ?? stdev(n, 1, arrOfNums, 1);
       const stderr = stdevApprox / Math.sqrt(n);
-      const zcrit = -1 * quantile((1 - Number(level)) / 2, 0, 1);
+      const zcrit = -1 * quantile((1 - confidenceLevel) / 2, 0, 1);
       const me = zcrit * stderr;
-      const ll = Number(xbar) - me;
-      const ul = Number(xbar) + me;
+      const [ll, ul] = [xbar - me, xbar + me];
 
       const rowData: DataTableRow<CIColumns | SampleStatistics, ''> = {
         '': varName,
@@ -45,7 +44,7 @@ const calcCI = (
           DECIMAL,
         ),
         'Std.Err': parseNumber(stderr, DECIMAL),
-        Level: level,
+        Level: confidenceLevel,
         'Z-crit': parseNumber(zcrit, DECIMAL),
         'M.E.': parseNumber(me, DECIMAL),
         'L.Limit': parseNumber(ll, DECIMAL),
