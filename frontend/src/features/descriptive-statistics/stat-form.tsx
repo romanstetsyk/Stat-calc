@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Checkbox, Text } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
@@ -12,7 +11,7 @@ import {
   Legend,
 } from '~/common/components';
 import { useForm } from '~/common/hooks';
-import { dataStore } from '~/data-store';
+import { useGridData } from '~/store/grid-data';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';
@@ -31,10 +30,7 @@ type Props = {
 };
 
 const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
-  const { colData } = useSyncExternalStore(
-    dataStore.subscribe,
-    dataStore.getSnapshot,
-  );
+  const { colData } = useGridData();
 
   const { handleSubmit, control, watch } = useForm<TForm>({
     defaultValues,

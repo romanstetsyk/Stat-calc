@@ -1,11 +1,14 @@
-import type {
-  EditableGridCell,
-  GridCell,
-  Item,
-} from '@glideapps/glide-data-grid';
+import type { GridCell, Item } from '@glideapps/glide-data-grid';
 import { GridCellKind } from '@glideapps/glide-data-grid';
+import { useSyncExternalStore } from 'react';
 
 import { ArrayLike } from '~/utils/array-like';
+
+import type {
+  OnCellsEditedParams,
+  OverwriteRowsParameters,
+  Snapshot,
+} from './types';
 
 // functions with which components subscribed to this datastore
 let listeners: (() => void)[] = [];
@@ -32,11 +35,6 @@ function getContent(cell: Item): GridCell {
     data: String(d),
   };
 }
-
-type OnCellsEditedParams = readonly {
-  location: Item;
-  value: EditableGridCell;
-}[];
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 function onCellsEdited(newValues: OnCellsEditedParams): boolean {
@@ -88,12 +86,6 @@ function onCellsEdited(newValues: OnCellsEditedParams): boolean {
   return true;
 }
 
-type OverwriteRowsParameters = {
-  datasetId: string;
-  newRows: ArrayLike<ArrayLike<string>>;
-  newCols: ArrayLike<ArrayLike<string>>;
-};
-
 function overwriteRows({
   datasetId,
   newRows,
@@ -105,15 +97,6 @@ function overwriteRows({
   finalize();
 }
 
-type Snapshot = {
-  datasetId: string;
-  rowData: ArrayLike<ArrayLike<string>>;
-  colData: ArrayLike<ArrayLike<string>>;
-  onCellsEdited: (newValues: OnCellsEditedParams) => boolean;
-  overwriteRows: (arg: OverwriteRowsParameters) => void;
-  getContent: (cell: Item) => GridCell;
-};
-
 let snapshot: Snapshot = {
   datasetId: '',
   rowData: new ArrayLike<ArrayLike<string>>(),
@@ -123,21 +106,17 @@ let snapshot: Snapshot = {
   getContent,
 };
 
-type DataStore = {
-  subscribe: (listener: () => void) => () => void;
-  getSnapshot: () => Snapshot;
+const subscribe = (listener: () => void): (() => void) => {
+  listeners = [...listeners, listener];
+  return () => {
+    listeners = listeners.filter((l) => l !== listener);
+  };
 };
 
-const dataStore: DataStore = {
-  subscribe: (listener) => {
-    listeners = [...listeners, listener];
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  },
-  getSnapshot: () => {
-    return snapshot;
-  },
+const getSnapshot = (): Snapshot => snapshot;
+
+const useGridData = (): Snapshot => {
+  return useSyncExternalStore(subscribe, getSnapshot);
 };
 
-export { dataStore };
+export { useGridData };

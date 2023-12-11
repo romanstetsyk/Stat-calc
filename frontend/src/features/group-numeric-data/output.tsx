@@ -1,9 +1,9 @@
 import { Button, Flex } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
 import type * as React from 'react';
-import { useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { dataStore } from '~/data-store';
+import { useGridData } from '~/store/grid-data';
 import type { DisplayOptions } from '~/types';
 
 import { calcGroups } from './calc-groups';
@@ -27,10 +27,7 @@ const Output = ({
 }: Props): JSX.Element => {
   const outputId = useMemo(() => id ?? nanoid(), [id]);
 
-  const { colData } = useSyncExternalStore(
-    dataStore.subscribe,
-    dataStore.getSnapshot,
-  );
+  const { colData } = useGridData();
   const arrOfTables = useMemo(
     () => calcGroups(colData, formSummary),
     [colData, formSummary],

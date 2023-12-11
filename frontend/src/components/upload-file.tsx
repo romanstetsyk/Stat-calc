@@ -2,11 +2,11 @@
 import { Button, Center, Spinner, useToast } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
-import { useRef, useState, useSyncExternalStore } from 'react';
+import { useRef, useState } from 'react';
 import type { WorkBook } from 'xlsx';
 import { read, utils } from 'xlsx';
 
-import { dataStore } from '~/data-store';
+import { useGridData } from '~/store/grid-data';
 import { ArrayLike } from '~/utils/array-like';
 
 type FileRow = Record<number, unknown> & { __rowNum__: number };
@@ -51,10 +51,8 @@ const parse_wb = (
   return { datasetId: nanoid(), newRows, newCols };
 };
 
-const { subscribe, getSnapshot } = dataStore;
-
 const UploadFile = (): JSX.Element => {
-  const { overwriteRows } = useSyncExternalStore(subscribe, getSnapshot);
+  const { overwriteRows } = useGridData();
   const [loading, setLoading] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   const toast = useToast();

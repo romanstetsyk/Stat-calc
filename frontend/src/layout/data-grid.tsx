@@ -8,15 +8,9 @@ import type {
 } from '@glideapps/glide-data-grid';
 import { DataEditor } from '@glideapps/glide-data-grid';
 import { debounce } from 'lodash-es';
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { dataStore } from '~/data-store';
+import { useGridData } from '~/store/grid-data';
 import { createColName } from '~/utils/create-col-name';
 
 const ROW_COUNT = 300;
@@ -39,8 +33,7 @@ const generateHeaders = (colCount: number = COL_COUNT): SizedGridColumn[] =>
 const DataGrid = (): JSX.Element => {
   const ref = useRef<DataEditorRef>(null);
 
-  const { datasetId, onCellsEdited, rowData, getContent } =
-    useSyncExternalStore(dataStore.subscribe, dataStore.getSnapshot);
+  const { datasetId, onCellsEdited, rowData, getContent } = useGridData();
 
   const [rowCount, setRowCount] = useState<number>(ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
