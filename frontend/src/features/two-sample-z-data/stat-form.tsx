@@ -1,23 +1,22 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Box, Radio } from '@chakra-ui/react';
+import { Box, Flex, Radio } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { CheckboxControlled } from '~/common/components';
-import { useForm } from '~/common/hooks';
-import { PopulationMeanDiff } from '~/components/hypothesis-notation';
 import {
-  CIFormPart,
+  CheckboxControlled,
+  ConfidenceIntervalFormPart,
   FieldStack,
-  FormBlock,
-  FormWraper,
-  HTFormPart,
+  Form,
+  HypothesisTestFormPart,
   InputField,
   Legend,
   RadioGroupControlled,
   SelectField,
-} from '~/components/stat-form';
+} from '~/common/components';
+import { useForm } from '~/common/hooks';
+import { PopulationMeanDiff } from '~/components/hypothesis-notation';
 import { dataStore } from '~/data-store';
 import { Perform } from '~/types';
 import { getVarName } from '~/utils/get-column-name-and-values';
@@ -48,7 +47,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   });
 
   return (
-    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+    <Form onSubmit={handleSubmit(onSubmit)} id={formId}>
       {colData.length > 0 && (
         <>
           <CheckboxControlled control={control} name='withLabel'>
@@ -57,13 +56,13 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
         </>
       )}
 
-      <FormBlock>
+      <Flex flexDirection={{ base: 'column', md: 'row' }} gap={4}>
         <FieldStack flex='1'>
           <Legend>Sample 1</Legend>
 
           <SelectField
             name='sample1Data.sample1'
-            label='Column'
+            label='Column:'
             placeholder='Select column'
             control={control}
           >
@@ -86,7 +85,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
 
           <SelectField
             name='sample2Data.sample2'
-            label='Column'
+            label='Column:'
             placeholder='Select column'
             control={control}
           >
@@ -103,7 +102,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             control={control}
           />
         </FieldStack>
-      </FormBlock>
+      </Flex>
 
       <FieldStack>
         <Legend>Perform:</Legend>
@@ -120,7 +119,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
               Hypothesis Test
             </Radio>
 
-            <HTFormPart<TForm>
+            <HypothesisTestFormPart<TForm>
               ml={6}
               param={<PopulationMeanDiff />}
               alternative={{ name: 'hypothesisTest.alternative' }}
@@ -134,14 +133,14 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
                 name='hypothesisTest.alpha'
                 control={control}
               />
-            </HTFormPart>
+            </HypothesisTestFormPart>
           </Box>
           <Box>
             <Radio value={Perform.ConfidenceInerval} mb={2}>
               Confidence Interval
             </Radio>
 
-            <CIFormPart
+            <ConfidenceIntervalFormPart
               control={control}
               level={{ name: 'confidenceInterval.confidenceLevel' }}
               disabled={watch('perform') !== Perform.ConfidenceInerval}
@@ -170,7 +169,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           </CheckboxControlled>
         )}
       </FieldStack>
-    </FormWraper>
+    </Form>
   );
 };
 

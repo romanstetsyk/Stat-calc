@@ -13,9 +13,9 @@ import { get } from '~/common/helpers';
 import { useFormState, useWatch } from '~/common/hooks';
 import { H0Sign, H1Sign } from '~/types';
 
-import { FieldStack } from './field-stack';
-import { InputField } from './input-field';
-import { SelectField } from './select-field';
+import { FieldStack } from '../field-stack';
+import { InputField } from '../input-field';
+import { SelectField } from '../select-field';
 
 type Props<T extends FieldValues> = Pick<
   UseControllerProps<T>,
@@ -27,7 +27,7 @@ type Props<T extends FieldValues> = Pick<
   setValue: UseFormSetValue<T>;
 } & FlexProps;
 
-const HTFormPart = <T extends FieldValues>({
+const HypothesisTestFormPart = <T extends FieldValues>({
   param,
   alternative,
   nullValue,
@@ -132,4 +132,4 @@ const HTFormPart = <T extends FieldValues>({
   );
 };
 
-export { HTFormPart };
+export { HypothesisTestFormPart };

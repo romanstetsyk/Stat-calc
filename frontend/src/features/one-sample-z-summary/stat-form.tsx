@@ -3,18 +3,18 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { useId } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { CheckboxControlled } from '~/common/components';
-import { useForm } from '~/common/hooks';
-import { PopulationMean } from '~/components/hypothesis-notation';
 import {
-  CIFormPart,
+  CheckboxControlled,
+  ConfidenceIntervalFormPart,
   FieldStack,
-  FormWraper,
-  HTFormPart,
+  Form,
+  HypothesisTestFormPart,
   InputField,
   Legend,
   RadioGroupControlled,
-} from '~/components/stat-form';
+} from '~/common/components';
+import { useForm } from '~/common/hooks';
+import { PopulationMean } from '~/components/hypothesis-notation';
 import { Perform } from '~/types';
 
 import type { TForm } from './types';
@@ -40,7 +40,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   });
 
   return (
-    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+    <Form onSubmit={handleSubmit(onSubmit)} id={formId}>
       <FieldStack>
         <Legend>Sample 1</Legend>
 
@@ -109,7 +109,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
               Hypothesis Test
             </Radio>
 
-            <HTFormPart<TForm>
+            <HypothesisTestFormPart<TForm>
               ml={6}
               param={<PopulationMean />}
               alternative={{ name: 'hypothesisTest.alternative' }}
@@ -123,14 +123,14 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
                 name='hypothesisTest.alpha'
                 control={control}
               />
-            </HTFormPart>
+            </HypothesisTestFormPart>
           </Box>
           <Box>
             <Radio value={Perform.ConfidenceInerval} mb={2}>
               Confidence Interval
             </Radio>
 
-            <CIFormPart
+            <ConfidenceIntervalFormPart
               control={control}
               level={{ name: 'confidenceInterval.confidenceLevel' }}
               disabled={watch('perform') !== Perform.ConfidenceInerval}
@@ -152,7 +152,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           </CheckboxControlled>
         </FieldStack>
       )}
-    </FormWraper>
+    </Form>
   );
 };
 

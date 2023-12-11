@@ -11,7 +11,7 @@ import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { useController } from '~/common/hooks';
 
-import { Legend } from './legend';
+import { Legend } from '../legend';
 
 type Props<T extends FieldValues> = WithRequired<
   UseControllerProps<T>,

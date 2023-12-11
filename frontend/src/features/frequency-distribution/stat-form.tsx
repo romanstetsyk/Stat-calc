@@ -4,14 +4,14 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { useSyncExternalStore } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { CheckboxControlled } from '~/common/components';
-import { useForm } from '~/common/hooks';
 import {
+  CheckboxControlled,
   CheckboxGroupControlled,
   FieldStack,
-  FormWraper,
+  Form,
   Legend,
-} from '~/components/stat-form';
+} from '~/common/components';
+import { useForm } from '~/common/hooks';
 import { dataStore } from '~/data-store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
@@ -42,7 +42,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   });
 
   return (
-    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
+    <Form onSubmit={handleSubmit(onSubmit)} id={formId}>
       {colData.length > 0 ? (
         <>
           <CheckboxControlled control={control} name='withLabel'>
@@ -83,7 +83,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           );
         })}
       </CheckboxGroupControlled>
-    </FormWraper>
+    </Form>
   );
 };
 

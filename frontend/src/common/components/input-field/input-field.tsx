@@ -38,7 +38,8 @@ const InputField = <T extends FieldValues>({
   ...inputProps
 }: Props<T>): JSX.Element => {
   const {
-    field: { value, ...fieldRest },
+    // Default value is required to avoid an error 'A component is changing an uncontrolled input to be controlled'
+    field: { value = '', ...fieldRest },
     fieldState: { error, invalid },
   } = useController({
     name,
@@ -66,7 +67,7 @@ const InputField = <T extends FieldValues>({
         </FormLabel>
       )}
 
-      <Input type={type} value={value ?? ''} {...fieldRest} {...inputProps} />
+      <Input type={type} value={value} {...fieldRest} {...inputProps} />
 
       {error &&
         (errorContainerRef ? (

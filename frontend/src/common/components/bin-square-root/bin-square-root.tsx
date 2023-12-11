@@ -1,8 +1,8 @@
 import type { FlexProps } from '@chakra-ui/react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
-import { FieldStack } from './field-stack';
-import { InputField } from './input-field';
+import { FieldStack } from '../field-stack';
+import { InputField } from '../input-field';
 
 type Props<T extends FieldValues> = Pick<
   UseControllerProps<T>,

@@ -1,20 +1,19 @@
-import { Box, FormLabel, Grid, Radio, useId } from '@chakra-ui/react';
+import { Box, Flex, FormLabel, Grid, Radio, useId } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { CheckboxControlled } from '~/common/components';
-import { useForm } from '~/common/hooks';
-import { PopulationMeanDiff } from '~/components/hypothesis-notation';
 import {
-  CIFormPart,
+  CheckboxControlled,
+  ConfidenceIntervalFormPart,
   FieldStack,
-  FormBlock,
-  FormWraper,
-  HTFormPart,
+  Form,
+  HypothesisTestFormPart,
   InputField,
   Legend,
   RadioGroupControlled,
-} from '~/components/stat-form';
+} from '~/common/components';
+import { useForm } from '~/common/hooks';
+import { PopulationMeanDiff } from '~/components/hypothesis-notation';
 import { Perform } from '~/types';
 
 import type { TForm } from './types';
@@ -40,8 +39,8 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
   });
 
   return (
-    <FormWraper onSubmit={handleSubmit(onSubmit)} formId={formId}>
-      <FormBlock>
+    <Form onSubmit={handleSubmit(onSubmit)} id={formId}>
+      <Flex flexDirection={{ base: 'column', md: 'row' }} gap={4}>
         <FieldStack flex='1'>
           <Legend>Sample 1</Legend>
 
@@ -147,7 +146,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             />
           </Grid>
         </FieldStack>
-      </FormBlock>
+      </Flex>
 
       <FieldStack>
         <Legend>Perform:</Legend>
@@ -164,7 +163,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
               Hypothesis Test
             </Radio>
 
-            <HTFormPart
+            <HypothesisTestFormPart
               ml={6}
               param={<PopulationMeanDiff />}
               alternative={{ name: 'hypothesisTest.alternative' }}
@@ -178,14 +177,14 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
                 name='hypothesisTest.alpha'
                 control={control}
               />
-            </HTFormPart>
+            </HypothesisTestFormPart>
           </Box>
           <Box>
             <Radio value={Perform.ConfidenceInerval} mb={2}>
               Confidence Interval
             </Radio>
 
-            <CIFormPart
+            <ConfidenceIntervalFormPart
               control={control}
               level={{ name: 'confidenceInterval.confidenceLevel' }}
               disabled={watch('perform') !== Perform.ConfidenceInerval}
@@ -214,7 +213,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           </CheckboxControlled>
         )}
       </FieldStack>
-    </FormWraper>
+    </Form>
   );
 };
 
