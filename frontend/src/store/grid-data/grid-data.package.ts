@@ -1,22 +1,20 @@
 import type { GridCell, Item } from '@glideapps/glide-data-grid';
 import { GridCellKind } from '@glideapps/glide-data-grid';
 
+import { ExternalStore } from '~/framework/external-store';
 import { ArrayLike } from '~/utils/array-like';
 
 import type {
+  GridData,
   OnCellsEditedParams,
   OverwriteRowsParameters,
-  Snapshot,
 } from './types';
 
-class Dataset {
-  private listeners: (() => void)[] = [];
-
-  private snapshot: Snapshot;
+class Dataset extends ExternalStore<GridData> {
+  protected snapshot: GridData;
 
   public constructor(datasetId: string) {
-    this.subscribe = this.subscribe.bind(this);
-    this.getSnapshot = this.getSnapshot.bind(this);
+    super();
 
     this.snapshot = {
       datasetId,
@@ -26,20 +24,6 @@ class Dataset {
       onCellsEdited: this.onCellsEdited.bind(this),
       overwriteRows: this.overwriteRows.bind(this),
     };
-  }
-
-  public subscribe(listener: () => void): () => void {
-    this.listeners = [...this.listeners, listener];
-    return () => {
-      this.listeners = this.listeners.filter((l) => l !== listener);
-    };
-  }
-
-  private emitChange(): void {
-    this.snapshot = { ...this.snapshot };
-    for (const listener of this.listeners) {
-      listener();
-    }
   }
 
   public getContent(cell: Item): GridCell {
@@ -114,10 +98,6 @@ class Dataset {
 
     this.emitChange();
     return true;
-  }
-
-  public getSnapshot(): Snapshot {
-    return this.snapshot;
   }
 }
 

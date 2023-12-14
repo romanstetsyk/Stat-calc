@@ -17,7 +17,7 @@ type OverwriteRowsParameters = {
   newCols: ArrayLike<ArrayLike<string>>;
 };
 
-type Snapshot = {
+type GridData = {
   datasetId: string;
   rowData: ArrayLike<ArrayLike<string>>;
   colData: ArrayLike<ArrayLike<string>>;
@@ -26,4 +26,4 @@ type Snapshot = {
   getContent: (cell: Item) => GridCell;
 };
 
-export type { OnCellsEditedParams, OverwriteRowsParameters, Snapshot };
+export type { GridData, OnCellsEditedParams, OverwriteRowsParameters };

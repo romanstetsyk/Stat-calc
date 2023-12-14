@@ -1,12 +1,11 @@
 import { CardBody, Text } from '@chakra-ui/react';
 import Muuri from 'muuri';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 import DraggableGrid from 'ruuri';
 
 import { DataTable } from '~/components/data-table';
 import { SessionItemWrapper } from '~/components/session/session-item-wrapper';
-import { SessionContext } from '~/contexts/session-context';
 import type { SampleStatistics } from '~/features/descriptive-statistics/types';
 import { OutputContent as FrequencyDistOutputContent } from '~/features/frequency-distribution/output-content';
 import { OutputContent as GroupedDataOutputContent } from '~/features/group-numeric-data/output-content';
@@ -15,11 +14,12 @@ import { OutputContent as Z1DataOutputContent } from '~/features/one-sample-z-da
 import { OutputContent as Z1SummaryOutputContent } from '~/features/one-sample-z-summary/output-content';
 import { OutputContent as Z2DataOutputContent } from '~/features/two-sample-z-data/output-content';
 import { OutputContent as Z2SummaryOutputContent } from '~/features/two-sample-z-summary/output-content';
+import { useSessionData } from '~/store/session-data';
 import type { TSession } from '~/types';
 import { layoutFunction } from '~/utils/layout-function';
 
 const Session = (): JSX.Element => {
-  const { session } = useContext(SessionContext);
+  const { session } = useSessionData();
 
   const gridRef = useRef<DraggableGridHandle | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null);

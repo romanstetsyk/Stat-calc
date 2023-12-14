@@ -1,14 +1,13 @@
 import { CloseButton, Tooltip } from '@chakra-ui/react';
-import { useContext } from 'react';
 
-import { SessionContext } from '~/contexts/session-context';
+import { useSessionData } from '~/store/session-data';
 
 type Props = {
   id: string;
 };
 
 const RemoveBtn = ({ id }: Props): JSX.Element => {
-  const { removeSessionItem } = useContext(SessionContext);
+  const { removeSessionItem } = useSessionData();
 
   return (
     <Tooltip hasArrow label='Remove from session' placement='top' fontSize='xs'>

@@ -3,11 +3,16 @@ import { GridCellKind } from '@glideapps/glide-data-grid';
 
 import { ArrayLike } from '~/utils/array-like';
 
-import type {
-  OnCellsEditedParams,
-  OverwriteRowsParameters,
-  Snapshot,
-} from './types';
+type Snapshot = {
+  datasetId: string;
+  rowData: ArrayLike<ArrayLike<string>>;
+  colData: ArrayLike<ArrayLike<string>>;
+  onCellsEdited: (newValues: OnCellsEditedParams) => boolean;
+  overwriteRows: (arg: OverwriteRowsParameters) => void;
+  getContent: (cell: Item) => GridCell;
+};
+
+import type { OnCellsEditedParams, OverwriteRowsParameters } from './types';
 
 // functions with which components subscribed to this datastore
 let listeners: (() => void)[] = [];

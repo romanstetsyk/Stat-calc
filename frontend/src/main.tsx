@@ -11,7 +11,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { APP_ROUTES } from '~/common/constants';
 import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
-import { SessionProvider } from '~/contexts/session-context';
 import { SignInPage } from '~/modules/auth/pages/sign-in-page';
 import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
 import { About } from '~/pages/about';
@@ -56,9 +55,7 @@ ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <SessionProvider>
-          <RouterProvider router={createBrowserRouter(routes)} />
-        </SessionProvider>
+        <RouterProvider router={createBrowserRouter(routes)} />
       </ChakraProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

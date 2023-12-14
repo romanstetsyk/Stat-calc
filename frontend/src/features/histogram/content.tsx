@@ -7,10 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
-import { useContext, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { SessionContext } from '~/contexts/session-context';
+import { useSessionData } from '~/store/session-data';
 import type { DisplayOptions } from '~/types';
 import { BinMethod } from '~/types';
 
@@ -32,8 +32,7 @@ type Props = {
 };
 
 const Content = ({ onClose, id }: Props): JSX.Element => {
-  const { session, addSessionItem, updateSessionItem } =
-    useContext(SessionContext);
+  const { session, addSessionItem, updateSessionItem } = useSessionData();
 
   const formId = useId();
   const [display, setDisplay] = useState<DisplayOptions>('form');
