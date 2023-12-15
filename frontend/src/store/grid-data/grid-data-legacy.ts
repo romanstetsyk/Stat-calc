@@ -1,7 +1,7 @@
 import type { GridCell, Item } from '@glideapps/glide-data-grid';
 import { GridCellKind } from '@glideapps/glide-data-grid';
 
-import { ArrayLike } from '~/utils/array-like';
+import { ArrayLike } from '~/framework/array-like';
 
 type Snapshot = {
   datasetId: string;

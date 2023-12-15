@@ -3,8 +3,8 @@ import gcusum from '@stdlib/blas-ext-base-gcusum';
 import tabulate from '@stdlib/utils-tabulate';
 
 import type { DataTableRow } from '~/components/data-table';
+import type { ArrayLike } from '~/framework/array-like';
 import type { ColumnHeading } from '~/types';
-import type { ArrayLike } from '~/utils/array-like';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import { parseNumber } from '~/utils/parse-number';
 

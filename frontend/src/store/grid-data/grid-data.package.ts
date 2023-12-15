@@ -1,8 +1,8 @@
 import type { GridCell, Item } from '@glideapps/glide-data-grid';
 import { GridCellKind } from '@glideapps/glide-data-grid';
 
+import { ArrayLike } from '~/framework/array-like';
 import { ExternalStore } from '~/framework/external-store';
-import { ArrayLike } from '~/utils/array-like';
 
 import type {
   GridData,

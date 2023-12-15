@@ -6,8 +6,8 @@ import { useRef, useState } from 'react';
 import type { WorkBook } from 'xlsx';
 import { read, utils } from 'xlsx';
 
+import { ArrayLike } from '~/framework/array-like';
 import { useGridData } from '~/store/grid-data';
-import { ArrayLike } from '~/utils/array-like';
 
 type FileRow = Record<number, unknown> & { __rowNum__: number };
 

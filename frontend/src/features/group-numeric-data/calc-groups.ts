@@ -1,6 +1,6 @@
 import type { DataTableRow } from '~/components/data-table';
+import type { ArrayLike } from '~/framework/array-like';
 import { BinMethod } from '~/types';
-import type { ArrayLike } from '~/utils/array-like';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import type { TabulateParams } from '~/utils/tabulate';

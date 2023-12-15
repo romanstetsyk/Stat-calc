@@ -6,8 +6,8 @@ import stdev from '@stdlib/stats-base-stdev';
 import variance from '@stdlib/stats-base-variance';
 
 import type { DataTableRow } from '~/components/data-table';
+import type { ArrayLike } from '~/framework/array-like';
 import type { ColumnHeading } from '~/types';
-import type { ArrayLike } from '~/utils/array-like';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import { parseNumber } from '~/utils/parse-number';

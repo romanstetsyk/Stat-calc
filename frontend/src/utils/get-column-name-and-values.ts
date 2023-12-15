@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import type { ArrayLike } from './array-like';
+import type { ArrayLike } from '~/framework/array-like';
+
 import { createColName } from './create-col-name';
 
 function firstKey(obj: ArrayLike<string>): string {

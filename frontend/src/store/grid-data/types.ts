@@ -4,7 +4,7 @@ import type {
   Item,
 } from '@glideapps/glide-data-grid';
 
-import type { ArrayLike } from '~/utils/array-like';
+import type { ArrayLike } from '~/framework/array-like';
 
 type OnCellsEditedParams = readonly {
   location: Item;
