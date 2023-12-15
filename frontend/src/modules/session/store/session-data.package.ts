@@ -1,7 +1,6 @@
 import { ExternalStore } from '~/framework/external-store';
-import type { TSession } from '~/types';
 
-import type { SessionData } from './types';
+import type { SessionData, TSession } from '../types';
 
 class SessionStore extends ExternalStore<SessionData> {
   protected snapshot: SessionData;

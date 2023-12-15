@@ -5,7 +5,6 @@ import type { DraggableGridHandle } from 'ruuri';
 import DraggableGrid from 'ruuri';
 
 import { DataTable } from '~/components/data-table';
-import { SessionItemWrapper } from '~/components/session/session-item-wrapper';
 import type { SampleStatistics } from '~/features/descriptive-statistics/types';
 import { OutputContent as FrequencyDistOutputContent } from '~/features/frequency-distribution/output-content';
 import { OutputContent as GroupedDataOutputContent } from '~/features/group-numeric-data/output-content';
@@ -14,9 +13,11 @@ import { OutputContent as Z1DataOutputContent } from '~/features/one-sample-z-da
 import { OutputContent as Z1SummaryOutputContent } from '~/features/one-sample-z-summary/output-content';
 import { OutputContent as Z2DataOutputContent } from '~/features/two-sample-z-data/output-content';
 import { OutputContent as Z2SummaryOutputContent } from '~/features/two-sample-z-summary/output-content';
-import { useSessionData } from '~/store/session-data';
-import type { TSession } from '~/types';
-import { layoutFunction } from '~/utils/layout-function';
+
+import { useSessionData } from '../store';
+import type { TSession } from '../types';
+import { layoutFunction } from '../utils/layout-function';
+import { SessionItemWrapper } from './session-item-wrapper';
 
 const Session = (): JSX.Element => {
   const { session } = useSessionData();

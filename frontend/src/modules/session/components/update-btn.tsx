@@ -6,7 +6,8 @@ import { StatModal as OneSampleZDataModal } from '~/features/one-sample-z-data/s
 import { StatModal as OneSampleZSummaryModal } from '~/features/one-sample-z-summary/stat-modal';
 import { StatModal as TwoSampleZDataModal } from '~/features/two-sample-z-data/stat-modal';
 import { StatModal as TwoSampleZSummaryModal } from '~/features/two-sample-z-summary/stat-modal';
-import { useSessionData } from '~/store/session-data';
+
+import { useSessionData } from '../store';
 
 type Props = {
   id: string;

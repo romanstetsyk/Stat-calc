@@ -1,6 +1,6 @@
 import { CloseButton, Tooltip } from '@chakra-ui/react';
 
-import { useSessionData } from '~/store/session-data';
+import { useSessionData } from '../store';
 
 type Props = {
   id: string;

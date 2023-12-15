@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
+import type { SessionData } from '../types';
 import { SessionStore } from './session-data.package';
-import type { SessionData } from './types';
 
 const sessionData = new SessionStore();
 

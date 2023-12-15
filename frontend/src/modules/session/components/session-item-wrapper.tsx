@@ -4,8 +4,8 @@ import debounce from 'lodash-es/debounce';
 import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 
-import { RemoveBtn } from '~/components/session/remove-btn';
-import { UpdateBtn } from '~/components/session/update-btn';
+import { RemoveBtn } from './remove-btn';
+import { UpdateBtn } from './update-btn';
 
 type Props = {
   children: React.ReactNode;

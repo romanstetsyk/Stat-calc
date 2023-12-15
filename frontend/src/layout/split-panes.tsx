@@ -16,7 +16,7 @@ import { Allotment } from 'allotment';
 import { useEffect, useRef, useState } from 'react';
 
 import { DataGrid } from '~/layout/data-grid';
-import { Session } from '~/layout/session';
+import { Session } from '~/modules/session/components/session';
 
 const DEFAULT = {
   showSessionMobile: false,

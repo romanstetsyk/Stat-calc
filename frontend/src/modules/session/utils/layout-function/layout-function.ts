@@ -107,8 +107,4 @@ class CustomLayout {
   };
 }
 
-const layout = new CustomLayout();
-
-const layoutFunction = layout.createLayout.bind(layout);
-
-export { layoutFunction };
+export { CustomLayout };

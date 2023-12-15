@@ -9,7 +9,7 @@ import {
 import { useId, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import { useSessionData } from '~/store/session-data';
+import { useSessionData } from '~/modules/session/store';
 import type { DisplayOptions } from '~/types';
 import { HypothesisType, Perform } from '~/types';
 
