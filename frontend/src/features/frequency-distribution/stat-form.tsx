@@ -11,7 +11,7 @@ import {
   Legend,
 } from '~/common/components';
 import { useForm } from '~/common/hooks';
-import { useGridData } from '~/store/grid-data';
+import { useGridData } from '~/modules/data-grid/store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';

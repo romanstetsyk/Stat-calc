@@ -4,7 +4,7 @@ import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
 import { DataTable } from '~/components/data-table';
-import { useGridData } from '~/store/grid-data';
+import { useGridData } from '~/modules/data-grid/store';
 import type { DisplayOptions } from '~/types';
 
 import { calcStatistics } from './calc-statistics';

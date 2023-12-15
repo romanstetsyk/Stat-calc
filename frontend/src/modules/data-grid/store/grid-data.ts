@@ -1,8 +1,8 @@
 import { nanoid } from 'nanoid';
 import { useSyncExternalStore } from 'react';
 
+import type { GridData } from '../types';
 import { Dataset } from './grid-data.package';
-import type { GridData } from './types';
 
 const datasetId = nanoid();
 const dataset = new Dataset(datasetId);

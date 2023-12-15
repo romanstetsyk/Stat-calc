@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { ArrayLike } from '~/framework/array-like';
-
-import { createColName } from './create-col-name';
+import { createColumnName } from '~/modules/data-grid/utils';
 
 function firstKey(obj: ArrayLike<string>): string {
   let n = 0;
@@ -17,8 +16,8 @@ const getVarName = (
   withLabel: boolean,
 ): string => {
   return withLabel
-    ? `${firstKey(colData[colHeader])} (${createColName(colHeader)})`
-    : createColName(colHeader);
+    ? `${firstKey(colData[colHeader])} (${createColumnName(colHeader)})`
+    : createColumnName(colHeader);
 };
 
 const getVarValues = (

@@ -15,8 +15,8 @@ import type { AllotmentHandle } from 'allotment';
 import { Allotment } from 'allotment';
 import { useEffect, useRef, useState } from 'react';
 
-import { DataGrid } from '~/layout/data-grid';
-import { Session } from '~/modules/session/components/session';
+import { DataGrid } from '~/modules/data-grid/components';
+import { Session } from '~/modules/session/components';
 
 const DEFAULT = {
   showSessionMobile: false,

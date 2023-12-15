@@ -6,6 +6,8 @@ import type {
 
 import type { ArrayLike } from '~/framework/array-like';
 
+type GridColumnName = `col${number}`;
+
 type OnCellsEditedParams = readonly {
   location: Item;
   value: EditableGridCell;
@@ -26,4 +28,9 @@ type GridData = {
   getContent: (cell: Item) => GridCell;
 };
 
-export type { GridData, OnCellsEditedParams, OverwriteRowsParameters };
+export type {
+  GridColumnName,
+  GridData,
+  OnCellsEditedParams,
+  OverwriteRowsParameters,
+};

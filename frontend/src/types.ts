@@ -1,5 +1,3 @@
-type GridColumnName = `col${number}`;
-
 type ColumnHeading = `${number}`;
 
 const enum HypothesisType {
@@ -33,5 +31,5 @@ const enum BinMethod {
   // OTHER = "OTHER",
 }
 
-export type { ColumnHeading, DisplayOptions, GridColumnName };
+export type { ColumnHeading, DisplayOptions };
 export { BinMethod, H0Sign, H1Sign, HypothesisType, Perform };

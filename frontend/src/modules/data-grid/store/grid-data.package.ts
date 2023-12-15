@@ -8,7 +8,7 @@ import type {
   GridData,
   OnCellsEditedParams,
   OverwriteRowsParameters,
-} from './types';
+} from '../types';
 
 class Dataset extends ExternalStore<GridData> {
   protected snapshot: GridData;
@@ -96,7 +96,7 @@ class Dataset extends ExternalStore<GridData> {
       }
     }
 
-    this.emitChange();
+    // this.emitChange();
     return true;
   }
 }

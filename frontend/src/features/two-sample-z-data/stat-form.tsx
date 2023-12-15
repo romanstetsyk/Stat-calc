@@ -16,7 +16,7 @@ import {
 } from '~/common/components';
 import { useForm } from '~/common/hooks';
 import { PopulationMeanDiff } from '~/components/hypothesis-notation';
-import { useGridData } from '~/store/grid-data';
+import { useGridData } from '~/modules/data-grid/store';
 import { Perform } from '~/types';
 import { getVarName } from '~/utils/get-column-name-and-values';
 

@@ -7,7 +7,7 @@ import type { WorkBook } from 'xlsx';
 import { read, utils } from 'xlsx';
 
 import { ArrayLike } from '~/framework/array-like';
-import { useGridData } from '~/store/grid-data';
+import { useGridData } from '~/modules/data-grid/store';
 
 type FileRow = Record<number, unknown> & { __rowNum__: number };
 

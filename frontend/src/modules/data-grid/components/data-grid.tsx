@@ -1,41 +1,22 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import '@glideapps/glide-data-grid/dist/index.css';
 
-import type {
-  DataEditorRef,
-  GridColumn,
-  SizedGridColumn,
-} from '@glideapps/glide-data-grid';
+import type { DataEditorRef, GridColumn } from '@glideapps/glide-data-grid';
 import { DataEditor } from '@glideapps/glide-data-grid';
 import { debounce } from 'lodash-es';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { useGridData } from '~/store/grid-data';
-import { createColName } from '~/utils/create-col-name';
+import { Config } from '../config';
+import { useGridData } from '../store';
+import { gridHeadersGenerator } from '../utils';
 
-const ROW_COUNT = 300;
-const ROW_HEIGHT = 24;
-const COL_COUNT = 50;
-const COL_WIDTH = 100;
-const HEADER_HEIGHT = 28;
-
-const generateHeaders = (colCount: number = COL_COUNT): SizedGridColumn[] =>
-  Array.from({ length: colCount }, (_, i) => {
-    const colName = createColName(i);
-    const col: GridColumn = {
-      title: colName,
-      id: colName,
-      width: COL_WIDTH,
-    };
-    return col;
-  });
+const generateHeaders = gridHeadersGenerator();
 
 const DataGrid = (): JSX.Element => {
   const ref = useRef<DataEditorRef>(null);
 
   const { datasetId, onCellsEdited, rowData, getContent } = useGridData();
 
-  const [rowCount, setRowCount] = useState<number>(ROW_COUNT);
+  const [rowCount, setRowCount] = useState<number>(Config.ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
 
   const onColumnResize = useCallback(
@@ -52,13 +33,20 @@ const DataGrid = (): JSX.Element => {
   const onVisibleRegionChanged = useMemo(
     () =>
       debounce(({ x, y, width, height }) => {
-        if (x + width > columnHeaders.length - 5) {
-          setColumnHeaders(generateHeaders(columnHeaders.length + 10));
+        if (x + width > columnHeaders.length - Config.COLUMNS_LOAD_THRESHOLD) {
+          setColumnHeaders(
+            generateHeaders(
+              columnHeaders.length + Config.COLUMNS_ADDED_PER_SCROLL,
+            ),
+          );
         }
-        if (y + height > rowCount - 40) {
-          setRowCount((prev) => Math.max(prev, rowData.length) + 50);
+        if (y + height > rowCount - Config.ROWS_LOAD_THRESHOLD) {
+          setRowCount(
+            (prev) =>
+              Math.max(prev, rowData.length) + Config.ROWS_ADDED_PER_SCROLL,
+          );
         }
-      }, 100),
+      }, Config.DEBOUNCE_TIMEOUT),
     [columnHeaders.length, rowCount, rowData.length],
   );
 
@@ -69,8 +57,8 @@ const DataGrid = (): JSX.Element => {
       getCellContent={getContent}
       columns={columnHeaders}
       rows={Math.max(rowCount, rowData.length)}
-      rowHeight={ROW_HEIGHT}
-      headerHeight={HEADER_HEIGHT}
+      rowHeight={Config.ROW_HEIGHT}
+      headerHeight={Config.HEADER_HEIGHT}
       onCellsEdited={onCellsEdited}
       rowMarkers='clickable-number'
       getCellsForSelection={true}

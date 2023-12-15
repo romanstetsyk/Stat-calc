@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
-import { useGridData } from '~/store/grid-data';
+import { useGridData } from '~/modules/data-grid/store';
 import type { DisplayOptions } from '~/types';
 
 import { calcGroups } from './calc-groups';
