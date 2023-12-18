@@ -8,6 +8,7 @@ export {
   HTTP_METHODS,
   HTTP_STATES,
   TIME_CONVERT,
+  TIMEOUT,
 } from '~/constants/constants.js';
 export { HttpError } from '~/frameworks/frameworks.js';
 export { hasValue, isHttpCode } from '~/helpers/helpers.js';

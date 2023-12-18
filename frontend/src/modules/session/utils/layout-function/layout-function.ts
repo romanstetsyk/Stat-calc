@@ -97,8 +97,7 @@ class CustomLayout {
 
       this.registeredItems = new Set(items);
       callback(layout);
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    }, 0);
+    });
 
     // cleanup
     return (): void => {

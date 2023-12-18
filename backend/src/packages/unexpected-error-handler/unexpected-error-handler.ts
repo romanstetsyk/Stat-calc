@@ -2,9 +2,9 @@
 import type { Server } from 'node:http';
 
 import type { ValueOf } from 'shared/build/index.js';
+import { TIMEOUT } from 'shared/build/index.js';
 
 import type { EXIT_CODES } from '~/common/constants/constants.js';
-import { TIMEOUT } from '~/common/constants/constants.js';
 import { logger } from '~/packages/logger/logger.js';
 
 const unexpectedErrorHandler = (

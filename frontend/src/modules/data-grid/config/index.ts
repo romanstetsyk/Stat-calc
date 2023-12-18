@@ -1,3 +1,5 @@
+import { TIMEOUT } from '@shared/build/esm/index';
+
 const Config = {
   // Initial grid parameters
   ROW_COUNT: 300,
@@ -12,7 +14,7 @@ const Config = {
   COLUMNS_LOAD_THRESHOLD: 5,
   ROWS_LOAD_THRESHOLD: 40,
   // Scroll debounce
-  DEBOUNCE_TIMEOUT: 100,
+  DEBOUNCE_TIMEOUT: TIMEOUT['0.1s'],
 } as const;
 
 export { Config };

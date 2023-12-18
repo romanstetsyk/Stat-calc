@@ -7,3 +7,4 @@ export { HTTP_HEADERS } from './http-headers.js';
 export { HTTP_METHODS } from './http-methods.js';
 export { HTTP_STATES } from './http-states.js';
 export { TIME_CONVERT } from './time-convert.js';
+export { TIMEOUT } from './timeout.js';
