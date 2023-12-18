@@ -19,8 +19,6 @@ import type { HttpBase } from '~/framework/http';
 import type { Storage } from '~/framework/storage';
 
 class AuthApi extends ApiBase {
-  private storage: Storage;
-
   public constructor({
     baseUrl,
     prefix,
@@ -32,8 +30,7 @@ class AuthApi extends ApiBase {
     http: HttpBase;
     storage: Storage;
   }) {
-    super({ baseUrl, prefix, http });
-    this.storage = storage;
+    super({ baseUrl, prefix, http, storage });
   }
 
   public async signUp(payload: SignUpRequestDTO): Promise<SignUpResponseDTO> {
@@ -112,7 +109,7 @@ class AuthApi extends ApiBase {
       },
     });
     const json: RefreshTokenResponseDTO = await res.json();
-    this.storage.set('token', json.accessToken);
+    this.storage.setItem('token', json.accessToken);
   };
 }
 

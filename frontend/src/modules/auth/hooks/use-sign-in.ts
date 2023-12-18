@@ -35,7 +35,7 @@ const useSignIn: UseSignIn = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      storage.set('token', data.accessToken);
+      storage.setItem('token', data.accessToken);
       void queryClient.resetQueries({ queryKey: ['currentUser'] });
     }
   }, [data?.accessToken, isSuccess, queryClient]);

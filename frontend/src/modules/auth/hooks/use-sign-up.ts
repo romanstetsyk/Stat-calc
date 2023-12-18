@@ -50,7 +50,7 @@ const useSignUp: UseSignUp = () => {
   }, [error?.message, isError, toast]);
 
   if (isSuccess) {
-    storage.set('token', data.accessToken);
+    storage.setItem('token', data.accessToken);
   }
 
   return mutationResult;

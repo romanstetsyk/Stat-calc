@@ -12,7 +12,7 @@ import { authApi } from '../api';
 const useCurrentUser = (): UseQueryResult<UserInfo | null, ErrorCommon> => {
   const queryClient = useQueryClient();
 
-  const accessToken = useMemo(() => storage.get('token'), []);
+  const accessToken = useMemo(() => storage.getItem('token'), []);
 
   const staleTime =
     config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
@@ -41,7 +41,7 @@ const useCurrentUser = (): UseQueryResult<UserInfo | null, ErrorCommon> => {
 
   useEffect(() => {
     if (isError) {
-      storage.drop('token');
+      storage.removeItem('token');
       queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
     }
   }, [isError, queryClient]);

@@ -10,7 +10,7 @@ import {
 } from '@shared/build/esm/index.js';
 
 import type { HttpBase } from '~/framework/http';
-import { storage } from '~/framework/storage';
+import type { Storage } from '~/framework/storage';
 
 import type { HttpApiOptions, HttpResponseInterceptor } from './types';
 
@@ -18,19 +18,23 @@ abstract class ApiBase {
   private baseUrl: string;
   private prefix: string[];
   private http: HttpBase;
+  protected storage: Storage;
 
   protected constructor({
     baseUrl,
     prefix,
     http,
+    storage,
   }: {
     baseUrl: string;
     prefix: string[];
     http: HttpBase;
+    storage: Storage;
   }) {
     this.baseUrl = baseUrl;
     this.prefix = prefix;
     this.http = http;
+    this.storage = storage;
   }
 
   public async load({
@@ -87,7 +91,7 @@ abstract class ApiBase {
     if (hasAuth) {
       headers.set(
         HTTP_HEADERS.AUTHORIZATION,
-        `${AUTH_SCHEMA} ${storage.get('token')}`,
+        `${AUTH_SCHEMA} ${this.storage.getItem('token')}`,
       );
     }
 

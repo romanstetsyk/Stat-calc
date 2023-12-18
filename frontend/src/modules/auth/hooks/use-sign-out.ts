@@ -28,7 +28,7 @@ const useSignOut: UseSignOut = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      storage.drop('token');
+      storage.removeItem('token');
       queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
       navigate(API_PATHS_AUTH.SIGN_IN);
     }
