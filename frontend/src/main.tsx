@@ -1,5 +1,3 @@
-import './index.css';
-
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -9,13 +7,16 @@ import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { APP_ROUTES } from '~/common/constants';
+import { theme } from '~/common/theme';
 import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
 import { SignInPage } from '~/modules/auth/pages/sign-in-page';
 import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
 import { About } from '~/pages/about';
 
-const Application = React.lazy(() => import('~/pages/application'));
+const Application = React.lazy(
+  () => import('~/modules/application/components/application'),
+);
 const Home = React.lazy(() => import('~/pages/home'));
 
 const routes: RouteObject[] = [
@@ -54,7 +55,7 @@ const routes: RouteObject[] = [
 ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <RouterProvider router={createBrowserRouter(routes)} />
       </ChakraProvider>
       <ReactQueryDevtools initialIsOpen={false} />
