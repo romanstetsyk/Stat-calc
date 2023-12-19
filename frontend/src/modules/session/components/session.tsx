@@ -4,8 +4,7 @@ import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 import DraggableGrid from 'ruuri';
 
-import { DataTable } from '~/modules/application/components';
-import type { SampleStatistics } from '~/modules/application/features/descriptive-statistics/types';
+import { OutputContent as DescriptiveStatisticsOutputContent } from '~/modules/application/features/descriptive-statistics/output-content';
 import { OutputContent as FrequencyDistOutputContent } from '~/modules/application/features/frequency-distribution/output-content';
 import { OutputContent as GroupedDataOutputContent } from '~/modules/application/features/group-numeric-data/output-content';
 import { OutputContent as HistogramOutputContent } from '~/modules/application/features/histogram/output-content';
@@ -66,7 +65,7 @@ const Session = (): JSX.Element => {
         renderItem={(item: TSession): React.ReactNode => {
           switch (item.type) {
             case 'descriptive': {
-              const { id, title, data, stats, timestamp } = item;
+              const { id, title, data, timestamp } = item;
               return (
                 <SessionItemWrapper
                   key={id}
@@ -75,9 +74,8 @@ const Session = (): JSX.Element => {
                   gridRef={gridRef}
                 >
                   <CardBody px={3} py={2} overflow='auto'>
-                    <DataTable<SampleStatistics, ''>
-                      data={data}
-                      stats={stats}
+                    <DescriptiveStatisticsOutputContent
+                      outputData={data}
                       key={timestamp} // remount component to auto update col widths
                     />
                   </CardBody>
@@ -93,14 +91,7 @@ const Session = (): JSX.Element => {
                   title={title}
                   gridRef={gridRef}
                 >
-                  <CardBody
-                    px={3}
-                    py={2}
-                    display='flex'
-                    gap={4}
-                    flexDirection='column'
-                    overflow='auto'
-                  >
+                  <CardBody px={3} py={2} overflow='auto'>
                     <FrequencyDistOutputContent
                       outputData={data}
                       key={timestamp}
@@ -118,14 +109,7 @@ const Session = (): JSX.Element => {
                   title={title}
                   gridRef={gridRef}
                 >
-                  <CardBody
-                    px={3}
-                    py={2}
-                    display='flex'
-                    gap={4}
-                    flexDirection='column'
-                    overflow='auto'
-                  >
+                  <CardBody px={3} py={2} overflow='auto'>
                     <HistogramOutputContent outputData={data} key={timestamp} />
                   </CardBody>
                 </SessionItemWrapper>
@@ -140,14 +124,7 @@ const Session = (): JSX.Element => {
                   title={title}
                   gridRef={gridRef}
                 >
-                  <CardBody
-                    px={3}
-                    py={2}
-                    display='flex'
-                    gap={4}
-                    flexDirection='column'
-                    overflow='auto'
-                  >
+                  <CardBody px={3} py={2} overflow='auto'>
                     <GroupedDataOutputContent
                       outputData={data}
                       key={timestamp}

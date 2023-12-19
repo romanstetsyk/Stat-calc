@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 
 import { DataTable } from '~/modules/application/components';
 
@@ -8,15 +8,19 @@ type Props = {
   outputData: OutputReturn[];
 };
 
-const OutputContent = ({ outputData }: Props): JSX.Element[] => {
-  return outputData.map(({ varName, n, table, stats }) => (
-    <Box key={varName}>
-      <Heading size='xs' as='h5' mb={4}>
-        Variable: {varName}. Count: {n}
-      </Heading>
-      <DataTable data={table} stats={stats} />
-    </Box>
-  ));
+const OutputContent = ({ outputData }: Props): JSX.Element => {
+  return (
+    <Flex flexDirection='column' gap={2}>
+      {outputData.map(({ varName, n, table, stats }) => (
+        <Flex flexDirection='column' gap={2} key={varName}>
+          <Heading size='xs' as='h5'>
+            Variable: {varName}. Count: {n}
+          </Heading>
+          <DataTable data={table} stats={stats} />
+        </Flex>
+      ))}
+    </Flex>
+  );
 };
 
 export { OutputContent };

@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 
 import { Histogram } from '~/modules/application/components';
 
@@ -8,25 +8,29 @@ type Props = {
   outputData: OutputReturn[];
 };
 
-const OutputContent = ({ outputData }: Props): JSX.Element[] => {
-  return outputData.map(({ varName, out, options }) => (
-    <Box key={varName}>
-      <Heading size='xs' as='h5' mb={4}>
-        Variable: {varName}
-      </Heading>
-      <Histogram
-        key={varName}
-        domain={out.domain}
-        classWidth={out.width}
-        table={out.bins}
-        parsing={{
-          xAxisKey: 'midpoint',
-          yAxisKey: options,
-        }}
-        datalabel={varName}
-      />
-    </Box>
-  ));
+const OutputContent = ({ outputData }: Props): JSX.Element => {
+  return (
+    <Flex flexDirection='column' gap={2}>
+      {outputData.map(({ varName, out, options }) => (
+        <Flex flexDirection='column' gap={2} key={varName}>
+          <Heading size='xs' as='h5'>
+            Variable: {varName}
+          </Heading>
+          <Histogram
+            key={varName}
+            domain={out.domain}
+            classWidth={out.width}
+            table={out.bins}
+            parsing={{
+              xAxisKey: 'midpoint',
+              yAxisKey: options,
+            }}
+            datalabel={varName}
+          />
+        </Flex>
+      ))}
+    </Flex>
+  );
 };
 
 export { OutputContent };

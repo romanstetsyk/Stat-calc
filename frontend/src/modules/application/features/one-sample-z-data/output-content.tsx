@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 
 import {
   DataTable,
@@ -23,13 +23,13 @@ const OutputContent = ({
       const { alternative, nullValue } = formSummary.hypothesisTest;
       const { HTData, HTStats, CIData, CIStats } = outputData;
       return (
-        <>
+        <Flex flexDirection='column' gap={2}>
           <HypothesisNotationDisplay
             param={<PopulationMean />}
             h1dir={alternative}
             h1val={nullValue}
           />
-          <Heading size='xs' as='h5' my={2}>
+          <Heading size='xs' as='h5'>
             Hypothesis Test Result
           </Heading>
           <DataTable<HTColumns | SampleStatistics, ''>
@@ -38,28 +38,28 @@ const OutputContent = ({
           />
           {CIData && CIStats && (
             <>
-              <Heading size='xs' as='h5' my={2}>
+              <Heading size='xs' as='h5'>
                 Confidence Interval
               </Heading>
               <DataTable<CIColumns, ''> data={CIData} stats={CIStats} />
             </>
           )}
-        </>
+        </Flex>
       );
     }
 
     case Perform.ConfidenceInerval: {
       const { CIData, CIStats } = outputData;
       return (
-        <>
-          <Heading size='xs' as='h5' mb={2}>
+        <Flex flexDirection='column' gap={2}>
+          <Heading size='xs' as='h5'>
             Confidence Interval
           </Heading>
           <DataTable<CIColumns | SampleStatistics, ''>
             data={CIData}
             stats={CIStats}
           />
-        </>
+        </Flex>
       );
     }
 

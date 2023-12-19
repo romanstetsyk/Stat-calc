@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 
 import {
   DataTable,
@@ -24,19 +24,19 @@ const OutputContent = ({
       const { HTData, HTStats, CIData, CIStats, sampleData, sampleStats } =
         outputData;
       return (
-        <>
+        <Flex flexDirection='column' gap={2}>
           <HypothesisNotationDisplay
             param={<PopulationMeanDifference />}
             h1dir={alternative}
             h1val={nullValue}
           />
-          <Heading size='xs' as='h5' my={2}>
+          <Heading size='xs' as='h5'>
             Hypothesis Test Result
           </Heading>
           <DataTable<HTColumns, ''> data={HTData} stats={HTStats} />
           {CIData && CIStats && (
             <>
-              <Heading size='xs' as='h5' my={2}>
+              <Heading size='xs' as='h5'>
                 Confidence Interval
               </Heading>
               <DataTable<CIColumns, ''> data={CIData} stats={CIStats} />
@@ -44,7 +44,7 @@ const OutputContent = ({
           )}
           {sampleData && sampleStats && (
             <>
-              <Heading size='xs' as='h5' my={2}>
+              <Heading size='xs' as='h5'>
                 Sample Summary
               </Heading>
               <DataTable<SampleStatistics, ''>
@@ -53,15 +53,15 @@ const OutputContent = ({
               />
             </>
           )}
-        </>
+        </Flex>
       );
     }
 
     case Perform.ConfidenceInerval: {
       const { CIData, CIStats, sampleData, sampleStats } = outputData;
       return (
-        <>
-          <Heading size='xs' as='h5' mb={2}>
+        <Flex flexDirection='column' gap={2}>
+          <Heading size='xs' as='h5'>
             Confidence Interval
           </Heading>
           <DataTable<CIColumns, ''> data={CIData} stats={CIStats} />
@@ -77,7 +77,7 @@ const OutputContent = ({
               />
             </>
           )}
-        </>
+        </Flex>
       );
     }
 

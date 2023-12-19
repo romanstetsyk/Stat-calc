@@ -3,11 +3,11 @@ import { nanoid } from 'nanoid';
 import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
-import { DataTable } from '~/modules/application/components';
 import type { DisplayStep } from '~/modules/application/types';
 import { useGridData } from '~/modules/data-grid/store';
 
 import { calcStatistics } from './calc-statistics';
+import { OutputContent } from './output-content';
 import type {
   DescriptiveStatisticsSession,
   SampleStatistics,
@@ -34,8 +34,11 @@ const Output = ({
   const { colData } = useGridData();
   const { columns, options, withLabel } = formSummary;
 
-  const data = useMemo(
-    () => calcStatistics(columns, colData, withLabel, options),
+  const outputData = useMemo(
+    () => ({
+      data: calcStatistics(columns, colData, withLabel, options),
+      stats: ['', ...options] satisfies ['', ...SampleStatistics[]],
+    }),
     [colData, columns, options, withLabel],
   );
 
@@ -45,11 +48,10 @@ const Output = ({
       timestamp: Date.now(),
       title: 'Descriptive Statistics',
       type: 'descriptive',
-      data,
-      stats: ['', ...options],
+      data: outputData,
       formSummary,
     });
-  }, [data, formSummary, options, outputId, setOutput]);
+  }, [outputData, formSummary, options, outputId, setOutput]);
 
   return (
     <>
@@ -60,7 +62,7 @@ const Output = ({
       >
         ← Back
       </Button>
-      <DataTable<SampleStatistics, ''> data={data} stats={['', ...options]} />
+      <OutputContent outputData={outputData} />
     </>
   );
 };

@@ -20,15 +20,19 @@ type TForm = {
   withLabel: boolean;
 };
 
+type OutputReturn = {
+  data: DataTableRow<SampleStatistics, ''>[];
+  stats: ['', ...SampleStatistics[]];
+};
+
 type DescriptiveStatisticsSession = {
   id: string;
   timestamp: number;
   title: string;
   type: 'descriptive';
-  data: DataTableRow<SampleStatistics, ''>[];
-  stats: ['', ...SampleStatistics[]];
+  data: OutputReturn;
   formSummary: TForm;
 };
 
-export type { DescriptiveStatisticsSession, TForm };
+export type { DescriptiveStatisticsSession, OutputReturn, TForm };
 export { SampleStatistics };

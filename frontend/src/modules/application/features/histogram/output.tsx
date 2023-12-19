@@ -1,4 +1,4 @@
-import { Button, Flex } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
 import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
@@ -51,9 +51,7 @@ const Output = ({
       >
         ← Back
       </Button>
-      <Flex gap={4} flexDirection='column'>
-        <OutputContent outputData={arrOfTables} />
-      </Flex>
+      <OutputContent outputData={arrOfTables} />
     </>
   );
 };
