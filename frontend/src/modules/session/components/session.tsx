@@ -4,15 +4,15 @@ import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 import DraggableGrid from 'ruuri';
 
-import { DataTable } from '~/components/data-table';
-import type { SampleStatistics } from '~/features/descriptive-statistics/types';
-import { OutputContent as FrequencyDistOutputContent } from '~/features/frequency-distribution/output-content';
-import { OutputContent as GroupedDataOutputContent } from '~/features/group-numeric-data/output-content';
-import { OutputContent as HistogramOutputContent } from '~/features/histogram/output-content';
-import { OutputContent as Z1DataOutputContent } from '~/features/one-sample-z-data/output-content';
-import { OutputContent as Z1SummaryOutputContent } from '~/features/one-sample-z-summary/output-content';
-import { OutputContent as Z2DataOutputContent } from '~/features/two-sample-z-data/output-content';
-import { OutputContent as Z2SummaryOutputContent } from '~/features/two-sample-z-summary/output-content';
+import { DataTable } from '~/modules/application/components';
+import type { SampleStatistics } from '~/modules/application/features/descriptive-statistics/types';
+import { OutputContent as FrequencyDistOutputContent } from '~/modules/application/features/frequency-distribution/output-content';
+import { OutputContent as GroupedDataOutputContent } from '~/modules/application/features/group-numeric-data/output-content';
+import { OutputContent as HistogramOutputContent } from '~/modules/application/features/histogram/output-content';
+import { OutputContent as Z1DataOutputContent } from '~/modules/application/features/one-sample-z-data/output-content';
+import { OutputContent as Z1SummaryOutputContent } from '~/modules/application/features/one-sample-z-summary/output-content';
+import { OutputContent as Z2DataOutputContent } from '~/modules/application/features/two-sample-z-data/output-content';
+import { OutputContent as Z2SummaryOutputContent } from '~/modules/application/features/two-sample-z-summary/output-content';
 
 import { useSessionData } from '../store';
 import type { TSession } from '../types';
@@ -31,7 +31,7 @@ const Session = (): JSX.Element => {
   }
 
   return (
-    <CardBody overflow='scroll' p={0} ref={divRef}>
+    <CardBody overflow='auto' p={0} mb={2} ref={divRef}>
       <DraggableGrid
         style={{
           backgroundSize: '0.5in 0.5in',

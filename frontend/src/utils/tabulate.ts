@@ -2,7 +2,7 @@
 import stdlibMax from '@stdlib/stats-base-max';
 import stdlibMin from '@stdlib/stats-base-min';
 
-import { BinMethod } from '~/types';
+import { BinMethod } from '~/modules/application/enums';
 
 import { roundToPrecision } from './parse-number';
 

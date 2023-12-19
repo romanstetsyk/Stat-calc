@@ -1,11 +1,11 @@
-import type { DescriptiveStatisticsSession } from '~/features/descriptive-statistics/types';
-import type { FrequencyDistributionSession } from '~/features/frequency-distribution/types';
-import type { GroupNumericalDataSession } from '~/features/group-numeric-data/types';
-import type { HistogramSession } from '~/features/histogram/types';
-import type { Z1DataSession } from '~/features/one-sample-z-data/types';
-import type { Z1SummarySession } from '~/features/one-sample-z-summary/types';
-import type { Z2DataSession } from '~/features/two-sample-z-data/types';
-import type { Z2SummarySession } from '~/features/two-sample-z-summary/types';
+import type { DescriptiveStatisticsSession } from '~/modules/application/features/descriptive-statistics/types';
+import type { FrequencyDistributionSession } from '~/modules/application/features/frequency-distribution/types';
+import type { GroupNumericalDataSession } from '~/modules/application/features/group-numeric-data/types';
+import type { HistogramSession } from '~/modules/application/features/histogram/types';
+import type { Z1DataSession } from '~/modules/application/features/one-sample-z-data/types';
+import type { Z1SummarySession } from '~/modules/application/features/one-sample-z-summary/types';
+import type { Z2DataSession } from '~/modules/application/features/two-sample-z-data/types';
+import type { Z2SummarySession } from '~/modules/application/features/two-sample-z-summary/types';
 
 type TSession =
   | DescriptiveStatisticsSession

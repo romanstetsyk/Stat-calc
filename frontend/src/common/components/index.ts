@@ -1,13 +1,9 @@
-export { BinManual } from './bin-manual';
-export { BinSquareRoot } from './bin-square-root';
 export { CheckboxControlled } from './checkbox-controlled';
 export { CheckboxGroupControlled } from './checkbox-group-controlled';
-export { ConfidenceIntervalFormPart } from './confidence-interval-form-part';
 export { FieldStack } from './field-stack';
 export { Footer } from './footer';
 export { Form } from './form';
 export { Header } from './header';
-export { HypothesisTestFormPart } from './hypothesis-test-form-part';
 export { InputControlled } from './input-controlled';
 export { InputField } from './input-field';
 export { Legend } from './legend';

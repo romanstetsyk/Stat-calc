@@ -12,3 +12,6 @@
 
 'backend/**/*.ts':
   - npm run lint:ts:generic -w backend
+
+'shared/**/*.ts':
+  - npm run lint:ts:generic -w shared
