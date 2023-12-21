@@ -10,7 +10,7 @@ const global: Styles = {
       position: 'fixed',
       left: 0,
       top: 0,
-      zIndex: 1000,
+      zIndex: 1401, // Chakra z-index for a modal window is 1400
     },
     /* https://github.com/haltu/muuri#grid-option-dragautoscroll */
     '#dragContainer': {
