@@ -24,7 +24,11 @@ const OutputContent = ({
       const { HTData, HTStats, CIData, CIStats, sampleData, sampleStats } =
         outputData;
       return (
-        <Flex flexDirection='column' gap={2}>
+        <Flex
+          flexDirection='column'
+          gap={2}
+          maxHeight={{ base: '100vh', md: '60vh' }}
+        >
           <HypothesisNotationDisplay
             param={<PopulationMeanDifference />}
             h1dir={alternative}

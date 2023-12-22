@@ -30,6 +30,7 @@ const SessionItemWrapper = ({
 
   return (
     <Card
+      userSelect='text'
       ref={ref}
       mx={2}
       my={1}

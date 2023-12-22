@@ -15,13 +15,14 @@ type TForm = {
   withLabel: boolean;
 };
 
-const topLeftCell = 'Value';
+const TopLeftCell = 'Value';
+type TopLeftCell = typeof TopLeftCell;
 
 type OutputReturn = {
   varName: string;
   n: number;
-  table: DataTableRow<FrequencyDistribution, typeof topLeftCell>[];
-  stats: [typeof topLeftCell, ...FrequencyDistribution[]];
+  table: DataTableRow<FrequencyDistribution, TopLeftCell>[];
+  stats: [TopLeftCell, ...FrequencyDistribution[]];
 };
 
 type FrequencyDistributionSession = {
@@ -34,4 +35,4 @@ type FrequencyDistributionSession = {
 };
 
 export type { FrequencyDistributionSession, OutputReturn, TForm };
-export { FrequencyDistribution, topLeftCell };
+export { FrequencyDistribution, TopLeftCell };

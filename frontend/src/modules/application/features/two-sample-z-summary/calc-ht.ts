@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { GridCellKind } from '@glideapps/glide-data-grid';
+import roundn from '@stdlib/math-base-special-roundn';
 import cdf from '@stdlib/stats-base-dists-normal-cdf';
 import quantile from '@stdlib/stats-base-dists-normal-quantile';
 
+import { Config } from '~/modules/application/config';
 import { HypothesisType, Perform } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
-import { parseNumber } from '~/utils/parse-number';
 
 import type {
   CIColumns,
@@ -14,7 +16,7 @@ import type {
   TForm,
 } from './types';
 
-const DECIMAL = 6;
+const { ROUND_DECIMAL } = Config;
 
 const calcHT = (formSummary: TForm): HTReturn => {
   const { xbar1, stdev1, n1 } = formSummary.sample1Summary;
@@ -36,19 +38,19 @@ const calcHT = (formSummary: TForm): HTReturn => {
   switch (alternative) {
     case HypothesisType.TwoTailed: {
       ciLevel = 1 - alpha;
-      zcrit = -quantile(alpha / 2, 0, 1);
-      pvalue = 2 * cdf(-Math.abs(zstat), 0, 1);
+      zcrit = -1 * quantile(alpha / 2, 0, 1);
+      pvalue = 2 * cdf(-1 * Math.abs(zstat), 0, 1);
       break;
     }
     case HypothesisType.RightTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = 1 - cdf(zstat, 0, 1);
       break;
     }
     case HypothesisType.LeftTailed: {
       ciLevel = 1 - 2 * alpha;
-      zcrit = -quantile(alpha, 0, 1);
+      zcrit = -1 * quantile(alpha, 0, 1);
       pvalue = cdf(zstat, 0, 1);
       break;
     }
@@ -59,12 +61,36 @@ const calcHT = (formSummary: TForm): HTReturn => {
 
   const HTData: DataTableRow<HTColumns, ''>[] = [
     {
-      '': '\u03BC\u2081 - \u03BC\u2082',
-      Alpha: parseNumber(alpha),
-      'Z-crit': zcrit.toFixed(DECIMAL),
-      'Std.Err.': stderrPooled.toFixed(DECIMAL),
-      'Z-stat': zstat.toFixed(DECIMAL),
-      'P-value': pvalue.toFixed(DECIMAL),
+      '': {
+        data: '\u03BC\u2081 - \u03BC\u2082',
+        kind: GridCellKind.Text,
+        displayData: '\u03BC\u2081 - \u03BC\u2082',
+      },
+      'Alpha': {
+        data: alpha,
+        kind: GridCellKind.Number,
+        displayData: alpha.toString(),
+      },
+      'Z-crit': {
+        data: zcrit,
+        kind: GridCellKind.Number,
+        displayData: roundn(zcrit, ROUND_DECIMAL).toString(),
+      },
+      'Std.Err.': {
+        data: stderrPooled,
+        kind: GridCellKind.Number,
+        displayData: roundn(stderrPooled, ROUND_DECIMAL).toString(),
+      },
+      'Z-stat': {
+        data: zstat,
+        kind: GridCellKind.Number,
+        displayData: roundn(zstat, ROUND_DECIMAL).toString(),
+      },
+      'P-value': {
+        data: pvalue,
+        kind: GridCellKind.Number,
+        displayData: roundn(pvalue, ROUND_DECIMAL).toString(),
+      },
     },
   ];
 
@@ -86,18 +112,58 @@ const calcHT = (formSummary: TForm): HTReturn => {
   if (includeSampleStatistics) {
     const sampleData: DataTableRow<SampleStatistics, ''>[] = [
       {
-        '': 'Sample 1',
-        N: n1,
-        Mean: xbar1,
-        'Known Stdev': stdev1,
-        'Std.Err': parseNumber(stderr1, DECIMAL),
+        '': {
+          data: 'Sample 1',
+          kind: GridCellKind.Text,
+          displayData: 'Sample 1',
+        },
+        'N': {
+          data: n1,
+          kind: GridCellKind.Number,
+          displayData: n1.toString(),
+        },
+        'Mean': {
+          data: xbar1,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar1, ROUND_DECIMAL).toString(),
+        },
+        'Known Stdev': {
+          data: stdev1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdev1, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr1, ROUND_DECIMAL).toString(),
+        },
       },
       {
-        '': 'Sample 2',
-        N: n2,
-        Mean: xbar2,
-        'Known Stdev': stdev2,
-        'Std.Err': parseNumber(stderr2, DECIMAL),
+        '': {
+          data: 'Sample 2',
+          kind: GridCellKind.Text,
+          displayData: 'Sample 2',
+        },
+        'N': {
+          data: n2,
+          kind: GridCellKind.Number,
+          displayData: n2.toString(),
+        },
+        'Mean': {
+          data: xbar2,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar2, ROUND_DECIMAL).toString(),
+        },
+        'Known Stdev': {
+          data: stdev2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdev2, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr2, ROUND_DECIMAL).toString(),
+        },
       },
     ];
 
@@ -123,12 +189,36 @@ const calcHT = (formSummary: TForm): HTReturn => {
 
     const CIData: DataTableRow<CIColumns, ''>[] = [
       {
-        '': '\u03BC\u2081 - \u03BC\u2082',
-        Level: parseNumber(ciLevel),
-        'Z-crit': parseNumber(zcrit, DECIMAL),
-        'M.E.': parseNumber(me, DECIMAL),
-        'L.Limit': parseNumber(ll, DECIMAL),
-        'U.Limit': parseNumber(ul, DECIMAL),
+        '': {
+          data: '\u03BC\u2081 - \u03BC\u2082',
+          kind: GridCellKind.Text,
+          displayData: '\u03BC\u2081 - \u03BC\u2082',
+        },
+        'Level': {
+          data: ciLevel,
+          kind: GridCellKind.Number,
+          displayData: ciLevel.toString(),
+        },
+        'Z-crit': {
+          data: zcrit,
+          kind: GridCellKind.Number,
+          displayData: roundn(zcrit, ROUND_DECIMAL).toString(),
+        },
+        'M.E.': {
+          data: me,
+          kind: GridCellKind.Number,
+          displayData: roundn(me, ROUND_DECIMAL).toString(),
+        },
+        'L.Limit': {
+          data: ll,
+          kind: GridCellKind.Number,
+          displayData: roundn(ll, ROUND_DECIMAL).toString(),
+        },
+        'U.Limit': {
+          data: ul,
+          kind: GridCellKind.Number,
+          displayData: roundn(ul, ROUND_DECIMAL).toString(),
+        },
       },
     ];
 

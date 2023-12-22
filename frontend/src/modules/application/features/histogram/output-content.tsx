@@ -12,7 +12,12 @@ const OutputContent = ({ outputData }: Props): JSX.Element => {
   return (
     <Flex flexDirection='column' gap={2}>
       {outputData.map(({ varName, out, options }) => (
-        <Flex flexDirection='column' gap={2} key={varName}>
+        <Flex
+          flexDirection='column'
+          gap={2}
+          key={varName}
+          maxHeight={{ base: '100vh', md: '60vh' }}
+        >
           <Heading size='xs' as='h5'>
             Variable: {varName}
           </Heading>

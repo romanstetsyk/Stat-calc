@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { GridCellKind } from '@glideapps/glide-data-grid';
+import roundn from '@stdlib/math-base-special-roundn';
 import quantile from '@stdlib/stats-base-dists-normal-quantile';
 
+import { Config } from '~/modules/application/config';
 import { Perform } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
-import { parseNumber } from '~/utils/parse-number';
 
 import type { CIColumns, CIReturn, SampleStatistics, TForm } from './types';
 
-const DECIMAL = 6;
+const { ROUND_DECIMAL } = Config;
 
 const calcCI = (formSummary: TForm): CIReturn => {
   const { xbar1, stdev1, n1 } = formSummary.sample1Summary;
@@ -26,13 +28,41 @@ const calcCI = (formSummary: TForm): CIReturn => {
 
   const CIData: DataTableRow<CIColumns, ''>[] = [
     {
-      '': '\u03BC\u2081 - \u03BC\u2082',
-      Level: parseNumber(confidenceLevel),
-      'Z-crit': parseNumber(zcrit, DECIMAL),
-      'M.E.': parseNumber(me, DECIMAL),
-      'L.Limit': parseNumber(ll, DECIMAL),
-      'U.Limit': parseNumber(ul, DECIMAL),
-      'Std.Err.': parseNumber(stderrPooled, DECIMAL),
+      '': {
+        data: '\u03BC\u2081 - \u03BC\u2082',
+        kind: GridCellKind.Text,
+        displayData: '\u03BC\u2081 - \u03BC\u2082',
+      },
+      'Level': {
+        data: confidenceLevel,
+        kind: GridCellKind.Number,
+        displayData: confidenceLevel.toString(),
+      },
+      'Z-crit': {
+        data: zcrit,
+        kind: GridCellKind.Number,
+        displayData: roundn(zcrit, ROUND_DECIMAL).toString(),
+      },
+      'M.E.': {
+        data: me,
+        kind: GridCellKind.Number,
+        displayData: roundn(me, ROUND_DECIMAL).toString(),
+      },
+      'L.Limit': {
+        data: ll,
+        kind: GridCellKind.Number,
+        displayData: roundn(ll, ROUND_DECIMAL).toString(),
+      },
+      'U.Limit': {
+        data: ul,
+        kind: GridCellKind.Number,
+        displayData: roundn(ul, ROUND_DECIMAL).toString(),
+      },
+      'Std.Err.': {
+        data: stderrPooled,
+        kind: GridCellKind.Number,
+        displayData: roundn(stderrPooled, ROUND_DECIMAL).toString(),
+      },
     },
   ];
 
@@ -55,18 +85,58 @@ const calcCI = (formSummary: TForm): CIReturn => {
   if (includeSampleStatistics) {
     const sampleData: DataTableRow<SampleStatistics, ''>[] = [
       {
-        '': 'Sample 1',
-        N: n1,
-        Mean: xbar1,
-        'Known Stdev': stdev1,
-        'Std.Err': parseNumber(stderr1, DECIMAL),
+        '': {
+          data: 'Sample 1',
+          kind: GridCellKind.Text,
+          displayData: 'Sample 1',
+        },
+        'N': {
+          data: n1,
+          kind: GridCellKind.Number,
+          displayData: n1.toString(),
+        },
+        'Mean': {
+          data: xbar1,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar1, ROUND_DECIMAL).toString(),
+        },
+        'Known Stdev': {
+          data: stdev1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdev1, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr1, ROUND_DECIMAL).toString(),
+        },
       },
       {
-        '': 'Sample 2',
-        N: n2,
-        Mean: xbar2,
-        'Known Stdev': stdev2,
-        'Std.Err': parseNumber(stderr2, DECIMAL),
+        '': {
+          data: 'Sample 2',
+          kind: GridCellKind.Text,
+          displayData: 'Sample 2',
+        },
+        'N': {
+          data: n2,
+          kind: GridCellKind.Number,
+          displayData: n2.toString(),
+        },
+        'Mean': {
+          data: xbar2,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar2, ROUND_DECIMAL).toString(),
+        },
+        'Known Stdev': {
+          data: stdev2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdev2, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr2, ROUND_DECIMAL).toString(),
+        },
       },
     ];
 

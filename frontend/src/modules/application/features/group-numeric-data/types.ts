@@ -24,13 +24,14 @@ type TForm = {
   };
 };
 
-const topLeftCell = 'Limits';
+const TopLeftCell = 'Limits';
+type TopLeftCell = typeof TopLeftCell;
 
 type OutputReturn = {
   varName: string;
   n: number;
-  table: DataTableRow<FrequencyDistribution, typeof topLeftCell>[];
-  stats: [typeof topLeftCell, ...FrequencyDistribution[]];
+  table: DataTableRow<FrequencyDistribution, TopLeftCell>[];
+  stats: [TopLeftCell, ...FrequencyDistribution[]];
 };
 
 type GroupNumericalDataSession = {
@@ -43,4 +44,4 @@ type GroupNumericalDataSession = {
 };
 
 export type { GroupNumericalDataSession, OutputReturn, TForm };
-export { FrequencyDistribution, topLeftCell };
+export { FrequencyDistribution, TopLeftCell };

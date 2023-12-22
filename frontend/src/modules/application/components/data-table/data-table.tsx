@@ -1,15 +1,21 @@
-import type { GridCell, GridColumn, Item } from '@glideapps/glide-data-grid';
+import type {
+  GridCell,
+  GridColumn,
+  Item,
+  NumberCell,
+  TextCell,
+} from '@glideapps/glide-data-grid';
 import { DataEditor, GridCellKind } from '@glideapps/glide-data-grid';
 import { useCallback, useMemo } from 'react';
 
 import type { DataTableRow } from '~/modules/application/types';
 
-type Props<T extends string, Title extends string = 'column'> = {
+type Props<T extends string, Title extends string = ' '> = {
   data: DataTableRow<T, Title>[];
-  stats: Title extends 'column' ? T[] : [Title, ...T[]];
+  stats: Title extends ' ' ? T[] : [Title, ...T[]];
 };
 
-const DataTable = <T extends string, Title extends string = 'column'>({
+const DataTable = <T extends string, Title extends string = ' '>({
   data,
   stats,
 }: Props<T, Title>): JSX.Element | null => {
@@ -23,25 +29,35 @@ const DataTable = <T extends string, Title extends string = 'column'>({
   const getCellContent = useCallback(
     (cell: Item): GridCell => {
       const [col, row] = cell;
-      const dataRow = data[row];
-      // dumb but simple way to do this
-      const indexes: (keyof DataTableRow<T, Title>)[] = columnHeaders.map(
-        (col) => col.title as keyof DataTableRow<T, Title>,
-      );
+      const cellValue = data[row][stats[col]];
 
-      const d = dataRow[indexes[col]];
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!cellValue) {
+        return {
+          data: '',
+          kind: GridCellKind.Text,
+          displayData: '--',
+          allowOverlay: true,
+          readonly: true,
+        };
+      }
 
+      if (cellValue.kind === GridCellKind.Number) {
+        return {
+          ...cellValue,
+          allowOverlay: true,
+          readonly: false,
+          contentAlign: 'right',
+        } satisfies NumberCell;
+      }
       return {
-        kind: GridCellKind.Text,
+        ...cellValue,
         allowOverlay: true,
         readonly: false,
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        displayData: d === undefined ? '-' : String(d),
-        data: String(d),
-        contentAlign: 'right',
-      };
+        contentAlign: 'left',
+      } satisfies TextCell;
     },
-    [columnHeaders, data],
+    [data, stats],
   );
 
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
@@ -58,6 +74,8 @@ const DataTable = <T extends string, Title extends string = 'column'>({
       rowMarkers='none'
       copyHeaders={true}
       smoothScrollX={true}
+      smoothScrollY={true}
+      scaleToRem={true}
     />
   );
 };

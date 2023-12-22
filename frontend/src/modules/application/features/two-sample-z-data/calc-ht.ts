@@ -1,16 +1,18 @@
 /* eslint-disable unicorn/no-array-callback-reference */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { GridCellKind } from '@glideapps/glide-data-grid';
+import roundn from '@stdlib/math-base-special-roundn';
 import cdf from '@stdlib/stats-base-dists-normal-cdf';
 import quantile from '@stdlib/stats-base-dists-normal-quantile';
 import mean from '@stdlib/stats-base-mean';
 import stdev from '@stdlib/stats-base-stdev';
 
 import type { ArrayLike } from '~/framework/array-like';
+import { Config } from '~/modules/application/config';
 import { HypothesisType, Perform } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
-import { parseNumber } from '~/utils/parse-number';
 
 import type {
   CIColumns,
@@ -20,7 +22,7 @@ import type {
   TForm,
 } from './types';
 
-const DECIMAL = 6;
+const { ROUND_DECIMAL } = Config;
 
 const calcHT = (
   formSummary: TForm,
@@ -89,12 +91,36 @@ const calcHT = (
 
   const HTData: DataTableRow<HTColumns, ''>[] = [
     {
-      '': '\u03BC\u2081 - \u03BC\u2082',
-      Alpha: parseNumber(alpha),
-      'Z-crit': parseNumber(zcrit, DECIMAL),
-      'Std.Err.': parseNumber(stderrPooled, DECIMAL),
-      'Z-stat': parseNumber(zstat, DECIMAL),
-      'P-value': parseNumber(pvalue, DECIMAL),
+      '': {
+        data: '\u03BC\u2081 - \u03BC\u2082',
+        kind: GridCellKind.Text,
+        displayData: '\u03BC\u2081 - \u03BC\u2082',
+      },
+      'Alpha': {
+        data: alpha,
+        kind: GridCellKind.Number,
+        displayData: alpha.toString(),
+      },
+      'Z-crit': {
+        data: zcrit,
+        kind: GridCellKind.Number,
+        displayData: roundn(zcrit, ROUND_DECIMAL).toString(),
+      },
+      'Std.Err.': {
+        data: stderrPooled,
+        kind: GridCellKind.Number,
+        displayData: roundn(stderrPooled, ROUND_DECIMAL).toString(),
+      },
+      'Z-stat': {
+        data: zstat,
+        kind: GridCellKind.Number,
+        displayData: roundn(zstat, ROUND_DECIMAL).toString(),
+      },
+      'P-value': {
+        data: pvalue,
+        kind: GridCellKind.Number,
+        displayData: roundn(pvalue, ROUND_DECIMAL).toString(),
+      },
     },
   ];
 
@@ -116,25 +142,59 @@ const calcHT = (
   if (includeSampleStatistics) {
     const sampleData: DataTableRow<SampleStatistics, ''>[] = [
       {
-        '': var1Name,
-        N: n1,
-        Mean: parseNumber(xbar1, DECIMAL),
+        '': {
+          data: var1Name,
+          kind: GridCellKind.Text,
+          displayData: var1Name,
+        },
+        'N': {
+          data: n1,
+          kind: GridCellKind.Number,
+          displayData: n1.toString(),
+        },
+        'Mean': {
+          data: xbar1,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar1, ROUND_DECIMAL).toString(),
+        },
         // eslint-disable-next-line sonarjs/no-duplicate-string
-        [knownStdev1 ? 'Known Stdev' : 'S.Stdev']: parseNumber(
-          stdevApprox1,
-          DECIMAL,
-        ),
-        'Std.Err': parseNumber(stderr1, DECIMAL),
+        [knownStdev1 ? 'Known Stdev' : 'S.Stdev']: {
+          data: stdevApprox1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdevApprox1, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr1,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr1, ROUND_DECIMAL).toString(),
+        },
       },
       {
-        '': var2Name,
-        N: n2,
-        Mean: parseNumber(xbar2, DECIMAL),
-        [knownStdev2 ? 'Known Stdev' : 'S.Stdev']: parseNumber(
-          stdevApprox2,
-          DECIMAL,
-        ),
-        'Std.Err': parseNumber(stderr2, DECIMAL),
+        '': {
+          data: var2Name,
+          kind: GridCellKind.Text,
+          displayData: var2Name,
+        },
+        'N': {
+          data: n2,
+          kind: GridCellKind.Number,
+          displayData: n2.toString(),
+        },
+        'Mean': {
+          data: xbar2,
+          kind: GridCellKind.Number,
+          displayData: roundn(xbar2, ROUND_DECIMAL).toString(),
+        },
+        [knownStdev2 ? 'Known Stdev' : 'S.Stdev']: {
+          data: stdevApprox2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stdevApprox2, ROUND_DECIMAL).toString(),
+        },
+        'Std.Err': {
+          data: stderr2,
+          kind: GridCellKind.Number,
+          displayData: roundn(stderr2, ROUND_DECIMAL).toString(),
+        },
       },
     ];
 
@@ -166,12 +226,36 @@ const calcHT = (
 
     const CIData: DataTableRow<CIColumns, ''>[] = [
       {
-        '': '\u03BC\u2081 - \u03BC\u2082',
-        Level: parseNumber(ciLevel),
-        'Z-crit': parseNumber(zcrit, DECIMAL),
-        'M.E.': parseNumber(me, DECIMAL),
-        'L.Limit': parseNumber(ll, DECIMAL),
-        'U.Limit': parseNumber(ul, DECIMAL),
+        '': {
+          data: '\u03BC\u2081 - \u03BC\u2082',
+          kind: GridCellKind.Text,
+          displayData: '\u03BC\u2081 - \u03BC\u2082',
+        },
+        'Level': {
+          data: ciLevel,
+          kind: GridCellKind.Number,
+          displayData: ciLevel.toString(),
+        },
+        'Z-crit': {
+          data: zcrit,
+          kind: GridCellKind.Number,
+          displayData: roundn(zcrit, ROUND_DECIMAL).toString(),
+        },
+        'M.E.': {
+          data: me,
+          kind: GridCellKind.Number,
+          displayData: roundn(me, ROUND_DECIMAL).toString(),
+        },
+        'L.Limit': {
+          data: ll,
+          kind: GridCellKind.Number,
+          displayData: roundn(ll, ROUND_DECIMAL).toString(),
+        },
+        'U.Limit': {
+          data: ul,
+          kind: GridCellKind.Number,
+          displayData: roundn(ul, ROUND_DECIMAL).toString(),
+        },
       },
     ];
 

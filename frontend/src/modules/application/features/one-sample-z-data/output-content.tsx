@@ -23,7 +23,11 @@ const OutputContent = ({
       const { alternative, nullValue } = formSummary.hypothesisTest;
       const { HTData, HTStats, CIData, CIStats } = outputData;
       return (
-        <Flex flexDirection='column' gap={2}>
+        <Flex
+          flexDirection='column'
+          gap={2}
+          maxHeight={{ base: '100vh', md: '60vh' }}
+        >
           <HypothesisNotationDisplay
             param={<PopulationMean />}
             h1dir={alternative}

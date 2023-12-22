@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { GridCellKind } from '@glideapps/glide-data-grid';
+import roundn from '@stdlib/math-base-special-roundn';
 import mean from '@stdlib/stats-base-mean';
 import mediansorted from '@stdlib/stats-base-mediansorted';
 import range from '@stdlib/stats-base-range';
@@ -6,14 +8,14 @@ import stdev from '@stdlib/stats-base-stdev';
 import variance from '@stdlib/stats-base-variance';
 
 import type { ArrayLike } from '~/framework/array-like';
+import { Config } from '~/modules/application/config';
 import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
 import { isFiniteNumberString } from '~/utils/assertions';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
-import { parseNumber } from '~/utils/parse-number';
 
 import type { SampleStatistics } from './types';
 
-const DECIMAL = 6;
+const { ROUND_DECIMAL } = Config;
 
 const calcStatistics = (
   columns: ColumnHeading[],
@@ -27,55 +29,102 @@ const calcStatistics = (
     // eslint-disable-next-line unicorn/no-array-callback-reference
     const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
     const n = arrOfNums.length;
-    const row: DataTableRow<SampleStatistics, ''> = { '': varName };
+    const row: DataTableRow<SampleStatistics, ''> = {
+      '': {
+        data: varName,
+        kind: GridCellKind.Text,
+        displayData: varName,
+      },
+    };
 
     // Data length
     if (options.includes('N')) {
-      row.N = n.toString();
+      row.N = {
+        data: n,
+        kind: GridCellKind.Number,
+        displayData: n.toString(),
+      };
     }
 
     // Mean
     if (options.includes('Mean')) {
-      row.Mean = mean(n, arrOfNums, 1).toFixed(DECIMAL);
+      const xbar = mean(n, arrOfNums, 1);
+      row.Mean = {
+        data: xbar,
+        kind: GridCellKind.Number,
+        displayData: roundn(xbar, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Median
     if (options.includes('Median')) {
-      row.Median = mediansorted(
-        n,
-        arrOfNums.sort((a, b) => a - b),
-        1,
-      ).toFixed(DECIMAL);
+      const sorted = arrOfNums.toSorted((a, b) => a - b);
+      const median = mediansorted(n, sorted, 1);
+      row.Median = {
+        data: median,
+        kind: GridCellKind.Number,
+        displayData: roundn(median, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Sample variance
     if (options.includes('S.Var')) {
-      row['S.Var'] = variance(n, 1, arrOfNums, 1).toFixed(DECIMAL);
+      const sVar = variance(n, 1, arrOfNums, 1);
+      row['S.Var'] = {
+        data: sVar,
+        kind: GridCellKind.Number,
+        displayData: roundn(sVar, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Population variance
     if (options.includes('P.Var')) {
-      row['P.Var'] = variance(n, 0, arrOfNums, 1).toFixed(DECIMAL);
+      const pVar = variance(n, 0, arrOfNums, 1);
+      row['P.Var'] = {
+        data: pVar,
+        kind: GridCellKind.Number,
+        displayData: roundn(pVar, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Sample standard deviation
     if (options.includes('S.Stdev')) {
-      row['S.Stdev'] = stdev(n, 1, arrOfNums, 1).toFixed(DECIMAL);
+      const sStdev = stdev(n, 1, arrOfNums, 1);
+      row['S.Stdev'] = {
+        data: sStdev,
+        kind: GridCellKind.Number,
+        displayData: roundn(sStdev, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Population standard deviation
     if (options.includes('P.Stdev')) {
-      row['P.Stdev'] = stdev(n, 0, arrOfNums, 1).toFixed(DECIMAL);
+      const pStdev = stdev(n, 0, arrOfNums, 1);
+      row['P.Stdev'] = {
+        data: pStdev,
+        kind: GridCellKind.Number,
+        displayData: roundn(pStdev, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Standard error (uses sample stdev)
     if (options.includes('Std.Err')) {
-      row['Std.Err'] = (stdev(n, 1, arrOfNums, 1) / n ** 0.5).toFixed(DECIMAL);
+      const stderr = stdev(n, 1, arrOfNums, 1) / n ** 0.5;
+      row['Std.Err'] = {
+        data: stderr,
+        kind: GridCellKind.Number,
+        displayData: roundn(stderr, ROUND_DECIMAL).toString(),
+      };
     }
 
     // Range
     if (options.includes('Range')) {
-      row.Range = parseNumber(range(n, arrOfNums, 1));
+      const sRange = range(n, arrOfNums, 1);
+      row.Range = {
+        data: sRange,
+        kind: GridCellKind.Number,
+        displayData: sRange.toString(),
+      };
     }
 
     return row;

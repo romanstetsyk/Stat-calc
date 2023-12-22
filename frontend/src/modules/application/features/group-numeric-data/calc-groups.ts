@@ -1,3 +1,5 @@
+import { GridCellKind } from '@glideapps/glide-data-grid';
+
 import type { ArrayLike } from '~/framework/array-like';
 import { BinMethod } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
@@ -7,7 +9,7 @@ import type { TabulateParams } from '~/utils/tabulate';
 import { Tabulate } from '~/utils/tabulate';
 
 import type { FrequencyDistribution, OutputReturn, TForm } from './types';
-import { topLeftCell } from './types';
+import { TopLeftCell } from './types';
 
 const calcGroups = (
   colData: ArrayLike<ArrayLike<string>>,
@@ -64,16 +66,22 @@ const calcGroups = (
       out.computeCumulativeRelativeFrequency();
     }
 
-    const table: DataTableRow<FrequencyDistribution, typeof topLeftCell>[] =
+    const table: DataTableRow<FrequencyDistribution, TopLeftCell>[] =
       out.bins.map(({ limits, ...rest }) => ({
-        ...rest,
-        [topLeftCell]: limits.join(' - '),
+        ...Object.fromEntries(
+          Object.entries(rest).map(([k, v]) => [
+            k,
+            { data: v, kind: GridCellKind.Number, displayData: v.toString() },
+          ]),
+        ),
+        [TopLeftCell]: {
+          data: limits.join(' - '),
+          kind: GridCellKind.Text,
+          displayData: limits.join(' - '),
+        },
       }));
 
-    const stats: [typeof topLeftCell, ...typeof options] = [
-      topLeftCell,
-      ...options,
-    ];
+    const stats: [TopLeftCell, ...typeof options] = [TopLeftCell, ...options];
     return { varName, n, table, stats };
   });
 };
