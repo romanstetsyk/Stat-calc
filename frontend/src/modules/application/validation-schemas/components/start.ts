@@ -1,5 +1,5 @@
 import Joi from 'joi';
 
-const start = Joi.number().label('Start');
+const start = Joi.number().optional().empty('').label('Start');
 
 export { start };
