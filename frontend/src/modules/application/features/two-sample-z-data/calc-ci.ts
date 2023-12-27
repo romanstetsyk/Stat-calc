@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-array-callback-reference */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { GridCellKind } from '@glideapps/glide-data-grid';
 import roundn from '@stdlib/math-base-special-roundn';
@@ -6,21 +5,17 @@ import quantile from '@stdlib/stats-base-dists-normal-quantile';
 import mean from '@stdlib/stats-base-mean';
 import stdev from '@stdlib/stats-base-stdev';
 
-import type { ArrayLike } from '~/framework/array-like';
 import { Config } from '~/modules/application/config';
 import { Perform } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
-import { isFiniteNumberString } from '~/utils/assertions';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
 import type { CIColumns, CIReturn, SampleStatistics, TForm } from './types';
 
 const { ROUND_DECIMAL } = Config;
 
-const calcCI = (
-  formSummary: TForm,
-  colData: ArrayLike<ArrayLike<string>>,
-): CIReturn => {
+const calcCI = (formSummary: TForm, colData: GridData['colData']): CIReturn => {
   const { sample1, knownStdev1 } = formSummary.sample1Data;
   const { sample2, knownStdev2 } = formSummary.sample2Data;
   const { confidenceLevel } = formSummary.confidenceInterval;
@@ -29,14 +24,18 @@ const calcCI = (
 
   const var1Name = getVarName(colData, Number(sample1), withLabel);
   const var1Values = getVarValues(colData, Number(sample1), withLabel);
-  const arrOfNums1 = var1Values.filter(isFiniteNumberString).map(Number);
+  const arrOfNums1 = var1Values.filter(
+    (e): e is number => typeof e === 'number',
+  );
   const n1 = arrOfNums1.length;
   const xbar1 = mean(n1, arrOfNums1, 1);
   const stdevApprox1 = knownStdev1 ?? stdev(n1, 1, arrOfNums1, 1);
 
   const var2Name = getVarName(colData, Number(sample2), withLabel);
   const var2Values = getVarValues(colData, Number(sample2), withLabel);
-  const arrOfNums2 = var2Values.filter(isFiniteNumberString).map(Number);
+  const arrOfNums2 = var2Values.filter(
+    (e): e is number => typeof e === 'number',
+  );
   const n2 = arrOfNums2.length;
   const xbar2 = mean(n2, arrOfNums2, 1);
   const stdevApprox2 = knownStdev2 ?? stdev(n2, 1, arrOfNums2, 1);

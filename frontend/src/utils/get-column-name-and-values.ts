@@ -1,36 +1,23 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import type { ArrayLike } from '~/framework/array-like';
+import type { GridData } from '~/modules/data-grid/types';
 import { createColumnName } from '~/modules/data-grid/utils';
 
-function firstKey(obj: ArrayLike<string>): string {
-  let n = 0;
-  while (!(n in obj)) {
-    n += 1;
-  }
-  return obj[n];
-}
-
 const getVarName = (
-  colData: ArrayLike<ArrayLike<string>>,
+  colData: GridData['colData'],
   colHeader: number,
   withLabel: boolean,
 ): string => {
   return withLabel
-    ? `${firstKey(colData[colHeader])} (${createColumnName(colHeader)})`
+    ? `${colData[colHeader].first()?.value} (${createColumnName(colHeader)})`
     : createColumnName(colHeader);
 };
 
 const getVarValues = (
-  colData: ArrayLike<ArrayLike<string>>,
-  colHeader: number,
-  withLabel: boolean,
-): string[] => {
-  const arr = [];
-  for (const key in colData[colHeader]) {
-    arr.push(colData[colHeader][key]);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  return withLabel ? arr.slice(1) : arr;
+  colData: GridData['colData'],
+  column: number,
+  excludefirst: boolean,
+): (string | number)[] => {
+  return Object.values(colData[column]).slice(Number(excludefirst));
 };
 
 export { getVarName, getVarValues };

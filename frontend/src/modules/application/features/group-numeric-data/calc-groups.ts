@@ -1,9 +1,8 @@
 import { GridCellKind } from '@glideapps/glide-data-grid';
 
-import type { ArrayLike } from '~/framework/array-like';
 import { BinMethod } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
-import { isFiniteNumberString } from '~/utils/assertions';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import type { TabulateParams } from '~/utils/tabulate';
 import { Tabulate } from '~/utils/tabulate';
@@ -12,7 +11,7 @@ import type { FrequencyDistribution, OutputReturn, TForm } from './types';
 import { TopLeftCell } from './types';
 
 const calcGroups = (
-  colData: ArrayLike<ArrayLike<string>>,
+  colData: GridData['colData'],
   formSummary: TForm,
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 ): OutputReturn[] => {
@@ -22,8 +21,9 @@ const calcGroups = (
   return columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);
-    // eslint-disable-next-line unicorn/no-array-callback-reference
-    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
+    const arrOfNums = varValues.filter(
+      (e): e is number => typeof e === 'number',
+    );
     const n = arrOfNums.length;
 
     let tabulateParams: TabulateParams;

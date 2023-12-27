@@ -8,6 +8,21 @@ import { read, utils } from 'xlsx';
 
 import { ArrayLike } from '~/framework/array-like';
 import { useGridData } from '~/modules/data-grid/store';
+import type { GridData } from '~/modules/data-grid/types';
+
+function classifyInput(value: unknown): string | number {
+  switch (typeof value) {
+    case 'number': {
+      return value;
+    }
+    case 'string': {
+      return value;
+    }
+    default: {
+      return String(value);
+    }
+  }
+}
 
 type FileRow = Record<number, unknown> & { __rowNum__: number };
 
@@ -15,8 +30,8 @@ const parse_wb = (
   wb: WorkBook,
 ): {
   datasetId: string;
-  newRows: ArrayLike<ArrayLike<string>>;
-  newCols: ArrayLike<ArrayLike<string>>;
+  newRows: GridData['rowData'];
+  newCols: GridData['colData'];
 } => {
   const sheet = wb.Sheets[wb.SheetNames[0]];
   const range = utils.decode_range(sheet['!ref'] ?? 'A1');
@@ -29,20 +44,19 @@ const parse_wb = (
     // blankrows: true,
   });
 
-  const newRows = new ArrayLike<ArrayLike<string>>();
-  const newCols = new ArrayLike<ArrayLike<string>>();
+  const newRows = new ArrayLike<ArrayLike<string | number>>();
+  const newCols = new ArrayLike<ArrayLike<string | number>>();
 
   for (const row of data) {
     const { __rowNum__, ...rest } = row;
-    const newRow = new ArrayLike<string>();
+    const newRow = new ArrayLike<string | number>();
     for (const col in rest) {
-      newRow.add(Number(col), String(rest[col]));
+      newRow.add(Number(col), classifyInput(rest[col]));
 
       if (!(col in newCols)) {
-        const newCol = new ArrayLike<string>();
-        newCols.add(Number(col), newCol);
+        newCols.add(Number(col), new ArrayLike<string | number>());
       }
-      newCols[col].add(__rowNum__, String(rest[col]));
+      newCols[col].add(__rowNum__, classifyInput(rest[col]));
     }
 
     newRows.add(__rowNum__, newRow);

@@ -6,11 +6,10 @@ import quantile from '@stdlib/stats-base-dists-normal-quantile';
 import mean from '@stdlib/stats-base-mean';
 import stdev from '@stdlib/stats-base-stdev';
 
-import type { ArrayLike } from '~/framework/array-like';
 import { Config } from '~/modules/application/config';
 import { HypothesisType, Perform } from '~/modules/application/enums';
 import type { DataTableRow } from '~/modules/application/types';
-import { isFiniteNumberString } from '~/utils/assertions';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
 import type {
@@ -23,10 +22,7 @@ import type {
 
 const { ROUND_DECIMAL } = Config;
 
-const calcHT = (
-  formSummary: TForm,
-  colData: ArrayLike<ArrayLike<string>>,
-): HTReturn => {
+const calcHT = (formSummary: TForm, colData: GridData['colData']): HTReturn => {
   const { columns, withLabel, knownStdev } = formSummary.sampleData;
   const {
     nullValue,
@@ -41,8 +37,9 @@ const calcHT = (
     (colHeader) => {
       const varName = getVarName(colData, Number(colHeader), withLabel);
       const varValues = getVarValues(colData, Number(colHeader), withLabel);
-      // eslint-disable-next-line unicorn/no-array-callback-reference
-      const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
+      const arrOfNums = varValues.filter(
+        (e): e is number => typeof e === 'number',
+      );
       const n = arrOfNums.length;
       const xbar = mean(n, arrOfNums, 1);
       const stdevApprox = knownStdev ?? stdev(n, 1, arrOfNums, 1);

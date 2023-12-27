@@ -7,10 +7,9 @@ import range from '@stdlib/stats-base-range';
 import stdev from '@stdlib/stats-base-stdev';
 import variance from '@stdlib/stats-base-variance';
 
-import type { ArrayLike } from '~/framework/array-like';
 import { Config } from '~/modules/application/config';
 import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
-import { isFiniteNumberString } from '~/utils/assertions';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
 import type { SampleStatistics } from './types';
@@ -19,15 +18,16 @@ const { ROUND_DECIMAL } = Config;
 
 const calcStatistics = (
   columns: ColumnHeading[],
-  colData: ArrayLike<ArrayLike<string>>,
+  colData: GridData['colData'],
   withLabel: boolean,
   options: SampleStatistics[],
 ): DataTableRow<SampleStatistics, ''>[] =>
   columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);
-    // eslint-disable-next-line unicorn/no-array-callback-reference
-    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
+    const arrOfNums = varValues.filter(
+      (e): e is number => typeof e === 'number',
+    );
     const n = arrOfNums.length;
     const row: DataTableRow<SampleStatistics, ''> = {
       '': {

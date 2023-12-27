@@ -4,9 +4,9 @@ import gcusum from '@stdlib/blas-ext-base-gcusum';
 import roundn from '@stdlib/math-base-special-roundn';
 import tabulate from '@stdlib/utils-tabulate';
 
-import type { ArrayLike } from '~/framework/array-like';
 import { Config } from '~/modules/application/config';
 import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
 import type { FrequencyDistribution, OutputReturn } from './types';
@@ -16,7 +16,7 @@ const { ROUND_DECIMAL } = Config;
 
 const calcFrequency = (
   columns: ColumnHeading[],
-  colData: ArrayLike<ArrayLike<string>>,
+  colData: GridData['colData'],
   withLabel: boolean,
   options: FrequencyDistribution[],
 ): OutputReturn[] => {
@@ -30,9 +30,9 @@ const calcFrequency = (
       ([x, fr, relFr]) => {
         const row: DataTableRow<FrequencyDistribution, TopLeftCell> = {
           Value: {
-            data: x,
+            data: x.toString(),
             kind: GridCellKind.Text,
-            displayData: x,
+            displayData: x.toString(),
           },
           Frequency: {
             data: fr,

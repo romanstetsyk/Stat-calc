@@ -15,14 +15,14 @@ type OnCellsEditedParams = readonly {
 
 type OverwriteRowsParameters = {
   datasetId: string;
-  newRows: ArrayLike<ArrayLike<string>>;
-  newCols: ArrayLike<ArrayLike<string>>;
+  newRows: ArrayLike<ArrayLike<string | number>>;
+  newCols: ArrayLike<ArrayLike<string | number>>;
 };
 
 type GridData = {
   datasetId: string;
-  rowData: ArrayLike<ArrayLike<string>>;
-  colData: ArrayLike<ArrayLike<string>>;
+  rowData: ArrayLike<ArrayLike<string | number>>;
+  colData: ArrayLike<ArrayLike<string | number>>;
   onCellsEdited: (newValues: OnCellsEditedParams) => boolean;
   overwriteRows: (arg: OverwriteRowsParameters) => void;
   getContent: (cell: Item) => GridCell;

@@ -1,6 +1,5 @@
-import type { ArrayLike } from '~/framework/array-like';
 import { BinMethod } from '~/modules/application/enums';
-import { isFiniteNumberString } from '~/utils/assertions';
+import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 import type { TabulateParams } from '~/utils/tabulate';
 import { Tabulate } from '~/utils/tabulate';
@@ -8,7 +7,7 @@ import { Tabulate } from '~/utils/tabulate';
 import type { OutputReturn, TForm } from './types';
 
 const calcHistogram = (
-  colData: ArrayLike<ArrayLike<string>>,
+  colData: GridData['colData'],
   formSummary: TForm,
 ): OutputReturn[] => {
   const { withLabel, columns, options, method, manual, squareRoot } =
@@ -17,9 +16,9 @@ const calcHistogram = (
   return columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);
-    // eslint-disable-next-line unicorn/no-array-callback-reference
-    const arrOfNums = varValues.filter(isFiniteNumberString).map(Number);
-
+    const arrOfNums = varValues.filter(
+      (e): e is number => typeof e === 'number',
+    );
     let tabulateParams: TabulateParams;
     if (method === BinMethod.MANUAL) {
       const { start, width } = manual;

@@ -18,8 +18,8 @@ class Dataset extends ExternalStore<GridData> {
 
     this.snapshot = {
       datasetId,
-      rowData: new ArrayLike<ArrayLike<string>>(),
-      colData: new ArrayLike<ArrayLike<string>>(),
+      rowData: new ArrayLike<ArrayLike<string | number>>(),
+      colData: new ArrayLike<ArrayLike<string | number>>(),
       getContent: this.getContent.bind(this),
       onCellsEdited: this.onCellsEdited.bind(this),
       overwriteRows: this.overwriteRows.bind(this),
@@ -29,13 +29,17 @@ class Dataset extends ExternalStore<GridData> {
   public getContent(cell: Item): GridCell {
     const [colIdx, rowIdx] = cell;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const d = this.snapshot.rowData?.[rowIdx]?.[colIdx] || '';
+    const d = this.snapshot.rowData?.[rowIdx]?.[colIdx] ?? '';
     return {
       kind: GridCellKind.Text,
       allowOverlay: true,
       readonly: false,
       displayData: String(d),
       data: String(d),
+      contentAlign:
+        typeof d === 'number' || Number.parseFloat(d) === Number(d)
+          ? 'right'
+          : 'left',
     };
   }
 
@@ -85,14 +89,24 @@ class Dataset extends ExternalStore<GridData> {
 
       if (newValue.data !== '') {
         if (!(rowIdx in this.snapshot.rowData)) {
-          this.snapshot.rowData.add(rowIdx, new ArrayLike<string>());
+          this.snapshot.rowData.add(rowIdx, new ArrayLike<string | number>());
         }
-        this.snapshot.rowData[rowIdx].add(colIdx, newValue.data);
+        this.snapshot.rowData[rowIdx].add(
+          colIdx,
+          Number.parseFloat(newValue.data) === Number(newValue.data)
+            ? Number(newValue.data)
+            : newValue.data,
+        );
 
         if (!(colIdx in this.snapshot.colData)) {
-          this.snapshot.colData.add(colIdx, new ArrayLike<string>());
+          this.snapshot.colData.add(colIdx, new ArrayLike<string | number>());
         }
-        this.snapshot.colData[colIdx].add(rowIdx, newValue.data);
+        this.snapshot.colData[colIdx].add(
+          rowIdx,
+          Number.parseFloat(newValue.data) === Number(newValue.data)
+            ? Number(newValue.data)
+            : newValue.data,
+        );
       }
     }
 
