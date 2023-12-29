@@ -4,21 +4,21 @@ import roundn from '@stdlib/math-base-special-roundn';
 import tabulate from '@stdlib/utils-tabulate';
 
 import { Config } from '~/modules/application/config';
-import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
+import type { DataTableRow } from '~/modules/application/types';
 import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
-import type { FrequencyDistribution, OutputReturn } from './types';
+import type { FrequencyDistribution, OutputReturn, TForm } from './types';
 import { TopLeftCell } from './types';
 
 const { ROUND_DECIMAL } = Config;
 
 const calcFrequency = (
-  columns: ColumnHeading[],
+  formSummary: TForm,
   colData: GridData['colData'],
-  withLabel: boolean,
-  options: FrequencyDistribution[],
 ): OutputReturn[] => {
+  const { withLabel, columns, options } = formSummary;
+
   return columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);

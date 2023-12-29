@@ -7,20 +7,20 @@ import stdev from '@stdlib/stats-base-stdev';
 import variance from '@stdlib/stats-base-variance';
 
 import { Config } from '~/modules/application/config';
-import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
+import type { DataTableRow } from '~/modules/application/types';
 import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
-import type { OutputReturn, SampleStatistics } from './types';
+import type { OutputReturn, SampleStatistics, TForm } from './types';
 
 const { ROUND_DECIMAL } = Config;
 
 const calcStatistics = (
-  columns: ColumnHeading[],
+  formSummary: TForm,
   colData: GridData['colData'],
-  withLabel: boolean,
-  options: SampleStatistics[],
 ): OutputReturn => {
+  const { withLabel, columns, options } = formSummary;
+
   const data = columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);

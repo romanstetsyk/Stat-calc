@@ -28,11 +28,10 @@ const Output = ({
   const outputId = useMemo(() => id ?? nanoid(), [id]);
 
   const { colData } = useGridData();
-  const { columns, options, withLabel } = formSummary;
 
   const arrOfTables = useMemo(
-    () => calcFrequency(columns, colData, withLabel, options),
-    [colData, columns, options, withLabel],
+    () => calcFrequency(formSummary, colData),
+    [colData, formSummary],
   );
 
   useEffect(() => {

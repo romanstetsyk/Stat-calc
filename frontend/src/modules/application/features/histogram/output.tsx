@@ -27,7 +27,7 @@ const Output = ({
 
   const { colData } = useGridData();
   const arrOfTables = useMemo(
-    () => calcHistogram(colData, formSummary),
+    () => calcHistogram(formSummary, colData),
     [colData, formSummary],
   );
 

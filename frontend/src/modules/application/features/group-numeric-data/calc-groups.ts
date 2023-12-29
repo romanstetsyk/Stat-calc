@@ -11,9 +11,8 @@ import type { FrequencyDistribution, OutputReturn, TForm } from './types';
 import { TopLeftCell } from './types';
 
 const calcGroups = (
-  colData: GridData['colData'],
   formSummary: TForm,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  colData: GridData['colData'],
 ): OutputReturn[] => {
   const { withLabel, columns, options, method, manual, squareRoot } =
     formSummary;

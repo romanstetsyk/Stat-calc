@@ -28,11 +28,10 @@ const Output = ({
   const outputId = useMemo(() => id ?? nanoid(), [id]);
 
   const { colData } = useGridData();
-  const { columns, options, withLabel } = formSummary;
 
   const outputData = useMemo(
-    () => calcStatistics(columns, colData, withLabel, options),
-    [colData, columns, options, withLabel],
+    () => calcStatistics(formSummary, colData),
+    [colData, formSummary],
   );
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const Output = ({
       data: outputData,
       formSummary,
     });
-  }, [outputData, formSummary, options, outputId, setOutput]);
+  }, [formSummary, outputData, outputId, setOutput]);
 
   return (
     <>

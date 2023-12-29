@@ -61,12 +61,12 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
             return;
           }
 
-          const { options, withLabel } = item.formSummary;
+          const formSummary = { ...item.formSummary, columns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
-            data: calcFrequency(columns, colData, withLabel, options),
-            formSummary: { ...item.formSummary, columns },
+            data: calcFrequency(formSummary, colData),
+            formSummary,
           });
           break;
         }
@@ -98,7 +98,7 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
-            data: calcGroups(colData, formSummary),
+            data: calcGroups(formSummary, colData),
             formSummary,
           });
           break;
@@ -131,7 +131,7 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
-            data: calcHistogram(colData, formSummary),
+            data: calcHistogram(formSummary, colData),
             formSummary,
           });
           break;
@@ -160,12 +160,12 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
             return;
           }
 
-          const { options, withLabel } = item.formSummary;
+          const formSummary = { ...item.formSummary, columns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
-            data: calcStatistics(columns, colData, withLabel, options),
-            formSummary: { ...item.formSummary, columns },
+            data: calcStatistics(formSummary, colData),
+            formSummary,
           });
           break;
         }

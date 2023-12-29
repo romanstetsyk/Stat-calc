@@ -29,7 +29,7 @@ const Output = ({
 
   const { colData } = useGridData();
   const arrOfTables = useMemo(
-    () => calcGroups(colData, formSummary),
+    () => calcGroups(formSummary, colData),
     [colData, formSummary],
   );
 

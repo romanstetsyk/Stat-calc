@@ -7,8 +7,8 @@ import { Tabulate } from '~/utils/tabulate';
 import type { OutputReturn, TForm } from './types';
 
 const calcHistogram = (
-  colData: GridData['colData'],
   formSummary: TForm,
+  colData: GridData['colData'],
 ): OutputReturn[] => {
   const { withLabel, columns, options, method, manual, squareRoot } =
     formSummary;
