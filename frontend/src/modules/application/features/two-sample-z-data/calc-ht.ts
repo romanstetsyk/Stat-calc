@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-array-callback-reference */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { GridCellKind } from '@glideapps/glide-data-grid';
 import roundn from '@stdlib/math-base-special-roundn';

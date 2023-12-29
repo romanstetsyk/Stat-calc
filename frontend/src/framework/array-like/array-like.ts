@@ -32,7 +32,6 @@ class ArrayLike<T> implements globalThis.ArrayLike<T> {
   }
 
   public isEmpty(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     return this.length === 0;
   }
 

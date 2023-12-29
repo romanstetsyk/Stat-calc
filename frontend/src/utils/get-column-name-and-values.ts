@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { GridData } from '~/modules/data-grid/types';
 import { createColumnName } from '~/modules/data-grid/utils';
 

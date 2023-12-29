@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { FlexProps } from '@chakra-ui/react';
 import {
   CheckboxGroup,

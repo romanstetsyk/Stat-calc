@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Box } from '@chakra-ui/react';
 import type { TooltipItem } from 'chart.js';
 import {
@@ -59,7 +58,8 @@ const Histogram = <T,>({
           stepSize: classWidth, // class width
           callback: (tickValue: string | number): number | string =>
             typeof tickValue === 'number'
-              ? Number(tickValue.toFixed(6))
+              ? // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+                Number(tickValue.toFixed(6))
               : tickValue,
         },
         suggestedMin: domain[0],

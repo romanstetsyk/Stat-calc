@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Button, Center, Spinner, useToast } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';

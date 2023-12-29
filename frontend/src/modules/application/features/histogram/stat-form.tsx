@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Box, Checkbox, Radio, Text, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useMemo } from 'react';

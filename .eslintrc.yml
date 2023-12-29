@@ -125,7 +125,10 @@ rules:
     - off
   '@typescript-eslint/no-magic-numbers':
     - error
-    - ignoreEnums: true
+    - ignore:
+        - 0
+        - 1
+      ignoreEnums: true
       ignoreNumericLiteralTypes: true
       ignoreReadonlyClassProperties: true
       ignoreTypeIndexes: true

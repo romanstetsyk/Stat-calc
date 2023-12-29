@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { GridCellKind } from '@glideapps/glide-data-grid';
 import roundn from '@stdlib/math-base-special-roundn';
 import mean from '@stdlib/stats-base-mean';
@@ -109,7 +108,7 @@ const calcStatistics = (
 
     // Standard error (uses sample stdev)
     if (options.includes('Std.Err')) {
-      const stderr = stdev(n, 1, arrOfNums, 1) / n ** 0.5;
+      const stderr = stdev(n, 1, arrOfNums, 1) / Math.sqrt(n);
       row['Std.Err'] = {
         data: stderr,
         kind: GridCellKind.Number,

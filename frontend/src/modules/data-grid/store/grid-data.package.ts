@@ -75,11 +75,10 @@ class Dataset extends ExternalStore<GridData> {
           this.snapshot.colData[colIdx].delete(rowIdx);
 
           // if after deletion row is empty, delete it
-          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           if (this.snapshot.rowData[rowIdx].length === 0) {
             this.snapshot.rowData.delete(rowIdx);
           }
-          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+
           if (this.snapshot.colData[colIdx].length === 0) {
             this.snapshot.colData.delete(colIdx);
           }

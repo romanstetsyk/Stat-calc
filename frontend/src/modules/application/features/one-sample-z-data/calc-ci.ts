@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { GridCellKind } from '@glideapps/glide-data-grid';
 import roundn from '@stdlib/math-base-special-roundn';
 import quantile from '@stdlib/stats-base-dists-normal-quantile';
@@ -30,6 +29,7 @@ const calcCI = (formSummary: TForm, colData: GridData['colData']): CIReturn => {
       const xbar = mean(n, arrOfNums, 1);
       const stdevApprox = knownStdev ?? stdev(n, 1, arrOfNums, 1);
       const stderr = stdevApprox / Math.sqrt(n);
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const zcrit = -1 * quantile((1 - confidenceLevel) / 2, 0, 1);
       const me = zcrit * stderr;
       const [ll, ul] = [xbar - me, xbar + me];

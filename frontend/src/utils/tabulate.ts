@@ -16,9 +16,7 @@ const computeBins = (
 
   let i = 0;
   while (start + i * width <= max) {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     bins.push([start + i * width, start + (i + 1) * width]);
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     i += 1;
   }
   return { values: bins, l: start, u: start + i * width };

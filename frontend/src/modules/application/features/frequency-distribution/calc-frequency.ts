@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { GridCellKind } from '@glideapps/glide-data-grid';
 import gcusum from '@stdlib/blas-ext-base-gcusum';
 import roundn from '@stdlib/math-base-special-roundn';
@@ -63,6 +62,7 @@ const calcFrequency = (
     }
 
     if (options.includes('Cumulative Relative Frequency')) {
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const relFreqArr = out.map((e) => e[2]);
       const cumulRelFreq = Array.from<number>({ length: relFreqArr.length });
       gcusum(table.length, 0, relFreqArr, 1, cumulRelFreq, 1);

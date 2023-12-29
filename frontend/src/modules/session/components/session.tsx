@@ -24,7 +24,6 @@ const Session = (): JSX.Element => {
   const gridRef = useRef<DraggableGridHandle | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (session.length === 0) {
     return <Text m={5}>No data</Text>;
   }

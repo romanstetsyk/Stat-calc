@@ -60,7 +60,6 @@ const DataTable = <T extends string, Title extends string = ' '>({
     [data, stats],
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (stats.length === 0) {
     return null;
   }
