@@ -1,3 +1,4 @@
+export { AlertModal } from './alert-modal';
 export { CheckboxControlled } from './checkbox-controlled';
 export { CheckboxGroupControlled } from './checkbox-group-controlled';
 export { FieldStack } from './field-stack';
