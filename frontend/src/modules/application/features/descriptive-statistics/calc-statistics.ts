@@ -12,7 +12,7 @@ import type { ColumnHeading, DataTableRow } from '~/modules/application/types';
 import type { GridData } from '~/modules/data-grid/types';
 import { getVarName, getVarValues } from '~/utils/get-column-name-and-values';
 
-import type { SampleStatistics } from './types';
+import type { OutputReturn, SampleStatistics } from './types';
 
 const { ROUND_DECIMAL } = Config;
 
@@ -21,8 +21,8 @@ const calcStatistics = (
   colData: GridData['colData'],
   withLabel: boolean,
   options: SampleStatistics[],
-): DataTableRow<SampleStatistics, ''>[] =>
-  columns.map((colHeader) => {
+): OutputReturn => {
+  const data = columns.map((colHeader) => {
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);
     const arrOfNums = varValues.filter(
@@ -129,5 +129,9 @@ const calcStatistics = (
 
     return row;
   });
+
+  const stats = ['', ...options] satisfies ['', ...SampleStatistics[]];
+  return { data, stats };
+};
 
 export { calcStatistics };

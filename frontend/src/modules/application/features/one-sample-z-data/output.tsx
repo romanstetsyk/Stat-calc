@@ -3,12 +3,10 @@ import { nanoid } from 'nanoid';
 import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
-import { Perform } from '~/modules/application/enums';
 import type { DisplayStep } from '~/modules/application/types';
 import { useGridData } from '~/modules/data-grid/store';
 
-import { calcCI } from './calc-ci';
-import { calcHT } from './calc-ht';
+import { calcZ1Data } from './calc-z1-data';
 import { OutputContent } from './output-content';
 import type { CIReturn, HTReturn, TForm, Z1DataSession } from './types';
 
@@ -28,25 +26,11 @@ const Output = ({
   const outputId = useMemo(() => id ?? nanoid(), [id]);
 
   const { colData } = useGridData();
-  const { perform } = formSummary;
 
-  const outputData: CIReturn | HTReturn = useMemo(() => {
-    let result;
-    switch (perform) {
-      case Perform.HypothesisTest: {
-        result = calcHT(formSummary, colData);
-        break;
-      }
-      case Perform.ConfidenceInerval: {
-        result = calcCI(formSummary, colData);
-        break;
-      }
-      default: {
-        throw new Error('Unknown z-test type');
-      }
-    }
-    return result;
-  }, [colData, formSummary, perform]);
+  const outputData: CIReturn | HTReturn = useMemo(
+    () => calcZ1Data(formSummary, colData),
+    [colData, formSummary],
+  );
 
   useEffect(() => {
     setOutput({

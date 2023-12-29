@@ -3,11 +3,9 @@ import { nanoid } from 'nanoid';
 import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
-import { Perform } from '~/modules/application/enums';
 import type { DisplayStep } from '~/modules/application/types';
 
-import { calcCI } from './calc-ci';
-import { calcHT } from './calc-ht';
+import { calcZ2Summary } from './calc-z2-summary';
 import { OutputContent } from './output-content';
 import type { CIReturn, HTReturn, TForm, Z2SummarySession } from './types';
 
@@ -26,25 +24,10 @@ const Output = ({
 }: Props): JSX.Element => {
   const outputId = useMemo(() => id ?? nanoid(), [id]);
 
-  const { perform } = formSummary;
-
-  const outputData: CIReturn | HTReturn = useMemo(() => {
-    let result;
-    switch (perform) {
-      case Perform.HypothesisTest: {
-        result = calcHT(formSummary);
-        break;
-      }
-      case Perform.ConfidenceInerval: {
-        result = calcCI(formSummary);
-        break;
-      }
-      default: {
-        throw new Error('Unknown z-test type');
-      }
-    }
-    return result;
-  }, [formSummary, perform]);
+  const outputData: CIReturn | HTReturn = useMemo(
+    () => calcZ2Summary(formSummary),
+    [formSummary],
+  );
 
   useEffect(() => {
     setOutput({

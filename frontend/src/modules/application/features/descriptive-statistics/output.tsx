@@ -8,11 +8,7 @@ import { useGridData } from '~/modules/data-grid/store';
 
 import { calcStatistics } from './calc-statistics';
 import { OutputContent } from './output-content';
-import type {
-  DescriptiveStatisticsSession,
-  SampleStatistics,
-  TForm,
-} from './types';
+import type { DescriptiveStatisticsSession, TForm } from './types';
 
 type Props = {
   id?: string;
@@ -35,10 +31,7 @@ const Output = ({
   const { columns, options, withLabel } = formSummary;
 
   const outputData = useMemo(
-    () => ({
-      data: calcStatistics(columns, colData, withLabel, options),
-      stats: ['', ...options] satisfies ['', ...SampleStatistics[]],
-    }),
+    () => calcStatistics(columns, colData, withLabel, options),
     [colData, columns, options, withLabel],
   );
 
