@@ -4,6 +4,7 @@ import debounce from 'lodash-es/debounce';
 import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 
+import { RefreshBtn } from './refresh-btn';
 import { RemoveBtn } from './remove-btn';
 import { UpdateBtn } from './update-btn';
 
@@ -55,6 +56,7 @@ const SessionItemWrapper = ({
           </Text> */}
         </CardHeader>
 
+        <RefreshBtn id={id} />
         <UpdateBtn id={id} />
         <RemoveBtn id={id} />
       </Flex>
