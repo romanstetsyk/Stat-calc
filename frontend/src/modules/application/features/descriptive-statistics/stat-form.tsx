@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Checkbox, Text } from '@chakra-ui/react';
+import { Checkbox, Text, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
+  AlertModal,
   CheckboxControlled,
   CheckboxGroupControlled,
   FieldStack,
@@ -11,6 +13,7 @@ import {
   Legend,
 } from '~/common/components';
 import { useForm } from '~/common/hooks';
+import { ColumnsError } from '~/modules/application/enums';
 import { useGridData } from '~/modules/data-grid/store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
@@ -27,13 +30,28 @@ type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
   defaultValues: TForm;
+  alertCloseRef: React.MutableRefObject<null>;
 };
 
-const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
+const StatForm = ({
+  formId,
+  onSubmit,
+  defaultValues,
+  alertCloseRef,
+}: Props): JSX.Element => {
+  const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
   const { colData } = useGridData();
 
+  const colDataKeys = useMemo(() => Object.keys(colData), [colData]);
+  const columns = useMemo(
+    () => defaultValues.columns.filter((c) => colDataKeys.includes(c)),
+    [colDataKeys, defaultValues.columns],
+  );
+
+  const shouldAlert = columns.length !== defaultValues.columns.length;
+
   const { handleSubmit, control, watch } = useForm<TForm>({
-    defaultValues,
+    defaultValues: { ...defaultValues, columns },
     resolver,
   });
 
@@ -50,7 +68,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             name='columns'
             control={control}
           >
-            {Object.keys(colData).map((colHeader) => {
+            {colDataKeys.map((colHeader) => {
               return (
                 <Checkbox key={colHeader} value={colHeader}>
                   {getVarName(colData, Number(colHeader), watch('withLabel'))}
@@ -79,6 +97,18 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           );
         })}
       </CheckboxGroupControlled>
+
+      {shouldAlert && (
+        <AlertModal
+          onClose={onClose}
+          isOpen={isOpen}
+          title='Warning'
+          description={
+            columns.length === 0 ? ColumnsError.All : ColumnsError.OneOrMore
+          }
+          finalFocusRef={alertCloseRef}
+        />
+      )}
     </Form>
   );
 };

@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Box, Checkbox, Radio, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Radio, Text, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
+  AlertModal,
   CheckboxControlled,
   CheckboxGroupControlled,
   FieldStack,
@@ -34,13 +35,33 @@ type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
   defaultValues: TForm;
+  alertCloseRef: React.MutableRefObject<null>;
 };
 
-const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
+const StatForm = ({
+  formId,
+  onSubmit,
+  defaultValues,
+  alertCloseRef,
+}: Props): JSX.Element => {
+  const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
   const { colData } = useGridData();
 
+  const colDataKeys = useMemo(() => Object.keys(colData), [colData]);
+  const columns = useMemo(
+    () =>
+      defaultValues.sampleData.columns.filter((c) => colDataKeys.includes(c)),
+    [colDataKeys, defaultValues.sampleData.columns],
+  );
+
+  const shouldAlert =
+    columns.length !== defaultValues.sampleData.columns.length;
+
   const { handleSubmit, control, setValue, watch } = useForm<TForm>({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      sampleData: { ...defaultValues.sampleData, columns },
+    },
     resolver,
   });
 
@@ -57,7 +78,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             name='sampleData.columns'
             control={control}
           >
-            {Object.keys(colData).map((colHeader) => {
+            {colDataKeys.map((colHeader) => {
               return (
                 <Checkbox key={colHeader} value={colHeader}>
                   {getVarName(
@@ -141,6 +162,18 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             Confidence Interval
           </CheckboxControlled>
         </FieldStack>
+      )}
+
+      {shouldAlert && (
+        <AlertModal
+          onClose={onClose}
+          isOpen={isOpen}
+          title='Warning'
+          description={`${
+            columns.length === 0 ? 'All' : 'One or more'
+          } columns included in the table have been deleted from the spreadsheet`}
+          finalFocusRef={alertCloseRef}
+        />
       )}
     </Form>
   );

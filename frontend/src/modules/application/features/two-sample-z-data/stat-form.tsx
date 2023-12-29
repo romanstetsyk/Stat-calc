@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Box, Flex, Radio } from '@chakra-ui/react';
+import { Box, Flex, Radio, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
+  AlertModal,
   CheckboxControlled,
   FieldStack,
   Form,
@@ -22,6 +23,7 @@ import { Perform } from '~/modules/application/enums';
 import { useGridData } from '~/modules/data-grid/store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
+import type { ColumnHeading } from '../../types';
 import type { TForm } from './types';
 import { schema } from './validation-schema/schema';
 
@@ -33,14 +35,49 @@ const resolver = joiResolver(schema, {
 type Props = {
   formId: string;
   onSubmit: SubmitHandler<TForm>;
-  defaultValues: Omit<TForm, 'sample1Data' | 'sample2Data'>;
+  defaultValues: Omit<TForm, 'sample1Data' | 'sample2Data'> &
+    Partial<Pick<TForm, 'sample1Data' | 'sample2Data'>>;
+  alertCloseRef: React.MutableRefObject<null>;
 };
 
-const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
+const StatForm = ({
+  formId,
+  onSubmit,
+  defaultValues,
+  alertCloseRef,
+}: Props): JSX.Element => {
+  const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
   const { colData } = useGridData();
 
+  const colDataKeys = useMemo(
+    () => Object.keys(colData) as ColumnHeading[],
+    [colData],
+  );
+
+  const columns = useMemo(
+    () => [
+      colDataKeys.find((e) => e === defaultValues.sample1Data?.sample1),
+      colDataKeys.find((e) => e === defaultValues.sample2Data?.sample2),
+    ],
+    [
+      colDataKeys,
+      defaultValues.sample1Data?.sample1,
+      defaultValues.sample2Data?.sample2,
+    ],
+  );
+
+  // When modal is first opened, defaultValues.sample1Data is undefined
+  // Alert shouldn't open in this case
+  const shouldAlert =
+    (!!defaultValues.sample1Data && !columns[0]) ||
+    (!!defaultValues.sample2Data && !columns[1]);
+
   const { handleSubmit, control, setValue, watch } = useForm<TForm>({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      sample1Data: { ...defaultValues.sample1Data, sample1: columns[0] },
+      sample2Data: { ...defaultValues.sample2Data, sample2: columns[1] },
+    },
     resolver,
   });
 
@@ -64,7 +101,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             placeholder='Select column'
             control={control}
           >
-            {Object.keys(colData).map((colHeader) => (
+            {colDataKeys.map((colHeader) => (
               <option key={colHeader} value={colHeader}>
                 {getVarName(colData, Number(colHeader), watch('withLabel'))}
               </option>
@@ -87,7 +124,7 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
             placeholder='Select column'
             control={control}
           >
-            {Object.keys(colData).map((colHeader) => (
+            {colDataKeys.map((colHeader) => (
               <option key={colHeader} value={colHeader}>
                 {getVarName(colData, Number(colHeader), watch('withLabel'))}
               </option>
@@ -167,6 +204,16 @@ const StatForm = ({ formId, onSubmit, defaultValues }: Props): JSX.Element => {
           </CheckboxControlled>
         )}
       </FieldStack>
+
+      {shouldAlert && (
+        <AlertModal
+          onClose={onClose}
+          isOpen={isOpen}
+          title='Warning'
+          description='One or more columns included in the table have been deleted from the spreadsheet'
+          finalFocusRef={alertCloseRef}
+        />
+      )}
     </Form>
   );
 };

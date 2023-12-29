@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import { HypothesisType, Perform } from '~/modules/application/enums';
@@ -17,7 +17,8 @@ import { Output } from './output';
 import { StatForm } from './stat-form';
 import type { TForm, Z2DataSession } from './types';
 
-const defaultValues: Omit<TForm, 'sample1Data' | 'sample2Data'> = {
+const defaultValues: Omit<TForm, 'sample1Data' | 'sample2Data'> &
+  Partial<Pick<TForm, 'sample1Data' | 'sample2Data'>> = {
   withLabel: false,
   perform: Perform.HypothesisTest,
   hypothesisTest: {
@@ -42,6 +43,8 @@ type Props = {
 };
 
 const Content = ({ onClose, id }: Props): JSX.Element => {
+  const alertCloseRef = useRef(null);
+
   const { session, addSessionItem, updateSessionItem } = useSessionData();
 
   const formId = useId();
@@ -81,6 +84,7 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
             formId={formId}
             onSubmit={onSubmit}
             defaultValues={formSummary ?? defaultValues}
+            alertCloseRef={alertCloseRef}
           />
         )}
         {display === 'result' && formSummary && (
@@ -94,7 +98,7 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
       </ModalBody>
 
       <ModalFooter>
-        <Button variant='ghost' mr={3} onClick={onClose}>
+        <Button variant='ghost' mr={3} onClick={onClose} ref={alertCloseRef}>
           Close
         </Button>
         {display === 'form' && (
