@@ -1,6 +1,5 @@
 import { Box, Checkbox, Radio, Text, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
@@ -41,18 +40,18 @@ const StatForm = ({
   alertCloseRef,
 }: Props): JSX.Element => {
   const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
-  const { colData } = useGridData();
+  const { colData, getColumnChanges } = useGridData();
 
-  const colDataKeys = useMemo(() => Object.keys(colData), [colData]);
-  const columns = useMemo(
-    () => defaultValues.columns.filter((c) => colDataKeys.includes(c)),
-    [colDataKeys, defaultValues.columns],
+  const { existingColumns, deletedColumns } = getColumnChanges(
+    defaultValues.columns,
   );
 
-  const shouldAlert = columns.length !== defaultValues.columns.length;
+  const showAlert = deletedColumns.length > 0;
+  const alertDescription =
+    existingColumns.length === 0 ? ColumnsError.All : ColumnsError.OneOrMore;
 
   const { handleSubmit, control, watch } = useForm<TForm>({
-    defaultValues: { ...defaultValues, columns },
+    defaultValues: { ...defaultValues, columns: existingColumns },
     resolver,
   });
 
@@ -69,7 +68,7 @@ const StatForm = ({
             name='columns'
             control={control}
           >
-            {colDataKeys.map((colHeader) => {
+            {Object.keys(colData).map((colHeader) => {
               return (
                 <Checkbox key={colHeader} value={colHeader}>
                   {getVarName(colData, Number(colHeader), watch('withLabel'))}
@@ -127,14 +126,12 @@ const StatForm = ({
         </RadioGroupControlled>
       </FieldStack>
 
-      {shouldAlert && (
+      {showAlert && (
         <AlertModal
           onClose={onClose}
           isOpen={isOpen}
           title='Warning'
-          description={
-            columns.length === 0 ? ColumnsError.All : ColumnsError.OneOrMore
-          }
+          description={alertDescription}
           finalFocusRef={alertCloseRef}
         />
       )}

@@ -22,7 +22,7 @@ type Props = {
 
 const RefreshBtn = ({ id }: Props): JSX.Element => {
   const { session, updateSessionItem } = useSessionData();
-  const { colData } = useGridData();
+  const { colData, getColumnChanges } = useGridData();
   const item = session.find((item) => item.id === id);
 
   const [alertContinue, setAlertContinue] = useState(false);
@@ -39,29 +39,25 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
     (withConfirmation: boolean) => () => {
       switch (item?.type) {
         case 'frequencyDistribution': {
-          const colDataKeys = Object.keys(colData);
-          const columns = item.formSummary.columns.filter((c) =>
-            colDataKeys.includes(c),
+          const { existingColumns, deletedColumns } = getColumnChanges(
+            item.formSummary.columns,
           );
 
-          if (columns.length === 0) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
             setAlertDescription(() => ColumnsError.All);
             onOpen();
             return;
           }
 
-          if (
-            columns.length !== item.formSummary.columns.length &&
-            withConfirmation
-          ) {
+          if (deletedColumns.length > 0 && withConfirmation) {
             setAlertContinue(() => true);
             setAlertDescription(() => ColumnsError.OneOrMore);
             onOpen();
             return;
           }
 
-          const formSummary = { ...item.formSummary, columns };
+          const formSummary = { ...item.formSummary, columns: existingColumns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
@@ -72,29 +68,25 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
 
         case 'groupNumericalData': {
-          const colDataKeys = Object.keys(colData);
-          const columns = item.formSummary.columns.filter((c) =>
-            colDataKeys.includes(c),
+          const { existingColumns, deletedColumns } = getColumnChanges(
+            item.formSummary.columns,
           );
 
-          if (columns.length === 0) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
             setAlertDescription(() => ColumnsError.All);
             onOpen();
             return;
           }
 
-          if (
-            columns.length !== item.formSummary.columns.length &&
-            withConfirmation
-          ) {
+          if (deletedColumns.length > 0 && withConfirmation) {
             setAlertContinue(() => true);
             setAlertDescription(() => ColumnsError.OneOrMore);
             onOpen();
             return;
           }
 
-          const formSummary = { ...item.formSummary, columns };
+          const formSummary = { ...item.formSummary, columns: existingColumns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
@@ -105,29 +97,25 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
 
         case 'histogram': {
-          const colDataKeys = Object.keys(colData);
-          const columns = item.formSummary.columns.filter((c) =>
-            colDataKeys.includes(c),
+          const { existingColumns, deletedColumns } = getColumnChanges(
+            item.formSummary.columns,
           );
 
-          if (columns.length === 0) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
             setAlertDescription(() => ColumnsError.All);
             onOpen();
             return;
           }
 
-          if (
-            columns.length !== item.formSummary.columns.length &&
-            withConfirmation
-          ) {
+          if (deletedColumns.length > 0 && withConfirmation) {
             setAlertContinue(() => true);
             setAlertDescription(() => ColumnsError.OneOrMore);
             onOpen();
             return;
           }
 
-          const formSummary = { ...item.formSummary, columns };
+          const formSummary = { ...item.formSummary, columns: existingColumns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
@@ -138,29 +126,25 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
 
         case 'descriptive': {
-          const colDataKeys = Object.keys(colData);
-          const columns = item.formSummary.columns.filter((c) =>
-            colDataKeys.includes(c),
+          const { existingColumns, deletedColumns } = getColumnChanges(
+            item.formSummary.columns,
           );
 
-          if (columns.length === 0) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
             setAlertDescription(() => ColumnsError.All);
             onOpen();
             return;
           }
 
-          if (
-            columns.length !== item.formSummary.columns.length &&
-            withConfirmation
-          ) {
+          if (deletedColumns.length > 0 && withConfirmation) {
             setAlertContinue(() => true);
             setAlertDescription(() => ColumnsError.OneOrMore);
             onOpen();
             return;
           }
 
-          const formSummary = { ...item.formSummary, columns };
+          const formSummary = { ...item.formSummary, columns: existingColumns };
           updateSessionItem({
             ...item,
             timestamp: Date.now(),
@@ -189,22 +173,18 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
 
         case 'z1data': {
-          const colDataKeys = Object.keys(colData);
-          const columns = item.formSummary.sampleData.columns.filter((c) =>
-            colDataKeys.includes(c),
+          const { existingColumns, deletedColumns } = getColumnChanges(
+            item.formSummary.sampleData.columns,
           );
 
-          if (columns.length === 0) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
             setAlertDescription(() => ColumnsError.All);
             onOpen();
             return;
           }
 
-          if (
-            columns.length !== item.formSummary.sampleData.columns.length &&
-            withConfirmation
-          ) {
+          if (deletedColumns.length > 0 && withConfirmation) {
             setAlertContinue(() => true);
             setAlertDescription(() => ColumnsError.OneOrMore);
             onOpen();
@@ -213,7 +193,10 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
 
           const formSummary = {
             ...item.formSummary,
-            sampleData: { ...item.formSummary.sampleData, columns },
+            sampleData: {
+              ...item.formSummary.sampleData,
+              columns: existingColumns,
+            },
           };
 
           updateSessionItem({
@@ -226,15 +209,21 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
 
         case 'z2data': {
-          const colDataKeys = Object.keys(colData);
-          const columns = [
-            colDataKeys.find((e) => e === item.formSummary.sample1Data.sample1),
-            colDataKeys.find((e) => e === item.formSummary.sample2Data.sample2),
-          ];
+          const { existingColumns, deletedColumns } = getColumnChanges([
+            item.formSummary.sample1Data.sample1,
+            item.formSummary.sample2Data.sample2,
+          ]);
 
-          if (columns.includes(undefined)) {
+          if (existingColumns.length === 0) {
             setAlertContinue(() => false);
-            setAlertDescription(() => ColumnsError.OneOrMore);
+            setAlertDescription(() => ColumnsError.All);
+            onOpen();
+            return;
+          }
+
+          if (deletedColumns.length > 0) {
+            setAlertContinue(() => false);
+            setAlertDescription(() => ColumnsError.One);
             onOpen();
             return;
           }
@@ -252,7 +241,7 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
         }
       }
     },
-    [colData, item, onOpen, updateSessionItem],
+    [getColumnChanges, colData, item, onOpen, updateSessionItem],
   );
 
   return (

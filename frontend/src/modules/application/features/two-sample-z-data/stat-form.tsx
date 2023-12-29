@@ -19,11 +19,10 @@ import {
   HypothesisTestFormPart,
   PopulationMeanDifference,
 } from '~/modules/application/components';
-import { Perform } from '~/modules/application/enums';
+import { ColumnsError, Perform } from '~/modules/application/enums';
 import { useGridData } from '~/modules/data-grid/store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
-import type { ColumnHeading } from '../../types';
 import type { TForm } from './types';
 import { schema } from './validation-schema/schema';
 
@@ -47,39 +46,39 @@ const StatForm = ({
   alertCloseRef,
 }: Props): JSX.Element => {
   const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
-  const { colData } = useGridData();
+  const { colData, getColumnChanges } = useGridData();
 
-  const colDataKeys = useMemo(
-    () => Object.keys(colData) as ColumnHeading[],
-    [colData],
-  );
-
-  const columns = useMemo(
-    () => [
-      colDataKeys.find((e) => e === defaultValues.sample1Data?.sample1),
-      colDataKeys.find((e) => e === defaultValues.sample2Data?.sample2),
-    ],
+  const { existingColumns, deletedColumns } = getColumnChanges(
     [
-      colDataKeys,
       defaultValues.sample1Data?.sample1,
       defaultValues.sample2Data?.sample2,
-    ],
+    ].filter((e): e is Exclude<typeof e, undefined> => e !== undefined),
   );
 
-  // When modal is first opened, defaultValues.sample1Data is undefined
-  // Alert shouldn't open in this case
-  const shouldAlert =
-    (!!defaultValues.sample1Data && !columns[0]) ||
-    (!!defaultValues.sample2Data && !columns[1]);
+  const showAlert = deletedColumns.length > 0;
+  const alertDescription =
+    existingColumns.length === 0 ? ColumnsError.All : ColumnsError.One;
 
   const { handleSubmit, control, setValue, watch } = useForm<TForm>({
     defaultValues: {
       ...defaultValues,
-      sample1Data: { ...defaultValues.sample1Data, sample1: columns[0] },
-      sample2Data: { ...defaultValues.sample2Data, sample2: columns[1] },
+      sample1Data: {
+        ...defaultValues.sample1Data,
+        sample1: existingColumns.find(
+          (e) => e === defaultValues.sample1Data?.sample1,
+        ),
+      },
+      sample2Data: {
+        ...defaultValues.sample2Data,
+        sample2: existingColumns.find(
+          (e) => e === defaultValues.sample2Data?.sample2,
+        ),
+      },
     },
     resolver,
   });
+
+  const colDataKeys = useMemo(() => Object.keys(colData), [colData]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} id={formId}>
@@ -205,12 +204,12 @@ const StatForm = ({
         )}
       </FieldStack>
 
-      {shouldAlert && (
+      {showAlert && (
         <AlertModal
           onClose={onClose}
           isOpen={isOpen}
           title='Warning'
-          description='One or more columns included in the table have been deleted from the spreadsheet'
+          description={alertDescription}
           finalFocusRef={alertCloseRef}
         />
       )}

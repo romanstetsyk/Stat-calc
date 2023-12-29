@@ -1,6 +1,5 @@
 import { Box, Checkbox, Radio, Text, useDisclosure } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useMemo } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 import {
@@ -19,7 +18,7 @@ import {
   HypothesisTestFormPart,
   PopulationMean,
 } from '~/modules/application/components';
-import { Perform } from '~/modules/application/enums';
+import { ColumnsError, Perform } from '~/modules/application/enums';
 import { useGridData } from '~/modules/data-grid/store';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
@@ -45,22 +44,20 @@ const StatForm = ({
   alertCloseRef,
 }: Props): JSX.Element => {
   const { onClose, isOpen } = useDisclosure({ defaultIsOpen: true });
-  const { colData } = useGridData();
+  const { colData, getColumnChanges } = useGridData();
 
-  const colDataKeys = useMemo(() => Object.keys(colData), [colData]);
-  const columns = useMemo(
-    () =>
-      defaultValues.sampleData.columns.filter((c) => colDataKeys.includes(c)),
-    [colDataKeys, defaultValues.sampleData.columns],
+  const { existingColumns, deletedColumns } = getColumnChanges(
+    defaultValues.sampleData.columns,
   );
 
-  const shouldAlert =
-    columns.length !== defaultValues.sampleData.columns.length;
+  const showAlert = deletedColumns.length > 0;
+  const alertDescription =
+    existingColumns.length === 0 ? ColumnsError.All : ColumnsError.OneOrMore;
 
   const { handleSubmit, control, setValue, watch } = useForm<TForm>({
     defaultValues: {
       ...defaultValues,
-      sampleData: { ...defaultValues.sampleData, columns },
+      sampleData: { ...defaultValues.sampleData, columns: existingColumns },
     },
     resolver,
   });
@@ -78,7 +75,7 @@ const StatForm = ({
             name='sampleData.columns'
             control={control}
           >
-            {colDataKeys.map((colHeader) => {
+            {Object.keys(colData).map((colHeader) => {
               return (
                 <Checkbox key={colHeader} value={colHeader}>
                   {getVarName(
@@ -164,14 +161,12 @@ const StatForm = ({
         </FieldStack>
       )}
 
-      {shouldAlert && (
+      {showAlert && (
         <AlertModal
           onClose={onClose}
           isOpen={isOpen}
           title='Warning'
-          description={`${
-            columns.length === 0 ? 'All' : 'One or more'
-          } columns included in the table have been deleted from the spreadsheet`}
+          description={alertDescription}
           finalFocusRef={alertCloseRef}
         />
       )}

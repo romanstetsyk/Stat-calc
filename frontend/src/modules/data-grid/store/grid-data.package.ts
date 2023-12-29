@@ -3,8 +3,10 @@ import { GridCellKind } from '@glideapps/glide-data-grid';
 
 import { ArrayLike } from '~/framework/array-like';
 import { ExternalStore } from '~/framework/external-store';
+import type { ColumnHeading } from '~/modules/application/types';
 
 import type {
+  ColumnChanges,
   GridData,
   OnCellsEditedParams,
   OverwriteRowsParameters,
@@ -23,7 +25,21 @@ class Dataset extends ExternalStore<GridData> {
       getContent: this.getContent.bind(this),
       onCellsEdited: this.onCellsEdited.bind(this),
       overwriteRows: this.overwriteRows.bind(this),
+      getColumnChanges: this.getColumnChanges.bind(this),
     };
+  }
+
+  public getColumnChanges(columns: ColumnHeading[]): ColumnChanges {
+    // eslint-disable-next-line unicorn/no-array-reduce
+    return columns.reduce<ColumnChanges>(
+      (acc, c) => {
+        c in this.snapshot.colData
+          ? acc.existingColumns.push(c)
+          : acc.deletedColumns.push(c);
+        return acc;
+      },
+      { existingColumns: [], deletedColumns: [] },
+    );
   }
 
   public getContent(cell: Item): GridCell {

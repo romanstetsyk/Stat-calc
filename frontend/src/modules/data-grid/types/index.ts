@@ -5,6 +5,7 @@ import type {
 } from '@glideapps/glide-data-grid';
 
 import type { ArrayLike } from '~/framework/array-like';
+import type { ColumnHeading } from '~/modules/application/types';
 
 type GridColumnName = `col${number}`;
 
@@ -19,6 +20,11 @@ type OverwriteRowsParameters = {
   newCols: ArrayLike<ArrayLike<string | number>>;
 };
 
+type ColumnChanges = {
+  existingColumns: ColumnHeading[];
+  deletedColumns: ColumnHeading[];
+};
+
 type GridData = {
   datasetId: string;
   rowData: ArrayLike<ArrayLike<string | number>>;
@@ -26,9 +32,11 @@ type GridData = {
   onCellsEdited: (newValues: OnCellsEditedParams) => boolean;
   overwriteRows: (arg: OverwriteRowsParameters) => void;
   getContent: (cell: Item) => GridCell;
+  getColumnChanges: (columns: ColumnHeading[]) => ColumnChanges;
 };
 
 export type {
+  ColumnChanges,
   GridColumnName,
   GridData,
   OnCellsEditedParams,
