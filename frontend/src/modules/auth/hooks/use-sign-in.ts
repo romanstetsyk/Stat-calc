@@ -35,8 +35,9 @@ const useSignIn: UseSignIn = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      // console.log('signin success');
       storage.setItem('token', data.accessToken);
-      void queryClient.resetQueries({ queryKey: ['currentUser'] });
+      void queryClient.refetchQueries({ queryKey: ['currentUser'] });
     }
   }, [data?.accessToken, isSuccess, queryClient]);
 
