@@ -23,7 +23,7 @@ const calcFrequency = (
     const varName = getVarName(colData, Number(colHeader), withLabel);
     const varValues = getVarValues(colData, Number(colHeader), withLabel);
     const n = varValues.length;
-    const out = tabulate(varValues);
+    const out = tabulate<(typeof varValues)[number]>(varValues);
 
     const table: DataTableRow<FrequencyDistribution, TopLeftCell>[] = out.map(
       ([x, fr, relFr]) => {

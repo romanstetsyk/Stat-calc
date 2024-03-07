@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "21.1.x",
-    "npm": "10.2.x"
+    "node": "21.7.x",
+    "npm": "10.5.x"
   },
   "exports": {
     "./build/*": {

@@ -84,6 +84,10 @@ rules:
     - prefer-top-level
   no-unused-expressions:
     - off
+  prefer-promise-reject-errors:
+    - off
+  '@typescript-eslint/prefer-promise-reject-errors':
+    - off
   '@typescript-eslint/no-unused-expressions':
     - error
     - allowShortCircuit: true
