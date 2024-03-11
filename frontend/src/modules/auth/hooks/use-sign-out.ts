@@ -30,6 +30,7 @@ const useSignOut: UseSignOut = () => {
     if (isSuccess) {
       storage.removeItem('token');
       queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
+      void queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       navigate(API_PATHS_AUTH.SIGN_IN);
     }
   }, [isSuccess, navigate, queryClient]);
