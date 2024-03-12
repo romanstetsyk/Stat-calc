@@ -10,6 +10,7 @@ type DefaultRequestOption = {
   headers?: Parameters<RequestHandler>[0]['headers'];
   cookies?: Parameters<RequestHandler>[0]['cookies'];
   signedCookies?: Parameters<RequestHandler>[0]['signedCookies'];
+  file?: Express.Multer.File;
 };
 
 type ServerApi = {
@@ -26,6 +27,7 @@ type ServerRoute = {
   path: string;
   method: ValueOf<typeof HTTP_METHODS>;
   handler: RequestHandlerWrapped;
+  plugins: RequestHandler[];
 };
 
 type RequestHandlerWrapped<
@@ -33,11 +35,10 @@ type RequestHandlerWrapped<
   R = unknown,
 > = RequestHandler<T['params'], R, T['body'], T['query']>;
 
-type ControllerRoute = {
-  path: string;
-  method: ValueOf<typeof HTTP_METHODS>;
+type ControllerRoute = Pick<ServerRoute, 'path' | 'method'> & {
   // WRONG: handler: (options) => Promise<...>
   handler(options: ApiRequest<DefaultRequestOption>): Promise<ApiResponse>;
+  plugins?: ServerRoute['plugins'];
 };
 
 type ApiRequest<

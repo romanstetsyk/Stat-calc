@@ -37,9 +37,9 @@ abstract class ControllerBase implements Controller {
     // const path = this.segment + route.path;
     // All handlers should be aded as `this.handler.bind(this)`
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    const { path, method, handler } = route;
+    const { path, method, handler, plugins = [] } = route;
     const wrappedHandler = this.wrapHandler(handler);
-    this.routes.push({ path, method, handler: wrappedHandler });
+    this.routes.push({ path, method, plugins, handler: wrappedHandler });
     logger.info(`registered route: ${method}: ${this.segment}${path}`);
   }
 

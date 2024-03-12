@@ -66,7 +66,7 @@ class AppBase {
   private initController(controller: Controller, segment: string): void {
     const expressRouter = express.Router();
     for (const route of controller.routes) {
-      expressRouter[route.method](route.path, route.handler);
+      expressRouter[route.method](route.path, ...route.plugins, route.handler);
       this.app.use(segment, expressRouter);
     }
   }
