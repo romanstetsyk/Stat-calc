@@ -1,3 +1,5 @@
+import { AccountPage } from '~/modules/account/pages/account-page';
+
 import { PROFILE_ROUTES } from './profile-routes';
 
 const PROFILE_ITEMS = [
@@ -9,7 +11,7 @@ const PROFILE_ITEMS = [
   {
     path: PROFILE_ROUTES.ACCOUNT,
     label: 'Account',
-    tabContent: <div>account</div>,
+    tabContent: <AccountPage />,
   },
 ] as const;
 

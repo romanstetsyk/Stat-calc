@@ -1,4 +1,5 @@
 import {
+  Container,
   Tab,
   TabIndicator,
   TabList,
@@ -16,7 +17,7 @@ type Props = {
 
 const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
   return (
-    <>
+    <Container maxWidth='2xl' mt={8}>
       <Tabs index={selectedIndex} isManual isLazy lazyBehavior='unmount'>
         <TabList>
           {PROFILE_ITEMS.map((tab) => (
@@ -39,7 +40,7 @@ const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
           ))}
         </TabPanels>
       </Tabs>
-    </>
+    </Container>
   );
 };
 
