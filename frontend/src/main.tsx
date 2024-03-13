@@ -12,6 +12,8 @@ import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
 import { SignInPage } from '~/modules/auth/pages/sign-in-page';
 import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
+import { PROFILE_ITEMS } from '~/modules/profile/constants';
+import { ProfilePage } from '~/modules/profile/pages/profile-page';
 import { About } from '~/pages/about';
 
 const Application = React.lazy(
@@ -44,6 +46,11 @@ const routes: RouteObject[] = [
         path: APP_ROUTES.SIGN_IN,
         element: <SignInPage />,
       },
+
+      ...PROFILE_ITEMS.map(({ path }, i) => {
+        return { path, element: <ProfilePage selectedIndex={i} /> };
+      }),
+
       {
         path: APP_ROUTES.OTHER,
         element: <div>not found</div>,

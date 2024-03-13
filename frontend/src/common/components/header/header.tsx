@@ -5,7 +5,7 @@ import { Logo } from '~/common/components';
 import { APP_ROUTES } from '~/common/constants';
 import { useCurrentUser } from '~/modules/auth/hooks';
 
-import { DesktopNav, MobileNav, MyProfile } from './components';
+import { DesktopNav, MobileNav, ProfileMenu } from './components';
 
 function Header(): JSX.Element {
   const location = useLocation();
@@ -43,7 +43,7 @@ function Header(): JSX.Element {
         spacing={6}
       >
         {currentUser ? (
-          <MyProfile />
+          <ProfileMenu />
         ) : (
           <Button
             as={RouterLink}
