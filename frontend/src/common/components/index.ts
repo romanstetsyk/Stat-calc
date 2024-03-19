@@ -6,6 +6,7 @@ export { Footer } from './footer';
 export { Form } from './form';
 export { Header } from './header';
 export { InputControlled } from './input-controlled';
+export { InputControlledDropzone } from './input-controlled-dropzone';
 export { InputField } from './input-field';
 export { Legend } from './legend';
 export { Logo } from './logo';
