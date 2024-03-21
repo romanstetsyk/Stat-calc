@@ -15,6 +15,7 @@ class BaseLogger implements Logger {
     this.logger = pino(
       {
         timestamp: pino.stdTimeFunctions.isoTime,
+        redact: ['*[*].buffer'],
       },
       pino.transport({ targets: this.config.LOG.TARGETS }),
     );

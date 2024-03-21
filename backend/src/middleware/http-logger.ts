@@ -9,6 +9,7 @@ const HTTP_ERRORS = {
 } as const;
 
 const httpLogger = pinoHttp({
+  redact: ['*[*].authorization', '*[*].cookie', '*[*]["set-cookie"]'],
   timestamp: pino.stdTimeFunctions.isoTime,
   customLogLevel: function (_req, res, err) {
     if (err) {
