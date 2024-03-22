@@ -15,7 +15,17 @@ class BaseLogger implements Logger {
     this.logger = pino(
       {
         timestamp: pino.stdTimeFunctions.isoTime,
-        redact: ['*[*].buffer'],
+        redact: {
+          paths: [
+            '*._original.buffer', // Joi validation error
+            '*.details[*].context.value', // Joi validation error
+            '*.errors[*].properties.value', // Mongoose validation error
+            '*.errors[*].value', // Mongoose validation error
+          ],
+          censor: (value) => {
+            return value instanceof Buffer ? '[Buffer data]' : value;
+          },
+        },
       },
       pino.transport({ targets: this.config.LOG.TARGETS }),
     );
