@@ -1,6 +1,5 @@
 import { FormControl, FormErrorMessage } from '@chakra-ui/react';
 import type { WithRequired } from '@shared/build/esm/index';
-import { FILESIZE_LIMITS } from '@shared/build/esm/index';
 import { useCallback, useEffect, useState } from 'react';
 import type { DropzoneOptions, FileRejection } from 'react-dropzone';
 import { useDropzone } from 'react-dropzone';
@@ -30,6 +29,7 @@ const InputControlledDropzone = <T extends FieldValues>({
   const {
     field: { onChange, ...restField },
     fieldState: { error, invalid },
+    formState: { isSubmitSuccessful },
   } = useController({
     name,
     control,
@@ -53,7 +53,6 @@ const InputControlledDropzone = <T extends FieldValues>({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple,
     onDrop,
-    maxSize: FILESIZE_LIMITS.DATASET,
   });
 
   const deleteFile = useCallback((fileToDelete: File) => {
@@ -65,6 +64,12 @@ const InputControlledDropzone = <T extends FieldValues>({
   useEffect(() => {
     onChange(files);
   }, [files, onChange]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      setFiles([]);
+    }
+  }, [isSubmitSuccessful]);
 
   return (
     <FormControl isInvalid={invalid}>
