@@ -1,4 +1,4 @@
-import { PROFILE_ROUTES } from '~/modules/profile/constants';
+import { PROFILE_ROUTES } from './profile-routes';
 
 const APP_ROUTES = {
   HOME: '/',

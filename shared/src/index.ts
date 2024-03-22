@@ -3,6 +3,7 @@ export {
   API_PATHS,
   CONTENT_TYPE,
   ERROR_MESSAGES,
+  FILESIZES,
   HTTP_CODES,
   HTTP_HEADERS,
   HTTP_METHODS,
@@ -25,5 +26,15 @@ export {
   signInSchema,
   signUpSchema,
 } from '~/modules/auth/auth.js';
+export type {
+  DatasetUploadRequestDTO,
+  DatasetUploadResponseDTO,
+} from '~/modules/datasets/datasets.js';
+export {
+  API_PATHS_DATASETS,
+  DATASET_VALIDATION_CONSTANTS,
+  DATASET_VALIDATION_MESSAGES,
+  UPLOAD_FIELD_NAME,
+} from '~/modules/datasets/datasets.js';
 export type { UserInfo } from '~/modules/users/users.js';
 export type { ErrorCommon, ValueOf, WithRequired } from '~/types/types.js';
