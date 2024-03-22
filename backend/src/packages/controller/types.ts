@@ -55,7 +55,7 @@ type CookieArray = {
 
 type ApiResponse<T = unknown> = {
   status: ValueOf<typeof HTTP_CODES>;
-  payload?: T;
+  payload: T | null;
   cookies?: CookieArray[];
   clearCookies?: [CookieArray[0], CookieArray[2]][];
 };

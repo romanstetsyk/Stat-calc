@@ -16,4 +16,5 @@ const authService = new AuthService(
 );
 const authController = new AuthController(logger, authService, config);
 
-export { authController };
+export { authController, authService };
+export type { AuthService } from './auth.service.js';

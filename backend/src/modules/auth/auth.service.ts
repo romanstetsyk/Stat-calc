@@ -7,7 +7,10 @@ import { ERROR_MESSAGES } from 'shared/build/index.js';
 
 import type { UserEntity, UserService } from '~/modules/users/users.js';
 import type { PasswordUtil } from '~/packages/password-util/password-util.js';
-import type { TOKEN_TYPES } from '~/packages/token-util/constants.js';
+import type {
+  JWTPayload,
+  TOKEN_TYPES,
+} from '~/packages/token-util/token-util.js';
 import type { TokenUtilBase } from '~/packages/token-util/token-util-base.package.js';
 
 import type { TokenService } from '../tokens/tokens.js';
@@ -64,6 +67,15 @@ class AuthService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  public ensureAuth(token: string): JWTPayload['id'] {
+    try {
+      const { id } = this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.ACCESS>(token);
+      return id;
+    } catch {
+      throw new Error('auth error');
     }
   }
 

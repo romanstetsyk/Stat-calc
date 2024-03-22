@@ -3,7 +3,13 @@ import type { IncomingHttpHeaders } from 'node:http';
 import type { CookieOptions } from 'express';
 import type Joi from 'joi';
 import type { ValidationResult } from 'joi';
-import { AUTH_SCHEMA, HTTP_HEADERS } from 'shared/build/index.js';
+import {
+  AUTH_SCHEMA,
+  ERROR_MESSAGES,
+  HTTP_CODES,
+  HTTP_HEADERS,
+  HttpError,
+} from 'shared/build/index.js';
 
 import type { Config } from '~/packages/config/config.js';
 import type { Logger } from '~/packages/logger/logger.js';
@@ -72,26 +78,33 @@ abstract class ControllerBase implements Controller {
   }
 
   protected validateBody<T>(schema: Joi.ObjectSchema<T>, body: T): void {
-    const { error }: ValidationResult<T> = schema.validate(body);
+    const { error }: ValidationResult<T> = schema.validate(body, {
+      errors: { wrap: { label: false } },
+    });
     if (error) {
       throw error;
     }
   }
 
-  protected getTokenFromHeaders(headers: IncomingHttpHeaders): string | null {
+  protected getTokenFromHeaders(headers: IncomingHttpHeaders): string {
     const AUTH_HEADER = HTTP_HEADERS.AUTHORIZATION;
 
+    const error = new HttpError({
+      status: HTTP_CODES.UNAUTHORIZED,
+      message: ERROR_MESSAGES.MISSING_TOKEN,
+    });
+
     if (!headers[AUTH_HEADER]) {
-      return null;
+      throw error;
     }
 
     const [schema, token] = headers.authorization.split(' ');
     if (schema.toLowerCase() !== AUTH_SCHEMA.toLowerCase()) {
-      return null;
+      throw error;
     }
 
     if (!token) {
-      return null;
+      throw error;
     }
 
     return token;

@@ -76,13 +76,6 @@ class AuthController extends ControllerBase {
 
     const accessToken = this.getTokenFromHeaders(headers);
 
-    if (!accessToken) {
-      throw new HttpError({
-        status: HTTP_CODES.UNAUTHORIZED,
-        message: ERROR_MESSAGES.MISSING_TOKEN,
-      });
-    }
-
     const user = await this.authService.getCurrentUser(accessToken);
 
     if (!user) {
@@ -204,6 +197,7 @@ class AuthController extends ControllerBase {
 
     return {
       status: HTTP_CODES.NO_CONTENT,
+      payload: null,
       clearCookies: [['refreshToken', { ...this.defaultCookieOptions() }]],
     };
   }
@@ -267,9 +261,10 @@ class AuthController extends ControllerBase {
   private ensureNotLoggedIn(headers: {
     [HTTP_HEADERS.AUTHORIZATION]?: string;
   }): void {
-    const accessToken = this.getTokenFromHeaders(headers);
-
-    if (!accessToken) {
+    let accessToken: string;
+    try {
+      accessToken = this.getTokenFromHeaders(headers);
+    } catch {
       return;
     }
 
