@@ -24,8 +24,15 @@ type HttpResponseInterceptor = {
   repeatOriginalRequestOnSuccess?: boolean;
 };
 
+type LoadParams = {
+  url: URL;
+  options: HttpApiOptions;
+  onError?: HttpResponseInterceptor;
+};
+
 export type {
   HttpApiOptions,
   HttpResponseInterceptor,
   HttpResponseInterceptorFn,
+  LoadParams,
 };

@@ -1,19 +1,18 @@
 import type { DatasetUploadRequestDTO } from '@shared/build/esm/index';
 import { API_PATHS_DATASETS, HTTP_METHODS } from '@shared/build/esm/index';
 
+import type { ApiBaseConstructor } from '~/framework/api';
 import { ApiBase } from '~/framework/api';
-import type { HttpBase } from '~/framework/http';
-import type { Storage } from '~/framework/storage';
 
-type Constructor = {
-  baseUrl: string;
-  prefix: string[];
-  http: HttpBase;
-  storage: Storage;
-};
+type DatasetApiConstructor = ApiBaseConstructor;
 
 class DatasetApi extends ApiBase {
-  public constructor({ baseUrl, prefix, http, storage }: Constructor) {
+  public constructor({
+    baseUrl,
+    prefix,
+    http,
+    storage,
+  }: DatasetApiConstructor) {
     super({ baseUrl, prefix, http, storage });
   }
 

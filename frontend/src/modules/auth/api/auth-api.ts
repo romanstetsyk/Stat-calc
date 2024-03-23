@@ -13,23 +13,16 @@ import {
   HTTP_METHODS,
 } from '@shared/build/esm/index';
 
-import type { HttpResponseInterceptorFn } from '~/framework/api';
+import type {
+  ApiBaseConstructor,
+  HttpResponseInterceptorFn,
+} from '~/framework/api';
 import { ApiBase } from '~/framework/api';
-import type { HttpBase } from '~/framework/http';
-import type { Storage } from '~/framework/storage';
+
+type AuthApiConstructor = ApiBaseConstructor;
 
 class AuthApi extends ApiBase {
-  public constructor({
-    baseUrl,
-    prefix,
-    http,
-    storage,
-  }: {
-    baseUrl: string;
-    prefix: string[];
-    http: HttpBase;
-    storage: Storage;
-  }) {
+  public constructor({ baseUrl, prefix, http, storage }: AuthApiConstructor) {
     super({ baseUrl, prefix, http, storage });
   }
 

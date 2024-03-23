@@ -12,7 +12,14 @@ import {
 import type { HttpBase } from '~/framework/http';
 import type { Storage } from '~/framework/storage';
 
-import type { HttpApiOptions, HttpResponseInterceptor } from './types';
+import type { HttpApiOptions, LoadParams } from './types';
+
+type ApiBaseConstructor = {
+  baseUrl: string;
+  prefix: string[];
+  http: HttpBase;
+  storage: Storage;
+};
 
 abstract class ApiBase {
   private baseUrl: string;
@@ -25,27 +32,14 @@ abstract class ApiBase {
     prefix,
     http,
     storage,
-  }: {
-    baseUrl: string;
-    prefix: string[];
-    http: HttpBase;
-    storage: Storage;
-  }) {
+  }: ApiBaseConstructor) {
     this.baseUrl = baseUrl;
     this.prefix = prefix;
     this.http = http;
     this.storage = storage;
   }
 
-  public async load({
-    url,
-    options,
-    onError,
-  }: {
-    url: URL;
-    options: HttpApiOptions;
-    onError?: HttpResponseInterceptor;
-  }): Promise<Response> {
+  public async load({ url, options, onError }: LoadParams): Promise<Response> {
     const {
       headers,
       hasAuth,
@@ -117,4 +111,5 @@ abstract class ApiBase {
   }
 }
 
+export type { ApiBaseConstructor };
 export { ApiBase };
