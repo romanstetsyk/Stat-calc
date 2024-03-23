@@ -8,7 +8,6 @@ import type {
   UserInfo,
 } from 'shared/build/index.js';
 import {
-  API_PATHS,
   API_PATHS_AUTH,
   ERROR_MESSAGES,
   HTTP_CODES,
@@ -23,20 +22,32 @@ import type { Config } from '~/packages/config/config.js';
 import type {
   ApiRequest,
   ApiResponse,
+  ControllerBaseConstructor,
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
 import type { AllowedCookies } from '~/packages/controller/types.js';
-import type { Logger } from '~/packages/logger/logger.js';
 
 import type { AuthService } from './auth.service.js';
 import type { UserWithTokens } from './types.js';
 
+type AuthControllerConstructor = ControllerBaseConstructor & {
+  config: Config;
+  authService: AuthService;
+};
+
 class AuthController extends ControllerBase {
   private authService: AuthService;
+  protected config: Config;
 
-  public constructor(logger: Logger, authService: AuthService, config: Config) {
-    super(logger, API_PATHS.AUTH, config);
+  public constructor({
+    segment,
+    logger,
+    authService,
+    config,
+  }: AuthControllerConstructor) {
+    super({ segment, logger });
     this.authService = authService;
+    this.config = config;
 
     this.addRoute({
       path: API_PATHS_AUTH.SIGN_UP,

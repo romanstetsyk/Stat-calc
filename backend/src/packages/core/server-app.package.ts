@@ -24,6 +24,13 @@ import type { Database } from '~/packages/database/database.js';
 import type { Logger } from '~/packages/logger/logger.js';
 import { unexpectedErrorHandler } from '~/packages/unexpected-error-handler/unexpected-error-handler.js';
 
+type AppBaseConstructor = {
+  config: Config;
+  logger: Logger;
+  database: Database;
+  apis: ServerApi[];
+};
+
 class AppBase {
   private config: Config;
   private logger: Logger;
@@ -32,12 +39,7 @@ class AppBase {
 
   private app: Express;
 
-  public constructor(
-    config: Config,
-    logger: Logger,
-    database: Database,
-    apis: ServerApi[],
-  ) {
+  public constructor({ config, logger, database, apis }: AppBaseConstructor) {
     this.config = config;
     this.logger = logger;
     this.database = database;

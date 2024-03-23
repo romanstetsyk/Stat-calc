@@ -10,7 +10,7 @@ type HttpErrorConstructor = {
 class HttpError extends Error {
   public status: ValueOf<typeof HTTP_CODES>;
 
-  public constructor({ message, cause, status }: HttpErrorConstructor) {
+  public constructor({ status, message, cause }: HttpErrorConstructor) {
     super(message, { cause });
     this.status = status;
   }

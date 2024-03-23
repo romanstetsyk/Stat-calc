@@ -11,9 +11,7 @@ import {
   HttpError,
 } from 'shared/build/index.js';
 
-import type { Config } from '~/packages/config/config.js';
 import type { Logger } from '~/packages/logger/logger.js';
-import { logger } from '~/packages/logger/logger.js';
 
 import type {
   Controller,
@@ -22,21 +20,20 @@ import type {
   ServerRoute,
 } from './types.js';
 
+type ControllerBaseConstructor = {
+  segment: Controller['segment'];
+  logger: Logger;
+};
+
 abstract class ControllerBase implements Controller {
   public logger: Logger;
   public segment: Controller['segment'];
   public routes: ServerRoute[];
-  protected config: Config;
 
-  public constructor(
-    logger: Logger,
-    segment: Controller['segment'],
-    config: Config,
-  ) {
+  public constructor({ segment, logger }: ControllerBaseConstructor) {
     this.logger = logger;
     this.segment = segment;
     this.routes = [];
-    this.config = config;
   }
 
   protected addRoute(route: ControllerRoute): void {
@@ -46,7 +43,7 @@ abstract class ControllerBase implements Controller {
     const { path, method, handler, plugins = [] } = route;
     const wrappedHandler = this.wrapHandler(handler);
     this.routes.push({ path, method, plugins, handler: wrappedHandler });
-    logger.info(`registered route: ${method}: ${this.segment}${path}`);
+    this.logger.info(`Registered route: ${method}: ${this.segment}${path}`);
   }
 
   // Convert a function that accepts ApiRequest<T> to RequestHandlerWrapped
@@ -121,4 +118,5 @@ abstract class ControllerBase implements Controller {
   }
 }
 
+export type { ControllerBaseConstructor };
 export { ControllerBase };

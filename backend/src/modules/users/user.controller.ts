@@ -1,5 +1,4 @@
 import {
-  API_PATHS,
   ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
@@ -8,13 +7,12 @@ import {
 import { validate as validateUUID } from 'uuid';
 
 import { API_PATHS_USERS } from '~/common/constants/constants.js';
-import type { Config } from '~/packages/config/config.js';
 import type {
   ApiRequest,
   ApiResponse,
+  ControllerBaseConstructor,
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
-import type { Logger } from '~/packages/logger/logger.js';
 
 import type {
   FindAllResponseDTO,
@@ -23,11 +21,19 @@ import type {
 } from './types.js';
 import type { UserService } from './user.service.js';
 
+type UserControllerConstructor = ControllerBaseConstructor & {
+  userService: UserService;
+};
+
 class UserController extends ControllerBase {
   private userService: UserService;
 
-  public constructor(logger: Logger, userService: UserService, config: Config) {
-    super(logger, API_PATHS.USERS, config);
+  public constructor({
+    segment,
+    logger,
+    userService,
+  }: UserControllerConstructor) {
+    super({ segment, logger });
     this.userService = userService;
 
     this.addRoute({

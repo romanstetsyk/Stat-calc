@@ -16,6 +16,6 @@ const apiV1: ServerApi = new ApiBase(
   datasetsController,
 );
 
-const serverApp = new AppBase(config, logger, database, [apiV1]);
+const serverApp = new AppBase({ config, logger, database, apis: [apiV1] });
 
 export { serverApp };

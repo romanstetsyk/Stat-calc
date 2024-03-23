@@ -1,3 +1,4 @@
+export type { ControllerBaseConstructor } from './controller-base.js';
 export { ControllerBase } from './controller-base.js';
 export type {
   ApiRequest,

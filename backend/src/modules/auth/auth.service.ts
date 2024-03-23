@@ -16,18 +16,25 @@ import type { TokenUtilBase } from '~/packages/token-util/token-util-base.packag
 import type { TokenService } from '../tokens/tokens.js';
 import type { Tokens, UserWithTokens } from './types.js';
 
+type AuthServiceConstructor = {
+  userService: UserService;
+  tokenService: TokenService;
+  passwordUtil: PasswordUtil;
+  tokenUtil: TokenUtilBase;
+};
+
 class AuthService {
   private userService: UserService;
   private tokenService: TokenService;
   private passwordUtil: PasswordUtil;
   private tokenUtil: TokenUtilBase;
 
-  public constructor(
-    userService: UserService,
-    tokenService: TokenService,
-    passwordUtil: PasswordUtil,
-    tokenUtil: TokenUtilBase,
-  ) {
+  public constructor({
+    userService,
+    tokenService,
+    passwordUtil,
+    tokenUtil,
+  }: AuthServiceConstructor) {
     this.userService = userService;
     this.tokenService = tokenService;
     this.passwordUtil = passwordUtil;

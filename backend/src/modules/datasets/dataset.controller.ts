@@ -4,7 +4,6 @@ import type {
   HTTP_HEADERS,
 } from 'shared/build/index.js';
 import {
-  API_PATHS,
   API_PATHS_DATASETS,
   HTTP_CODES,
   HTTP_METHODS,
@@ -13,29 +12,33 @@ import {
 
 import { fileUpload } from '~/middleware/middleware.js';
 import type { AuthService } from '~/modules/auth/auth.js';
-import type { Config } from '~/packages/config/config.js';
 import type {
   ApiRequest,
   ApiResponse,
+  ControllerBaseConstructor,
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
-import type { Logger } from '~/packages/logger/logger.js';
 
 import type { DatasetEntity } from './dataset.entity.js';
 import type { DatasetService } from './dataset.service.js';
 import { fileSchema } from './validation-schemas/validation-schemas.js';
 
+type DatasetControllerConstructor = ControllerBaseConstructor & {
+  datasetService: DatasetService;
+  authService: AuthService;
+};
+
 class DatasetController extends ControllerBase {
   private datasetService: DatasetService;
   private authService: AuthService;
 
-  public constructor(
-    logger: Logger,
-    config: Config,
-    datasetService: DatasetService,
-    authService: AuthService,
-  ) {
-    super(logger, API_PATHS.DATASETS, config);
+  public constructor({
+    segment,
+    logger,
+    datasetService,
+    authService,
+  }: DatasetControllerConstructor) {
+    super({ segment, logger });
     this.datasetService = datasetService;
     this.authService = authService;
 

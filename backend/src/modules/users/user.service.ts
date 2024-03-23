@@ -6,14 +6,16 @@ import type { PasswordUtil } from '~/packages/password-util/password-util.js';
 import { UserEntity } from './user.entity.js';
 import type { UserRepository } from './user.repository.js';
 
+type UserServiceConstructor = {
+  userRepository: UserRepository;
+  passwordUtil: PasswordUtil;
+};
+
 class UserService implements Service<UserEntity> {
   private userRepository: UserRepository;
   private passwordUtil: PasswordUtil;
 
-  public constructor(
-    userRepository: UserRepository,
-    passwordUtil: PasswordUtil,
-  ) {
+  public constructor({ userRepository, passwordUtil }: UserServiceConstructor) {
     this.userRepository = userRepository;
     this.passwordUtil = passwordUtil;
   }
