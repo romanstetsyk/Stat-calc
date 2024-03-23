@@ -1,7 +1,8 @@
 import { FormControl, FormErrorMessage } from '@chakra-ui/react';
 import type { WithRequired } from '@shared/build/esm/index';
+import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
-import type { DropzoneOptions, FileRejection } from 'react-dropzone';
+import type { DropzoneOptions } from 'react-dropzone';
 import { useDropzone } from 'react-dropzone';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
@@ -15,6 +16,8 @@ type Props<T extends FieldValues> = WithRequired<
 > &
   Pick<DropzoneOptions, 'multiple'>;
 
+type FileWithKey = { key: string; file: File };
+
 const InputControlledDropzone = <T extends FieldValues>({
   name,
   control,
@@ -24,7 +27,7 @@ const InputControlledDropzone = <T extends FieldValues>({
   disabled,
   multiple = false,
 }: Props<T>): JSX.Element => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<FileWithKey[]>([]);
 
   const {
     field: { onChange, ...restField },
@@ -40,14 +43,13 @@ const InputControlledDropzone = <T extends FieldValues>({
   });
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]): void => {
-      setFiles((prev) => [
-        ...prev,
-        ...acceptedFiles,
-        ...fileRejections.map((e) => e.file),
-      ]);
+    (acceptedFiles: File[]): void => {
+      const newFiles = acceptedFiles.map((file) => ({ key: nanoid(), file }));
+      multiple
+        ? setFiles((prev) => [...prev, ...newFiles])
+        : setFiles(newFiles);
     },
-    [],
+    [multiple],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -55,14 +57,14 @@ const InputControlledDropzone = <T extends FieldValues>({
     onDrop,
   });
 
-  const deleteFile = useCallback((fileToDelete: File) => {
+  const deleteFile = useCallback((key: FileWithKey['key']) => {
     return () => {
-      setFiles((prev) => prev.filter((file) => file !== fileToDelete));
+      setFiles((prev) => prev.filter((file) => file.key !== key));
     };
   }, []);
 
   useEffect(() => {
-    onChange(files);
+    onChange(files.map(({ file }) => file));
   }, [files, onChange]);
 
   useEffect(() => {
@@ -86,7 +88,7 @@ const InputControlledDropzone = <T extends FieldValues>({
       >
         {/**
          * Overwrite value with empty string because input type file
-         * can only be set to empty string programmatically.
+         * can only be set programmatically to empty string.
          * The actual value is set using `onChange` method from `useController`
          */}
         <input {...getInputProps({ onChange, ...restField })} value='' />
@@ -99,12 +101,12 @@ const InputControlledDropzone = <T extends FieldValues>({
 
       {files.length > 0 && (
         <ul>
-          {files.map((file, i) => (
-            <li key={file.name + file.lastModified}>
-              {file.name} <DeleteFile onClick={deleteFile(file)} />{' '}
-              {Array.isArray(error) && error[i] && (
+          {files.map(({ key, file }, idx) => (
+            <li key={key}>
+              {file.name} <DeleteFile onClick={deleteFile(key)} />{' '}
+              {Array.isArray(error) && error[idx] && (
                 <FormErrorMessage as='span'>
-                  {error[i].message}
+                  {error[idx].message}
                 </FormErrorMessage>
               )}
             </li>

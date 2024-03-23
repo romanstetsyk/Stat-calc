@@ -18,6 +18,7 @@ const DATASET_VALIDATION_MESSAGES = {
   ALLOWED_MIMETYPES: `File type must be one of [ ${DATASET_VALIDATION_CONSTANTS.ALLOWED_MIMETYPES.join(', ')} ]`,
   MIN_FILES: `Please select at least ${DATASET_VALIDATION_CONSTANTS.MIN_FILES} file`,
   MAX_FILES: `Please upload at most ${DATASET_VALIDATION_CONSTANTS.MAX_FILES} file at a time`,
+  UNIQUE: 'This file has already been selected',
 } as const;
 
 export { DATASET_VALIDATION_CONSTANTS, DATASET_VALIDATION_MESSAGES };
