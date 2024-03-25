@@ -6,6 +6,7 @@ import * as ReactDOM from 'react-dom/client';
 import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { ProtectedRoute } from '~/common/components';
 import { APP_ROUTES } from '~/common/constants';
 import { theme } from '~/common/theme';
 import { SharedLayout } from '~/components/shared-layout';
@@ -48,7 +49,14 @@ const routes: RouteObject[] = [
       },
 
       ...PROFILE_ITEMS.map(({ path }, i) => {
-        return { path, element: <ProfilePage selectedIndex={i} /> };
+        return {
+          path,
+          element: (
+            <ProtectedRoute>
+              <ProfilePage selectedIndex={i} />
+            </ProtectedRoute>
+          ),
+        };
       }),
 
       {

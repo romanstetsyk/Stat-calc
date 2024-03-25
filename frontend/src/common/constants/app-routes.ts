@@ -1,11 +1,11 @@
+import { AUTH_ROUTES } from './auth-routes';
 import { PROFILE_ROUTES } from './profile-routes';
 
 const APP_ROUTES = {
   HOME: '/',
   APP: '/app',
   ABOUT: '/about',
-  SIGN_IN: '/sign-in',
-  SIGN_UP: '/sign-up',
+  ...AUTH_ROUTES,
   ...PROFILE_ROUTES,
   OTHER: '*',
 } as const;

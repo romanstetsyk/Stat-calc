@@ -10,6 +10,7 @@ export { InputControlledDropzone } from './input-controlled-dropzone';
 export { InputField } from './input-field';
 export { Legend } from './legend';
 export { Logo } from './logo';
+export { ProtectedRoute } from './protected-route';
 export { RadioGroupControlled } from './radio-group-controlled';
 export { SelectField } from './select-field';
 export { SocialButton } from './social-button';
