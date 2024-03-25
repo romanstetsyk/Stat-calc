@@ -1,3 +1,4 @@
+import { Progress } from '@chakra-ui/react';
 import { Navigate } from 'react-router-dom';
 
 import { APP_ROUTES } from '~/common/constants';
@@ -8,13 +9,17 @@ type Props = {
 };
 
 const ProtectedRoute = ({ children }: Props): JSX.Element => {
-  const { data: currentUser } = useCurrentUser();
+  const { data: currentUser, isSuccess, isFetching } = useCurrentUser();
 
-  if (!currentUser) {
-    return <Navigate to={APP_ROUTES.SIGN_IN} replace={true} />;
+  if (isFetching) {
+    return <Progress size='xs' isIndeterminate />;
   }
 
-  return children;
+  if (isSuccess && currentUser) {
+    return children;
+  }
+
+  return <Navigate to={APP_ROUTES.SIGN_IN} replace={true} />;
 };
 
 export { ProtectedRoute };

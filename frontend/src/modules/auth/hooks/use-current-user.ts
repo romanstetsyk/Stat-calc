@@ -24,7 +24,9 @@ const useCurrentUser = (): UseQueryResult<UserInfo | null, ErrorCommon> => {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     enabled: Boolean(accessToken),
-    placeholderData: null,
+    placeholderData: () => {
+      return queryClient.getQueryData<UserInfo | null>(['currentUser']);
+    },
     staleTime,
   });
 
