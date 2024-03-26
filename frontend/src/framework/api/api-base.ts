@@ -106,8 +106,22 @@ abstract class ApiBase {
     throw new HttpError({ message, status, cause: res });
   }
 
-  protected constructURL(path: string): URL {
-    return new URL([...this.prefix, path].join(''), this.baseUrl);
+  protected constructURL(
+    path: string,
+    options: { params?: Record<string, string> } = {},
+  ): URL {
+    const { params = {} } = options;
+    const pathWithParams = this.parseURLParams(path, params);
+
+    return new URL([...this.prefix, pathWithParams].join(''), this.baseUrl);
+  }
+
+  private parseURLParams(path: string, params: Record<string, string>): string {
+    let pathCopy = path;
+    for (const [key, value] of Object.entries(params)) {
+      pathCopy = pathCopy.replace(`:${key}`, value);
+    }
+    return pathCopy;
   }
 }
 
