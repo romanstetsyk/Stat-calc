@@ -1,9 +1,9 @@
 import type { ToastId } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import type {
+  DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
   DatasetFindAllResponseDTO,
-  DatasetUploadRequestDTO,
-  DatasetUploadResponseDTO,
   ErrorCommon,
 } from '@shared/build/esm/index';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -13,22 +13,22 @@ import { useMutation, useQueryClient } from '~/common/hooks';
 
 import { datasetApi } from '../api';
 
-type UseUpload = () => UseMutationResult<
-  DatasetUploadResponseDTO,
+type UseDeleteDataset = () => UseMutationResult<
+  DatasetDeleteResponseDTO,
   ErrorCommon,
-  DatasetUploadRequestDTO
+  DatasetDeleteURLParams
 >;
 
-const useUpload: UseUpload = () => {
+const useDeleteDataset: UseDeleteDataset = () => {
   const queryClient = useQueryClient();
 
   const mutationResult = useMutation<
-    DatasetUploadResponseDTO,
+    DatasetDeleteResponseDTO,
     ErrorCommon,
-    DatasetUploadRequestDTO
+    { id: string }
   >({
-    mutationKey: ['uploadFile'],
-    mutationFn: datasetApi.upload.bind(datasetApi),
+    mutationKey: ['deleteFile'],
+    mutationFn: datasetApi.delete.bind(datasetApi),
   });
 
   const toast = useToast();
@@ -37,14 +37,13 @@ const useUpload: UseUpload = () => {
   const { isError, error, isSuccess, data } = mutationResult;
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data !== null) {
       void queryClient.setQueryData(
         ['allDatasets'],
         (old: DatasetFindAllResponseDTO): DatasetFindAllResponseDTO => {
-          return [...old, data];
+          return old.filter(({ id }) => id !== data.id);
         },
       );
-      // void queryClient.refetchQueries({ queryKey: ['allDatasets'] });
     }
   }, [data, isSuccess, queryClient]);
 
@@ -66,4 +65,4 @@ const useUpload: UseUpload = () => {
   return mutationResult;
 };
 
-export { useUpload };
+export { useDeleteDataset };

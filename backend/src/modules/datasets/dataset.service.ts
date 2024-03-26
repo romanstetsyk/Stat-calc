@@ -1,5 +1,8 @@
-import type { DatasetBody, DatasetEntity } from './dataset.entity.js';
+import type { DatasetDTO } from 'shared/build/index.js';
+
+import type { DatasetEntity } from './dataset.entity.js';
 import type { DatasetRepository } from './dataset.repository.js';
+import type { DatasetBody } from './types.js';
 
 type DatasetServiceConstructor = {
   datasetRepository: DatasetRepository;
@@ -12,16 +15,23 @@ class DatasetService {
     this.datasetRepository = datasetRepository;
   }
 
-  public async uploadOne(
-    payload: DatasetBody,
-  ): Promise<DatasetEntity['originalname']> {
+  public async uploadOne(payload: DatasetBody): Promise<DatasetDTO> {
     const uploadedFile = await this.datasetRepository.uploadOne(payload);
-    return uploadedFile.originalname;
+    return uploadedFile.toObject();
   }
 
-  public async findAll(): Promise<DatasetEntity[]> {
-    const allDatasets: DatasetEntity[] = await this.datasetRepository.findAll();
-    return allDatasets;
+  public async findAll(userId: DatasetEntity['userId']): Promise<DatasetDTO[]> {
+    const allDatasets: DatasetEntity[] =
+      await this.datasetRepository.findAll(userId);
+    return allDatasets.map((dataset) => dataset.toObject());
+  }
+
+  public async delete(payload: {
+    id: DatasetEntity['id'];
+    userId: DatasetEntity['userId'];
+  }): Promise<DatasetDTO | null> {
+    const deletedDataset = await this.datasetRepository.delete(payload);
+    return deletedDataset ? deletedDataset.toObject() : null;
   }
 }
 

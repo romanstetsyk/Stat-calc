@@ -1,8 +1,8 @@
 import type { HydratedDocument } from 'mongoose';
 
-import type { DatasetBody } from './dataset.entity.js';
 import { DatasetEntity } from './dataset.entity.js';
 import type { DatasetDocument, DatasetModel } from './dataset.model.js';
+import type { DatasetBody } from './types.js';
 
 class DatasetRepository {
   private datasetModel: typeof DatasetModel;
@@ -11,10 +11,22 @@ class DatasetRepository {
     this.datasetModel = datasetModel;
   }
 
-  public async findAll(): Promise<DatasetEntity[]> {
+  public async findAll(
+    userId: DatasetEntity['userId'],
+  ): Promise<DatasetEntity[]> {
     const allDatasets: HydratedDocument<DatasetDocument>[] =
-      await this.datasetModel.find({});
+      await this.datasetModel.find({ userId });
     return allDatasets.map((dataset) => new DatasetEntity(dataset.toObject()));
+  }
+
+  public async delete(payload: {
+    id: DatasetEntity['id'];
+    userId: DatasetEntity['userId'];
+  }): Promise<DatasetEntity | null> {
+    const { id: _id, userId } = payload;
+    const deletedDataset: HydratedDocument<DatasetDocument> | null =
+      await this.datasetModel.findOneAndDelete({ _id, userId });
+    return deletedDataset ? new DatasetEntity(deletedDataset.toObject()) : null;
   }
 
   public async uploadOne(payload: DatasetBody): Promise<DatasetEntity> {

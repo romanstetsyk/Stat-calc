@@ -1,4 +1,6 @@
 import type {
+  DatasetDeleteResponseDTO,
+  DatasetFindAllResponseDTO,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
   HTTP_HEADERS,
@@ -19,7 +21,6 @@ import type {
 } from '~/packages/controller/controller.js';
 import { ControllerBase } from '~/packages/controller/controller.js';
 
-import type { DatasetEntity } from './dataset.entity.js';
 import type { DatasetService } from './dataset.service.js';
 import { fileSchema } from './validation-schemas/validation-schemas.js';
 
@@ -50,17 +51,49 @@ class DatasetController extends ControllerBase {
     });
 
     this.addRoute({
-      path: '/all',
+      path: API_PATHS_DATASETS.ROOT,
       method: HTTP_METHODS.GET,
-      handler: this.findAllDatasets.bind(this),
+      handler: this.findAll.bind(this),
+    });
+
+    this.addRoute({
+      path: API_PATHS_DATASETS.$ID,
+      method: HTTP_METHODS.DELETE,
+      handler: this.delete.bind(this),
     });
   }
 
-  private async findAllDatasets(): Promise<ApiResponse<string[]>> {
-    const allDatasets: DatasetEntity[] = await this.datasetService.findAll();
+  private async findAll(
+    options: ApiRequest<{
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
+    }>,
+  ): Promise<ApiResponse<DatasetFindAllResponseDTO>> {
+    const { headers } = options;
+    const accessToken = this.getTokenFromHeaders(headers);
+    const userId = this.authService.ensureAuth(accessToken);
+    const datasets = await this.datasetService.findAll(userId);
     return {
       status: HTTP_CODES.OK,
-      payload: allDatasets.map((d) => d.originalname),
+      payload: datasets,
+    };
+  }
+
+  private async delete(
+    options: ApiRequest<{
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
+      params: { id: string };
+    }>,
+  ): Promise<ApiResponse<DatasetDeleteResponseDTO>> {
+    const {
+      headers,
+      params: { id },
+    } = options;
+    const accessToken = this.getTokenFromHeaders(headers);
+    const userId = this.authService.ensureAuth(accessToken);
+    const deletedDataset = await this.datasetService.delete({ id, userId });
+    return {
+      status: HTTP_CODES.OK,
+      payload: deletedDataset,
     };
   }
 

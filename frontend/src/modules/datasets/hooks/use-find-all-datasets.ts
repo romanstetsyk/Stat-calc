@@ -1,4 +1,7 @@
-import type { ErrorCommon } from '@shared/build/esm/index';
+import type {
+  DatasetFindAllResponseDTO,
+  ErrorCommon,
+} from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -6,10 +9,13 @@ import { useQuery } from '~/common/hooks';
 
 import { datasetApi } from '../api';
 
-const useFindAllDatasets = (): UseQueryResult<string[], ErrorCommon> => {
-  const queryResult = useQuery<string[], ErrorCommon>({
+const useFindAllDatasets = (): UseQueryResult<
+  DatasetFindAllResponseDTO,
+  ErrorCommon
+> => {
+  const queryResult = useQuery<DatasetFindAllResponseDTO, ErrorCommon>({
     queryKey: ['allDatasets'],
-    queryFn: ({ signal }) => datasetApi.findAllDatasets(signal),
+    queryFn: ({ signal }) => datasetApi.findAll(signal),
     staleTime: Number.POSITIVE_INFINITY,
   });
 

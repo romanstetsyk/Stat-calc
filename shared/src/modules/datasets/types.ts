@@ -10,6 +10,26 @@ type DatasetUploadRequestDTO = {
   [UPLOAD_FIELD_NAME]: File[];
 };
 
-type DatasetUploadResponseDTO = string;
+type DatasetDTO = {
+  id: string;
+  filename: string;
+  size: number;
+  updatedAt: string;
+};
 
-export type { DatasetUploadRequestDTO, DatasetUploadResponseDTO };
+type DatasetUploadResponseDTO = DatasetDTO;
+
+type DatasetFindAllResponseDTO = DatasetDTO[];
+
+type DatasetDeleteURLParams = { id: DatasetDTO['id'] };
+
+type DatasetDeleteResponseDTO = DatasetDTO | null;
+
+export type {
+  DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
+  DatasetDTO,
+  DatasetFindAllResponseDTO,
+  DatasetUploadRequestDTO,
+  DatasetUploadResponseDTO,
+};

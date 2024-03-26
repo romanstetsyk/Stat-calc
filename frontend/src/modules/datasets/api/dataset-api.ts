@@ -1,5 +1,16 @@
-import type { DatasetUploadRequestDTO } from '@shared/build/esm/index';
-import { API_PATHS_DATASETS, HTTP_METHODS } from '@shared/build/esm/index';
+import type {
+  DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
+  DatasetFindAllResponseDTO,
+  DatasetUploadRequestDTO,
+  DatasetUploadResponseDTO,
+} from '@shared/build/esm/index';
+import {
+  ACCEPT,
+  API_PATHS_DATASETS,
+  CONTENT_TYPE,
+  HTTP_METHODS,
+} from '@shared/build/esm/index';
 
 import type { ApiBaseConstructor } from '~/framework/api';
 import { ApiBase } from '~/framework/api';
@@ -16,7 +27,9 @@ class DatasetApi extends ApiBase {
     super({ baseUrl, prefix, http, storage });
   }
 
-  public async upload(payload: DatasetUploadRequestDTO): Promise<string> {
+  public async upload(
+    payload: DatasetUploadRequestDTO,
+  ): Promise<DatasetUploadResponseDTO> {
     // Get fieldName from the payload to not hardcode it in `formData.set(...)`
     const [[fieldName, [file]]] = Object.entries(payload);
     const formData = new FormData();
@@ -34,15 +47,32 @@ class DatasetApi extends ApiBase {
     return res.json();
   }
 
-  public async findAllDatasets(
+  public async findAll(
     signal?: RequestInit['signal'],
-  ): Promise<string[]> {
+  ): Promise<DatasetFindAllResponseDTO> {
     const res = await this.load({
-      url: this.constructURL('/all'),
+      url: this.constructURL(API_PATHS_DATASETS.ROOT),
       options: {
-        method: 'get',
+        method: HTTP_METHODS.GET,
         hasAuth: true,
         signal,
+      },
+    });
+    return res.json();
+  }
+
+  public async delete(
+    params: DatasetDeleteURLParams,
+  ): Promise<DatasetDeleteResponseDTO> {
+    const res = await this.load({
+      url: this.constructURL(API_PATHS_DATASETS.$ID, { params }),
+      options: {
+        method: HTTP_METHODS.DELETE,
+        hasAuth: true,
+        headers: {
+          accept: ACCEPT.JSON,
+          contentType: CONTENT_TYPE.JSON,
+        },
       },
     });
     return res.json();

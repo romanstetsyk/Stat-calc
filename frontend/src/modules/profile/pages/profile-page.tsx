@@ -17,7 +17,7 @@ type Props = {
 
 const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
   return (
-    <Container maxWidth='2xl' mt={8}>
+    <Container maxWidth='3xl' mt={8}>
       <Tabs index={selectedIndex} isManual isLazy lazyBehavior='unmount'>
         <TabList>
           {PROFILE_ITEMS.map((tab) => (
@@ -36,7 +36,9 @@ const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
 
         <TabPanels>
           {PROFILE_ITEMS.map((tab) => (
-            <TabPanel key={tab.label}>{tab.tabContent}</TabPanel>
+            <TabPanel key={tab.label} px={0}>
+              {tab.tabContent}
+            </TabPanel>
           ))}
         </TabPanels>
       </Tabs>

@@ -27,6 +27,10 @@ export {
   signUpSchema,
 } from '~/modules/auth/auth.js';
 export type {
+  DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
+  DatasetDTO,
+  DatasetFindAllResponseDTO,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from '~/modules/datasets/datasets.js';

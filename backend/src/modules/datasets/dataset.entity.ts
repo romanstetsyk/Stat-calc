@@ -1,10 +1,14 @@
+import type { DatasetDTO } from 'shared/build/index.js';
+
+import type { UserEntity } from '~/modules/users/users.js';
+
 type DatasetEntityConstructor = {
   id: string;
   originalname: string;
   mimetype: string;
   size: number;
   buffer: Buffer;
-  userId: string;
+  userId: UserEntity['id'];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -38,9 +42,12 @@ class DatasetEntity {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
+
+  public toObject(): DatasetDTO {
+    const { id, originalname, size, updatedAt } = this;
+    const filename = originalname;
+    return { id, filename, size, updatedAt: updatedAt.toISOString() };
+  }
 }
 
-type DatasetBody = Omit<DatasetEntity, 'id' | 'createdAt' | 'updatedAt'>;
-
-export type { DatasetBody };
 export { DatasetEntity };

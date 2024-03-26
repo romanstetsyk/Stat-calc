@@ -5,6 +5,10 @@ export {
   UPLOAD_FIELD_NAME,
 } from './constants/constants.js';
 export type {
+  DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
+  DatasetDTO,
+  DatasetFindAllResponseDTO,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from './types.js';
