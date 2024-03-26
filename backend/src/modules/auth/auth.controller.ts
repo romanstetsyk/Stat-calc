@@ -208,7 +208,6 @@ class AuthController extends ControllerBase {
 
     return {
       status: HTTP_CODES.NO_CONTENT,
-      payload: null,
       clearCookies: [['refreshToken', { ...this.defaultCookieOptions() }]],
     };
   }

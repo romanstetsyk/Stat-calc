@@ -54,7 +54,7 @@ class UserController extends ControllerBase {
 
     return {
       status: HTTP_CODES.OK,
-      payload: users,
+      payload: users.map((e) => e.toObject()),
     };
   }
 
@@ -81,7 +81,7 @@ class UserController extends ControllerBase {
 
     return {
       status: HTTP_CODES.OK,
-      payload: user,
+      payload: user.toObject(),
     };
   }
 }

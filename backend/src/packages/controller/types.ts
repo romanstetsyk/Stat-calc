@@ -37,7 +37,9 @@ type RequestHandlerWrapped<
 
 type ControllerRoute = Pick<ServerRoute, 'path' | 'method'> & {
   // WRONG: handler: (options) => Promise<...>
-  handler(options: ApiRequest<DefaultRequestOption>): Promise<ApiResponse>;
+  handler(
+    options: ApiRequest<DefaultRequestOption>,
+  ): Promise<ApiResponse<Payload>>;
   plugins?: ServerRoute['plugins'];
 };
 
@@ -53,12 +55,20 @@ type CookieArray = {
   [C in keyof AllowedCookies]: [C, AllowedCookies[C], CookieOptions]; // [ name, value, options ]
 }[keyof AllowedCookies];
 
-type ApiResponse<T = unknown> = {
+type Payload =
+  | undefined
+  | null
+  | string
+  | number
+  | boolean
+  | { [k: string]: Payload }
+  | Payload[];
+
+type ApiResponse<T extends Payload = undefined> = {
   status: ValueOf<typeof HTTP_CODES>;
-  payload: T | null;
   cookies?: CookieArray[];
   clearCookies?: [CookieArray[0], CookieArray[2]][];
-};
+} & (T extends undefined ? { payload?: undefined } : { payload: T });
 
 export type {
   AllowedCookies,

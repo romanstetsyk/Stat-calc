@@ -8,11 +8,11 @@ type FindByIdRequestDTO = {
   id: UserEntity['id'];
 };
 
-type FindAllResponseDTO = UserEntity[];
+type FindAllResponseDTO = ReturnType<UserEntity['toObject']>[];
 
-type FindByIdResponseDTO = UserEntity;
+type FindByIdResponseDTO = ReturnType<UserEntity['toObject']>;
 
-type CreateResponseDTO = UserEntity;
+type CreateResponseDTO = ReturnType<UserEntity['toObject']>;
 
 export type {
   CreateResponseDTO,

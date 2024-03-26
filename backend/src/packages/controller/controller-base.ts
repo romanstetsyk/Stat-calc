@@ -67,7 +67,9 @@ abstract class ControllerBase implements Controller {
           }
         }
 
-        payload ? res.status(status).json(payload) : res.sendStatus(status);
+        payload === undefined
+          ? res.sendStatus(status)
+          : res.status(status).json(payload);
       } catch (error) {
         next(error);
       }
