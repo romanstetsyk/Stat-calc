@@ -17,6 +17,7 @@ const useFindAllDatasets = (): UseQueryResult<
     queryKey: ['allDatasets'],
     queryFn: ({ signal }) => datasetApi.findAll(signal),
     staleTime: Number.POSITIVE_INFINITY,
+    retry: false,
   });
 
   const { isError, isSuccess } = queryResult;

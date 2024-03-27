@@ -12,8 +12,8 @@ import { APP_ROUTES } from '~/common/constants';
 import { useCurrentUser, useSignOut } from '~/modules/auth/hooks';
 
 const ProfileMenu = (): JSX.Element | null => {
+  const { data: currentUser, isSuccess } = useCurrentUser();
   const { mutate: signOut } = useSignOut();
-  const { data: currentUser } = useCurrentUser();
 
   const handleSignOut = useCallback((): void => {
     signOut();
@@ -22,7 +22,7 @@ const ProfileMenu = (): JSX.Element | null => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
 
-  if (!currentUser) {
+  if (!isSuccess || !currentUser) {
     return null;
   }
 

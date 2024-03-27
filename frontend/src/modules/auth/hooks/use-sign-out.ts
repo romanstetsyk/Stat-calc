@@ -1,6 +1,6 @@
 import type { ToastId } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
-import type { ErrorCommon, UserInfo } from '@shared/build/esm/index';
+import type { ErrorCommon } from '@shared/build/esm/index';
 import { API_PATHS_AUTH } from '@shared/build/esm/index';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
@@ -29,8 +29,7 @@ const useSignOut: UseSignOut = () => {
   useEffect(() => {
     if (isSuccess) {
       storage.removeItem('token');
-      queryClient.setQueryData<UserInfo | null>(['currentUser'], null);
-      void queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      queryClient.removeQueries();
       navigate(API_PATHS_AUTH.SIGN_IN);
     }
   }, [isSuccess, navigate, queryClient]);
