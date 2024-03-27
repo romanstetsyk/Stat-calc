@@ -10,6 +10,7 @@ const ERROR_MESSAGES = {
   WRONG_CREDENTIALS: "That username or password didn't work",
   MISSING_TOKEN: 'The token is missing in the request',
   TOKEN_EXPIRED: 'JWT token expired',
+  MISSING_EXP_CLAIM: "Token doesn't contain the `exp` claim",
 } as const;
 
 export { ERROR_MESSAGES };
