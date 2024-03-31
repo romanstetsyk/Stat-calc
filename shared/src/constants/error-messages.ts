@@ -1,6 +1,7 @@
 const ERROR_MESSAGES = {
   NOT_FOUND: 'Not found.',
   BAD_REQUEST: 'Bad request',
+  UNAUTHORIZED: 'Unauthorized',
   UNKNOWN: 'Internal Server Error',
   USER_ALREADY_EXIST: 'User already exists',
   USER_ALREADY_AUTHENTICATED: 'Already authenticated',

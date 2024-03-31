@@ -39,11 +39,11 @@ const errorConverter: ErrorRequestHandler = (
     status = HTTP_CODES.BAD_REQUEST;
     message = err.message;
   } else if (err instanceof jwt.JsonWebTokenError) {
-    status = HTTP_CODES.FORBIDDEN;
+    status = HTTP_CODES.UNAUTHORIZED;
     message =
-      err.name === 'TokenExpiredError'
+      err instanceof jwt.TokenExpiredError
         ? ERROR_MESSAGES.TOKEN_EXPIRED
-        : err.message;
+        : ERROR_MESSAGES.UNAUTHORIZED;
   } else {
     status =
       'status' in err && isHttpCode(err.status)

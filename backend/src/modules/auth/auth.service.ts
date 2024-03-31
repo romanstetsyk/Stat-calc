@@ -78,12 +78,8 @@ class AuthService {
   }
 
   public ensureAuth(token: string): JWTPayload['id'] {
-    try {
-      const { id } = this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.ACCESS>(token);
-      return id;
-    } catch {
-      throw new Error('auth error');
-    }
+    const { id } = this.tokenUtil.verifyJWT<typeof TOKEN_TYPES.ACCESS>(token);
+    return id;
   }
 
   public async signIn(payload: SignInRequestDTO): Promise<UserWithTokens> {
