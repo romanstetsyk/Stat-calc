@@ -1,9 +1,11 @@
+import type { ToastId } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import type {
   DatasetFindAllResponseDTO,
   ErrorCommon,
 } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useQuery } from '~/common/hooks';
 
@@ -20,19 +22,25 @@ const useFindAllDatasets = (): UseQueryResult<
     retry: false,
   });
 
-  const { isError, isSuccess } = queryResult;
+  const toast = useToast();
+  const toastRef = useRef<ToastId>();
+
+  const { isError, error } = queryResult;
 
   useEffect(() => {
     if (isError) {
-      // console.log('useFindAllDatasets error');
+      toastRef.current = toast({
+        title: 'Error',
+        description: error.message,
+        status: 'error',
+        duration: null,
+        isClosable: true,
+      });
     }
-  }, [isError]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      // console.log('useFindAllDatasets success');
-    }
-  }, [isSuccess]);
+    return () => {
+      toastRef.current && toast.close(toastRef.current);
+    };
+  }, [error, isError, toast]);
 
   return queryResult;
 };

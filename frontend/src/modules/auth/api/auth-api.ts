@@ -1,5 +1,4 @@
 import type {
-  RefreshTokenResponseDTO,
   SignInRequestDTO,
   SignInResponseDTO,
   SignUpRequestDTO,
@@ -13,17 +12,22 @@ import {
   HTTP_METHODS,
 } from '@shared/build/esm/index';
 
-import type {
-  ApiBaseConstructor,
-  HttpResponseInterceptorFn,
-} from '~/framework/api';
+import type { ApiBaseConstructor, Interceptors } from '~/framework/api';
 import { ApiBase } from '~/framework/api';
 
-type AuthApiConstructor = ApiBaseConstructor;
+type AuthApiConstructor = ApiBaseConstructor & { interceptors: Interceptors };
 
 class AuthApi extends ApiBase {
-  public constructor({ baseUrl, prefix, http, storage }: AuthApiConstructor) {
+  public constructor({
+    baseUrl,
+    prefix,
+    http,
+    storage,
+    interceptors,
+  }: AuthApiConstructor) {
     super({ baseUrl, prefix, http, storage });
+
+    this.interceptors = interceptors;
   }
 
   public async signUp(payload: SignUpRequestDTO): Promise<SignUpResponseDTO> {
@@ -37,6 +41,7 @@ class AuthApi extends ApiBase {
           contentType: CONTENT_TYPE.JSON,
           accept: ACCEPT.JSON,
         },
+        ignoreInterceptors: true,
       },
     });
     return res.json();
@@ -53,6 +58,7 @@ class AuthApi extends ApiBase {
           contentType: CONTENT_TYPE.JSON,
           accept: ACCEPT.JSON,
         },
+        ignoreInterceptors: true,
       },
     });
     return res.json();
@@ -72,38 +78,19 @@ class AuthApi extends ApiBase {
     return res.text(); // no body to parse as json for code 204
   }
 
-  public async currentUser(signal?: RequestInit['signal']): Promise<UserInfo> {
+  public async currentUser(): Promise<UserInfo> {
     const res = await this.load({
       url: this.constructURL(API_PATHS_AUTH.ME),
       options: {
         method: HTTP_METHODS.GET,
         hasAuth: true,
-        signal,
         headers: {
           accept: ACCEPT.JSON,
         },
       },
-      onError: {
-        fn: this.refresh.bind(this),
-        repeatOriginalRequestOnSuccess: true,
-      },
     });
     return res.json();
   }
-
-  private refresh: HttpResponseInterceptorFn = async ({ signal }) => {
-    const res = await this.load({
-      url: this.constructURL(API_PATHS_AUTH.REFRESH),
-      options: {
-        method: HTTP_METHODS.GET,
-        credentials: 'include',
-        hasAuth: false,
-        signal,
-      },
-    });
-    const json: RefreshTokenResponseDTO = await res.json();
-    this.storage.setItem('token', json.accessToken);
-  };
 }
 
 export { AuthApi };

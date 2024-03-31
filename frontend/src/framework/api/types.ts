@@ -9,30 +9,16 @@ type HttpApiOptions = Omit<HttpOptions, 'headers' | 'body'> & {
   };
   hasAuth?: boolean; // refers to authorization header
   payload?: HttpOptions['body'];
+  ignoreInterceptors?: boolean;
 };
 
-type HttpResponseInterceptorFn = ({
-  response,
-  signal,
-}: {
-  response?: Response;
-  signal?: RequestInit['signal'];
-}) => Promise<void>;
-
-type HttpResponseInterceptor = {
-  fn: HttpResponseInterceptorFn;
-  repeatOriginalRequestOnSuccess?: boolean;
+type Interceptors = {
+  request?: (params: { url: URL; options: HttpApiOptions }) => Promise<void>;
+  response?: (params: {
+    response: Response;
+    url: URL;
+    options: HttpApiOptions;
+  }) => Promise<void>;
 };
 
-type LoadParams = {
-  url: URL;
-  options: HttpApiOptions;
-  onError?: HttpResponseInterceptor;
-};
-
-export type {
-  HttpApiOptions,
-  HttpResponseInterceptor,
-  HttpResponseInterceptorFn,
-  LoadParams,
-};
+export type { HttpApiOptions, Interceptors };

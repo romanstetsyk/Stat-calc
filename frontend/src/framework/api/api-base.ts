@@ -9,10 +9,10 @@ import {
   HttpError,
 } from '@shared/build/esm/index.js';
 
-import type { HttpBase } from '~/framework/http';
+import type { HttpBase, HttpOptions } from '~/framework/http';
 import type { Storage } from '~/framework/storage';
 
-import type { HttpApiOptions, LoadParams } from './types';
+import type { HttpApiOptions, Interceptors } from './types';
 
 type ApiBaseConstructor = {
   baseUrl: string;
@@ -27,6 +27,8 @@ abstract class ApiBase {
   private http: HttpBase;
   protected storage: Storage;
 
+  protected interceptors: Interceptors = {};
+
   protected constructor({
     baseUrl,
     prefix,
@@ -39,39 +41,41 @@ abstract class ApiBase {
     this.storage = storage;
   }
 
-  public async load({ url, options, onError }: LoadParams): Promise<Response> {
-    const {
-      headers,
-      hasAuth,
-      payload: body,
-      method,
-      credentials,
-      signal,
-    } = options;
-
-    const response = await this.http.makeRequest(url, {
-      body,
-      method,
-      credentials,
-      signal,
-      headers: this.setHeaders(hasAuth, headers),
-    });
-
-    if (!response.ok) {
-      if (onError) {
-        try {
-          await onError.fn({ response, signal });
-          if (onError.repeatOriginalRequestOnSuccess) {
-            return await this.load({ url, options });
-          }
-        } catch {
-          /* empty */
-        }
-      }
-
-      await this.handleError(response);
+  public async load(reqParams: {
+    url: URL;
+    options: HttpApiOptions;
+  }): Promise<Response> {
+    if (!reqParams.options.ignoreInterceptors && this.interceptors.request) {
+      await this.interceptors.request(reqParams);
     }
-    return response;
+
+    const fetchOptions: HttpOptions = {
+      body: reqParams.options.payload,
+      method: reqParams.options.method,
+      credentials: reqParams.options.credentials,
+      signal: reqParams.options.signal,
+      headers: this.setHeaders(
+        reqParams.options.hasAuth,
+        reqParams.options.headers,
+      ),
+    };
+
+    const response = await this.http.makeRequest(reqParams.url, fetchOptions);
+
+    const resParams = {
+      response,
+      url: reqParams.url,
+      options: reqParams.options,
+    };
+
+    if (!reqParams.options.ignoreInterceptors && this.interceptors.response) {
+      await this.interceptors.response(resParams);
+    }
+
+    if (!resParams.response.ok) {
+      await this.handleError(resParams.response);
+    }
+    return resParams.response;
   }
 
   private setHeaders(

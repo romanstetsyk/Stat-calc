@@ -16,23 +16,20 @@ const useSignOut: UseSignOut = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const mutationResult = useMutation<string, ErrorCommon>({
-    mutationKey: ['signOut'],
-    mutationFn: authApi.signOut.bind(authApi),
-  });
-
   const toast = useToast();
   const toastRef = useRef<ToastId>();
 
-  const { isError, error, isSuccess } = mutationResult;
-
-  useEffect(() => {
-    if (isSuccess) {
+  const mutationResult = useMutation<string, ErrorCommon>({
+    mutationKey: ['signOut'],
+    mutationFn: authApi.signOut.bind(authApi),
+    onSuccess: () => {
       storage.removeItem('token');
       queryClient.removeQueries();
       navigate(API_PATHS_AUTH.SIGN_IN);
-    }
-  }, [isSuccess, navigate, queryClient]);
+    },
+  });
+
+  const { isError, error } = mutationResult;
 
   useEffect(() => {
     if (isError) {

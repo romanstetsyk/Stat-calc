@@ -12,10 +12,12 @@ import {
   HTTP_METHODS,
 } from '@shared/build/esm/index';
 
-import type { ApiBaseConstructor } from '~/framework/api';
+import type { ApiBaseConstructor, Interceptors } from '~/framework/api';
 import { ApiBase } from '~/framework/api';
 
-type DatasetApiConstructor = ApiBaseConstructor;
+type DatasetApiConstructor = ApiBaseConstructor & {
+  interceptors: Interceptors;
+};
 
 class DatasetApi extends ApiBase {
   public constructor({
@@ -23,8 +25,11 @@ class DatasetApi extends ApiBase {
     prefix,
     http,
     storage,
+    interceptors,
   }: DatasetApiConstructor) {
     super({ baseUrl, prefix, http, storage });
+
+    this.interceptors = interceptors;
   }
 
   public async upload(

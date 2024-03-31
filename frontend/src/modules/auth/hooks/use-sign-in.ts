@@ -26,19 +26,19 @@ const useSignIn: UseSignIn = () => {
     SignInResponseDTO,
     ErrorCommon,
     SignInRequestDTO
-  >({ mutationKey: ['signIn'], mutationFn: authApi.signIn.bind(authApi) });
+  >({
+    mutationKey: ['signIn'],
+    mutationFn: authApi.signIn.bind(authApi),
+    onSuccess: (data) => {
+      storage.setItem('token', data.accessToken);
+      void queryClient.fetchQuery({ queryKey: ['currentUser'] });
+    },
+  });
 
   const toast = useToast();
   const toastRef = useRef<ToastId>();
 
-  const { isError, error, isSuccess, data } = mutationResult;
-
-  useEffect(() => {
-    if (isSuccess) {
-      storage.setItem('token', data.accessToken);
-      void queryClient.fetchQuery({ queryKey: ['currentUser'] });
-    }
-  }, [data?.accessToken, isSuccess, queryClient]);
+  const { isError, error } = mutationResult;
 
   useEffect(() => {
     if (isError) {
