@@ -9,6 +9,7 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { MUTATION_KEY, QUERY_KEY } from '~/common/constants';
 import { useMutation, useQueryClient } from '~/common/hooks';
 
 import { datasetApi } from '../api';
@@ -27,7 +28,7 @@ const useUpload: UseUpload = () => {
     ErrorCommon,
     DatasetUploadRequestDTO
   >({
-    mutationKey: ['uploadFile'],
+    mutationKey: MUTATION_KEY.UPLOAD_FILE,
     mutationFn: datasetApi.upload.bind(datasetApi),
   });
 
@@ -39,12 +40,11 @@ const useUpload: UseUpload = () => {
   useEffect(() => {
     if (isSuccess) {
       void queryClient.setQueryData(
-        ['allDatasets'],
+        QUERY_KEY.ALL_DATASETS,
         (old: DatasetFindAllResponseDTO): DatasetFindAllResponseDTO => {
           return [...old, data];
         },
       );
-      // void queryClient.refetchQueries({ queryKey: ['allDatasets'] });
     }
   }, [data, isSuccess, queryClient]);
 

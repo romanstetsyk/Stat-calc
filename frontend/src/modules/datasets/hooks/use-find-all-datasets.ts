@@ -7,6 +7,7 @@ import type {
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { QUERY_KEY } from '~/common/constants';
 import { useQuery } from '~/common/hooks';
 
 import { datasetApi } from '../api';
@@ -16,7 +17,7 @@ const useFindAllDatasets = (): UseQueryResult<
   ErrorCommon
 > => {
   const queryResult = useQuery<DatasetFindAllResponseDTO, ErrorCommon>({
-    queryKey: ['allDatasets'],
+    queryKey: QUERY_KEY.ALL_DATASETS,
     queryFn: ({ signal }) => datasetApi.findAll(signal),
     staleTime: Number.POSITIVE_INFINITY,
     retry: false,

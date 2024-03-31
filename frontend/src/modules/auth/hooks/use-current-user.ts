@@ -5,6 +5,7 @@ import { TIME_CONVERT } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
+import { QUERY_KEY } from '~/common/constants';
 import { useQuery, useQueryClient } from '~/common/hooks';
 import { config } from '~/config';
 import { storage } from '~/framework/storage';
@@ -20,7 +21,7 @@ const useCurrentUser = (): UseQueryResult<UserInfo, ErrorCommon> => {
     config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
 
   const queryResult = useQuery<UserInfo, ErrorCommon>({
-    queryKey: ['currentUser'],
+    queryKey: QUERY_KEY.CURRENT_USER,
     queryFn: authApi.currentUser.bind(authApi),
     retry: false,
     refetchOnMount: true,
@@ -28,7 +29,7 @@ const useCurrentUser = (): UseQueryResult<UserInfo, ErrorCommon> => {
     refetchOnReconnect: false,
     enabled: Boolean(accessToken),
     placeholderData: () => {
-      return queryClient.getQueryData<UserInfo>(['currentUser']);
+      return queryClient.getQueryData<UserInfo>(QUERY_KEY.CURRENT_USER);
     },
     staleTime,
   });
@@ -41,7 +42,7 @@ const useCurrentUser = (): UseQueryResult<UserInfo, ErrorCommon> => {
   useEffect(() => {
     if (isError) {
       storage.removeItem('token');
-      queryClient.removeQueries({ queryKey: ['currentUser'] });
+      queryClient.removeQueries({ queryKey: QUERY_KEY.CURRENT_USER });
     }
   }, [isError, queryClient]);
 

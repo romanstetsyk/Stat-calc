@@ -8,6 +8,7 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { MUTATION_KEY, QUERY_KEY } from '~/common/constants';
 import { useMutation, useQueryClient } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
@@ -27,11 +28,11 @@ const useSignIn: UseSignIn = () => {
     ErrorCommon,
     SignInRequestDTO
   >({
-    mutationKey: ['signIn'],
+    mutationKey: MUTATION_KEY.SIGN_IN,
     mutationFn: authApi.signIn.bind(authApi),
     onSuccess: (data) => {
       storage.setItem('token', data.accessToken);
-      void queryClient.fetchQuery({ queryKey: ['currentUser'] });
+      void queryClient.fetchQuery({ queryKey: QUERY_KEY.CURRENT_USER });
     },
   });
 

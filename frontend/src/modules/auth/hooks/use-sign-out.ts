@@ -5,6 +5,7 @@ import { API_PATHS_AUTH } from '@shared/build/esm/index';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { MUTATION_KEY } from '~/common/constants';
 import { useMutation, useNavigate, useQueryClient } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
@@ -20,7 +21,7 @@ const useSignOut: UseSignOut = () => {
   const toastRef = useRef<ToastId>();
 
   const mutationResult = useMutation<string, ErrorCommon>({
-    mutationKey: ['signOut'],
+    mutationKey: MUTATION_KEY.SIGN_OUT,
     mutationFn: authApi.signOut.bind(authApi),
     onSuccess: () => {
       storage.removeItem('token');

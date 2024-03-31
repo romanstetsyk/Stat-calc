@@ -8,6 +8,7 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { MUTATION_KEY } from '~/common/constants';
 import { useMutation } from '~/common/hooks';
 import { storage } from '~/framework/storage';
 
@@ -25,7 +26,7 @@ const useSignUp: UseSignUp = () => {
     ErrorCommon,
     SignUpRequestDTO
   >({
-    mutationKey: ['signUp'],
+    mutationKey: MUTATION_KEY.SIGN_UP,
     mutationFn: authApi.signUp.bind(authApi),
   });
 

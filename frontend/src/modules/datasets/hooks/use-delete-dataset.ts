@@ -9,6 +9,7 @@ import type {
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
+import { MUTATION_KEY, QUERY_KEY } from '~/common/constants';
 import { useMutation, useQueryClient } from '~/common/hooks';
 
 import { datasetApi } from '../api';
@@ -27,7 +28,7 @@ const useDeleteDataset: UseDeleteDataset = () => {
     ErrorCommon,
     { id: string }
   >({
-    mutationKey: ['deleteFile'],
+    mutationKey: MUTATION_KEY.DELETE_FILE,
     mutationFn: datasetApi.delete.bind(datasetApi),
   });
 
@@ -39,7 +40,7 @@ const useDeleteDataset: UseDeleteDataset = () => {
   useEffect(() => {
     if (isSuccess && data !== null) {
       void queryClient.setQueryData(
-        ['allDatasets'],
+        QUERY_KEY.ALL_DATASETS,
         (old: DatasetFindAllResponseDTO): DatasetFindAllResponseDTO => {
           return old.filter(({ id }) => id !== data.id);
         },
