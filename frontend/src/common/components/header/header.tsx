@@ -43,7 +43,7 @@ function Header(): JSX.Element {
         spacing={6}
       >
         {currentUser ? (
-          <ProfileMenu />
+          <ProfileMenu name={currentUser.name} />
         ) : (
           <Button
             as={RouterLink}

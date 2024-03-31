@@ -5,14 +5,18 @@ import {
   MenuList,
   useColorModeValue,
 } from '@chakra-ui/react';
+import type { UserInfo } from '@shared/build/esm/index';
 import { useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { APP_ROUTES } from '~/common/constants';
-import { useCurrentUser, useSignOut } from '~/modules/auth/hooks';
+import { useSignOut } from '~/modules/auth/hooks';
 
-const ProfileMenu = (): JSX.Element | null => {
-  const { data: currentUser, isSuccess } = useCurrentUser();
+type Props = {
+  name: UserInfo['name'];
+};
+
+const ProfileMenu = ({ name }: Props): JSX.Element | null => {
   const { mutate: signOut } = useSignOut();
 
   const handleSignOut = useCallback((): void => {
@@ -21,10 +25,6 @@ const ProfileMenu = (): JSX.Element | null => {
 
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
-
-  if (!isSuccess || !currentUser) {
-    return null;
-  }
 
   return (
     <Menu>
@@ -38,7 +38,7 @@ const ProfileMenu = (): JSX.Element | null => {
             _hover={{ color: linkHoverColor }}
             _expanded={{ color: linkHoverColor }}
           >
-            {currentUser.name}
+            {name}
           </MenuButton>
           <MenuList>
             <MenuItem as={RouterLink} to={APP_ROUTES.DATASETS}>
