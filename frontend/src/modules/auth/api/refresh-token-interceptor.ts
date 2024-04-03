@@ -21,6 +21,8 @@ class RefreshTokenInterceptor extends ApiBase implements Interceptors {
   public request: Interceptors['request'];
   public response: Interceptors['response'];
 
+  private refreshPromise: Promise<RefreshTokenResponseDTO> | null;
+
   public constructor({
     baseUrl,
     prefix,
@@ -33,6 +35,8 @@ class RefreshTokenInterceptor extends ApiBase implements Interceptors {
     this.tokenUtil = tokenUtil;
     this.request = this.reqFn.bind(this);
     this.response = this.resFn.bind(this);
+
+    this.refreshPromise = null;
   }
 
   private async refresh(
@@ -53,41 +57,50 @@ class RefreshTokenInterceptor extends ApiBase implements Interceptors {
     return res.json();
   }
 
+  private async handleRefresh(
+    refreshPromise: Promise<RefreshTokenResponseDTO>,
+  ): Promise<void> {
+    try {
+      const { accessToken } = await refreshPromise;
+      this.storage.setItem('token', accessToken);
+    } finally {
+      this.refreshPromise = null;
+    }
+  }
+
   private async reqFn(params: {
     url: URL;
     options: HttpApiOptions;
   }): Promise<void> {
-    const accessToken = this.storage.getItem('token');
-    if (!accessToken) {
-      // params.options.signal = AbortSignal.abort();
+    if (this.refreshPromise) {
+      await this.handleRefresh(this.refreshPromise);
       return;
     }
+
+    const accessToken = this.storage.getItem('token');
+    if (!accessToken) {
+      return;
+    }
+
     if (this.tokenUtil.isExpired(accessToken)) {
-      try {
-        const { accessToken } = await this.refresh(params.options.signal);
-        this.storage.setItem('token', accessToken);
-      } catch {
-        /* empty */
-      }
+      this.refreshPromise = this.refresh(params.options.signal);
+      await this.handleRefresh(this.refreshPromise);
     }
   }
 
   private async resFn(
     params: Parameters<NonNullable<Interceptors['response']>>[0],
   ): ReturnType<NonNullable<Interceptors['response']>> {
-    const { response, url, options } = params;
-
-    if (response.status !== HTTP_CODES.UNAUTHORIZED) {
+    if (params.response.status !== HTTP_CODES.UNAUTHORIZED) {
       return;
     }
 
-    try {
-      const { accessToken } = await this.refresh(options.signal);
-      this.storage.setItem('token', accessToken);
-      params.response = await this.load({ url, options });
-    } catch {
-      /* empty */
+    if (!this.refreshPromise) {
+      this.refreshPromise = this.refresh(params.options.signal);
     }
+
+    await this.handleRefresh(this.refreshPromise);
+    params.response = await this.load(params);
   }
 }
 
