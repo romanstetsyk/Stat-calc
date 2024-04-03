@@ -13,6 +13,12 @@ type DefaultRequestOption = {
   file?: Express.Multer.File;
 };
 
+type ResponseAttachment = {
+  filename: string;
+  buffer: Buffer;
+  mimetype: string;
+};
+
 type ServerApi = {
   version: string;
   controllers: Controller[];
@@ -68,7 +74,9 @@ type ApiResponse<T extends Payload = undefined> = {
   status: ValueOf<typeof HTTP_CODES>;
   cookies?: CookieArray[];
   clearCookies?: [CookieArray[0], CookieArray[2]][];
-} & (T extends undefined ? { payload?: undefined } : { payload: T });
+} & (T extends undefined
+  ? { payload?: undefined; file?: ResponseAttachment }
+  : { payload: T; file?: undefined });
 
 export type {
   AllowedCookies,
