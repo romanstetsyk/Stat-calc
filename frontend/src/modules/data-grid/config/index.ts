@@ -15,6 +15,8 @@ const Config = {
   ROWS_LOAD_THRESHOLD: 40,
   // Scroll debounce
   DEBOUNCE_TIMEOUT: TIMEOUT['0.1s'],
+
+  DEFAULT_TITLE: 'Untitled',
 } as const;
 
 export { Config };

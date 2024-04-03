@@ -5,26 +5,28 @@ import { ArrayLike } from '~/framework/array-like';
 import { ExternalStore } from '~/framework/external-store';
 import type { ColumnHeading } from '~/modules/application/types';
 
+import { Config } from '../config';
 import type {
   ColumnChanges,
   GridData,
   OnCellsEditedParams,
-  OverwriteRowsParameters,
+  OverwriteData,
 } from '../types';
 
 class Dataset extends ExternalStore<GridData> {
   protected snapshot: GridData;
 
-  public constructor(datasetId: string) {
+  public constructor(id: string) {
     super();
 
     this.snapshot = {
-      datasetId,
+      id,
+      title: Config.DEFAULT_TITLE,
       rowData: new ArrayLike<ArrayLike<string | number>>(),
       colData: new ArrayLike<ArrayLike<string | number>>(),
       getContent: this.getContent.bind(this),
       onCellsEdited: this.onCellsEdited.bind(this),
-      overwriteRows: this.overwriteRows.bind(this),
+      overwriteData: this.overwriteData.bind(this),
       getColumnChanges: this.getColumnChanges.bind(this),
     };
   }
@@ -59,12 +61,9 @@ class Dataset extends ExternalStore<GridData> {
     };
   }
 
-  public overwriteRows({
-    datasetId,
-    newRows,
-    newCols,
-  }: OverwriteRowsParameters): void {
-    this.snapshot.datasetId = datasetId;
+  public overwriteData({ id, title, newRows, newCols }: OverwriteData): void {
+    this.snapshot.id = id;
+    this.snapshot.title = title;
     this.snapshot.rowData = newRows;
     this.snapshot.colData = newCols;
     this.emitChange();

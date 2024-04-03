@@ -1,5 +1,6 @@
 import {
   Button,
+  Link,
   Table,
   TableContainer,
   Tbody,
@@ -9,6 +10,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import type { DatasetDTO } from '@shared/build/esm/index';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { bytesToKb } from '../../helpers';
 import { useDeleteDataset } from '../../hooks';
@@ -38,7 +40,14 @@ const DatasetList = ({ datasets }: Props): JSX.Element | null => {
           {datasets.map(({ id, filename, size, updatedAt }) => (
             <Tr key={id}>
               <Td isTruncated maxWidth='sm' title={filename}>
-                {filename}{' '}
+                <Link
+                  as={RouterLink}
+                  to={{ pathname: id }}
+                  target='_blank'
+                  rel='noreferrer noopener'
+                >
+                  {filename}
+                </Link>
                 <Button
                   type='button'
                   onClick={() => {

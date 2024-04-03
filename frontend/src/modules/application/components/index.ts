@@ -3,7 +3,6 @@ export { BinManual } from './bin-manual';
 export { BinSquareRoot } from './bin-square-root';
 export { ConfidenceIntervalFormPart } from './confidence-interval-form-part';
 export { DataTable } from './data-table';
-export { FileUpload } from './file-upload';
 export { Histogram } from './histogram';
 export { HypothesisNotationDisplay } from './hypothesis-notation-display';
 export { HypothesisTestFormPart } from './hypothesis-test-form-part';

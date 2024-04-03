@@ -2,6 +2,8 @@ import type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
   DatasetFindAllResponseDTO,
+  DatasetFindOneRepsonseDTO,
+  DatasetFindOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from '@shared/build/esm/index';
@@ -14,6 +16,8 @@ import {
 
 import type { ApiBaseConstructor, Interceptors } from '~/framework/api';
 import { ApiBase } from '~/framework/api';
+
+import { getFilenameFromHeaders } from '../helpers';
 
 type DatasetApiConstructor = ApiBaseConstructor & {
   interceptors: Interceptors;
@@ -81,6 +85,22 @@ class DatasetApi extends ApiBase {
       },
     });
     return res.json();
+  }
+
+  public async findOne(
+    signal: RequestInit['signal'],
+    params: DatasetFindOneURLParams,
+  ): Promise<DatasetFindOneRepsonseDTO> {
+    const res = await this.load({
+      url: this.constructURL(API_PATHS_DATASETS.$ID, { params }),
+      options: {
+        method: HTTP_METHODS.GET,
+        hasAuth: true,
+        signal,
+      },
+    });
+    const filename = getFilenameFromHeaders(res.headers);
+    return { filename, buffer: await res.arrayBuffer() };
   }
 }
 

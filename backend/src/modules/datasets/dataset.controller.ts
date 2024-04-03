@@ -1,14 +1,17 @@
 import type {
   DatasetDeleteResponseDTO,
   DatasetFindAllResponseDTO,
+  DatasetFindOneRepsonseDTO,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
   HTTP_HEADERS,
 } from 'shared/build/index.js';
 import {
   API_PATHS_DATASETS,
+  ERROR_MESSAGES,
   HTTP_CODES,
   HTTP_METHODS,
+  HttpError,
   UPLOAD_FIELD_NAME,
 } from 'shared/build/index.js';
 
@@ -61,6 +64,12 @@ class DatasetController extends ControllerBase {
       method: HTTP_METHODS.DELETE,
       handler: this.delete.bind(this),
     });
+
+    this.addRoute({
+      path: API_PATHS_DATASETS.$ID,
+      method: HTTP_METHODS.GET,
+      handler: this.downloadOne.bind(this),
+    });
   }
 
   private async findAll(
@@ -75,6 +84,32 @@ class DatasetController extends ControllerBase {
     return {
       status: HTTP_CODES.OK,
       payload: datasets,
+    };
+  }
+
+  private async downloadOne(
+    options: ApiRequest<{
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
+      params: { id: string };
+    }>,
+  ): Promise<ApiResponse> {
+    const {
+      headers,
+      params: { id },
+    } = options;
+
+    const accessToken = this.getTokenFromHeaders(headers);
+    const userId = this.authService.ensureAuth(accessToken);
+    const dataset = await this.datasetService.downloadOne({ id, userId });
+    if (!dataset) {
+      throw new HttpError({
+        status: HTTP_CODES.NOT_FOUND,
+        message: ERROR_MESSAGES.NOT_FOUND,
+      });
+    }
+    return {
+      status: HTTP_CODES.OK,
+      file: dataset satisfies DatasetFindOneRepsonseDTO,
     };
   }
 

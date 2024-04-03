@@ -31,6 +31,8 @@ export type {
   DatasetDeleteURLParams,
   DatasetDTO,
   DatasetFindAllResponseDTO,
+  DatasetFindOneRepsonseDTO,
+  DatasetFindOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from '~/modules/datasets/datasets.js';

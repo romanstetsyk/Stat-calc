@@ -14,8 +14,9 @@ type OnCellsEditedParams = readonly {
   value: EditableGridCell;
 }[];
 
-type OverwriteRowsParameters = {
-  datasetId: string;
+type OverwriteData = {
+  id: string;
+  title: string;
   newRows: ArrayLike<ArrayLike<string | number>>;
   newCols: ArrayLike<ArrayLike<string | number>>;
 };
@@ -26,11 +27,12 @@ type ColumnChanges = {
 };
 
 type GridData = {
-  datasetId: string;
+  id: string;
+  title: string;
   rowData: ArrayLike<ArrayLike<string | number>>;
   colData: ArrayLike<ArrayLike<string | number>>;
   onCellsEdited: (newValues: OnCellsEditedParams) => boolean;
-  overwriteRows: (arg: OverwriteRowsParameters) => void;
+  overwriteData: (arg: OverwriteData) => void;
   getContent: (cell: Item) => GridCell;
   getColumnChanges: (columns: ColumnHeading[]) => ColumnChanges;
 };
@@ -40,5 +42,5 @@ export type {
   GridColumnName,
   GridData,
   OnCellsEditedParams,
-  OverwriteRowsParameters,
+  OverwriteData,
 };

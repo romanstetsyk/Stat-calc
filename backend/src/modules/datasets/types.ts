@@ -2,7 +2,14 @@ import type { DatasetEntity } from './dataset.entity.js';
 
 type DatasetBody = Omit<
   DatasetEntity,
-  'id' | 'createdAt' | 'updatedAt' | 'toObject'
+  'id' | 'createdAt' | 'updatedAt' | 'toObject' | 'toFile'
 >;
 
-export type { DatasetBody };
+type DatasetFile = {
+  id: DatasetEntity['id'];
+  filename: DatasetEntity['originalname'];
+  buffer: DatasetEntity['buffer'];
+  mimetype: DatasetEntity['mimetype'];
+};
+
+export type { DatasetBody, DatasetFile };

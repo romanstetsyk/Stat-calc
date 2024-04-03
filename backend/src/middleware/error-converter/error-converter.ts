@@ -2,12 +2,14 @@ import type { ErrorRequestHandler } from 'express';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import { Error as MongooseError } from 'mongoose';
+import { ERROR_MESSAGES, HTTP_CODES, HttpError } from 'shared/build/index.js';
+
 import {
-  ERROR_MESSAGES,
-  HTTP_CODES,
-  HttpError,
-  isHttpCode,
-} from 'shared/build/index.js';
+  handleJoiErrors,
+  handleMongooseErrors,
+  handleNonInstanseOfErrors,
+  handleUnknownErrors,
+} from './helpers/helpers.js';
 
 const errorConverter: ErrorRequestHandler = (
   err: unknown,
@@ -21,23 +23,17 @@ const errorConverter: ErrorRequestHandler = (
   }
 
   if (!(err instanceof Error)) {
-    const status = HTTP_CODES.INTERNAL_SERVER_ERROR;
-    const message = ERROR_MESSAGES.UNKNOWN;
-    const error = new HttpError({ status, message, cause: err });
-    next(error);
+    next(handleNonInstanseOfErrors(err));
     return;
   }
 
   let status, message;
-  if (
-    err instanceof MongooseError.CastError ||
-    err instanceof MongooseError.ValidationError
-  ) {
-    status = HTTP_CODES.BAD_REQUEST;
-    message = ERROR_MESSAGES.BAD_REQUEST;
+  if (err instanceof MongooseError) {
+    next(handleMongooseErrors(err));
+    return;
   } else if (err instanceof Joi.ValidationError) {
-    status = HTTP_CODES.BAD_REQUEST;
-    message = err.message;
+    next(handleJoiErrors(err));
+    return;
   } else if (err instanceof jwt.JsonWebTokenError) {
     status = HTTP_CODES.UNAUTHORIZED;
     message =
@@ -45,11 +41,8 @@ const errorConverter: ErrorRequestHandler = (
         ? ERROR_MESSAGES.TOKEN_EXPIRED
         : ERROR_MESSAGES.UNAUTHORIZED;
   } else {
-    status =
-      'status' in err && isHttpCode(err.status)
-        ? err.status
-        : HTTP_CODES.INTERNAL_SERVER_ERROR;
-    message = err.message;
+    next(handleUnknownErrors(err));
+    return;
   }
 
   const error = new HttpError({ status, message, cause: err });

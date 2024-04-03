@@ -1,4 +1,8 @@
 import type { HydratedDocument } from 'mongoose';
+import { MongooseError } from 'mongoose';
+import { validate } from 'uuid';
+
+import { INTERNAL_ERROR_MESSAGES } from '~/common/constants/constants.js';
 
 import { DatasetEntity } from './dataset.entity.js';
 import type { DatasetDocument, DatasetModel } from './dataset.model.js';
@@ -27,6 +31,20 @@ class DatasetRepository {
     const deletedDataset: HydratedDocument<DatasetDocument> | null =
       await this.datasetModel.findOneAndDelete({ _id, userId });
     return deletedDataset ? new DatasetEntity(deletedDataset.toObject()) : null;
+  }
+
+  public async findOne(payload: {
+    id: DatasetEntity['id'];
+    userId: DatasetEntity['userId'];
+  }): Promise<DatasetEntity | null> {
+    const { id: _id, userId } = payload;
+    const isValidUUID = validate(_id);
+    if (!isValidUUID) {
+      throw new MongooseError(INTERNAL_ERROR_MESSAGES.INVALID_UUID);
+    }
+    const dataset: HydratedDocument<DatasetDocument> | null =
+      await this.datasetModel.findOne({ _id, userId });
+    return dataset ? new DatasetEntity(dataset.toObject()) : null;
   }
 
   public async uploadOne(payload: DatasetBody): Promise<DatasetEntity> {

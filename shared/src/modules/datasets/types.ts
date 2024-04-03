@@ -25,11 +25,17 @@ type DatasetDeleteURLParams = { id: DatasetDTO['id'] };
 
 type DatasetDeleteResponseDTO = DatasetDTO | null;
 
+type DatasetFindOneURLParams = { id: DatasetDTO['id'] };
+
+type DatasetFindOneRepsonseDTO = { filename: string; buffer: ArrayBuffer };
+
 export type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
   DatasetDTO,
   DatasetFindAllResponseDTO,
+  DatasetFindOneRepsonseDTO,
+  DatasetFindOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 };

@@ -14,7 +14,7 @@ const generateHeaders = gridHeadersGenerator();
 const DataGrid = (): JSX.Element => {
   const ref = useRef<DataEditorRef>(null);
 
-  const { datasetId, onCellsEdited, rowData, getContent } = useGridData();
+  const { id, onCellsEdited, rowData, getContent } = useGridData();
 
   const [rowCount, setRowCount] = useState<number>(Config.ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
@@ -53,7 +53,7 @@ const DataGrid = (): JSX.Element => {
   return (
     <DataEditor
       ref={ref}
-      key={datasetId}
+      key={id}
       getCellContent={getContent}
       columns={columnHeaders}
       rows={Math.max(rowCount, rowData.length)}

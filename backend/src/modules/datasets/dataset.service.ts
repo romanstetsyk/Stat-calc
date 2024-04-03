@@ -2,7 +2,7 @@ import type { DatasetDTO } from 'shared/build/index.js';
 
 import type { DatasetEntity } from './dataset.entity.js';
 import type { DatasetRepository } from './dataset.repository.js';
-import type { DatasetBody } from './types.js';
+import type { DatasetBody, DatasetFile } from './types.js';
 
 type DatasetServiceConstructor = {
   datasetRepository: DatasetRepository;
@@ -32,6 +32,14 @@ class DatasetService {
   }): Promise<DatasetDTO | null> {
     const deletedDataset = await this.datasetRepository.delete(payload);
     return deletedDataset ? deletedDataset.toObject() : null;
+  }
+
+  public async downloadOne(payload: {
+    id: DatasetEntity['id'];
+    userId: DatasetEntity['userId'];
+  }): Promise<DatasetFile | null> {
+    const dataset = await this.datasetRepository.findOne(payload);
+    return dataset ? dataset.toFile() : null;
   }
 }
 

@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/react';
 import type { DatasetUploadRequestDTO } from '@shared/build/esm/index';
 import { useCallback } from 'react';
 
@@ -7,7 +8,7 @@ import { useFindAllDatasets, useUpload } from '../hooks';
 
 const DatasetsPage = (): JSX.Element => {
   const { mutate: uploadFile } = useUpload();
-  const { data: datasets } = useFindAllDatasets();
+  const { data: datasets, refetch } = useFindAllDatasets();
 
   const onSubmit = useCallback(
     (data: DatasetUploadRequestDTO): void => {
@@ -19,6 +20,9 @@ const DatasetsPage = (): JSX.Element => {
   return (
     <>
       <DatasetList datasets={datasets} />
+      <Button type='button' onClick={() => refetch()}>
+        refresh
+      </Button>
       <FileUploadForm onSubmit={onSubmit} />
     </>
   );

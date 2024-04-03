@@ -4,8 +4,8 @@ import { useSyncExternalStore } from 'react';
 import type { GridData } from '../types';
 import { Dataset } from './grid-data.package';
 
-const datasetId = nanoid();
-const dataset = new Dataset(datasetId);
+const id = nanoid();
+const dataset = new Dataset(id);
 
 const useGridData = (): GridData => {
   return useSyncExternalStore(

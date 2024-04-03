@@ -2,6 +2,8 @@ import type { DatasetDTO } from 'shared/build/index.js';
 
 import type { UserEntity } from '~/modules/users/users.js';
 
+import type { DatasetFile } from './types.js';
+
 type DatasetEntityConstructor = {
   id: string;
   originalname: string;
@@ -47,6 +49,13 @@ class DatasetEntity {
     const { id, originalname, size, updatedAt } = this;
     const filename = originalname;
     return { id, filename, size, updatedAt: updatedAt.toISOString() };
+  }
+
+  public toFile(): DatasetFile {
+    const { id, originalname, buffer, mimetype } = this;
+    const bufferToSend = Buffer.from(buffer.buffer);
+    const filename = originalname;
+    return { id, filename, buffer: bufferToSend, mimetype };
   }
 }
 

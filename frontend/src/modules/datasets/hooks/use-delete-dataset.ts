@@ -26,7 +26,7 @@ const useDeleteDataset: UseDeleteDataset = () => {
   const mutationResult = useMutation<
     DatasetDeleteResponseDTO,
     ErrorCommon,
-    { id: string }
+    DatasetDeleteURLParams
   >({
     mutationKey: MUTATION_KEY.DELETE_FILE,
     mutationFn: datasetApi.delete.bind(datasetApi),

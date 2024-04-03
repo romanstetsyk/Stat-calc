@@ -16,8 +16,7 @@ import { StatModal as OneSampleZDataModal } from '~/modules/application/features
 import { StatModal as OneSampleZSummaryModal } from '~/modules/application/features/one-sample-z-summary/stat-modal';
 import { StatModal as TwoSampleZDataModal } from '~/modules/application/features/two-sample-z-data/stat-modal';
 import { StatModal as TwoSampleZSummaryModal } from '~/modules/application/features/two-sample-z-summary/stat-modal';
-
-import { FileUpload } from '../file-upload';
+import { LoadDataset } from '~/modules/datasets/components';
 
 const FeatureMenu = (): JSX.Element => {
   return (
@@ -29,7 +28,7 @@ const FeatureMenu = (): JSX.Element => {
       width='fit-content'
       boxShadow='none'
     >
-      <FileUpload />
+      <LoadDataset />
 
       <Menu>
         {({ isOpen }) => (

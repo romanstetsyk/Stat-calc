@@ -15,7 +15,7 @@ import { storage } from '~/framework/storage';
 import { ArrowButton } from '~/modules/application/components';
 import { Config } from '~/modules/application/config';
 import { normalizeArray } from '~/modules/application/utils';
-import { DataGrid } from '~/modules/data-grid/components';
+import { DataGrid, DataGridTitle } from '~/modules/data-grid/components';
 import { Session } from '~/modules/session/components';
 
 const SplitPanes = (): JSX.Element => {
@@ -135,7 +135,7 @@ const SplitPanes = (): JSX.Element => {
         >
           <Card minW='10rem' maxW='full' height='100%' m={2}>
             <CardHeader pb={0}>
-              <Heading size='md'>Untitled</Heading>
+              <DataGridTitle size='md' />
             </CardHeader>
             <CardBody overflow='auto' px={0} pb={2}>
               <DataGrid />

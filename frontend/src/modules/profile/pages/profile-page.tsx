@@ -1,5 +1,6 @@
 import {
   Container,
+  Progress,
   Tab,
   TabIndicator,
   TabList,
@@ -7,18 +8,27 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Suspense, useMemo } from 'react';
+import { Link as RouterLink, Outlet, useLocation } from 'react-router-dom';
 
 import { PROFILE_ITEMS } from '../constants';
 
-type Props = {
-  selectedIndex: number;
-};
+const ProfilePage = (): JSX.Element => {
+  const location = useLocation();
 
-const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
+  const index = useMemo(
+    () =>
+      PROFILE_ITEMS.findIndex((item) => {
+        // match route with and without trailing slash
+        const regex = new RegExp(`^${item.path}/?`);
+        return regex.test(location.pathname);
+      }),
+    [location.pathname],
+  );
+
   return (
     <Container maxWidth='3xl' mt={8}>
-      <Tabs index={selectedIndex} isManual isLazy lazyBehavior='unmount'>
+      <Tabs index={index} isManual isLazy lazyBehavior='unmount'>
         <TabList>
           {PROFILE_ITEMS.map((tab) => (
             <Tab key={tab.label} as={RouterLink} to={tab.path}>
@@ -37,7 +47,9 @@ const ProfilePage = ({ selectedIndex }: Props): JSX.Element => {
         <TabPanels>
           {PROFILE_ITEMS.map((tab) => (
             <TabPanel key={tab.label} px={0}>
-              {tab.tabContent}
+              <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+                <Outlet />
+              </Suspense>
             </TabPanel>
           ))}
         </TabPanels>
