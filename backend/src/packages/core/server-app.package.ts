@@ -1,7 +1,7 @@
-import * as fs from 'node:fs';
+import { existsSync } from 'node:fs';
 import type { Server } from 'node:http';
-import * as path from 'node:path';
-import * as nodeUrl from 'node:url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -85,7 +85,7 @@ class AppBase {
 
     // Render React as View
     const frontendDir = path.resolve(
-      path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
+      path.dirname(fileURLToPath(import.meta.url)),
       path.join('..', '..', '..', '..', 'build', 'frontend'),
     );
     this.app.use(express.static(frontendDir));
@@ -114,7 +114,7 @@ class AppBase {
     });
 
     const index = path.join(frontendDir, 'index.html');
-    if (fs.existsSync(index)) {
+    if (existsSync(index)) {
       this.app.use((_req, res) => {
         res.sendFile(index);
       });

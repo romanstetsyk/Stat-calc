@@ -1,5 +1,5 @@
-import * as path from 'node:path';
-import * as nodeUrl from 'node:url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { config as dotenvInit } from 'dotenv';
 import type { SpecsOutput } from 'envalid';
@@ -72,7 +72,7 @@ class BaseConfig implements Config {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   private loadEnv() {
     const pathToEnv = path.resolve(
-      path.dirname(nodeUrl.fileURLToPath(import.meta.url)),
+      path.dirname(fileURLToPath(import.meta.url)),
       path.join('..', '..', '..', '.env'),
     );
     dotenvInit({ path: pathToEnv });
