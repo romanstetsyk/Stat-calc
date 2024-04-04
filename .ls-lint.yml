@@ -34,3 +34,4 @@ ignore:
   - shared/build
   - coverage
   - backend/logs
+  - .vscode
