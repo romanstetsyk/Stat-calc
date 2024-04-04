@@ -150,6 +150,14 @@ rules:
     - off
   '@typescript-eslint/no-redundant-type-constituents':
     - off
+  '@typescript-eslint/restrict-plus-operands':
+    - error
+    - allowAny: false
+      allowBoolean: false
+      allowNullish: false
+      allowNumberAndString: true
+      allowRegExp: false
+      skipCompoundAssignments: false
 overrides:
   - files:
       - vitest.config.ts
