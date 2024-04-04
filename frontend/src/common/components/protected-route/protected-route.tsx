@@ -9,13 +9,13 @@ type Props = {
 };
 
 const ProtectedRoute = ({ children }: Props): JSX.Element => {
-  const { data: currentUser, isSuccess, isFetching } = useCurrentUser();
+  const { isSuccess, isFetching } = useCurrentUser();
 
   if (isFetching) {
     return <Progress size='xs' isIndeterminate />;
   }
 
-  if (isSuccess && currentUser) {
+  if (isSuccess) {
     return children;
   }
 

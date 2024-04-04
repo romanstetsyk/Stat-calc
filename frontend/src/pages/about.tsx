@@ -23,7 +23,7 @@ const About = (): JSX.Element => {
   return (
     <>
       <pre>{JSON.stringify(currentUser)}</pre>
-      {currentUser && <SignOutForm onSubmit={onSubmit} />}
+      <SignOutForm onSubmit={onSubmit} />
     </>
   );
 };
