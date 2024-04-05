@@ -1,4 +1,4 @@
-import { DeleteIcon } from '@chakra-ui/icons';
+import { SmallCloseIcon } from '@chakra-ui/icons';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import type { MouseEventHandler } from 'react';
 
@@ -13,7 +13,7 @@ const DeleteFile = ({ onClick }: Props): JSX.Element => {
         variant='ghost'
         size='sm'
         aria-label='Delete file'
-        icon={<DeleteIcon />}
+        icon={<SmallCloseIcon />}
         onClick={onClick}
       />
     </Tooltip>

@@ -8,15 +8,14 @@ import type { FieldValues, UseControllerProps } from 'react-hook-form';
 
 import { useController } from '~/common/hooks';
 
-import { DeleteFile } from './delete-file';
+import { SelectedFileList } from './selected-file-list';
+import type { FileWithKey } from './types';
 
 type Props<T extends FieldValues> = WithRequired<
   UseControllerProps<T>,
   'control'
 > &
   Pick<DropzoneOptions, 'multiple'>;
-
-type FileWithKey = { key: string; file: File };
 
 const InputControlledDropzone = <T extends FieldValues>({
   name,
@@ -57,7 +56,7 @@ const InputControlledDropzone = <T extends FieldValues>({
     onDrop,
   });
 
-  const deleteFile = useCallback((key: FileWithKey['key']) => {
+  const handleDelete = useCallback((key: FileWithKey['key']) => {
     return () => {
       setFiles((prev) => prev.filter((file) => file.key !== key));
     };
@@ -100,18 +99,7 @@ const InputControlledDropzone = <T extends FieldValues>({
       )}
 
       {files.length > 0 && (
-        <ul>
-          {files.map(({ key, file }, idx) => (
-            <li key={key}>
-              {file.name} <DeleteFile onClick={deleteFile(key)} />{' '}
-              {Array.isArray(error) && error[idx] && (
-                <FormErrorMessage as='span'>
-                  {error[idx].message}
-                </FormErrorMessage>
-              )}
-            </li>
-          ))}
-        </ul>
+        <SelectedFileList files={files} onDelete={handleDelete} error={error} />
       )}
     </FormControl>
   );
