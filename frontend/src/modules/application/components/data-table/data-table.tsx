@@ -10,12 +10,12 @@ import { useCallback, useMemo } from 'react';
 
 import type { DataTableRow } from '~/modules/application/types';
 
-type Props<T extends string, Title extends string = ' '> = {
+type Props<T extends string, Title extends string = never> = {
   data: DataTableRow<T, Title>[];
-  stats: Title extends ' ' ? T[] : [Title, ...T[]];
+  stats: (keyof DataTableRow<T, Title>)[];
 };
 
-const DataTable = <T extends string, Title extends string = ' '>({
+const DataTable = <T extends string, Title extends string = never>({
   data,
   stats,
 }: Props<T, Title>): JSX.Element | null => {
