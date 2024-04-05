@@ -4,6 +4,7 @@ ls:
   .ts: kebab-case
   .d.ts: kebab-case
   .test.ts: kebab-case
+  .test-d.ts: kebab-case
   .html: kebab-case
   .json: kebab-case
   .cjs.json: kebab-case

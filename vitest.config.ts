@@ -8,5 +8,8 @@ export default defineConfig({
       provider: 'v8',
       all: true,
     },
+    typecheck: {
+      enabled: true,
+    },
   },
 });
