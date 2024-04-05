@@ -2,7 +2,7 @@ import { FILESIZES } from '~/constants/constants.js';
 
 const DATASET_VALIDATION_CONSTANTS = {
   FILESIZE_MIN: FILESIZES.EMPTY,
-  FILESIZE_MAX: FILESIZES['1MiB'],
+  FILESIZE_MAX: FILESIZES['1Mb'],
   FILENAME_LENGTH_MIN: 1,
   FILENAME_LENGTH_MAX: 255,
   ALLOWED_MIMETYPES: ['text/csv'],
@@ -11,8 +11,8 @@ const DATASET_VALIDATION_CONSTANTS = {
 } as const;
 
 const DATASET_VALIDATION_MESSAGES = {
-  FILESIZE_MIN: `Filesize must be greater than ${DATASET_VALIDATION_CONSTANTS.FILESIZE_MIN / FILESIZES['1KiB']} KiB`,
-  FILESIZE_MAX: `Filesize must be less than or equal to ${DATASET_VALIDATION_CONSTANTS.FILESIZE_MAX / FILESIZES['1KiB']} KiB`,
+  FILESIZE_MIN: `Filesize must be greater than ${DATASET_VALIDATION_CONSTANTS.FILESIZE_MIN} bytes`,
+  FILESIZE_MAX: `Filesize must be less than or equal to ${DATASET_VALIDATION_CONSTANTS.FILESIZE_MAX / FILESIZES['1Mb']} Mb`,
   FILENAME_LENGTH_MIN: `Filename length must be at least ${DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MIN} characters long`,
   FILENAME_LENGTH_MAX: `Filename length must be less than or equal to ${DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MAX} characters long`,
   ALLOWED_MIMETYPES: `File type must be one of [ ${DATASET_VALIDATION_CONSTANTS.ALLOWED_MIMETYPES.join(', ')} ]`,

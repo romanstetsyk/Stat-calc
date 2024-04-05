@@ -12,7 +12,8 @@ import {
 import type { DatasetDTO } from '@shared/build/esm/index';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { bytesToKb } from '../../helpers';
+import { formatFileSize } from '~/common/helpers';
+
 import { useDeleteDataset } from '../../hooks';
 
 type Props = {
@@ -57,7 +58,7 @@ const DatasetList = ({ datasets }: Props): JSX.Element | null => {
                   Delete
                 </Button>
               </Td>
-              <Td fontSize='sm'>{bytesToKb(size)} Kb</Td>
+              <Td fontSize='sm'>{formatFileSize(size, 1)}</Td>
               <Td fontSize='sm'>{new Date(updatedAt).toLocaleString()}</Td>
             </Tr>
           ))}
