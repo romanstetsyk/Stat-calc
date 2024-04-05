@@ -1,4 +1,4 @@
-import { FormControl, FormErrorMessage } from '@chakra-ui/react';
+import { Button, Flex, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import type { WithRequired } from '@shared/build/esm/index';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
@@ -74,15 +74,16 @@ const InputControlledDropzone = <T extends FieldValues>({
 
   return (
     <FormControl isInvalid={invalid}>
-      <div
-        style={{
-          color: 'blue',
-          borderWidth: '1px',
-          borderStyle: 'dashed',
-          backgroundColor: isDragActive ? `#808080` : 'transparent',
-          padding: '16px',
-          cursor: 'pointer',
-        }}
+      <Flex
+        justifyContent='center'
+        p={8}
+        color='gray.600'
+        borderWidth='1px'
+        borderStyle='dashed'
+        borderColor='gray.600'
+        backgroundColor={isDragActive ? `#808080` : 'transparent'}
+        _hover={{ backgroundColor: '#F2F2F2' }}
+        cursor='pointer'
         {...getRootProps()}
       >
         {/**
@@ -91,8 +92,15 @@ const InputControlledDropzone = <T extends FieldValues>({
          * The actual value is set using `onChange` method from `useController`
          */}
         <input {...getInputProps({ onChange, ...restField })} value='' />
-        <button type='button'>Choose a file or drag and drop</button>
-      </div>
+        <Button
+          type='button'
+          variant='link'
+          fontWeight='normal'
+          _hover={{ color: 'gray.600' }}
+        >
+          Choose a file or drag and drop
+        </Button>
+      </Flex>
 
       {error && !Array.isArray(error) && (
         <FormErrorMessage as='span'>{error.message}</FormErrorMessage>

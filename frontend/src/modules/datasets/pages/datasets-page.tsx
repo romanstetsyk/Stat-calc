@@ -1,14 +1,14 @@
-import { Button } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import type { DatasetUploadRequestDTO } from '@shared/build/esm/index';
 import { useCallback } from 'react';
 
-import { DatasetList } from '../components';
+import { DatasetsTable, EmptyTableAlert } from '../components';
 import { FileUploadForm } from '../forms';
 import { useFindAllDatasets, useUpload } from '../hooks';
 
 const DatasetsPage = (): JSX.Element => {
   const { mutate: uploadFile } = useUpload();
-  const { data: datasets, refetch } = useFindAllDatasets();
+  const { data: datasets, isSuccess } = useFindAllDatasets();
 
   const onSubmit = useCallback(
     (data: DatasetUploadRequestDTO): void => {
@@ -18,13 +18,16 @@ const DatasetsPage = (): JSX.Element => {
   );
 
   return (
-    <>
-      <DatasetList datasets={datasets} />
-      <Button type='button' onClick={() => refetch()}>
-        refresh
-      </Button>
+    <Flex flexDirection='column' gap={16}>
+      {isSuccess &&
+        (datasets.length === 0 ? (
+          <EmptyTableAlert />
+        ) : (
+          <DatasetsTable datasets={datasets} />
+        ))}
+
       <FileUploadForm onSubmit={onSubmit} />
-    </>
+    </Flex>
   );
 };
 

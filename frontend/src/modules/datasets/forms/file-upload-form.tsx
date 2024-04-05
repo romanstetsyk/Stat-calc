@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
 import type { DatasetUploadRequestDTO } from '@shared/build/esm/index';
 import { UPLOAD_FIELD_NAME } from '@shared/build/esm/index';
@@ -44,7 +45,7 @@ const FileUploadForm = ({ onSubmit }: Props): JSX.Element => {
         multiple={false}
       />
 
-      <button type='submit'>Submit</button>
+      <Button type='submit'>Upload</Button>
     </Form>
   );
 };
