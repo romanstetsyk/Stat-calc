@@ -88,8 +88,8 @@ class DatasetApi extends ApiBase {
   }
 
   public async findOne(
-    signal: RequestInit['signal'],
     params: DatasetFindOneURLParams,
+    signal?: RequestInit['signal'],
   ): Promise<DatasetFindOneRepsonseDTO> {
     const res = await this.load({
       url: this.constructURL(API_PATHS_DATASETS.$ID, { params }),

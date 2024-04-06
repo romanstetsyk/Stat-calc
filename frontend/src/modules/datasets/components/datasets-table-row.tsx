@@ -5,13 +5,19 @@ import { Link as RouterLink } from 'react-router-dom';
 import { formatFileSize } from '~/common/helpers';
 
 import { DeleteDatasetBtn } from './delete-dataset-btn';
+import { DownloadDatasetBtn } from './download-dataset-btn';
 
 type Props = {
   dataset: DatasetDTO;
   onDelete: (id: string) => () => void;
+  onDownload: (id: string) => () => void;
 };
 
-const DatasetsTableRow = ({ dataset, onDelete }: Props): JSX.Element => {
+const DatasetsTableRow = ({
+  dataset,
+  onDelete,
+  onDownload,
+}: Props): JSX.Element => {
   const { id, filename, size, updatedAt } = dataset;
 
   return (
@@ -33,6 +39,7 @@ const DatasetsTableRow = ({ dataset, onDelete }: Props): JSX.Element => {
         {new Date(updatedAt).toLocaleString()}
       </Td>
       <Td isNumeric>
+        <DownloadDatasetBtn onClick={onDownload(id)} />
         <DeleteDatasetBtn onClick={onDelete(id)} />
       </Td>
     </Tr>

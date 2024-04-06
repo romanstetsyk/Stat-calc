@@ -2,7 +2,7 @@ import { Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import type { DatasetDTO } from '@shared/build/esm/index';
 import { useCallback } from 'react';
 
-import { useDeleteDataset } from '../hooks';
+import { useDeleteDataset, useDownloadDataset } from '../hooks';
 import { DatasetsTableRow } from './datasets-table-row';
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
 
 const DatasetsTable = ({ datasets }: Props): JSX.Element | null => {
   const { mutate: deleteFile } = useDeleteDataset();
+  const { mutate: downloadFile } = useDownloadDataset();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -19,6 +20,15 @@ const DatasetsTable = ({ datasets }: Props): JSX.Element | null => {
       };
     },
     [deleteFile],
+  );
+
+  const handleDownload = useCallback(
+    (id: string) => {
+      return () => {
+        downloadFile({ id });
+      };
+    },
+    [downloadFile],
   );
 
   return (
@@ -38,6 +48,7 @@ const DatasetsTable = ({ datasets }: Props): JSX.Element | null => {
               key={dataset.id}
               dataset={dataset}
               onDelete={handleDelete}
+              onDownload={handleDownload}
             />
           ))}
         </Tbody>

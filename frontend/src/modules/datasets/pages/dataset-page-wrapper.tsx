@@ -8,7 +8,7 @@ import { APP_ROUTES } from '~/common/constants';
 import { useGridData } from '~/modules/data-grid/store';
 
 import { parseWorkbook } from '../helpers';
-import { useDownloadDataset } from '../hooks';
+import { useOpenDataset } from '../hooks';
 
 const DatasetPageWrapper = (): JSX.Element => {
   const { id = '' } = useParams();
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const DatasetPage = ({ id }: Props): JSX.Element => {
-  const { data, isSuccess, isError, error } = useDownloadDataset({ id });
+  const { data, isSuccess, isError, error } = useOpenDataset({ id });
 
   const navigate = useNavigate();
   const { overwriteData } = useGridData();
