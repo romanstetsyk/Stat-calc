@@ -19,6 +19,19 @@ import { ApiBase } from '~/framework/api';
 
 import { getFilenameFromHeaders } from '../helpers';
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface WindowEventMap {
+    'fetch-progress': CustomEvent<{
+      received: number;
+      length: number;
+      done: boolean;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      options: any;
+    }>;
+  }
+}
+
 type DatasetApiConstructor = ApiBaseConstructor & {
   interceptors: Interceptors;
 };
@@ -100,7 +113,47 @@ class DatasetApi extends ApiBase {
       },
     });
     const filename = getFilenameFromHeaders(res.headers);
-    return { filename, buffer: await res.arrayBuffer() };
+    return { filename, buffer: await this.arrayBuffer(res, params) };
+  }
+
+  private async arrayBuffer(
+    response: Response,
+    options?: Record<string, unknown>,
+  ): Promise<Uint8Array> {
+    let loading = true;
+
+    if (!response.body) {
+      throw new Error('Response body is empty');
+    }
+    const reader = response.body.getReader();
+    const contentLength = response.headers.get('content-length');
+    if (!contentLength) {
+      throw new Error('Content length header is missing');
+    }
+    const length = +contentLength;
+    let received = 0;
+    const chunks: Uint8Array[] = [];
+
+    while (loading) {
+      const { done, value } = await reader.read();
+      if (done) {
+        loading = false;
+      } else {
+        chunks.push(value);
+        received += value.length;
+      }
+      const payload = { detail: { received, length, done, options } };
+      const onProgress = new CustomEvent('fetch-progress', payload);
+      window.dispatchEvent(onProgress);
+    }
+
+    const chunksAll = new Uint8Array(received);
+    let position = 0;
+    for (const chunk of chunks) {
+      chunksAll.set(chunk, position);
+      position += chunk.length;
+    }
+    return chunksAll;
   }
 }
 
