@@ -4,33 +4,25 @@ import type {
   ErrorCommon,
 } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 import { QUERY_KEY } from '~/common/constants';
 import { useQuery } from '~/common/hooks';
 
 import { datasetApi } from '../api';
 
-type UseOpenDataset = ({
-  id,
-}: DatasetFindOneURLParams) => UseQueryResult<
-  DatasetFindOneRepsonseDTO,
-  ErrorCommon
->;
+type UseOpenDataset = (
+  params: DatasetFindOneURLParams,
+) => UseQueryResult<DatasetFindOneRepsonseDTO, ErrorCommon>;
 
-const useOpenDataset: UseOpenDataset = ({ id }) => {
-  const queryResult = useQuery<DatasetFindOneRepsonseDTO, ErrorCommon>({
-    queryKey: [QUERY_KEY.FIND_ONE_DATASET, id],
+const useOpenDataset: UseOpenDataset = (params) => {
+  return useQuery<DatasetFindOneRepsonseDTO, ErrorCommon>({
+    queryKey: [QUERY_KEY.FIND_ONE_DATASET, params.id],
     queryFn: ({ signal }) =>
-      datasetApi.findOne.call(datasetApi, { id }, signal),
+      datasetApi.findOne.call(datasetApi, params, signal),
     retry: false,
+    gcTime: 0,
+    staleTime: 0,
   });
-
-  useEffect(() => {
-    //
-  }, []);
-
-  return queryResult;
 };
 
 export { useOpenDataset };

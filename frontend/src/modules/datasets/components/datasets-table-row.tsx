@@ -10,14 +10,9 @@ import { DownloadDatasetBtn } from './download-dataset-btn';
 type Props = {
   dataset: DatasetDTO;
   onDelete: (id: string) => () => void;
-  onDownload: (id: string) => () => void;
 };
 
-const DatasetsTableRow = ({
-  dataset,
-  onDelete,
-  onDownload,
-}: Props): JSX.Element => {
+const DatasetsTableRow = ({ dataset, onDelete }: Props): JSX.Element => {
   const { id, filename, size, updatedAt } = dataset;
 
   return (
@@ -39,7 +34,7 @@ const DatasetsTableRow = ({
         {new Date(updatedAt).toLocaleString()}
       </Td>
       <Td isNumeric>
-        <DownloadDatasetBtn onClick={onDownload(id)} />
+        <DownloadDatasetBtn id={id} />
         <DeleteDatasetBtn onClick={onDelete(id)} />
       </Td>
     </Tr>
