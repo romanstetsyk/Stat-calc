@@ -13,7 +13,7 @@ const Logo = (): JSX.Element => {
       textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
       fontFamily='heading'
       fontWeight='bold'
-      color={useColorModeValue('gray.800', 'white')}
+      color={useColorModeValue('brand.text.primary', 'white')}
       p={2}
     >
       NextStat

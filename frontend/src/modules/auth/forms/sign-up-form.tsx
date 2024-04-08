@@ -56,10 +56,10 @@ const SignUpForm = ({ onSubmit }: Props): JSX.Element => {
 
       <Button
         type='submit'
-        bg='blue.400'
-        color='white'
+        bg='brand.bg.button.primary'
+        color='brand.text.button.primary'
         _hover={{
-          bg: 'blue.500',
+          bg: 'brand.bg.button.primaryHover',
         }}
         mt={6}
       >

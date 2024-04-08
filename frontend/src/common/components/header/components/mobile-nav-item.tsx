@@ -5,7 +5,7 @@ import type { NavItem } from '../types';
 
 const MobileNavItem = ({ subItems, label, href }: NavItem): JSX.Element => {
   return subItems ? (
-    <MenuGroup title={label} fontWeight={600} color='gray.600'>
+    <MenuGroup title={label} fontWeight={600} color='brand.text.subtle'>
       {subItems.map(({ label, href }) => (
         <MenuItem
           as={RouterLink}
@@ -15,7 +15,7 @@ const MobileNavItem = ({ subItems, label, href }: NavItem): JSX.Element => {
           py={2}
           borderLeft={1}
           borderStyle='solid'
-          borderColor='gray.200'
+          borderColor='brand.border.primary'
           to={href}
         >
           {label}

@@ -10,7 +10,6 @@ const MobileNav = (): JSX.Element => {
       {({ isOpen }): JSX.Element => (
         <>
           <MenuButton
-            display={{ base: 'flex', md: 'none' }}
             alignSelf='center'
             as={IconButton}
             icon={

@@ -1,4 +1,5 @@
 import {
+  Button,
   Menu,
   MenuButton,
   MenuItem,
@@ -23,23 +24,26 @@ const ProfileMenu = ({ name }: Props): JSX.Element | null => {
     signOut();
   }, [signOut]);
 
-  const linkColor = useColorModeValue('gray.600', 'gray.200');
-  const linkHoverColor = useColorModeValue('gray.800', 'white');
+  const linkColor = useColorModeValue('brand.text.subtle', 'gray.200');
+  const linkHoverColor = useColorModeValue('brand.text.primary', 'white');
 
   return (
     <Menu>
       {(): JSX.Element => (
         <>
-          <MenuButton
+          <Button
+            as={MenuButton}
             p={2}
+            height='100%'
+            variant='link'
             fontSize='sm'
-            fontWeight={400}
+            fontWeight={500}
             color={linkColor}
             _hover={{ color: linkHoverColor }}
             _expanded={{ color: linkHoverColor }}
           >
             {name}
-          </MenuButton>
+          </Button>
           <MenuList>
             <MenuItem as={RouterLink} to={APP_ROUTES.DATASETS}>
               Datasets

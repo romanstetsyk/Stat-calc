@@ -1,4 +1,4 @@
-import { Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Button, Flex, Show, Stack, useColorModeValue } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { Logo } from '~/common/components';
@@ -6,6 +6,7 @@ import { APP_ROUTES } from '~/common/constants';
 import { useCurrentUser } from '~/modules/auth/hooks';
 
 import { DesktopNav, MobileNav, ProfileMenu } from './components';
+import { DesktopNavLink } from './components/desktop-nav-link';
 
 function Header(): JSX.Element {
   const location = useLocation();
@@ -15,15 +16,17 @@ function Header(): JSX.Element {
   return (
     <Flex
       as='header'
-      bg={useColorModeValue('white', 'gray.800')}
-      color={useColorModeValue('gray.600', 'white')}
+      bg={useColorModeValue('brand.bg.secondary', 'gray.800')}
+      color={useColorModeValue('brand.text.subtle', 'white')}
       minH={14}
       px={{ base: 4 }}
       borderBottom={1}
       borderStyle='solid'
-      borderColor={useColorModeValue('gray.200', 'gray.900')}
+      borderColor={useColorModeValue('brand.border.primary', 'gray.900')}
     >
-      <MobileNav />
+      <Show below='md'>
+        <MobileNav />
+      </Show>
 
       <Flex
         flex={{ base: 1 }}
@@ -45,15 +48,7 @@ function Header(): JSX.Element {
         {currentUser ? (
           <ProfileMenu name={currentUser.name} />
         ) : (
-          <Button
-            as={RouterLink}
-            to={APP_ROUTES.SIGN_UP}
-            fontSize='sm'
-            fontWeight={400}
-            variant='link'
-          >
-            Sign Up
-          </Button>
+          <DesktopNavLink href={APP_ROUTES.SIGN_UP}>Sign Up</DesktopNavLink>
         )}
 
         {location.pathname !== APP_ROUTES.APP && (
@@ -62,11 +57,11 @@ function Header(): JSX.Element {
             to={APP_ROUTES.APP}
             fontSize='sm'
             fontWeight={600}
-            colorScheme='green'
-            bg='green.400'
+            bg='brand.accent'
+            color='brand.text.button.primary'
             rounded='full'
             _hover={{
-              bg: 'green.500',
+              bg: 'brand.accentHover',
             }}
           >
             Open App

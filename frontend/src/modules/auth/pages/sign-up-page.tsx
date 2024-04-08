@@ -28,8 +28,8 @@ const SignUpPage = (): JSX.Element => {
     [signIn],
   );
 
-  const bgColor = useColorModeValue('gray.50', 'gray.800');
-  const boxBgColor = useColorModeValue('white', 'gray.700');
+  const bgColor = useColorModeValue('brand.bg.primary', 'gray.800');
+  const boxBgColor = useColorModeValue('brand.bg.secondary', 'gray.700');
 
   if (currentUser) {
     return <Navigate to={APP_ROUTES.HOME} replace={true} />;
@@ -48,7 +48,11 @@ const SignUpPage = (): JSX.Element => {
           <SignUpForm onSubmit={onSubmit} />
           <Text align='center' mt={8}>
             Already a user?{' '}
-            <Link as={RouterLink} to={APP_ROUTES.SIGN_IN} color='blue.400'>
+            <Link
+              as={RouterLink}
+              to={APP_ROUTES.SIGN_IN}
+              color='brand.link.primary'
+            >
               Sign in
             </Link>
           </Text>
