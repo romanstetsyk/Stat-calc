@@ -1,5 +1,5 @@
 import { GridListWithHeading as Features } from '~/components/features';
-import { CallToActionWithAnnotation as Hero } from '~/components/hero';
+import { Hero } from '~/components/hero';
 
 const Home = (): JSX.Element => {
   return (
