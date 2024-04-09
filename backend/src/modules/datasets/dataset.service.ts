@@ -41,6 +41,13 @@ class DatasetService {
     const dataset = await this.datasetRepository.findOne(payload);
     return dataset ? dataset.toFile() : null;
   }
+
+  public async rename(
+    payload: Pick<DatasetEntity, 'id' | 'originalname' | 'userId'>,
+  ): Promise<DatasetDTO | null> {
+    const renamedDataset = await this.datasetRepository.rename(payload);
+    return renamedDataset ? renamedDataset.toObject() : null;
+  }
 }
 
 export { DatasetService };

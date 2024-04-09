@@ -29,6 +29,12 @@ type DatasetFindOneURLParams = { id: DatasetDTO['id'] };
 
 type DatasetFindOneRepsonseDTO = { filename: string; buffer: ArrayBuffer };
 
+type DatasetRenameURLParams = { id: DatasetDTO['id'] };
+
+type DatasetRenameRequestDTO = { filename: string };
+
+type DatasetRenameResponseDTO = DatasetDTO;
+
 export type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
@@ -36,6 +42,9 @@ export type {
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
   DatasetFindOneURLParams,
+  DatasetRenameRequestDTO,
+  DatasetRenameResponseDTO,
+  DatasetRenameURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 };

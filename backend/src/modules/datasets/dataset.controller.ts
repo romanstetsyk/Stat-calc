@@ -2,6 +2,9 @@ import type {
   DatasetDeleteResponseDTO,
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
+  DatasetRenameRequestDTO,
+  DatasetRenameResponseDTO,
+  DatasetRenameURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
   HTTP_HEADERS,
@@ -25,7 +28,10 @@ import type {
 import { ControllerBase } from '~/packages/controller/controller.js';
 
 import type { DatasetService } from './dataset.service.js';
-import { fileSchema } from './validation-schemas/validation-schemas.js';
+import {
+  fileSchema,
+  renameSchema,
+} from './validation-schemas/validation-schemas.js';
 
 type DatasetControllerConstructor = ControllerBaseConstructor & {
   datasetService: DatasetService;
@@ -69,6 +75,12 @@ class DatasetController extends ControllerBase {
       path: API_PATHS_DATASETS.$ID,
       method: HTTP_METHODS.GET,
       handler: this.downloadOne.bind(this),
+    });
+
+    this.addRoute({
+      path: API_PATHS_DATASETS.$ID,
+      method: HTTP_METHODS.PUT,
+      handler: this.rename.bind(this),
     });
   }
 
@@ -144,13 +156,46 @@ class DatasetController extends ControllerBase {
 
     const accessToken = this.getTokenFromHeaders(headers);
     const userId = this.authService.ensureAuth(accessToken);
-    const originalname = await this.datasetService.uploadOne({
+    const uploadedDataset = await this.datasetService.uploadOne({
       userId,
       ...file,
     });
     return {
       status: HTTP_CODES.CREATED,
-      payload: originalname,
+      payload: uploadedDataset,
+    };
+  }
+
+  private async rename(
+    options: ApiRequest<{
+      params: DatasetRenameURLParams;
+      body: DatasetRenameRequestDTO;
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
+    }>,
+  ): Promise<ApiResponse<DatasetRenameResponseDTO>> {
+    const {
+      params: { id },
+      body,
+      headers,
+    } = options;
+    this.validateBody(renameSchema, body);
+    const accessToken = this.getTokenFromHeaders(headers);
+    const userId = this.authService.ensureAuth(accessToken);
+
+    const renamedDataset = await this.datasetService.rename({
+      id,
+      userId,
+      originalname: body.filename,
+    });
+    if (!renamedDataset) {
+      throw new HttpError({
+        status: HTTP_CODES.BAD_REQUEST,
+        message: ERROR_MESSAGES.BAD_REQUEST,
+      });
+    }
+    return {
+      status: HTTP_CODES.OK,
+      payload: renamedDataset,
     };
   }
 }

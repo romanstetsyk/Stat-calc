@@ -4,6 +4,8 @@ import {
   DATASET_VALIDATION_MESSAGES,
 } from 'shared/build/index.js';
 
+import { filename } from './filename.js';
+
 /**
  * Can't validate File objects
  * https://react-hook-form.com/docs/useform#defaultValues
@@ -12,15 +14,7 @@ import {
  * and a prototype of Object
  */
 const fileSchema = Joi.object<Express.Multer.File>({
-  originalname: Joi.string()
-    .min(DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MIN)
-    .max(DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MAX)
-    .required()
-    .label('Filename')
-    .messages({
-      'string.min': DATASET_VALIDATION_MESSAGES.FILENAME_LENGTH_MIN,
-      'string.max': DATASET_VALIDATION_MESSAGES.FILENAME_LENGTH_MAX,
-    }),
+  originalname: filename,
   mimetype: Joi.string()
     .valid(...DATASET_VALIDATION_CONSTANTS.ALLOWED_MIMETYPES)
     .required()

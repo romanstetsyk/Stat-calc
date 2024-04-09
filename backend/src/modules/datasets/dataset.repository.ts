@@ -53,6 +53,20 @@ class DatasetRepository {
 
     return new DatasetEntity(newDataset.toObject());
   }
+
+  public async rename(
+    payload: Pick<DatasetEntity, 'id' | 'originalname' | 'userId'>,
+  ): Promise<DatasetEntity | null> {
+    const { originalname, id: _id, userId } = payload;
+    const renamedDataset: HydratedDocument<DatasetDocument> | null =
+      await this.datasetModel.findOneAndUpdate(
+        { _id, userId },
+        { originalname },
+        { new: true },
+      );
+
+    return renamedDataset ? new DatasetEntity(renamedDataset.toObject()) : null;
+  }
 }
 
 export { DatasetRepository };

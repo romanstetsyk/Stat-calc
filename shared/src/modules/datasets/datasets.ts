@@ -11,6 +11,9 @@ export type {
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
   DatasetFindOneURLParams,
+  DatasetRenameRequestDTO,
+  DatasetRenameResponseDTO,
+  DatasetRenameURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from './types.js';
