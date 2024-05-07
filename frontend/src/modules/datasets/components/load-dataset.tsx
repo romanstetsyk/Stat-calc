@@ -1,5 +1,4 @@
 import { Button, Center, Spinner, useToast } from '@chakra-ui/react';
-import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
 import { useRef, useState } from 'react';
 import { read } from 'xlsx';
@@ -27,7 +26,7 @@ const LoadDataset = (): JSX.Element => {
 
     try {
       const workbook = read(fileBuffer, { cellDates: true, dense: true });
-      const gridData = parseWorkbook(nanoid(), file.name, workbook);
+      const gridData = parseWorkbook(crypto.randomUUID(), file.name, workbook);
       overwriteData(gridData);
       toast({
         title: 'Success',
