@@ -39,11 +39,9 @@ const useUpload: UseUpload = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      void queryClient.setQueryData(
+      void queryClient.setQueryData<DatasetFindAllResponseDTO>(
         QUERY_KEY.ALL_DATASETS,
-        (old: DatasetFindAllResponseDTO): DatasetFindAllResponseDTO => {
-          return [...old, data];
-        },
+        (old) => (old ? [...old, data] : old),
       );
     }
   }, [data, isSuccess, queryClient]);
