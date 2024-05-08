@@ -13,7 +13,7 @@ type Props = {
 };
 
 const DatasetsTableRow = ({ dataset, onDelete }: Props): JSX.Element => {
-  const { id, filename, size, updatedAt } = dataset;
+  const { id, filename, ext, size, updatedAt } = dataset;
 
   return (
     <Tr key={id}>
@@ -24,7 +24,7 @@ const DatasetsTableRow = ({ dataset, onDelete }: Props): JSX.Element => {
           target='_blank'
           rel='noreferrer noopener'
         >
-          {filename}
+          {filename + ext}
         </Link>
       </Td>
       <Td fontSize='sm' isNumeric>

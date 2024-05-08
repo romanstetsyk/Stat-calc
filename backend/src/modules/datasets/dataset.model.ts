@@ -7,7 +7,12 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.UUID,
       default: uuidv4,
     },
-    originalname: {
+    // file name without extension
+    name: {
+      type: String,
+      required: true,
+    },
+    ext: {
       type: String,
       required: true,
     },

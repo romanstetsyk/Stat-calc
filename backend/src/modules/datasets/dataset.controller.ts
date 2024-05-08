@@ -1,10 +1,14 @@
 import type {
   DatasetDeleteResponseDTO,
+  DatasetDeleteURLParams,
+  DatasetDownloadOneURLParams,
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
   DatasetRenameRequestDTO,
   DatasetRenameResponseDTO,
   DatasetRenameURLParams,
+  DatasetUpdateOneResponseDTO,
+  DatasetUpdateOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
   HTTP_HEADERS,
@@ -15,6 +19,7 @@ import {
   HTTP_CODES,
   HTTP_METHODS,
   HttpError,
+  parseFilename,
   UPLOAD_FIELD_NAME,
 } from 'shared/build/index.js';
 
@@ -82,6 +87,13 @@ class DatasetController extends ControllerBase {
       method: HTTP_METHODS.PUT,
       handler: this.rename.bind(this),
     });
+
+    this.addRoute({
+      path: API_PATHS_DATASETS.$IDUpdate,
+      method: HTTP_METHODS.PUT,
+      handler: this.updateOne.bind(this),
+      plugins: [fileUpload.single(UPLOAD_FIELD_NAME)],
+    });
   }
 
   private async findAll(
@@ -102,7 +114,7 @@ class DatasetController extends ControllerBase {
   private async downloadOne(
     options: ApiRequest<{
       headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
-      params: { id: string };
+      params: DatasetDownloadOneURLParams;
     }>,
   ): Promise<ApiResponse> {
     const {
@@ -128,7 +140,7 @@ class DatasetController extends ControllerBase {
   private async delete(
     options: ApiRequest<{
       headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
-      params: { id: string };
+      params: DatasetDeleteURLParams;
     }>,
   ): Promise<ApiResponse<DatasetDeleteResponseDTO>> {
     const {
@@ -153,12 +165,18 @@ class DatasetController extends ControllerBase {
   ): Promise<ApiResponse<DatasetUploadResponseDTO>> {
     const { file, headers } = options;
     this.validateBody(fileSchema, file);
+    const { originalname, buffer, mimetype, size } = file;
+    const { name, ext } = parseFilename(originalname);
 
     const accessToken = this.getTokenFromHeaders(headers);
     const userId = this.authService.ensureAuth(accessToken);
     const uploadedDataset = await this.datasetService.uploadOne({
+      name,
+      ext,
+      mimetype,
+      size,
+      buffer,
       userId,
-      ...file,
     });
     return {
       status: HTTP_CODES.CREATED,
@@ -185,7 +203,7 @@ class DatasetController extends ControllerBase {
     const renamedDataset = await this.datasetService.rename({
       id,
       userId,
-      originalname: body.filename,
+      name: body.filename,
     });
     if (!renamedDataset) {
       throw new HttpError({
@@ -196,6 +214,44 @@ class DatasetController extends ControllerBase {
     return {
       status: HTTP_CODES.OK,
       payload: renamedDataset,
+    };
+  }
+
+  private async updateOne(
+    options: ApiRequest<{
+      file: Express.Multer.File;
+      params: DatasetUpdateOneURLParams;
+      headers: { [HTTP_HEADERS.AUTHORIZATION]?: string };
+    }>,
+  ): Promise<ApiResponse<DatasetUpdateOneResponseDTO>> {
+    const {
+      params: { id },
+      file,
+      headers,
+    } = options;
+    this.validateBody(fileSchema, file);
+    const { originalname, buffer, mimetype, size } = file;
+    const { name, ext } = parseFilename(originalname);
+
+    const accessToken = this.getTokenFromHeaders(headers);
+    const userId = this.authService.ensureAuth(accessToken);
+    const updatedDataset = await this.datasetService.update(id, {
+      name,
+      ext,
+      mimetype,
+      size,
+      buffer,
+      userId,
+    });
+    if (!updatedDataset) {
+      throw new HttpError({
+        status: HTTP_CODES.BAD_REQUEST,
+        message: ERROR_MESSAGES.BAD_REQUEST,
+      });
+    }
+    return {
+      status: HTTP_CODES.OK,
+      payload: updatedDataset,
     };
   }
 }

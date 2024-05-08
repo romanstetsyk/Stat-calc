@@ -1,5 +1,6 @@
 import type { ToastId } from '@chakra-ui/react';
 import { Progress, useToast } from '@chakra-ui/react';
+import { parseFilename } from '@shared/build/esm/index';
 import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { read } from 'xlsx';
@@ -33,11 +34,11 @@ const DatasetPage = ({ id }: Props): JSX.Element => {
     if (!isSuccess) {
       return;
     }
-
+    const { name: title, ext } = parseFilename(data.filename);
     try {
       const workbook = read(data.buffer, { cellDates: true, dense: true });
-      const gridData = parseWorkbook(id, data.filename, workbook);
-      overwriteData(gridData);
+      const gridData = parseWorkbook(workbook);
+      overwriteData({ id, title, ext, ...gridData });
       toastRef.current = toast({
         title: 'Success',
         description: 'File opened successfully',

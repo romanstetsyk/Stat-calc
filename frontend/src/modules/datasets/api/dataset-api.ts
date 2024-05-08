@@ -4,6 +4,9 @@ import type {
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
   DatasetFindOneURLParams,
+  DatasetUpdateOneRequestDTO,
+  DatasetUpdateOneResponseDTO,
+  DatasetUpdateOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from '@shared/build/esm/index';
@@ -12,6 +15,7 @@ import {
   API_PATHS_DATASETS,
   CONTENT_TYPE,
   HTTP_METHODS,
+  UPLOAD_FIELD_NAME,
 } from '@shared/build/esm/index';
 
 import type { ApiBaseConstructor, Interceptors } from '~/framework/api';
@@ -154,6 +158,25 @@ class DatasetApi extends ApiBase {
       position += chunk.length;
     }
     return chunksAll;
+  }
+
+  public async updateOne(
+    params: DatasetUpdateOneURLParams,
+    payload: DatasetUpdateOneRequestDTO,
+  ): Promise<DatasetUpdateOneResponseDTO> {
+    const formData = new FormData();
+    formData.set(UPLOAD_FIELD_NAME, payload);
+
+    const res = await this.load({
+      url: this.constructURL(API_PATHS_DATASETS.$IDUpdate, { params }),
+      options: {
+        method: HTTP_METHODS.PUT,
+        payload: formData,
+        hasAuth: true,
+      },
+    });
+
+    return res.json();
   }
 }
 

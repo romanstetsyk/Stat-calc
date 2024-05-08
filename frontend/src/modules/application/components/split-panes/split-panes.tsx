@@ -16,6 +16,7 @@ import { ArrowButton } from '~/modules/application/components';
 import { Config } from '~/modules/application/config';
 import { normalizeArray } from '~/modules/application/utils';
 import { DataGrid, DataGridTitle } from '~/modules/data-grid/components';
+import { SaveDatasetBtn } from '~/modules/datasets/components';
 import { Session } from '~/modules/session/components';
 
 const SplitPanes = (): JSX.Element => {
@@ -134,8 +135,9 @@ const SplitPanes = (): JSX.Element => {
           preferredSize={`${leftPaneSize}%`}
         >
           <Card minW='10rem' maxW='full' height='100%' m={2}>
-            <CardHeader pb={0}>
+            <CardHeader pb={0} display='flex' alignItems='baseline' gap={2}>
               <DataGridTitle size='md' />
+              <SaveDatasetBtn />
             </CardHeader>
             <CardBody overflow='auto' px={0} pb={2}>
               <DataGrid />

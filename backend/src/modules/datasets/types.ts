@@ -7,7 +7,7 @@ type DatasetBody = Omit<
 
 type DatasetFile = {
   id: DatasetEntity['id'];
-  filename: DatasetEntity['originalname'];
+  filename: DatasetEntity['name'];
   buffer: DatasetEntity['buffer'];
   mimetype: DatasetEntity['mimetype'];
 };

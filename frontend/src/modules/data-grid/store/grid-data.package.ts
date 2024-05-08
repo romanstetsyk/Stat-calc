@@ -22,6 +22,7 @@ class Dataset extends ExternalStore<GridData> {
     this.snapshot = {
       id,
       title: Config.DEFAULT_TITLE,
+      ext: Config.DEFAULT_EXT,
       rowData: new ArrayLike<ArrayLike<string | number>>(),
       colData: new ArrayLike<ArrayLike<string | number>>(),
       getContent: this.getContent.bind(this),
@@ -61,9 +62,16 @@ class Dataset extends ExternalStore<GridData> {
     };
   }
 
-  public overwriteData({ id, title, newRows, newCols }: OverwriteData): void {
+  public overwriteData({
+    id,
+    title,
+    ext,
+    newRows,
+    newCols,
+  }: OverwriteData): void {
     this.snapshot.id = id;
     this.snapshot.title = title;
+    this.snapshot.ext = ext;
     this.snapshot.rowData = newRows;
     this.snapshot.colData = newCols;
     this.emitChange();
@@ -124,7 +132,7 @@ class Dataset extends ExternalStore<GridData> {
       }
     }
 
-    // this.emitChange();
+    this.emitChange();
     return true;
   }
 }

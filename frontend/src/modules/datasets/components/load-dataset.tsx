@@ -1,4 +1,5 @@
 import { Button, Center, Spinner, useToast } from '@chakra-ui/react';
+import { parseFilename } from '@shared/build/esm/index';
 import type { ChangeEvent } from 'react';
 import { useRef, useState } from 'react';
 import { read } from 'xlsx';
@@ -23,11 +24,13 @@ const LoadDataset = (): JSX.Element => {
     }
 
     const fileBuffer = await file.arrayBuffer();
+    const { name: title, ext } = parseFilename(file.name);
+    const id = crypto.randomUUID();
 
     try {
       const workbook = read(fileBuffer, { cellDates: true, dense: true });
-      const gridData = parseWorkbook(crypto.randomUUID(), file.name, workbook);
-      overwriteData(gridData);
+      const gridData = parseWorkbook(workbook);
+      overwriteData({ id, title, ext, ...gridData });
       toast({
         title: 'Success',
         description: 'File opened successfully',

@@ -9,10 +9,8 @@ import { classifyInput } from './classify-input';
 type FileRow = Record<number, unknown> & { __rowNum__: number };
 
 const parseWorkbook = (
-  id: OverwriteData['id'],
-  title: OverwriteData['title'],
   workbook: WorkBook,
-): OverwriteData => {
+): Pick<OverwriteData, 'newCols' | 'newRows'> => {
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const range = utils.decode_range(sheet['!ref'] ?? 'A1');
   const headers = Array.from<unknown, `${number}`>(
@@ -43,7 +41,7 @@ const parseWorkbook = (
     newRows.add(__rowNum__, newRow);
   }
 
-  return { id, title, newRows, newCols };
+  return { newRows, newCols };
 };
 
 export { parseWorkbook };

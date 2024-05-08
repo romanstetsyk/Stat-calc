@@ -43,10 +43,18 @@ class DatasetService {
   }
 
   public async rename(
-    payload: Pick<DatasetEntity, 'id' | 'originalname' | 'userId'>,
+    payload: Pick<DatasetEntity, 'id' | 'name' | 'userId'>,
   ): Promise<DatasetDTO | null> {
     const renamedDataset = await this.datasetRepository.rename(payload);
     return renamedDataset ? renamedDataset.toObject() : null;
+  }
+
+  public async update(
+    id: DatasetEntity['id'],
+    payload: DatasetBody,
+  ): Promise<DatasetDTO | null> {
+    const updatedDataset = await this.datasetRepository.update(id, payload);
+    return updatedDataset ? updatedDataset.toObject() : null;
   }
 }
 

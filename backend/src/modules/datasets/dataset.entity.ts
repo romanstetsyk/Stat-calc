@@ -6,7 +6,8 @@ import type { DatasetFile } from './types.js';
 
 type DatasetEntityConstructor = {
   id: string;
-  originalname: string;
+  name: string;
+  ext: string;
   mimetype: string;
   size: number;
   buffer: Buffer;
@@ -17,7 +18,8 @@ type DatasetEntityConstructor = {
 
 class DatasetEntity {
   public id: string;
-  public originalname: string;
+  public name: string;
+  public ext: string;
   public mimetype: string;
   public size: number;
   public buffer: Buffer;
@@ -27,7 +29,8 @@ class DatasetEntity {
 
   public constructor({
     id,
-    originalname,
+    name,
+    ext,
     mimetype,
     size,
     buffer,
@@ -36,7 +39,8 @@ class DatasetEntity {
     updatedAt,
   }: DatasetEntityConstructor) {
     this.id = id;
-    this.originalname = originalname;
+    this.name = name;
+    this.ext = ext;
     this.mimetype = mimetype;
     this.size = size;
     this.buffer = buffer;
@@ -46,15 +50,15 @@ class DatasetEntity {
   }
 
   public toObject(): DatasetDTO {
-    const { id, originalname, size, updatedAt } = this;
-    const filename = originalname;
-    return { id, filename, size, updatedAt: updatedAt.toISOString() };
+    const { id, name, ext, size, updatedAt } = this;
+    const filename = name;
+    return { id, filename, ext, size, updatedAt: updatedAt.toISOString() };
   }
 
   public toFile(): DatasetFile {
-    const { id, originalname, buffer, mimetype } = this;
+    const { id, name, ext, buffer, mimetype } = this;
     const bufferToSend = Buffer.from(buffer.buffer);
-    const filename = originalname;
+    const filename = name + ext;
     return { id, filename, buffer: bufferToSend, mimetype };
   }
 }

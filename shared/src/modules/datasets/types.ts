@@ -13,6 +13,7 @@ type DatasetUploadRequestDTO = {
 type DatasetDTO = {
   id: string;
   filename: string;
+  ext: string;
   size: number;
   updatedAt: string;
 };
@@ -20,6 +21,8 @@ type DatasetDTO = {
 type DatasetUploadResponseDTO = DatasetDTO;
 
 type DatasetFindAllResponseDTO = DatasetDTO[];
+
+type DatasetDownloadOneURLParams = { id: DatasetDTO['id'] };
 
 type DatasetDeleteURLParams = { id: DatasetDTO['id'] };
 
@@ -35,9 +38,16 @@ type DatasetRenameRequestDTO = { filename: string };
 
 type DatasetRenameResponseDTO = DatasetDTO;
 
+type DatasetUpdateOneURLParams = { id: DatasetDTO['id'] };
+
+type DatasetUpdateOneRequestDTO = File;
+
+type DatasetUpdateOneResponseDTO = DatasetDTO;
+
 export type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
+  DatasetDownloadOneURLParams,
   DatasetDTO,
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
@@ -45,6 +55,9 @@ export type {
   DatasetRenameRequestDTO,
   DatasetRenameResponseDTO,
   DatasetRenameURLParams,
+  DatasetUpdateOneRequestDTO,
+  DatasetUpdateOneResponseDTO,
+  DatasetUpdateOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 };

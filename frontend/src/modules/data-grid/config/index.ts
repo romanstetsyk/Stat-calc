@@ -17,6 +17,7 @@ const Config = {
   DEBOUNCE_TIMEOUT: TIMEOUT['0.1s'],
 
   DEFAULT_TITLE: 'Untitled',
+  DEFAULT_EXT: '.csv',
 } as const;
 
 export { Config };

@@ -7,6 +7,7 @@ export {
 export type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
+  DatasetDownloadOneURLParams,
   DatasetDTO,
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
@@ -14,6 +15,9 @@ export type {
   DatasetRenameRequestDTO,
   DatasetRenameResponseDTO,
   DatasetRenameURLParams,
+  DatasetUpdateOneRequestDTO,
+  DatasetUpdateOneResponseDTO,
+  DatasetUpdateOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from './types.js';

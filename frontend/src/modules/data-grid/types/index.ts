@@ -17,6 +17,7 @@ type OnCellsEditedParams = readonly {
 type OverwriteData = {
   id: string;
   title: string;
+  ext: string;
   newRows: ArrayLike<ArrayLike<string | number>>;
   newCols: ArrayLike<ArrayLike<string | number>>;
 };
@@ -29,6 +30,7 @@ type ColumnChanges = {
 type GridData = {
   id: string;
   title: string;
+  ext: string;
   rowData: ArrayLike<ArrayLike<string | number>>;
   colData: ArrayLike<ArrayLike<string | number>>;
   onCellsEdited: (newValues: OnCellsEditedParams) => boolean;

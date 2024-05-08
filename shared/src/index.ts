@@ -12,7 +12,7 @@ export {
   TIMEOUT,
 } from '~/constants/constants.js';
 export { HttpError } from '~/frameworks/frameworks.js';
-export { hasValue, isHttpCode } from '~/helpers/helpers.js';
+export { hasValue, isHttpCode, parseFilename } from '~/helpers/helpers.js';
 export type {
   RefreshTokenResponseDTO,
   SignInRequestDTO,
@@ -29,6 +29,7 @@ export {
 export type {
   DatasetDeleteResponseDTO,
   DatasetDeleteURLParams,
+  DatasetDownloadOneURLParams,
   DatasetDTO,
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
@@ -36,6 +37,9 @@ export type {
   DatasetRenameRequestDTO,
   DatasetRenameResponseDTO,
   DatasetRenameURLParams,
+  DatasetUpdateOneRequestDTO,
+  DatasetUpdateOneResponseDTO,
+  DatasetUpdateOneURLParams,
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from '~/modules/datasets/datasets.js';
