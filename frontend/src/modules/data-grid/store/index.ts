@@ -1,1 +1,1 @@
-export { useGridData } from './grid-data';
+export { gridData } from './grid-data';

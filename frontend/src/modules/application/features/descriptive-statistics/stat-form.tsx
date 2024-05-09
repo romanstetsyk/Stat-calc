@@ -12,7 +12,7 @@ import {
 } from '~/common/components';
 import { useForm } from '~/common/hooks';
 import { ColumnsError } from '~/modules/application/enums';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';

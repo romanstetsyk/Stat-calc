@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { read } from 'xlsx';
 
 import { APP_ROUTES } from '~/common/constants';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 
 import { parseWorkbook } from '../helpers';
 import { useOpenDataset } from '../hooks';

@@ -4,7 +4,7 @@ import type * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
 import type { DisplayStep } from '~/modules/application/types';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 
 import { calcZ2Data } from './calc-z2-data';
 import { OutputContent } from './output-content';

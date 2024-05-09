@@ -1,7 +1,7 @@
 import type { HeadingProps } from '@chakra-ui/react';
 import { Heading } from '@chakra-ui/react';
 
-import { useGridData } from '../store';
+import { useGridData } from '../hooks';
 
 type Props = HeadingProps;
 

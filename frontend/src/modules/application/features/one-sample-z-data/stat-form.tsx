@@ -19,7 +19,7 @@ import {
   PopulationMean,
 } from '~/modules/application/components';
 import { ColumnsError, Perform } from '~/modules/application/enums';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';

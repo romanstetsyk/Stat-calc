@@ -4,7 +4,7 @@ import type { ChangeEvent } from 'react';
 import { useRef, useState } from 'react';
 import { read } from 'xlsx';
 
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 
 import { parseWorkbook } from '../helpers';
 

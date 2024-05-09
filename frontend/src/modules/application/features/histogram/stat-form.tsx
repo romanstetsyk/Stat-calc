@@ -14,7 +14,7 @@ import {
 import { useForm } from '~/common/hooks';
 import { BinManual, BinSquareRoot } from '~/modules/application/components';
 import { BinMethod, ColumnsError } from '~/modules/application/enums';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 import { getVarName } from '~/utils/get-column-name-and-values';
 
 import type { TForm } from './types';

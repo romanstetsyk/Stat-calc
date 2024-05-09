@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { RiSave3Fill } from 'react-icons/ri';
 
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 
 import { createDatasetFile } from '../helpers';
 import { useUpdateDataset } from '../hooks';

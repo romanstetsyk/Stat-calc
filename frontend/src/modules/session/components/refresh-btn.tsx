@@ -12,7 +12,7 @@ import { calcZ1Data } from '~/modules/application/features/one-sample-z-data/cal
 import { calcZ1Summary } from '~/modules/application/features/one-sample-z-summary/calc-z1-summary';
 import { calcZ2Data } from '~/modules/application/features/two-sample-z-data/calc-z2-data';
 import { calcZ2Summary } from '~/modules/application/features/two-sample-z-summary/calc-z2-summary';
-import { useGridData } from '~/modules/data-grid/store';
+import { useGridData } from '~/modules/data-grid/hooks';
 
 import { useSessionData } from '../store';
 
