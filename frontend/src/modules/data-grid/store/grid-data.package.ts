@@ -2,6 +2,7 @@ import type {
   EditableGridCell,
   EditListItem,
   GridCell,
+  GridSelection,
   Item,
 } from '@glideapps/glide-data-grid';
 import { GridCellKind } from '@glideapps/glide-data-grid';
@@ -11,7 +12,7 @@ import { ExternalStore } from '~/framework/external-store';
 import type { ColumnHeading } from '~/modules/application/types';
 
 import { Config } from '../config';
-import type { ColumnChanges, DatasetData, GridData } from '../types';
+import type { Batch, ColumnChanges, DatasetData, GridData } from '../types';
 
 class Dataset extends ExternalStore<GridData> {
   protected snapshot: GridData;
@@ -30,7 +31,23 @@ class Dataset extends ExternalStore<GridData> {
       onCellsEdited: this.onCellsEdited.bind(this),
       overwriteData: this.overwriteData.bind(this),
       getColumnChanges: this.getColumnChanges.bind(this),
+      recentEdits: {
+        undoHistory: [],
+        redoHistory: [],
+        canUndo: false,
+        canRedo: false,
+        isApplyingUndo: false,
+        isApplyingRedo: false,
+        undo: this.undo.bind(this),
+        redo: this.redo.bind(this),
+      },
+      onGridSelectionChange: this.onGridSelectionChange.bind(this),
     };
+  }
+
+  public onGridSelectionChange(newSelection: GridSelection): void {
+    this.snapshot.recentEdits.currentSelection = newSelection;
+    this.emitChange();
   }
 
   public getColumnChanges(columns: ColumnHeading[]): ColumnChanges {
@@ -133,12 +150,79 @@ class Dataset extends ExternalStore<GridData> {
   }
 
   public onCellsEdited(newValues: readonly EditListItem[]): boolean {
+    if (
+      !this.snapshot.recentEdits.isApplyingUndo &&
+      !this.snapshot.recentEdits.isApplyingRedo
+    ) {
+      const batch = this.getCurrentBatch(newValues);
+      this.snapshot.recentEdits.undoHistory.push(batch);
+      this.snapshot.recentEdits.redoHistory = [];
+      this.snapshot.recentEdits.canUndo = true;
+    }
+
     for (const { location: cell, value: newValue } of newValues) {
       this.onCellEdited(cell, newValue);
     }
 
     this.emitChange();
     return true;
+  }
+
+  private updateCanUndoRedo(): void {
+    this.snapshot.recentEdits.canUndo =
+      this.snapshot.recentEdits.undoHistory.length > 0;
+    this.snapshot.recentEdits.canRedo =
+      this.snapshot.recentEdits.redoHistory.length > 0;
+  }
+
+  private getCurrentBatch(values: readonly EditListItem[]): Batch {
+    return {
+      edits: values.map(({ location }) => ({
+        location,
+        value: this.getContent(location) as EditableGridCell,
+      })),
+      selection: this.snapshot.recentEdits.currentSelection,
+    };
+  }
+
+  public undo(): { cell: Item }[] | undefined {
+    if (!this.snapshot.recentEdits.canUndo) {
+      return;
+    }
+    this.snapshot.recentEdits.isApplyingUndo = true;
+    const operation = this.snapshot.recentEdits.undoHistory.pop();
+    if (!operation) {
+      return;
+    }
+    const batch = this.getCurrentBatch(operation.edits);
+    this.snapshot.recentEdits.redoHistory.push(batch);
+    this.updateCanUndoRedo();
+    this.snapshot.recentEdits.currentSelection = operation.selection;
+    this.onCellsEdited(operation.edits);
+    this.snapshot.recentEdits.isApplyingUndo = false;
+    return operation.edits.map(({ location }) => ({
+      cell: location,
+    }));
+  }
+
+  public redo(): { cell: Item }[] | undefined {
+    if (!this.snapshot.recentEdits.canRedo) {
+      return;
+    }
+    this.snapshot.recentEdits.isApplyingRedo = true;
+    const operation = this.snapshot.recentEdits.redoHistory.pop();
+    if (!operation) {
+      return;
+    }
+    const batch = this.getCurrentBatch(operation.edits);
+    this.snapshot.recentEdits.undoHistory.push(batch);
+    this.updateCanUndoRedo();
+    this.snapshot.recentEdits.currentSelection = operation.selection;
+    this.onCellsEdited(operation.edits);
+    this.snapshot.recentEdits.isApplyingRedo = false;
+    return operation.edits.map(({ location }) => ({
+      cell: location,
+    }));
   }
 }
 

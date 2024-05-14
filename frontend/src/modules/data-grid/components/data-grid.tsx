@@ -10,7 +10,7 @@ import { debounce } from 'lodash-es';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Config } from '../config';
-import { useGridData } from '../store';
+import { useGridData, useUndoRedo } from '../hooks';
 import { gridHeadersGenerator } from '../utils';
 
 const generateHeaders = gridHeadersGenerator();
@@ -18,7 +18,16 @@ const generateHeaders = gridHeadersGenerator();
 const DataGrid = (): JSX.Element => {
   const ref = useRef<DataEditorRef>(null);
 
-  const { id, onCellsEdited, rowData, getContent } = useGridData();
+  const {
+    id,
+    rowData,
+    getContent,
+    onCellsEdited,
+    onGridSelectionChange,
+    recentEdits: { currentSelection },
+  } = useGridData();
+
+  useUndoRedo(ref);
 
   const [rowCount, setRowCount] = useState<number>(Config.ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
@@ -68,6 +77,8 @@ const DataGrid = (): JSX.Element => {
       rowHeight={Config.ROW_HEIGHT}
       headerHeight={Config.HEADER_HEIGHT}
       onCellsEdited={onCellsEdited}
+      gridSelection={currentSelection}
+      onGridSelectionChange={onGridSelectionChange}
       rowMarkers='clickable-number'
       getCellsForSelection={true}
       onPaste={true}

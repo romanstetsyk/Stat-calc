@@ -1,4 +1,9 @@
-import type { DataEditorProps } from '@glideapps/glide-data-grid';
+import type {
+  DataEditorProps,
+  EditListItem,
+  GridSelection,
+  Item,
+} from '@glideapps/glide-data-grid';
 
 import type { ArrayLike } from '~/framework/array-like';
 import type { ColumnHeading } from '~/modules/application/types';
@@ -18,6 +23,23 @@ type ColumnChanges = {
   deletedColumns: ColumnHeading[];
 };
 
+type Batch = {
+  edits: EditListItem[];
+  selection?: GridSelection;
+};
+
+type RecentEdits = {
+  currentSelection?: GridSelection;
+  undoHistory: Batch[];
+  redoHistory: Batch[];
+  canUndo: boolean;
+  canRedo: boolean;
+  isApplyingUndo: boolean;
+  isApplyingRedo: boolean;
+  undo: () => { cell: Item }[] | undefined;
+  redo: () => { cell: Item }[] | undefined;
+};
+
 type GridData = {
   id: DatasetData['id'];
   title: DatasetData['title'];
@@ -29,6 +51,8 @@ type GridData = {
   overwriteData: (data: DatasetData) => void;
   getContent: DataEditorProps['getCellContent'];
   getColumnChanges: (columns: ColumnHeading[]) => ColumnChanges;
+  recentEdits: RecentEdits;
+  onGridSelectionChange: DataEditorProps['onGridSelectionChange'];
 };
 
-export type { ColumnChanges, DatasetData, GridColumnName, GridData };
+export type { Batch, ColumnChanges, DatasetData, GridColumnName, GridData };
