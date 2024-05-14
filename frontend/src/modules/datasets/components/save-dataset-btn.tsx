@@ -8,7 +8,7 @@ import { createDatasetFile } from '../helpers';
 import { useUpdateDataset } from '../hooks';
 
 const SaveDatasetBtn = (): JSX.Element => {
-  const { id, rowData, title, ext } = useGridData();
+  const { id, rowData, title, ext, recentEdits } = useGridData();
   const { mutate: updateDataset } = useUpdateDataset(id);
 
   const handleClick = useCallback((): void => {
@@ -19,7 +19,7 @@ const SaveDatasetBtn = (): JSX.Element => {
     }
   }, [ext, rowData, title, updateDataset]);
 
-  const isDisabled = rowData.length <= 0;
+  const isDisabled = !recentEdits.canUndo;
 
   return (
     <Tooltip hasArrow label='Save' placement='top' fontSize='xs'>
