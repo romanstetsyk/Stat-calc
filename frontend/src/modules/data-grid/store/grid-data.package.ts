@@ -23,6 +23,7 @@ class Dataset extends ExternalStore<GridData> {
     this.snapshot = {
       id,
       title: Config.DEFAULT_TITLE,
+      renameDataset: this.renameDataset.bind(this),
       ext: Config.DEFAULT_EXT,
       rowData: new ArrayLike(),
       colData: new ArrayLike(),
@@ -43,6 +44,11 @@ class Dataset extends ExternalStore<GridData> {
       },
       onGridSelectionChange: this.onGridSelectionChange.bind(this),
     };
+  }
+
+  public renameDataset(title: string): void {
+    this.snapshot.title = title;
+    this.emitChange();
   }
 
   public onGridSelectionChange(newSelection: GridSelection): void {

@@ -43,6 +43,7 @@ type RecentEdits = {
 type GridData = {
   id: DatasetData['id'];
   title: DatasetData['title'];
+  renameDataset: (title: string) => void;
   ext: DatasetData['ext'];
   rowData: DatasetData['rowData'];
   colData: DatasetData['colData'];
