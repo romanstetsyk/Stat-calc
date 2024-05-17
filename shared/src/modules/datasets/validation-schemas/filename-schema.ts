@@ -1,10 +1,11 @@
 import Joi from 'joi';
+
 import {
   DATASET_VALIDATION_CONSTANTS,
   DATASET_VALIDATION_MESSAGES,
-} from 'shared/build/index.js';
+} from '../datasets.js';
 
-const filename = Joi.string()
+const filenameSchema = Joi.string()
   .trim()
   .min(DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MIN)
   .max(DATASET_VALIDATION_CONSTANTS.FILENAME_LENGTH_MAX)
@@ -15,4 +16,4 @@ const filename = Joi.string()
     'string.max': DATASET_VALIDATION_MESSAGES.FILENAME_LENGTH_MAX,
   });
 
-export { filename };
+export { filenameSchema };

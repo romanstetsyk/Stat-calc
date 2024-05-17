@@ -47,6 +47,8 @@ export {
   API_PATHS_DATASETS,
   DATASET_VALIDATION_CONSTANTS,
   DATASET_VALIDATION_MESSAGES,
+  filenameSchema,
+  renameSchema,
   UPLOAD_FIELD_NAME,
 } from '~/modules/datasets/datasets.js';
 export type { UserInfo } from '~/modules/users/users.js';

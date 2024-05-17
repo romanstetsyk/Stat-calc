@@ -2,9 +2,8 @@ import Joi from 'joi';
 import {
   DATASET_VALIDATION_CONSTANTS,
   DATASET_VALIDATION_MESSAGES,
+  filenameSchema,
 } from 'shared/build/index.js';
-
-import { filename } from './filename.js';
 
 /**
  * Can't validate File objects
@@ -14,7 +13,7 @@ import { filename } from './filename.js';
  * and a prototype of Object
  */
 const fileSchema = Joi.object<Express.Multer.File>({
-  originalname: filename,
+  originalname: filenameSchema,
   mimetype: Joi.string()
     .valid(...DATASET_VALIDATION_CONSTANTS.ALLOWED_MIMETYPES)
     .required()

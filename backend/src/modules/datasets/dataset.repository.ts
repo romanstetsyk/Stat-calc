@@ -55,13 +55,13 @@ class DatasetRepository {
   }
 
   public async rename(
-    payload: Pick<DatasetEntity, 'id' | 'name' | 'userId'>,
+    payload: Pick<DatasetEntity, 'id' | 'displayName' | 'userId'>,
   ): Promise<DatasetEntity | null> {
-    const { name, id: _id, userId } = payload;
+    const { displayName, id: _id, userId } = payload;
     const renamedDataset: HydratedDocument<DatasetDocument> | null =
       await this.datasetModel.findOneAndUpdate(
         { _id, userId },
-        { name },
+        { displayName },
         { new: true },
       );
 
