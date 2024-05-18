@@ -1,4 +1,4 @@
-import { AttachmentIcon } from '@chakra-ui/icons';
+import { AttachmentIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import {
   FormErrorMessage,
   Table,
@@ -12,7 +12,7 @@ import type { FieldError } from 'react-hook-form';
 
 import { formatFileSize } from '~/common/helpers';
 
-import { DeleteFile } from './delete-file';
+import { IconButtonTooltip } from '../icon-button-tooltip';
 import type { FileWithKey } from './types';
 
 type Props = {
@@ -50,7 +50,11 @@ const SelectedFileList = ({ files, onDelete, error }: Props): JSX.Element => {
                     borderBottom={hasError ? 'none' : undefined}
                     pb={hasError ? 0 : undefined}
                   >
-                    <DeleteFile onClick={onDelete(key)} />
+                    <IconButtonTooltip
+                      label='Delete file'
+                      icon={<SmallCloseIcon />}
+                      onClick={onDelete(key)}
+                    />
                   </Td>
                 </Tr>
                 {Array.isArray(error) && error[idx] && (

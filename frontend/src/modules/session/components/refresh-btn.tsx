@@ -1,8 +1,8 @@
 import { RepeatIcon } from '@chakra-ui/icons';
-import { IconButton, Tooltip, useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import { useCallback, useRef, useState } from 'react';
 
-import { AlertModal } from '~/common/components';
+import { AlertModal, IconButtonTooltip } from '~/common/components';
 import { ColumnsError } from '~/modules/application/enums';
 import { calcStatistics } from '~/modules/application/features/descriptive-statistics/calc-statistics';
 import { calcFrequency } from '~/modules/application/features/frequency-distribution/calc-frequency';
@@ -246,16 +246,12 @@ const RefreshBtn = ({ id }: Props): JSX.Element => {
 
   return (
     <>
-      <Tooltip hasArrow label='Refresh' placement='top' fontSize='xs'>
-        <IconButton
-          ref={alertCloseRef}
-          variant='ghost'
-          size='sm'
-          aria-label='Refresh'
-          icon={<RepeatIcon />}
-          onClick={refreshSessionItem(true)}
-        />
-      </Tooltip>
+      <IconButtonTooltip
+        ref={alertCloseRef}
+        label='Refresh'
+        icon={<RepeatIcon />}
+        onClick={refreshSessionItem(true)}
+      />
 
       <AlertModal
         isOpen={isOpen}
