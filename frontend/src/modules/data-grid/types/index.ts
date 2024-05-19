@@ -26,10 +26,13 @@ type ColumnChanges = {
 type Batch = {
   edits: EditListItem[];
   selection?: GridSelection;
+  title?: string;
+  isSaved: boolean;
 };
 
 type RecentEdits = {
   currentSelection?: GridSelection;
+  isSaved: boolean;
   undoHistory: Batch[];
   redoHistory: Batch[];
   canUndo: boolean;
@@ -38,6 +41,7 @@ type RecentEdits = {
   isApplyingRedo: boolean;
   undo: () => { cell: Item }[] | undefined;
   redo: () => { cell: Item }[] | undefined;
+  save: () => void;
 };
 
 type GridData = {

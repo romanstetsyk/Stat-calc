@@ -16,10 +16,11 @@ const SaveDatasetBtn = (): JSX.Element => {
     const file = createDatasetFile(rowData, filename);
     if (file) {
       updateDataset(file);
+      recentEdits.save();
     }
-  }, [ext, rowData, title, updateDataset]);
+  }, [ext, recentEdits, rowData, title, updateDataset]);
 
-  const isDisabled = !recentEdits.canUndo;
+  const isDisabled = recentEdits.isSaved || rowData.isEmpty();
 
   return (
     <IconButtonTooltip
