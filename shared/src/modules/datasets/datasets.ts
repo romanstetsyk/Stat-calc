@@ -21,3 +21,7 @@ export type {
   DatasetUploadRequestDTO,
   DatasetUploadResponseDTO,
 } from './types.js';
+export {
+  filenameSchema,
+  renameSchema,
+} from './validation-schemas/validation-schemas.js';

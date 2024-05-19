@@ -1,10 +1,7 @@
 import { CheckIcon, DownloadIcon, SmallCloseIcon } from '@chakra-ui/icons';
-import {
-  CircularProgress,
-  CircularProgressLabel,
-  IconButton,
-  Tooltip,
-} from '@chakra-ui/react';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+
+import { IconButtonTooltip } from '~/common/components';
 
 import { useDownloadDataset } from '../hooks';
 
@@ -26,49 +23,36 @@ const DownloadDatasetBtn = ({ id }: Props): JSX.Element => {
         size={8}
       >
         <CircularProgressLabel>
-          <Tooltip
-            hasArrow
+          <IconButtonTooltip
+            isRound
+            minWidth={0}
+            width={6}
+            height={6}
             label={
               progress === ProgressLimits.MAX
                 ? 'Download finished'
                 : 'Cancel download'
             }
-            placement='top'
-            fontSize='xs'
-          >
-            <IconButton
-              isRound
-              variant='ghost'
-              size='sm'
-              minWidth={0}
-              width={6}
-              height={6}
-              aria-label='Cancel download'
-              icon={
-                progress === ProgressLimits.MAX ? (
-                  <CheckIcon />
-                ) : (
-                  <SmallCloseIcon />
-                )
-              }
-              onClick={cancelQuery}
-            />
-          </Tooltip>
+            icon={
+              progress === ProgressLimits.MAX ? (
+                <CheckIcon />
+              ) : (
+                <SmallCloseIcon />
+              )
+            }
+            onClick={cancelQuery}
+          />
         </CircularProgressLabel>
       </CircularProgress>
     );
   }
 
   return (
-    <Tooltip hasArrow label='Download file' placement='top' fontSize='xs'>
-      <IconButton
-        variant='ghost'
-        size='sm'
-        aria-label='Download file'
-        icon={<DownloadIcon />}
-        onClick={download}
-      />
-    </Tooltip>
+    <IconButtonTooltip
+      label='Download file'
+      icon={<DownloadIcon />}
+      onClick={download}
+    />
   );
 };
 

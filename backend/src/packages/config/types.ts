@@ -17,6 +17,7 @@ type LOG_LEVEL = (typeof LOG_LEVEL)[number];
 type EnvSchema = {
   NODE_ENV: ENVIRONMENTS;
   PORT: number;
+  CORS_ALLOWED_ORIGIN: string;
   API_PREFIX: string;
   LOG_LEVEL: LOG_LEVEL;
   LOG_TO_FILE: boolean;
@@ -30,6 +31,7 @@ type EnvSchema = {
 type Config = {
   ENV: ENVIRONMENTS;
   PORT: number;
+  CORS_ALLOWED_ORIGIN: string[];
   API_PREFIX: string;
   LOG: {
     LEVEL: LOG_LEVEL;

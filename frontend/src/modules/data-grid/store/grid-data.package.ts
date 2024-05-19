@@ -23,6 +23,7 @@ class Dataset extends ExternalStore<GridData> {
     this.snapshot = {
       id,
       title: Config.DEFAULT_TITLE,
+      renameDataset: this.renameDataset.bind(this),
       ext: Config.DEFAULT_EXT,
       rowData: new ArrayLike(),
       colData: new ArrayLike(),
@@ -32,6 +33,7 @@ class Dataset extends ExternalStore<GridData> {
       overwriteData: this.overwriteData.bind(this),
       getColumnChanges: this.getColumnChanges.bind(this),
       recentEdits: {
+        isSaved: false,
         undoHistory: [],
         redoHistory: [],
         canUndo: false,
@@ -40,9 +42,16 @@ class Dataset extends ExternalStore<GridData> {
         isApplyingRedo: false,
         undo: this.undo.bind(this),
         redo: this.redo.bind(this),
+        save: this.save.bind(this),
       },
       onGridSelectionChange: this.onGridSelectionChange.bind(this),
     };
+  }
+
+  public renameDataset(title: string): void {
+    this.addEdit([], true);
+    this.snapshot.title = title;
+    this.emitChange();
   }
 
   public onGridSelectionChange(newSelection: GridSelection): void {
@@ -92,11 +101,20 @@ class Dataset extends ExternalStore<GridData> {
     this.snapshot.ext = ext;
     this.snapshot.rowData = rowData;
     this.snapshot.colData = colData;
+
+    this.snapshot.recentEdits.isSaved = false;
+    this.snapshot.recentEdits.undoHistory = [];
+    this.snapshot.recentEdits.redoHistory = [];
+    this.snapshot.recentEdits.canUndo = false;
+    this.snapshot.recentEdits.canRedo = false;
+    this.snapshot.recentEdits.isApplyingUndo = false;
+    this.snapshot.recentEdits.isApplyingRedo = false;
+
     this.emitChange();
   }
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  public onCellEdited(cell: Item, newValue: EditableGridCell): void {
+  private onCellEdited(cell: Item, newValue: EditableGridCell): void {
     if (newValue.kind !== GridCellKind.Text) {
       return;
     }
@@ -150,22 +168,26 @@ class Dataset extends ExternalStore<GridData> {
   }
 
   public onCellsEdited(newValues: readonly EditListItem[]): boolean {
-    if (
-      !this.snapshot.recentEdits.isApplyingUndo &&
-      !this.snapshot.recentEdits.isApplyingRedo
-    ) {
-      const batch = this.getCurrentBatch(newValues);
-      this.snapshot.recentEdits.undoHistory.push(batch);
-      this.snapshot.recentEdits.redoHistory = [];
-      this.snapshot.recentEdits.canUndo = true;
-    }
-
+    this.addEdit(newValues);
     for (const { location: cell, value: newValue } of newValues) {
       this.onCellEdited(cell, newValue);
     }
 
     this.emitChange();
     return true;
+  }
+
+  private addEdit(values: readonly EditListItem[], withTitle = false): void {
+    if (
+      !this.snapshot.recentEdits.isApplyingUndo &&
+      !this.snapshot.recentEdits.isApplyingRedo
+    ) {
+      const batch: Batch = this.getCurrentBatch(values, withTitle);
+      this.snapshot.recentEdits.undoHistory.push(batch);
+      this.snapshot.recentEdits.redoHistory = [];
+      this.updateCanUndoRedo();
+      this.snapshot.recentEdits.isSaved = false;
+    }
   }
 
   private updateCanUndoRedo(): void {
@@ -175,30 +197,50 @@ class Dataset extends ExternalStore<GridData> {
       this.snapshot.recentEdits.redoHistory.length > 0;
   }
 
-  private getCurrentBatch(values: readonly EditListItem[]): Batch {
+  private getCurrentBatch(
+    values: readonly EditListItem[],
+    withTitle = false,
+  ): Batch {
     return {
       edits: values.map(({ location }) => ({
         location,
         value: this.getContent(location) as EditableGridCell,
       })),
       selection: this.snapshot.recentEdits.currentSelection,
+      title: withTitle ? this.snapshot.title : undefined,
+      isSaved: this.snapshot.recentEdits.isSaved,
     };
+  }
+
+  private applyOperation(operation: Batch, type: 'undo' | 'redo'): void {
+    const batch = this.getCurrentBatch(
+      operation.edits,
+      Boolean(operation.title),
+    );
+
+    type === 'undo'
+      ? this.snapshot.recentEdits.redoHistory.push(batch)
+      : this.snapshot.recentEdits.undoHistory.push(batch);
+
+    this.updateCanUndoRedo();
+    this.snapshot.recentEdits.currentSelection = operation.selection;
+    if (operation.title) {
+      this.renameDataset(operation.title);
+    }
+    this.snapshot.recentEdits.isSaved = operation.isSaved;
+    this.onCellsEdited(operation.edits);
   }
 
   public undo(): { cell: Item }[] | undefined {
     if (!this.snapshot.recentEdits.canUndo) {
       return;
     }
-    this.snapshot.recentEdits.isApplyingUndo = true;
     const operation = this.snapshot.recentEdits.undoHistory.pop();
     if (!operation) {
       return;
     }
-    const batch = this.getCurrentBatch(operation.edits);
-    this.snapshot.recentEdits.redoHistory.push(batch);
-    this.updateCanUndoRedo();
-    this.snapshot.recentEdits.currentSelection = operation.selection;
-    this.onCellsEdited(operation.edits);
+    this.snapshot.recentEdits.isApplyingUndo = true;
+    this.applyOperation(operation, 'undo');
     this.snapshot.recentEdits.isApplyingUndo = false;
     return operation.edits.map(({ location }) => ({
       cell: location,
@@ -209,20 +251,26 @@ class Dataset extends ExternalStore<GridData> {
     if (!this.snapshot.recentEdits.canRedo) {
       return;
     }
-    this.snapshot.recentEdits.isApplyingRedo = true;
     const operation = this.snapshot.recentEdits.redoHistory.pop();
     if (!operation) {
       return;
     }
-    const batch = this.getCurrentBatch(operation.edits);
-    this.snapshot.recentEdits.undoHistory.push(batch);
-    this.updateCanUndoRedo();
-    this.snapshot.recentEdits.currentSelection = operation.selection;
-    this.onCellsEdited(operation.edits);
+    this.snapshot.recentEdits.isApplyingRedo = true;
+    this.applyOperation(operation, 'redo');
     this.snapshot.recentEdits.isApplyingRedo = false;
     return operation.edits.map(({ location }) => ({
       cell: location,
     }));
+  }
+
+  public save(): void {
+    this.snapshot.recentEdits.isSaved = true;
+    for (const batch of this.snapshot.recentEdits.undoHistory) {
+      batch.isSaved = false;
+    }
+    for (const batch of this.snapshot.recentEdits.redoHistory) {
+      batch.isSaved = false;
+    }
   }
 }
 

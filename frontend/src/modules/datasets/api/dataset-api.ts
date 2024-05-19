@@ -4,6 +4,9 @@ import type {
   DatasetFindAllResponseDTO,
   DatasetFindOneRepsonseDTO,
   DatasetFindOneURLParams,
+  DatasetRenameRequestDTO,
+  DatasetRenameResponseDTO,
+  DatasetRenameURLParams,
   DatasetUpdateOneRequestDTO,
   DatasetUpdateOneResponseDTO,
   DatasetUpdateOneURLParams,
@@ -176,6 +179,25 @@ class DatasetApi extends ApiBase {
       },
     });
 
+    return res.json();
+  }
+
+  public async rename(
+    params: DatasetRenameURLParams,
+    payload: DatasetRenameRequestDTO,
+  ): Promise<DatasetRenameResponseDTO> {
+    const res = await this.load({
+      url: this.constructURL(API_PATHS_DATASETS.$ID, { params }),
+      options: {
+        method: HTTP_METHODS.PUT,
+        payload: JSON.stringify(payload),
+        hasAuth: true,
+        headers: {
+          contentType: CONTENT_TYPE.JSON,
+          accept: ACCEPT.JSON,
+        },
+      },
+    });
     return res.json();
   }
 }

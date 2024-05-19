@@ -7,12 +7,14 @@ import { bool, cleanEnv, num, port, str, testOnly, url } from 'envalid';
 
 import type { Config, EnvSchema } from './types.js';
 import { ENVIRONMENTS, LOG_LEVEL } from './types.js';
+import { validateUrlList } from './validate-url-list.js';
 
 class BaseConfig implements Config {
   private envVars;
 
   public ENV;
   public PORT;
+  public CORS_ALLOWED_ORIGIN;
   public API_PREFIX;
   public LOG;
   public MONGOOSE;
@@ -24,6 +26,7 @@ class BaseConfig implements Config {
 
     this.ENV = this.envVars.NODE_ENV;
     this.PORT = this.envVars.PORT;
+    this.CORS_ALLOWED_ORIGIN = this.envVars.CORS_ALLOWED_ORIGIN;
     this.API_PREFIX = this.envVars.API_PREFIX;
 
     this.LOG = {
@@ -83,6 +86,7 @@ class BaseConfig implements Config {
         default: 'production',
       }),
       PORT: port({ devDefault: 3000 }),
+      CORS_ALLOWED_ORIGIN: validateUrlList({ default: [] }),
       API_PREFIX: str({ desc: 'API Prefix', example: '/api' }),
       LOG_LEVEL: str({
         choices: LOG_LEVEL,

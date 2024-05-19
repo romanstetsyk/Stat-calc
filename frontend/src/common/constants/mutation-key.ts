@@ -5,6 +5,7 @@ const MUTATION_KEY = {
   DELETE_FILE: ['deleteFile'],
   UPLOAD_FILE: ['uploadFile'],
   UPDATE_FILE: ['updateFile'],
+  RENAME_FILE: ['renameFile'],
 } as const;
 
 export { MUTATION_KEY };

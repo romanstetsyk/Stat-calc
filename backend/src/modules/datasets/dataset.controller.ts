@@ -20,6 +20,7 @@ import {
   HTTP_METHODS,
   HttpError,
   parseFilename,
+  renameSchema,
   UPLOAD_FIELD_NAME,
 } from 'shared/build/index.js';
 
@@ -33,10 +34,7 @@ import type {
 import { ControllerBase } from '~/packages/controller/controller.js';
 
 import type { DatasetService } from './dataset.service.js';
-import {
-  fileSchema,
-  renameSchema,
-} from './validation-schemas/validation-schemas.js';
+import { fileSchema } from './validation-schemas/validation-schemas.js';
 
 type DatasetControllerConstructor = ControllerBaseConstructor & {
   datasetService: DatasetService;
@@ -172,6 +170,7 @@ class DatasetController extends ControllerBase {
     const userId = this.authService.ensureAuth(accessToken);
     const uploadedDataset = await this.datasetService.uploadOne({
       name,
+      displayName: name,
       ext,
       mimetype,
       size,
@@ -203,7 +202,7 @@ class DatasetController extends ControllerBase {
     const renamedDataset = await this.datasetService.rename({
       id,
       userId,
-      name: body.filename,
+      displayName: body.filename,
     });
     if (!renamedDataset) {
       throw new HttpError({
@@ -237,6 +236,7 @@ class DatasetController extends ControllerBase {
     const userId = this.authService.ensureAuth(accessToken);
     const updatedDataset = await this.datasetService.update(id, {
       name,
+      displayName: name,
       ext,
       mimetype,
       size,

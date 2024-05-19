@@ -5,6 +5,7 @@ export { FieldStack } from './field-stack';
 export { Footer } from './footer';
 export { Form } from './form';
 export { Header } from './header';
+export { IconButtonTooltip } from './icon-button-tooltip';
 export { InputControlled } from './input-controlled';
 export { InputControlledDropzone } from './input-controlled-dropzone';
 export { InputField } from './input-field';

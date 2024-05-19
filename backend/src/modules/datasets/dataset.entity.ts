@@ -7,6 +7,7 @@ import type { DatasetFile } from './types.js';
 type DatasetEntityConstructor = {
   id: string;
   name: string;
+  displayName: string;
   ext: string;
   mimetype: string;
   size: number;
@@ -19,6 +20,7 @@ type DatasetEntityConstructor = {
 class DatasetEntity {
   public id: string;
   public name: string;
+  public displayName: string;
   public ext: string;
   public mimetype: string;
   public size: number;
@@ -30,6 +32,7 @@ class DatasetEntity {
   public constructor({
     id,
     name,
+    displayName,
     ext,
     mimetype,
     size,
@@ -40,6 +43,7 @@ class DatasetEntity {
   }: DatasetEntityConstructor) {
     this.id = id;
     this.name = name;
+    this.displayName = displayName;
     this.ext = ext;
     this.mimetype = mimetype;
     this.size = size;
@@ -50,15 +54,15 @@ class DatasetEntity {
   }
 
   public toObject(): DatasetDTO {
-    const { id, name, ext, size, updatedAt } = this;
-    const filename = name;
+    const { id, displayName, ext, size, updatedAt } = this;
+    const filename = displayName;
     return { id, filename, ext, size, updatedAt: updatedAt.toISOString() };
   }
 
   public toFile(): DatasetFile {
-    const { id, name, ext, buffer, mimetype } = this;
+    const { id, displayName, ext, buffer, mimetype } = this;
     const bufferToSend = Buffer.from(buffer.buffer);
-    const filename = name + ext;
+    const filename = displayName + ext;
     return { id, filename, buffer: bufferToSend, mimetype };
   }
 }

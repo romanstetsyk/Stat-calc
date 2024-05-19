@@ -1,7 +1,7 @@
-import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { RiSave3Fill } from 'react-icons/ri';
 
+import { IconButtonTooltip } from '~/common/components';
 import { useGridData } from '~/modules/data-grid/hooks';
 
 import { createDatasetFile } from '../helpers';
@@ -16,22 +16,19 @@ const SaveDatasetBtn = (): JSX.Element => {
     const file = createDatasetFile(rowData, filename);
     if (file) {
       updateDataset(file);
+      recentEdits.save();
     }
-  }, [ext, rowData, title, updateDataset]);
+  }, [ext, recentEdits, rowData, title, updateDataset]);
 
-  const isDisabled = !recentEdits.canUndo;
+  const isDisabled = recentEdits.isSaved || rowData.isEmpty();
 
   return (
-    <Tooltip hasArrow label='Save' placement='top' fontSize='xs'>
-      <IconButton
-        variant='ghost'
-        size='sm'
-        aria-label='Save'
-        icon={<RiSave3Fill />}
-        onClick={handleClick}
-        isDisabled={isDisabled}
-      />
-    </Tooltip>
+    <IconButtonTooltip
+      label='Save'
+      icon={<RiSave3Fill />}
+      onClick={handleClick}
+      isDisabled={isDisabled}
+    />
   );
 };
 
