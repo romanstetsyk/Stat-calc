@@ -62,4 +62,5 @@ const SignUpPage = (): JSX.Element => {
   );
 };
 
-export { SignUpPage };
+// eslint-disable-next-line import/no-default-export
+export default SignUpPage;

@@ -31,4 +31,5 @@ const DatasetsPage = (): JSX.Element => {
   );
 };
 
-export { DatasetsPage };
+// eslint-disable-next-line import/no-default-export
+export default DatasetsPage;

@@ -16,18 +16,44 @@ import { APP_ROUTES } from '~/common/constants';
 import { theme } from '~/common/theme';
 import { SharedLayout } from '~/components/shared-layout';
 import { queryClient } from '~/config/query-client';
-import { SignInPage } from '~/modules/auth/pages/sign-in-page';
-import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
-import { ProfilePage } from '~/modules/profile/pages/profile-page';
-import { About } from '~/pages/about';
+// import { AccountPage } from '~/modules/account/pages/account-page';
+// import { SignInPage } from '~/modules/auth/pages/sign-in-page';
+// import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
+// import { DatasetWrapperPage, DatasetsPage } from '~/modules/datasets/pages';
+// import { ProfilePage } from '~/modules/profile/pages/profile-page';
+// import { About } from '~/pages/about';
 
-import { AccountPage } from './modules/account/pages';
-import { DatasetPageWrapper, DatasetsPage } from './modules/datasets/pages';
-
-const Application = React.lazy(
-  () => import('~/modules/application/components/application'),
+const AccountPage = React.lazy(
+  () => import('~/modules/account/pages/account-page'),
 );
+
+const ApplicationPage = React.lazy(
+  () => import('~/modules/application/pages/application-page'),
+);
+
+const SignInPage = React.lazy(
+  () => import('~/modules/auth/pages/sign-in-page'),
+);
+
+const SignUpPage = React.lazy(
+  () => import('~/modules/auth/pages/sign-up-page'),
+);
+
+const DatasetWrapperPage = React.lazy(
+  () => import('~/modules/datasets/pages/dataset-wrapper-page'),
+);
+
+const DatasetsPage = React.lazy(
+  () => import('~/modules/datasets/pages/datasets-page'),
+);
+
+const ProfilePage = React.lazy(
+  () => import('~/modules/profile/pages/profile-page'),
+);
+
 const Home = React.lazy(() => import('~/pages/home'));
+
+const About = React.lazy(() => import('~/pages/about'));
 
 const routes: RouteObject[] = [
   {
@@ -35,7 +61,7 @@ const routes: RouteObject[] = [
     element: <SharedLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: APP_ROUTES.APP, element: <Application /> },
+      { path: APP_ROUTES.APP, element: <ApplicationPage /> },
       { path: APP_ROUTES.ABOUT, element: <About /> },
       { path: APP_ROUTES.SIGN_UP, element: <SignUpPage /> },
       { path: APP_ROUTES.SIGN_IN, element: <SignInPage /> },
@@ -61,7 +87,7 @@ const routes: RouteObject[] = [
 
           {
             path: APP_ROUTES.DATASET,
-            children: [{ index: true, element: <DatasetPageWrapper /> }],
+            children: [{ index: true, element: <DatasetWrapperPage /> }],
           },
         ],
       },

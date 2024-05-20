@@ -26,4 +26,5 @@ const AccountPage = (): JSX.Element | null => {
   );
 };
 
-export { AccountPage };
+// eslint-disable-next-line import/no-default-export
+export default AccountPage;

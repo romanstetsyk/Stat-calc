@@ -1,13 +1,50 @@
-import { StatModal as DescriptiveStatisticsModal } from '~/modules/application/features/descriptive-statistics/stat-modal';
-import { StatModal as FrequencyDistributionModal } from '~/modules/application/features/frequency-distribution/stat-modal';
-import { StatModal as GroupNumericDataModal } from '~/modules/application/features/group-numeric-data/stat-modal';
-import { StatModal as HistogramModal } from '~/modules/application/features/histogram/stat-modal';
-import { StatModal as OneSampleZDataModal } from '~/modules/application/features/one-sample-z-data/stat-modal';
-import { StatModal as OneSampleZSummaryModal } from '~/modules/application/features/one-sample-z-summary/stat-modal';
-import { StatModal as TwoSampleZDataModal } from '~/modules/application/features/two-sample-z-data/stat-modal';
-import { StatModal as TwoSampleZSummaryModal } from '~/modules/application/features/two-sample-z-summary/stat-modal';
+import React from 'react';
 
+// import { StatModal as DescriptiveStatisticsModal } from '~/modules/application/features/descriptive-statistics/stat-modal';
+// import { StatModal as FrequencyDistributionModal } from '~/modules/application/features/frequency-distribution/stat-modal';
+// import { StatModal as GroupNumericDataModal } from '~/modules/application/features/group-numeric-data/stat-modal';
+// import { StatModal as HistogramModal } from '~/modules/application/features/histogram/stat-modal';
+// import { StatModal as OneSampleZDataModal } from '~/modules/application/features/one-sample-z-data/stat-modal';
+// import { StatModal as OneSampleZSummaryModal } from '~/modules/application/features/one-sample-z-summary/stat-modal';
+// import { StatModal as TwoSampleZDataModal } from '~/modules/application/features/two-sample-z-data/stat-modal';
+// import { StatModal as TwoSampleZSummaryModal } from '~/modules/application/features/two-sample-z-summary/stat-modal';
 import { useSessionData } from '../store';
+
+const DescriptiveStatisticsModal = React.lazy(
+  () =>
+    import('~/modules/application/features/descriptive-statistics/stat-modal'),
+);
+
+const FrequencyDistributionModal = React.lazy(
+  () =>
+    import('~/modules/application/features/frequency-distribution/stat-modal'),
+);
+
+const GroupNumericDataModal = React.lazy(
+  () => import('~/modules/application/features/group-numeric-data/stat-modal'),
+);
+
+const HistogramModal = React.lazy(
+  () => import('~/modules/application/features/histogram/stat-modal'),
+);
+
+const OneSampleZDataModal = React.lazy(
+  () => import('~/modules/application/features/one-sample-z-data/stat-modal'),
+);
+
+const OneSampleZSummaryModal = React.lazy(
+  () =>
+    import('~/modules/application/features/one-sample-z-summary/stat-modal'),
+);
+
+const TwoSampleZDataModal = React.lazy(
+  () => import('~/modules/application/features/two-sample-z-data/stat-modal'),
+);
+
+const TwoSampleZSummaryModal = React.lazy(
+  () =>
+    import('~/modules/application/features/two-sample-z-summary/stat-modal'),
+);
 
 type Props = {
   id: string;

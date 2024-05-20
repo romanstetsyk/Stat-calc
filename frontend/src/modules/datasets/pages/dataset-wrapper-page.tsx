@@ -11,7 +11,7 @@ import { useGridData } from '~/modules/data-grid/hooks';
 import { parseWorkbook } from '../helpers';
 import { useOpenDataset } from '../hooks';
 
-const DatasetPageWrapper = (): JSX.Element => {
+const DatasetWrapperPage = (): JSX.Element => {
   const { id = '' } = useParams();
 
   return <DatasetPage id={id} />;
@@ -85,4 +85,5 @@ const DatasetPage = ({ id }: Props): JSX.Element => {
   return <Progress size='xs' isIndeterminate />;
 };
 
-export { DatasetPageWrapper };
+// eslint-disable-next-line import/no-default-export
+export default DatasetWrapperPage;

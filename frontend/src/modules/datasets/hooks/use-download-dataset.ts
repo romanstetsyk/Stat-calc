@@ -6,7 +6,7 @@ import type {
   ErrorCommon,
 } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { throttle } from 'lodash';
+import throttle from 'lodash-es/throttle';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { QUERY_KEY } from '~/common/constants';

@@ -58,4 +58,5 @@ const ProfilePage = (): JSX.Element => {
   );
 };
 
-export { ProfilePage };
+// eslint-disable-next-line import/no-default-export
+export default ProfilePage;

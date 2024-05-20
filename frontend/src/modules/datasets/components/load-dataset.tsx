@@ -104,4 +104,5 @@ const LoadDataset = (): JSX.Element => {
   );
 };
 
-export { LoadDataset };
+// eslint-disable-next-line import/no-default-export
+export default LoadDataset;

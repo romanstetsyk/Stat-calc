@@ -6,7 +6,7 @@ import type {
   GridColumn,
 } from '@glideapps/glide-data-grid';
 import { DataEditor } from '@glideapps/glide-data-grid';
-import { debounce } from 'lodash-es';
+import debounce from 'lodash-es/debounce';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Config } from '../config';

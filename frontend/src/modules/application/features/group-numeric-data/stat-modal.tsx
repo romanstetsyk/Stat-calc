@@ -26,4 +26,5 @@ const StatModal = ({ id }: Props): JSX.Element => {
   );
 };
 
-export { StatModal };
+// eslint-disable-next-line import/no-default-export
+export default StatModal;
