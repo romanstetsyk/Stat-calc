@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Progress } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as React from 'react';
@@ -11,17 +11,21 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import { ProtectedRoute } from '~/common/components';
 import { APP_ROUTES } from '~/common/constants';
 import { theme } from '~/common/theme';
-import { SharedLayout } from '~/components/shared-layout';
-import { queryClient } from '~/config/query-client';
-// import { AccountPage } from '~/modules/account/pages/account-page';
-// import { SignInPage } from '~/modules/auth/pages/sign-in-page';
-// import { SignUpPage } from '~/modules/auth/pages/sign-up-page';
-// import { DatasetWrapperPage, DatasetsPage } from '~/modules/datasets/pages';
-// import { ProfilePage } from '~/modules/profile/pages/profile-page';
-// import { About } from '~/pages/about';
+import { queryClient } from '~/config';
+
+const ProtectedRoute = React.lazy(() =>
+  import('~/common/components/protected-route').then((module) => ({
+    default: module.ProtectedRoute,
+  })),
+);
+
+const SharedLayout = React.lazy(() =>
+  import('~/common/components/shared-layout').then((module) => ({
+    default: module.SharedLayout,
+  })),
+);
 
 const AccountPage = React.lazy(
   () => import('~/modules/account/pages/account-page'),
@@ -51,18 +55,15 @@ const ProfilePage = React.lazy(
   () => import('~/modules/profile/pages/profile-page'),
 );
 
-const Home = React.lazy(() => import('~/pages/home'));
-
-const About = React.lazy(() => import('~/pages/about'));
+const HomePage = React.lazy(() => import('~/modules/pages/home-page'));
 
 const routes: RouteObject[] = [
   {
     path: APP_ROUTES.HOME,
     element: <SharedLayout />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: <HomePage /> },
       { path: APP_ROUTES.APP, element: <ApplicationPage /> },
-      { path: APP_ROUTES.ABOUT, element: <About /> },
       { path: APP_ROUTES.SIGN_UP, element: <SignUpPage /> },
       { path: APP_ROUTES.SIGN_IN, element: <SignInPage /> },
 
@@ -103,7 +104,9 @@ ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        <RouterProvider router={browserRouter} />
+        <React.Suspense fallback={<Progress size='xs' isIndeterminate />}>
+          <RouterProvider router={browserRouter} />
+        </React.Suspense>
       </ChakraProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

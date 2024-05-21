@@ -30,6 +30,7 @@ const DataGridTitle = (props: Props): JSX.Element => {
       renameDataset(data.filename);
     },
     submitOnBlur: false,
+    isPreviewFocusable: false,
   });
 
   return (

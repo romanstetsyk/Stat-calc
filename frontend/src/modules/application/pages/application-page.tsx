@@ -10,7 +10,7 @@ const ApplicationPage = (): JSX.Element => {
     <>
       <Global styles={{ body: { overscrollBehaviorX: 'contain' } }} />
       <Flex as='main' direction='column' flexGrow={1} minHeight='100%'>
-        <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+        <Suspense>
           <FeatureMenu />
         </Suspense>
         <Suspense fallback={<Progress size='xs' isIndeterminate />}>
@@ -21,5 +21,4 @@ const ApplicationPage = (): JSX.Element => {
   );
 };
 
-// eslint-disable-next-line import/no-default-export
 export default ApplicationPage;

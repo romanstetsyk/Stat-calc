@@ -85,5 +85,4 @@ const DatasetPage = ({ id }: Props): JSX.Element => {
   return <Progress size='xs' isIndeterminate />;
 };
 
-// eslint-disable-next-line import/no-default-export
 export default DatasetWrapperPage;
