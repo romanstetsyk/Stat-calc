@@ -29,6 +29,8 @@ rules:
 overrides:
   - files:
       - vite.config.ts
+      - 'src/modules/**/*-page.tsx'
+      - 'src/modules/application/features/*/stat-modal.tsx'
     rules:
       import/no-default-export:
         - off
