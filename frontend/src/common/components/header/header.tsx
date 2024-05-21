@@ -1,4 +1,11 @@
-import { Button, Flex, Show, Stack, useColorModeValue } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Hide,
+  Show,
+  Stack,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import { Logo } from '~/common/components';
@@ -24,27 +31,17 @@ function Header(): JSX.Element {
       borderStyle='solid'
       borderColor={useColorModeValue('brand.border.primary', 'gray.900')}
     >
-      <Show below='md'>
-        <MobileNav />
-      </Show>
-
-      <Flex
-        flex={{ base: 1 }}
-        justify={{ base: 'center', md: 'start' }}
-        gap={{ md: 4, lg: 16 }}
-      >
+      <Flex flexGrow={1} justify='start' gap={{ md: 4, lg: 16 }}>
+        <Hide above='md'>
+          <MobileNav />
+        </Hide>
         <Logo />
-
-        <DesktopNav />
+        <Show above='md'>
+          <DesktopNav />
+        </Show>
       </Flex>
 
-      <Stack
-        flex={{ base: 1, md: 0 }}
-        justify='flex-end'
-        alignItems='center'
-        direction='row'
-        spacing={6}
-      >
+      <Stack justify='flex-end' alignItems='center' direction='row' spacing={6}>
         {currentUser ? (
           <ProfileMenu name={currentUser.name} />
         ) : (

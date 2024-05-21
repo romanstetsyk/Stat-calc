@@ -1,16 +1,16 @@
-import { APP_ROUTES } from '~/common/constants';
+// import { APP_ROUTES } from '~/common/constants';
 
 import type { NavItem } from './types';
 
 const NAV_ITEMS: NavItem[] = [
-  {
-    label: 'Home',
-    href: APP_ROUTES.HOME,
-  },
-  {
-    label: 'About',
-    href: APP_ROUTES.ABOUT,
-  },
+  // {
+  //   label: 'Home',
+  //   href: APP_ROUTES.HOME,
+  // },
+  // {
+  //   label: 'About',
+  //   href: APP_ROUTES.ABOUT,
+  // },
 ];
 
 export { NAV_ITEMS };
