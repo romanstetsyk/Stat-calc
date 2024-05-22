@@ -1,5 +1,10 @@
 import { Error as MongooseError } from 'mongoose';
-import { ERROR_MESSAGES, HTTP_CODES, HttpError } from 'shared/build/index.js';
+import {
+  DATASET_VALIDATION_MESSAGES,
+  ERROR_MESSAGES,
+  HTTP_CODES,
+  HttpError,
+} from 'shared/build/index.js';
 
 import { INTERNAL_ERROR_MESSAGES } from '~/common/constants/constants.js';
 
@@ -24,6 +29,14 @@ const handleMongooseErrors = (err: MongooseError): HttpError => {
     return new HttpError({
       status: HTTP_CODES.NOT_FOUND,
       message: ERROR_MESSAGES.NOT_FOUND,
+      cause: err,
+    });
+  }
+
+  if (err.message === DATASET_VALIDATION_MESSAGES.MAX_TOTAL_FILES) {
+    return new HttpError({
+      status: HTTP_CODES.BAD_REQUEST,
+      message: DATASET_VALIDATION_MESSAGES.MAX_TOTAL_FILES,
       cause: err,
     });
   }

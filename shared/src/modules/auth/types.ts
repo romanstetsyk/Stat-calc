@@ -3,6 +3,7 @@ type SignUpRequestDTO = {
   lastName: string;
   email: string;
   password: string;
+  repeatPassword: string;
 };
 
 type SignUpResponseDTO = {

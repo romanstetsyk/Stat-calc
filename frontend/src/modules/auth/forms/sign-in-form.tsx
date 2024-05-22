@@ -34,14 +34,24 @@ const SignInForm = ({ onSubmit }: Props): JSX.Element => {
     <Stack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
       <FormControl isInvalid={Boolean(errors.email)} isRequired>
         <FormLabel>Email address</FormLabel>
-        <InputControlled type='email' control={control} name='email' />
+        <InputControlled
+          type='email'
+          control={control}
+          name='email'
+          autoComplete='email'
+        />
         {errors.email && (
           <FormErrorMessage>{errors.email.message}</FormErrorMessage>
         )}
       </FormControl>
       <FormControl isInvalid={Boolean(errors.password)} isRequired>
         <FormLabel>Password</FormLabel>
-        <InputControlled type='password' control={control} name='password' />
+        <InputControlled
+          type='password'
+          control={control}
+          name='password'
+          autoComplete='current-password'
+        />
         {errors.password && (
           <FormErrorMessage as='span' overflowWrap='anywhere' maxWidth='100%'>
             {errors.password.message}
