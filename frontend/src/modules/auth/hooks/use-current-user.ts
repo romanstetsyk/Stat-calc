@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react';
 import type { ErrorCommon, UserInfo } from '@shared/build/esm/index';
 import { TIME_CONVERT } from '@shared/build/esm/index';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { QUERY_KEY } from '~/common/constants';
 import { useQuery, useQueryClient } from '~/common/hooks';
@@ -15,7 +15,7 @@ import { authApi } from '../api';
 const useCurrentUser = (): UseQueryResult<UserInfo, ErrorCommon> => {
   const queryClient = useQueryClient();
 
-  const accessToken = useMemo(() => storage.getItem('token'), []);
+  const accessToken = storage.getItem('token');
 
   const staleTime =
     config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
