@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Stack,
 } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -30,29 +31,74 @@ const SignUpForm = ({ onSubmit }: Props): JSX.Element => {
 
   return (
     <Stack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
-      <FormControl isInvalid={Boolean(errors.name)}>
-        <FormLabel>Full name</FormLabel>
-        <InputControlled type='text' control={control} name='name' />
-        {errors.name && (
-          <FormErrorMessage>{errors.name.message}</FormErrorMessage>
-        )}
-      </FormControl>
-      <FormControl isInvalid={Boolean(errors.email)}>
+      <HStack alignItems='flex-start'>
+        <FormControl isInvalid={Boolean(errors.firstName)} isRequired>
+          <FormLabel>First Name</FormLabel>
+          <InputControlled
+            type='text'
+            control={control}
+            name='firstName'
+            autoComplete='given-name'
+          />
+          {errors.firstName && (
+            <FormErrorMessage>{errors.firstName.message}</FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={Boolean(errors.lastName)}>
+          <FormLabel>Last Name</FormLabel>
+          <InputControlled
+            type='text'
+            control={control}
+            name='lastName'
+            autoComplete='family-name'
+          />
+          {errors.lastName && (
+            <FormErrorMessage>{errors.lastName.message}</FormErrorMessage>
+          )}
+        </FormControl>
+      </HStack>
+      <FormControl isInvalid={Boolean(errors.email)} isRequired>
         <FormLabel>Email address</FormLabel>
-        <InputControlled type='email' control={control} name='email' />
+        <InputControlled
+          type='email'
+          control={control}
+          name='email'
+          autoComplete='email'
+        />
         {errors.email && (
           <FormErrorMessage>{errors.email.message}</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.password)}>
-        <FormLabel>Password</FormLabel>
-        <InputControlled type='password' control={control} name='password' />
-        {errors.password && (
-          <FormErrorMessage as='span' overflowWrap='anywhere' maxWidth='100%'>
-            {errors.password.message}
-          </FormErrorMessage>
-        )}
-      </FormControl>
+      <HStack alignItems='flex-start'>
+        <FormControl isInvalid={Boolean(errors.password)} isRequired>
+          <FormLabel>Password</FormLabel>
+          <InputControlled
+            type='password'
+            control={control}
+            name='password'
+            autoComplete='new-password'
+          />
+          {errors.password && (
+            <FormErrorMessage as='span' overflowWrap='anywhere' maxWidth='100%'>
+              {errors.password.message}
+            </FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={Boolean(errors.repeatPassword)} isRequired>
+          <FormLabel>Repeat password</FormLabel>
+          <InputControlled
+            type='password'
+            control={control}
+            name='repeatPassword'
+            autoComplete='new-password'
+          />
+          {errors.repeatPassword && (
+            <FormErrorMessage as='span' overflowWrap='anywhere' maxWidth='100%'>
+              {errors.repeatPassword.message}
+            </FormErrorMessage>
+          )}
+        </FormControl>
+      </HStack>
 
       <Button
         type='submit'

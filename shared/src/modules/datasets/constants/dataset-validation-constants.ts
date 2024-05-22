@@ -7,7 +7,8 @@ const DATASET_VALIDATION_CONSTANTS = {
   FILENAME_LENGTH_MAX: 255,
   ALLOWED_MIMETYPES: ['text/csv'],
   MIN_FILES: 1,
-  MAX_FILES: 1,
+  MAX_FILES: 1, // Max number of files to upload at a time
+  MAX_TOTAL_FILES: 10, // Max number of files user allowed to have
 } as const;
 
 const DATASET_VALIDATION_MESSAGES = {
@@ -19,6 +20,7 @@ const DATASET_VALIDATION_MESSAGES = {
   MIN_FILES: `Please select at least ${DATASET_VALIDATION_CONSTANTS.MIN_FILES} file`,
   MAX_FILES: `Please upload at most ${DATASET_VALIDATION_CONSTANTS.MAX_FILES} file at a time`,
   UNIQUE: 'This file has already been selected',
+  MAX_TOTAL_FILES: `You have reached the limit of ${DATASET_VALIDATION_CONSTANTS.MAX_TOTAL_FILES} files`,
 } as const;
 
 export { DATASET_VALIDATION_CONSTANTS, DATASET_VALIDATION_MESSAGES };

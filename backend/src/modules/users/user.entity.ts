@@ -7,42 +7,53 @@ type UserEntityConstructor = UserInfo & {
 
 class UserEntity {
   public id: string;
-  public name: string;
+  public firstName: string;
+  public lastName: string;
   public email: string;
   public passwordHash: string;
 
-  public constructor({ id, name, email, passwordHash }: UserEntityConstructor) {
+  public constructor({
+    id,
+    firstName,
+    lastName,
+    email,
+    passwordHash,
+  }: UserEntityConstructor) {
     this.id = id;
-    this.name = name;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.email = email;
     this.passwordHash = passwordHash;
   }
 
   public static create({
     id,
-    name,
+    firstName,
+    lastName,
     email,
     passwordHash,
   }: UserEntityConstructor): UserEntity {
-    return new UserEntity({ id, name, email, passwordHash });
+    return new UserEntity({ id, firstName, lastName, email, passwordHash });
   }
 
   public static createObject({
-    name,
+    firstName,
+    lastName,
     email,
     passwordHash,
   }: Omit<UserEntityConstructor, 'id'>): UserInfo &
     Pick<UserEntity, 'passwordHash'> {
     return {
-      name,
+      firstName,
+      lastName,
       email,
       passwordHash,
     };
   }
 
   public toObject(): UserInfo {
-    const { name, email } = this;
-    return { name, email };
+    const { firstName, lastName, email } = this;
+    return { firstName, lastName, email };
   }
 }
 

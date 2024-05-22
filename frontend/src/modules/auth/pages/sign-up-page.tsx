@@ -19,13 +19,13 @@ import { useCurrentUser, useSignUp } from '../hooks';
 const SignUpPage = (): JSX.Element => {
   const { data: currentUser } = useCurrentUser();
 
-  const { isSuccess, mutate: signIn } = useSignUp();
+  const { isSuccess, mutate: signUp } = useSignUp();
 
   const onSubmit = useCallback(
     (data: SignUpRequestDTO): void => {
-      signIn(data);
+      signUp(data);
     },
-    [signIn],
+    [signUp],
   );
 
   const bgColor = useColorModeValue('brand.bg.primary', 'gray.800');
@@ -62,4 +62,4 @@ const SignUpPage = (): JSX.Element => {
   );
 };
 
-export { SignUpPage };
+export default SignUpPage;

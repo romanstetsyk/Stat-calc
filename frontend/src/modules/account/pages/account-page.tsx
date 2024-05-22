@@ -8,13 +8,14 @@ const AccountPage = (): JSX.Element | null => {
   if (!currentUser) {
     return null;
   }
+  const fullName = `${currentUser.firstName} ${currentUser.lastName}`.trim();
   return (
     <TableContainer>
       <Table variant='simple'>
         <Tbody>
           <Tr>
             <Td>Name</Td>
-            <Td>{currentUser.name}</Td>
+            <Td>{fullName}</Td>
           </Tr>
           <Tr>
             <Td>Email</Td>
@@ -26,4 +27,4 @@ const AccountPage = (): JSX.Element | null => {
   );
 };
 
-export { AccountPage };
+export default AccountPage;

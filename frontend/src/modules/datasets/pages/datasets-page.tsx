@@ -31,4 +31,4 @@ const DatasetsPage = (): JSX.Element => {
   );
 };
 
-export { DatasetsPage };
+export default DatasetsPage;

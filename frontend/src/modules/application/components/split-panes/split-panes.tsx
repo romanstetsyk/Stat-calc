@@ -5,19 +5,37 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  Progress,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import type { AllotmentHandle } from 'allotment';
 import { Allotment } from 'allotment';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { storage } from '~/framework/storage';
 import { ArrowButton } from '~/modules/application/components';
 import { Config } from '~/modules/application/config';
 import { normalizeArray } from '~/modules/application/utils';
-import { DataGrid, DataGridTitle } from '~/modules/data-grid/components';
+import { DataGridTitle } from '~/modules/data-grid/components';
 import { SaveDatasetBtn } from '~/modules/datasets/components';
-import { Session } from '~/modules/session/components';
+
+const DataGrid = lazy(() =>
+  import('~/modules/data-grid/components/data-grid').then((module) => ({
+    default: module.DataGrid,
+  })),
+);
+const Session = lazy(() =>
+  import('~/modules/session/components/session').then((module) => ({
+    default: module.Session,
+  })),
+);
 
 const SplitPanes = (): JSX.Element => {
   const ref = useRef<AllotmentHandle | null>(null);
@@ -122,7 +140,7 @@ const SplitPanes = (): JSX.Element => {
   const [leftPaneSize, rightPaneSize] = normalizeArray(paneSizes);
 
   return (
-    <>
+    <Suspense fallback={<Progress size='xs' isIndeterminate />}>
       <Allotment
         ref={ref}
         snap
@@ -135,11 +153,11 @@ const SplitPanes = (): JSX.Element => {
           preferredSize={`${leftPaneSize}%`}
         >
           <Card minW='10rem' maxW='full' height='100%' m={2}>
-            <CardHeader pb={0} display='flex' alignItems='baseline' gap={2}>
-              <DataGridTitle size='md' />
+            <CardHeader py={3} display='flex' alignItems='center' gap={2}>
+              <DataGridTitle size='sm' />
               <SaveDatasetBtn />
             </CardHeader>
-            <CardBody overflow='auto' px={0} pb={2}>
+            <CardBody overflow='auto' px={0} pt={0} pb={2}>
               <DataGrid />
             </CardBody>
           </Card>
@@ -150,10 +168,15 @@ const SplitPanes = (): JSX.Element => {
           preferredSize={`${rightPaneSize}%`}
         >
           <Card minW='10rem' maxW='full' height='100%' m={2}>
-            <CardHeader>
-              <Heading size='md'>Session</Heading>
+            <CardHeader py={3} display='flex' alignItems='center'>
+              <Heading size='sm' height={8} display='flex' alignItems='center'>
+                Session
+              </Heading>
             </CardHeader>
-            <Session />
+            {/* Without Suspense component crashes on session save */}
+            <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+              <Session />
+            </Suspense>
           </Card>
         </Allotment.Pane>
       </Allotment>
@@ -173,7 +196,7 @@ const SplitPanes = (): JSX.Element => {
       {!smallScreen && !showSession && (
         <ArrowButton placement='right' onClick={handleShowSession} />
       )}
-    </>
+    </Suspense>
   );
 };
 

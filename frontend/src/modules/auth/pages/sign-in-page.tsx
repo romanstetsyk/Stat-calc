@@ -62,4 +62,4 @@ const SignInPage = (): JSX.Element => {
   );
 };
 
-export { SignInPage };
+export default SignInPage;

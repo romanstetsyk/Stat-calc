@@ -58,4 +58,4 @@ const ProfilePage = (): JSX.Element => {
   );
 };
 
-export { ProfilePage };
+export default ProfilePage;

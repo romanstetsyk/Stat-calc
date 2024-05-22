@@ -18,6 +18,7 @@ const USER_VALIDATION_CONSTANTS = {
 
 const USER_VALIDATION_MESSAGES = {
   NAME_REQUIRED: 'Name is required',
+  FIRST_NAME_REQUIRED: 'First name is required',
   NAME_ALPHANUM: 'Name must only contain alpha-numeric characters',
   EMAIL_REQUIRED: 'Email is required',
   PASSWORD_REQUIRED: 'Password is required',
@@ -25,6 +26,7 @@ const USER_VALIDATION_MESSAGES = {
   PASSWORD_INVALID:
     'Password must contain at least one uppercase letter (A-Z), one lowercase letter (a-z), one digit and one special character',
   PASSWORD_SHORT: 'Password must be at least 8 characters long',
+  PASSWORD_MATCH: 'Passwords do not match',
   MAX_LOGIN_INPUT_LENGTH_EXCEEDED: `Maximum length of ${USER_VALIDATION_CONSTANTS.MAX_LOGIN_INPUT_LENGTH} characters exceeded`,
 } as const;
 

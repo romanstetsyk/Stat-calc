@@ -1,10 +1,12 @@
 export { AlertModal } from './alert-modal';
 export { CheckboxControlled } from './checkbox-controlled';
 export { CheckboxGroupControlled } from './checkbox-group-controlled';
+export { Features } from './features';
 export { FieldStack } from './field-stack';
 export { Footer } from './footer';
 export { Form } from './form';
 export { Header } from './header';
+export { Hero } from './hero';
 export { IconButtonTooltip } from './icon-button-tooltip';
 export { InputControlled } from './input-controlled';
 export { InputControlledDropzone } from './input-controlled-dropzone';

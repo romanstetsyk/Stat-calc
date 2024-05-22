@@ -28,4 +28,4 @@ const StatModal = ({ id }: Props): JSX.Element => {
   );
 };
 
-export { StatModal };
+export default StatModal;

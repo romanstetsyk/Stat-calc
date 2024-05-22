@@ -1,5 +1,9 @@
 import type { HydratedDocument } from 'mongoose';
 import { MongooseError } from 'mongoose';
+import {
+  DATASET_VALIDATION_CONSTANTS,
+  DATASET_VALIDATION_MESSAGES,
+} from 'shared/build/index.js';
 import { validate } from 'uuid';
 
 import { INTERNAL_ERROR_MESSAGES } from '~/common/constants/constants.js';
@@ -48,9 +52,25 @@ class DatasetRepository {
   }
 
   public async uploadOne(payload: DatasetBody): Promise<DatasetEntity> {
-    const newDataset: HydratedDocument<DatasetDocument> =
-      await this.datasetModel.create(payload);
-
+    const session = await this.datasetModel.startSession();
+    let newDataset: HydratedDocument<DatasetDocument>;
+    try {
+      newDataset = await session.withTransaction(async () => {
+        const { userId } = payload;
+        const count = await this.datasetModel.countDocuments(
+          { userId },
+          { session },
+        );
+        if (count >= DATASET_VALIDATION_CONSTANTS.MAX_TOTAL_FILES) {
+          throw new MongooseError(DATASET_VALIDATION_MESSAGES.MAX_TOTAL_FILES);
+        }
+        // Can't use this.datasetModel.create() with session option
+        // https://mongoosejs.com/docs/api/model.html#Model.create()
+        return await new this.datasetModel(payload).save({ session });
+      });
+    } finally {
+      void session.endSession();
+    }
     return new DatasetEntity(newDataset.toObject());
   }
 

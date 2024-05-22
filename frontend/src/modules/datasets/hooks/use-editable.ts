@@ -30,6 +30,15 @@ const useEditable = <T extends FieldValues>({
   onSubmit: onSubmitEditable,
   onFormSubmit,
   submitOnBlur,
+  isPreviewFocusable,
+  isDisabled,
+  startWithEditView,
+  onCancel,
+  onEdit,
+  onBlur,
+  selectAllOnFocus,
+  placeholder,
+  finalFocusRef,
 }: Params<T>): UseEditableReturn & UseFormReturn<T> & { value: string } => {
   const [value, setValue] = useState(defaultValue);
 
@@ -71,10 +80,18 @@ const useEditable = <T extends FieldValues>({
 
   const useEditableReturn = useEditableChakra({
     defaultValue,
-    isPreviewFocusable: true,
+    isPreviewFocusable,
     onSubmit,
     onChange,
     submitOnBlur,
+    isDisabled,
+    startWithEditView,
+    onCancel,
+    onEdit,
+    onBlur,
+    selectAllOnFocus,
+    placeholder,
+    finalFocusRef,
   });
 
   return { ...useEditableReturn, ...useFormReturn, value };

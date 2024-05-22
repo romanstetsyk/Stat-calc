@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { RiSave3Fill } from 'react-icons/ri';
 
 import { IconButtonTooltip } from '~/common/components';
+import { useCurrentUser } from '~/modules/auth/hooks';
 import { useGridData } from '~/modules/data-grid/hooks';
 
 import { createDatasetFile } from '../helpers';
@@ -10,6 +11,8 @@ import { useUpdateDataset } from '../hooks';
 const SaveDatasetBtn = (): JSX.Element => {
   const { id, rowData, title, ext, recentEdits } = useGridData();
   const { mutate: updateDataset } = useUpdateDataset(id);
+
+  const { data: currentUser } = useCurrentUser();
 
   const handleClick = useCallback((): void => {
     const filename = title + ext;
@@ -20,7 +23,7 @@ const SaveDatasetBtn = (): JSX.Element => {
     }
   }, [ext, recentEdits, rowData, title, updateDataset]);
 
-  const isDisabled = recentEdits.isSaved || rowData.isEmpty();
+  const isDisabled = !currentUser || recentEdits.isSaved || rowData.isEmpty();
 
   return (
     <IconButtonTooltip

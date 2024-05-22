@@ -4,7 +4,10 @@ import { IconButton, Menu, MenuButton, MenuList } from '@chakra-ui/react';
 import { NAV_ITEMS } from '../nav-items';
 import { MobileNavItem } from './mobile-nav-item';
 
-const MobileNav = (): JSX.Element => {
+const MobileNav = (): JSX.Element | null => {
+  if (NAV_ITEMS.length === 0) {
+    return null;
+  }
   return (
     <Menu strategy='fixed'>
       {({ isOpen }): JSX.Element => (
