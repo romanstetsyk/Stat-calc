@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { USER_VALIDATION_MESSAGES } from '../../constants';
+import { USER_VALIDATION_MESSAGES } from '../../constants.js';
 
 const repeatPassword = <T extends object>(
   field: Extract<keyof T, string>,
