@@ -40,11 +40,12 @@ class UserService implements Service<UserEntity> {
   }
 
   public async create(payload: SignUpRequestDTO): Promise<UserEntity> {
-    const { name, email, password } = payload;
+    const { firstName, lastName, email, password } = payload;
     const passwordHash = await this.passwordUtil.hash(password);
 
     const userObjWithoutID = UserEntity.createObject({
-      name,
+      firstName,
+      lastName,
       email,
       passwordHash,
     });

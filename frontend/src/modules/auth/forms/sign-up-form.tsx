@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Stack,
 } from '@chakra-ui/react';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -30,21 +31,30 @@ const SignUpForm = ({ onSubmit }: Props): JSX.Element => {
 
   return (
     <Stack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
-      <FormControl isInvalid={Boolean(errors.name)}>
-        <FormLabel>Full name</FormLabel>
-        <InputControlled type='text' control={control} name='name' />
-        {errors.name && (
-          <FormErrorMessage>{errors.name.message}</FormErrorMessage>
-        )}
-      </FormControl>
-      <FormControl isInvalid={Boolean(errors.email)}>
+      <HStack>
+        <FormControl isInvalid={Boolean(errors.firstName)} isRequired>
+          <FormLabel>First Name</FormLabel>
+          <InputControlled type='text' control={control} name='firstName' />
+          {errors.firstName && (
+            <FormErrorMessage>{errors.firstName.message}</FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={Boolean(errors.lastName)}>
+          <FormLabel>Last Name</FormLabel>
+          <InputControlled type='text' control={control} name='lastName' />
+          {errors.lastName && (
+            <FormErrorMessage>{errors.lastName.message}</FormErrorMessage>
+          )}
+        </FormControl>
+      </HStack>
+      <FormControl isInvalid={Boolean(errors.email)} isRequired>
         <FormLabel>Email address</FormLabel>
         <InputControlled type='email' control={control} name='email' />
         {errors.email && (
           <FormErrorMessage>{errors.email.message}</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.password)}>
+      <FormControl isInvalid={Boolean(errors.password)} isRequired>
         <FormLabel>Password</FormLabel>
         <InputControlled type='password' control={control} name='password' />
         {errors.password && (

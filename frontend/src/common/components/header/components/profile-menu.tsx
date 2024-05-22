@@ -14,7 +14,7 @@ import { APP_ROUTES } from '~/common/constants';
 import { useSignOut } from '~/modules/auth/hooks';
 
 type Props = {
-  name: UserInfo['name'];
+  name: UserInfo['firstName'];
 };
 
 const ProfileMenu = ({ name }: Props): JSX.Element | null => {

@@ -6,7 +6,8 @@ import { name } from './components/name.js';
 import { password } from './components/password.js';
 
 const signUpSchema = Joi.object<SignUpRequestDTO, true>({
-  name,
+  firstName: name,
+  lastName: name,
   email,
   password,
 });

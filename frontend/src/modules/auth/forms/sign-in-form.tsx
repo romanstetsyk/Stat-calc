@@ -32,14 +32,14 @@ const SignInForm = ({ onSubmit }: Props): JSX.Element => {
 
   return (
     <Stack as='form' onSubmit={handleSubmit(onSubmit)} spacing={4}>
-      <FormControl isInvalid={Boolean(errors.email)}>
+      <FormControl isInvalid={Boolean(errors.email)} isRequired>
         <FormLabel>Email address</FormLabel>
         <InputControlled type='email' control={control} name='email' />
         {errors.email && (
           <FormErrorMessage>{errors.email.message}</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isInvalid={Boolean(errors.password)}>
+      <FormControl isInvalid={Boolean(errors.password)} isRequired>
         <FormLabel>Password</FormLabel>
         <InputControlled type='password' control={control} name='password' />
         {errors.password && (

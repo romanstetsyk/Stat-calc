@@ -8,7 +8,12 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.UUID,
       default: uuidv4,
     },
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
       type: String,
       required: true,
       trim: true,

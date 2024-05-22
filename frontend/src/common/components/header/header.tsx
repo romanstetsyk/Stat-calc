@@ -52,7 +52,7 @@ function Header(): JSX.Element {
           spacing={6}
         >
           {currentUser ? (
-            <ProfileMenu name={currentUser.name} />
+            <ProfileMenu name={currentUser.firstName} />
           ) : (
             <DesktopNavLink href={APP_ROUTES.SIGN_UP}>Sign Up</DesktopNavLink>
           )}
