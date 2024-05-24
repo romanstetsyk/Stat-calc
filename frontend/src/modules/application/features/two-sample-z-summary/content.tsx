@@ -97,12 +97,12 @@ const Content = ({ onClose, id }: Props): JSX.Element => {
           Close
         </Button>
         {display === 'form' && (
-          <Button type='submit' colorScheme='blue' form={formId}>
+          <Button type='submit' colorScheme='buttonColorScheme' form={formId}>
             Calculate
           </Button>
         )}
         {display === 'result' && (
-          <Button colorScheme='blue' onClick={onSaveToSession}>
+          <Button colorScheme='buttonColorScheme' onClick={onSaveToSession}>
             Save and Close
           </Button>
         )}

@@ -3,6 +3,9 @@ import { theme as baseTheme } from '@chakra-ui/react';
 
 const lightTheme: ThemeOverride = {
   colors: {
+    buttonColorScheme: baseTheme.colors.teal,
+    progressColorScheme: baseTheme.colors.teal,
+
     brand: {
       link: {
         primary: baseTheme.colors.blue['400'],
@@ -26,8 +29,8 @@ const lightTheme: ThemeOverride = {
         primary: baseTheme.colors.gray['200'],
       },
 
-      accent: baseTheme.colors.green['400'],
-      accentHover: baseTheme.colors.green['500'],
+      accent: baseTheme.colors.teal['500'],
+      accentHover: baseTheme.colors.teal['600'],
     },
   },
 };

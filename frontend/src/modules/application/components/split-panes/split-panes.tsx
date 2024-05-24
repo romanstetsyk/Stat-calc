@@ -140,7 +140,11 @@ const SplitPanes = (): JSX.Element => {
   const [leftPaneSize, rightPaneSize] = normalizeArray(paneSizes);
 
   return (
-    <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+    <Suspense
+      fallback={
+        <Progress size='xs' isIndeterminate colorScheme='progressColorScheme' />
+      }
+    >
       <Allotment
         ref={ref}
         snap
@@ -174,7 +178,15 @@ const SplitPanes = (): JSX.Element => {
               </Heading>
             </CardHeader>
             {/* Without Suspense component crashes on session save */}
-            <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+            <Suspense
+              fallback={
+                <Progress
+                  size='xs'
+                  isIndeterminate
+                  colorScheme='progressColorScheme'
+                />
+              }
+            >
               <Session />
             </Suspense>
           </Card>

@@ -62,13 +62,9 @@ function Header(): JSX.Element {
               as={RouterLink}
               to={APP_ROUTES.APP}
               fontSize='sm'
+              colorScheme='buttonColorScheme'
               fontWeight={600}
-              bg='brand.accent'
-              color='brand.text.button.primary'
               rounded='full'
-              _hover={{
-                bg: 'brand.accentHover',
-              }}
             >
               Open App
             </Button>

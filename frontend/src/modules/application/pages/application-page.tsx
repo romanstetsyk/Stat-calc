@@ -13,7 +13,15 @@ const ApplicationPage = (): JSX.Element => {
         <Suspense>
           <FeatureMenu />
         </Suspense>
-        <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+        <Suspense
+          fallback={
+            <Progress
+              size='xs'
+              isIndeterminate
+              colorScheme='progressColorScheme'
+            />
+          }
+        >
           <SplitPanes />
         </Suspense>
       </Flex>

@@ -11,7 +11,15 @@ const SharedLayout = (): JSX.Element => {
   return (
     <Flex direction='column' height='100vh'>
       <Header />
-      <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+      <Suspense
+        fallback={
+          <Progress
+            size='xs'
+            isIndeterminate
+            colorScheme='progressColorScheme'
+          />
+        }
+      >
         <Outlet />
       </Suspense>
       {location.pathname !== APP_ROUTES.APP && <Footer />}

@@ -12,7 +12,9 @@ const ProtectedRoute = ({ children }: Props): JSX.Element => {
   const { isSuccess, isFetching } = useCurrentUser();
 
   if (isFetching) {
-    return <Progress size='xs' isIndeterminate />;
+    return (
+      <Progress size='xs' isIndeterminate colorScheme='progressColorScheme' />
+    );
   }
 
   if (isSuccess) {
