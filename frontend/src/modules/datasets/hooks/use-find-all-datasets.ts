@@ -18,9 +18,8 @@ const useFindAllDatasets = (): UseQueryResult<
 > => {
   const queryResult = useQuery<DatasetFindAllResponseDTO, ErrorCommon>({
     queryKey: QUERY_KEY.ALL_DATASETS,
-    queryFn: ({ signal }) => datasetApi.findAll(signal),
-    staleTime: Number.POSITIVE_INFINITY,
-    retry: false,
+    queryFn: datasetApi.findAll.bind(datasetApi, null),
+    retry: true,
   });
 
   const toast = useToast();
