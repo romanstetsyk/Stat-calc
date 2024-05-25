@@ -8,7 +8,9 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Link as RRDLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { APP_ROUTES } from '~/common/constants';
 
 import { ArrowIcon } from './arrow-icon';
 
@@ -26,11 +28,16 @@ const Hero = (): JSX.Element => {
         <Heading
           as='h1'
           fontWeight={600}
-          fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+          fontSize={{ base: '3xl', sm: '4xl', md: '6xl' }}
           lineHeight='110%'
         >
           Unlock the power of data <br />
-          <Text as='span' color='green.400'>
+          <Text
+            as='span'
+            color='brand.accent'
+            bgGradient='linear(to-r, teal.500 0%, green.300 200%)'
+            bgClip='text'
+          >
             with NextStat
           </Text>
         </Heading>
@@ -46,15 +53,12 @@ const Hero = (): JSX.Element => {
           position='relative'
         >
           <Button
-            as={RRDLink}
-            to='/app'
-            colorScheme='green'
-            bg='green.400'
-            rounded='full'
+            as={RouterLink}
+            to={APP_ROUTES.APP}
             px={6}
-            _hover={{
-              bg: 'green.500',
-            }}
+            colorScheme='buttonColorScheme'
+            fontWeight={600}
+            rounded='full'
           >
             Open App
           </Button>

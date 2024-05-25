@@ -100,15 +100,7 @@ const SignUpForm = ({ onSubmit }: Props): JSX.Element => {
         </FormControl>
       </HStack>
 
-      <Button
-        type='submit'
-        bg='brand.bg.button.primary'
-        color='brand.text.button.primary'
-        _hover={{
-          bg: 'brand.bg.button.primaryHover',
-        }}
-        mt={6}
-      >
+      <Button type='submit' colorScheme='buttonColorScheme' mt={6}>
         Sign up
       </Button>
     </Stack>

@@ -19,7 +19,7 @@ const DownloadDatasetBtn = ({ id }: Props): JSX.Element => {
         min={ProgressLimits.MIN}
         max={ProgressLimits.MAX}
         value={progress}
-        color='green.400'
+        color='brand.accent'
         size={8}
       >
         <CircularProgressLabel>

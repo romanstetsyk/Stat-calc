@@ -47,7 +47,15 @@ const ProfilePage = (): JSX.Element => {
         <TabPanels>
           {PROFILE_ITEMS.map((tab) => (
             <TabPanel key={tab.label} px={0}>
-              <Suspense fallback={<Progress size='xs' isIndeterminate />}>
+              <Suspense
+                fallback={
+                  <Progress
+                    size='xs'
+                    isIndeterminate
+                    colorScheme='progressColorScheme'
+                  />
+                }
+              >
                 <Outlet />
               </Suspense>
             </TabPanel>

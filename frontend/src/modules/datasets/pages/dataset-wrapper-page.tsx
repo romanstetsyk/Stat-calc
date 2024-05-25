@@ -82,7 +82,9 @@ const DatasetPage = ({ id }: Props): JSX.Element => {
     };
   }, [error, isError, toast]);
 
-  return <Progress size='xs' isIndeterminate />;
+  return (
+    <Progress size='xs' isIndeterminate colorScheme='progressColorScheme' />
+  );
 };
 
 export default DatasetWrapperPage;

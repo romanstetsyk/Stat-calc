@@ -18,7 +18,7 @@ const useCurrentUser = (): UseQueryResult<UserInfo, ErrorCommon> => {
   const accessToken = storage.getItem('token');
 
   const staleTime =
-    config.VITE_JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
+    config.JWT_ACCESS_EXPIRATION_MINUTES * TIME_CONVERT.MIN_TO_MS;
 
   const queryResult = useQuery<UserInfo, ErrorCommon>({
     queryKey: QUERY_KEY.CURRENT_USER,

@@ -67,14 +67,7 @@ const SignInForm = ({ onSubmit }: Props): JSX.Element => {
           <Checkbox>Remember me</Checkbox>
           <Text color='brand.link.primary'>Forgot password?</Text>
         </Stack>
-        <Button
-          type='submit'
-          bg='brand.bg.button.primary'
-          color='brand.text.button.primary'
-          _hover={{
-            bg: 'brand.bg.button.primaryHover',
-          }}
-        >
+        <Button type='submit' colorScheme='buttonColorScheme'>
           Sign in
         </Button>
       </Stack>

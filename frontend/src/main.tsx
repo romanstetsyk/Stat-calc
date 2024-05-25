@@ -104,7 +104,15 @@ ReactDOM.createRoot(document.querySelector('#root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        <React.Suspense fallback={<Progress size='xs' isIndeterminate />}>
+        <React.Suspense
+          fallback={
+            <Progress
+              size='xs'
+              isIndeterminate
+              colorScheme='progressColorScheme'
+            />
+          }
+        >
           <RouterProvider router={browserRouter} />
         </React.Suspense>
       </ChakraProvider>
