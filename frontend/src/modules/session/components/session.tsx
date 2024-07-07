@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import type { DraggableGridHandle } from 'ruuri';
 import DraggableGrid from 'ruuri';
 
+import { useBeforeUnload } from '~/common/hooks';
 import { OutputContent as DescriptiveStatisticsOutputContent } from '~/modules/application/features/descriptive-statistics/output-content';
 import { OutputContent as FrequencyDistOutputContent } from '~/modules/application/features/frequency-distribution/output-content';
 import { OutputContent as GroupedDataOutputContent } from '~/modules/application/features/group-numeric-data/output-content';
@@ -23,6 +24,8 @@ const Session = (): JSX.Element => {
 
   const gridRef = useRef<DraggableGridHandle | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null);
+
+  useBeforeUnload('session', session.length > 0);
 
   if (session.length === 0) {
     return <Text m={5}>No data</Text>;

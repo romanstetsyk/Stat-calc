@@ -1,3 +1,4 @@
+export { useBeforeUnload } from './use-before-unload';
 export {
   useBreakpointValue,
   useColorModeValue,

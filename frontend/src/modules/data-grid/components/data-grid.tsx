@@ -9,6 +9,8 @@ import { DataEditor } from '@glideapps/glide-data-grid';
 import debounce from 'lodash-es/debounce';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { useBeforeUnload } from '~/common/hooks';
+
 import { Config } from '../config';
 import { useGridData, useUndoRedo } from '../hooks';
 import { gridHeadersGenerator } from '../utils';
@@ -24,10 +26,13 @@ const DataGrid = (): JSX.Element => {
     getContent,
     onCellsEdited,
     onGridSelectionChange,
-    recentEdits: { currentSelection },
+    recentEdits: { currentSelection, canUndo, canRedo },
   } = useGridData();
 
   useUndoRedo(ref);
+
+  const isDirty = canUndo || canRedo;
+  useBeforeUnload('data', isDirty);
 
   const [rowCount, setRowCount] = useState<number>(Config.ROW_COUNT);
   const [columnHeaders, setColumnHeaders] = useState(() => generateHeaders());
